@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\2 - MODULARITA\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{01826229-056E-4DF9-B2B9-0B1D165C2BD1}|ukol2\\ukol2.vcxproj|C:\\Users\\admin\\Documents\\GitHub\\OOP\\2 - MODULARITA\\ukol2\\ukol2.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{01826229-056E-4DF9-B2B9-0B1D165C2BD1}|ukol2\\ukol2.vcxproj|solutionrelative:ukol2\\ukol2.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ukol2.cpp",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\2 - MODULARITA\\ukol2\\ukol2.cpp",
+              "RelativeDocumentMoniker": "ukol2\\ukol2.cpp",
+              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\2 - MODULARITA\\ukol2\\ukol2.cpp",
+              "RelativeToolTip": "ukol2\\ukol2.cpp",
+              "ViewState": "AQIAADAAAAAAAAAAAAAAAFQAAABLAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-05-05T18:56:29.637Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

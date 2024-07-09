@@ -1,0 +1,134 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{54830C6B-2A26-48D5-AA2B-F8E1714EF704}|ukol3.vcxproj|C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\ukol3.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{54830C6B-2A26-48D5-AA2B-F8E1714EF704}|ukol3.vcxproj|solutionrelative:ukol3.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54830C6B-2A26-48D5-AA2B-F8E1714EF704}|ukol3.vcxproj|C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\KeyValues.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{54830C6B-2A26-48D5-AA2B-F8E1714EF704}|ukol3.vcxproj|solutionrelative:KeyValues.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54830C6B-2A26-48D5-AA2B-F8E1714EF704}|ukol3.vcxproj|C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\KeyValues.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{54830C6B-2A26-48D5-AA2B-F8E1714EF704}|ukol3.vcxproj|solutionrelative:KeyValues.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54830C6B-2A26-48D5-AA2B-F8E1714EF704}|ukol3.vcxproj|C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\PolozkaFaktury.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{54830C6B-2A26-48D5-AA2B-F8E1714EF704}|ukol3.vcxproj|solutionrelative:PolozkaFaktury.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54830C6B-2A26-48D5-AA2B-F8E1714EF704}|ukol3.vcxproj|C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\Osoba.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{54830C6B-2A26-48D5-AA2B-F8E1714EF704}|ukol3.vcxproj|solutionrelative:Osoba.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54830C6B-2A26-48D5-AA2B-F8E1714EF704}|ukol3.vcxproj|C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\KeyValue.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{54830C6B-2A26-48D5-AA2B-F8E1714EF704}|ukol3.vcxproj|solutionrelative:KeyValue.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{54830C6B-2A26-48D5-AA2B-F8E1714EF704}|ukol3.vcxproj|C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\Faktura.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{54830C6B-2A26-48D5-AA2B-F8E1714EF704}|ukol3.vcxproj|solutionrelative:Faktura.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PolozkaFaktury.h",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\PolozkaFaktury.h",
+              "RelativeDocumentMoniker": "PolozkaFaktury.h",
+              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\PolozkaFaktury.h",
+              "RelativeToolTip": "PolozkaFaktury.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACUAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-05-28T03:51:30.587Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Osoba.h",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\Osoba.h",
+              "RelativeDocumentMoniker": "Osoba.h",
+              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\Osoba.h",
+              "RelativeToolTip": "Osoba.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACUAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-05-28T03:51:11.606Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "KeyValue.h",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\KeyValue.h",
+              "RelativeDocumentMoniker": "KeyValue.h",
+              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\KeyValue.h",
+              "RelativeToolTip": "KeyValue.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-05-28T03:50:56.578Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Faktura.h",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\Faktura.h",
+              "RelativeDocumentMoniker": "Faktura.h",
+              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\Faktura.h",
+              "RelativeToolTip": "Faktura.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-05-28T03:50:45.754Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "KeyValues.h",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\KeyValues.h",
+              "RelativeDocumentMoniker": "KeyValues.h",
+              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\KeyValues.h",
+              "RelativeToolTip": "KeyValues.h",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAuwDoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-05-28T03:50:17.33Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "KeyValues.cpp",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\KeyValues.cpp",
+              "RelativeDocumentMoniker": "KeyValues.cpp",
+              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\KeyValues.cpp",
+              "RelativeToolTip": "KeyValues.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-05-20T07:07:02.724Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ukol3.cpp",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\ukol3.cpp",
+              "RelativeDocumentMoniker": "ukol3.cpp",
+              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\3 - T\u0158\u00CDDY A OBJEKTY\\ukol3.cpp",
+              "RelativeToolTip": "ukol3.cpp",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAAAB8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-05-06T11:49:58.825Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

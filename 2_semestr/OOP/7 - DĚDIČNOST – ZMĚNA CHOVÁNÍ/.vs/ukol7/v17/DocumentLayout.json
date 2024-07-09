@@ -1,0 +1,103 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9CF817AF-D20B-421B-85AE-C31A2AFD75D5}|ukol7.vcxproj|C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\ukol7.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9CF817AF-D20B-421B-85AE-C31A2AFD75D5}|ukol7.vcxproj|solutionrelative:ukol7.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9CF817AF-D20B-421B-85AE-C31A2AFD75D5}|ukol7.vcxproj|C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\GeometricObject.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9CF817AF-D20B-421B-85AE-C31A2AFD75D5}|ukol7.vcxproj|solutionrelative:GeometricObject.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9CF817AF-D20B-421B-85AE-C31A2AFD75D5}|ukol7.vcxproj|C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\GeometricObject.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9CF817AF-D20B-421B-85AE-C31A2AFD75D5}|ukol7.vcxproj|solutionrelative:GeometricObject.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9CF817AF-D20B-421B-85AE-C31A2AFD75D5}|ukol7.vcxproj|C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\Task1.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9CF817AF-D20B-421B-85AE-C31A2AFD75D5}|ukol7.vcxproj|solutionrelative:Task1.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9CF817AF-D20B-421B-85AE-C31A2AFD75D5}|ukol7.vcxproj|C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\Task1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{9CF817AF-D20B-421B-85AE-C31A2AFD75D5}|ukol7.vcxproj|solutionrelative:Task1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GeometricObject.cpp",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\GeometricObject.cpp",
+              "RelativeDocumentMoniker": "GeometricObject.cpp",
+              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\GeometricObject.cpp",
+              "RelativeToolTip": "GeometricObject.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-05-28T16:39:23.815Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "GeometricObject.h",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\GeometricObject.h",
+              "RelativeDocumentMoniker": "GeometricObject.h",
+              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\GeometricObject.h",
+              "RelativeToolTip": "GeometricObject.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-05-28T04:25:47.797Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Task1.cpp",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\Task1.cpp",
+              "RelativeDocumentMoniker": "Task1.cpp",
+              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\Task1.cpp",
+              "RelativeToolTip": "Task1.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAADYAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-05-24T05:50:44.957Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Task1.h",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\Task1.h",
+              "RelativeDocumentMoniker": "Task1.h",
+              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\Task1.h",
+              "RelativeToolTip": "Task1.h",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAB4AAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-05-24T05:48:26.518Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ukol7.cpp",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\ukol7.cpp",
+              "RelativeDocumentMoniker": "ukol7.cpp",
+              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\OOP\\7 - D\u011ADI\u010CNOST \u2013 ZM\u011ANA CHOV\u00C1N\u00CD\\ukol7.cpp",
+              "RelativeToolTip": "ukol7.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAABeAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-05-22T12:01:19.721Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
