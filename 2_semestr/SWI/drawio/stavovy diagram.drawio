@@ -1,0 +1,88 @@
+<mxfile host="app.diagrams.net" modified="2024-05-17T06:17:24.091Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" etag="yMxHqnVjMphJy-e1NtMs" version="24.4.3" type="device">
+  <diagram name="Page-1" id="vBHMLKeCALug-5zdts4P">
+    <mxGraphModel dx="1434" dy="746" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Hnm54XY0QVZm_NeVnSGB-38" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="390" y="90" as="sourcePoint" />
+            <mxPoint x="390" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="esKZmvXYh1C9ElaGSJPS-1" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;Zákazník rezervuje termín&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="Hnm54XY0QVZm_NeVnSGB-38" vertex="1" connectable="0">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hnm54XY0QVZm_NeVnSGB-39" value="" style="ellipse;fillColor=strokeColor;html=1;" parent="1" vertex="1">
+          <mxGeometry x="375" y="60" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Hnm54XY0QVZm_NeVnSGB-40" value="" style="ellipse;html=1;shape=endState;fillColor=strokeColor;" parent="1" vertex="1">
+          <mxGeometry x="570" y="690" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Hnm54XY0QVZm_NeVnSGB-53" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="esKZmvXYh1C9ElaGSJPS-2" target="Hnm54XY0QVZm_NeVnSGB-54" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="389.5" y="270" as="sourcePoint" />
+            <mxPoint x="389.5" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="esKZmvXYh1C9ElaGSJPS-3" value="Potvrzení rezervace" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="Hnm54XY0QVZm_NeVnSGB-53" vertex="1" connectable="0">
+          <mxGeometry x="-0.1833" y="3" relative="1" as="geometry">
+            <mxPoint x="17" y="53" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="esKZmvXYh1C9ElaGSJPS-6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Hnm54XY0QVZm_NeVnSGB-54" target="Hnm54XY0QVZm_NeVnSGB-56" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="esKZmvXYh1C9ElaGSJPS-7" value="Check in" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="esKZmvXYh1C9ElaGSJPS-6" vertex="1" connectable="0">
+          <mxGeometry x="-0.04" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Hnm54XY0QVZm_NeVnSGB-54" value="Potvrzená rezervace" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;direction=west;" parent="1" vertex="1">
+          <mxGeometry x="515" y="390" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="esKZmvXYh1C9ElaGSJPS-8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Hnm54XY0QVZm_NeVnSGB-56" target="Hnm54XY0QVZm_NeVnSGB-40" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Hnm54XY0QVZm_NeVnSGB-56" value="Vyzvednutá rezervace" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;direction=west;" parent="1" vertex="1">
+          <mxGeometry x="515" y="530" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Hnm54XY0QVZm_NeVnSGB-61" value="Rezvace zrušená" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;direction=west;" parent="1" vertex="1">
+          <mxGeometry x="340" y="530" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Hnm54XY0QVZm_NeVnSGB-67" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="Hnm54XY0QVZm_NeVnSGB-61" target="Hnm54XY0QVZm_NeVnSGB-40" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="1000" as="sourcePoint" />
+            <mxPoint x="270" y="1050" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="esKZmvXYh1C9ElaGSJPS-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="esKZmvXYh1C9ElaGSJPS-2" target="Hnm54XY0QVZm_NeVnSGB-61" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="esKZmvXYh1C9ElaGSJPS-11" value="Vypršení časového limitu" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="esKZmvXYh1C9ElaGSJPS-10" vertex="1" connectable="0">
+          <mxGeometry x="-0.3182" y="-1" relative="1" as="geometry">
+            <mxPoint x="1" y="-36" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="esKZmvXYh1C9ElaGSJPS-2" value="Nepotvrzená rezervace" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;direction=west;" parent="1" vertex="1">
+          <mxGeometry x="320" y="230" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="esKZmvXYh1C9ElaGSJPS-4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" target="Hnm54XY0QVZm_NeVnSGB-61" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="515" y="410" as="sourcePoint" />
+            <mxPoint x="410" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="esKZmvXYh1C9ElaGSJPS-5" value="Storno" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="esKZmvXYh1C9ElaGSJPS-4" vertex="1" connectable="0">
+          <mxGeometry x="0.3402" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

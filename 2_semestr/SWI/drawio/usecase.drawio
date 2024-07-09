@@ -1,0 +1,160 @@
+<mxfile host="app.diagrams.net" modified="2024-05-17T08:13:19.741Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" etag="HuYl1wucUZ8evaGbExGZ" version="24.4.3" type="device">
+  <diagram name="Page-1" id="GxqAUsELF0jaE6SLqbSP">
+    <mxGraphModel dx="1434" dy="746" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="MR0T-RpS9AAxxwUeburC-10" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="150" y="130" width="690" height="540" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-1" value="Zákazník" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+          <mxGeometry x="90" y="220" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-2" value="Personál" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+          <mxGeometry x="90" y="490" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-4" value="" style="endArrow=block;html=1;rounded=0;endFill=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="104.5" y="470" as="sourcePoint" />
+            <mxPoint x="104.5" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-6" value="" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="300" y="180" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-7" value="UC1: Zobrazit dostupné termíny" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="325" y="190" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-8" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" target="mg4docPlW04ETTQn-9k0-6" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="130" y="240" as="sourcePoint" />
+            <mxPoint x="460" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-9" value="" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="300" y="300" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-10" value="UC4:&amp;nbsp;Zrušit rezervaci" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="325" y="310" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-11" value="" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="300" y="240" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-12" value="UC2:&amp;nbsp;Vytvořit rezervaci" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="325" y="250" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-13" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" target="mg4docPlW04ETTQn-9k0-11" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="250" as="sourcePoint" />
+            <mxPoint x="460" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-14" value="" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="660" y="240" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-15" value="UC3:&amp;nbsp;Vybrat termín" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="685" y="250" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-17" value="&lt;b&gt;&amp;lt;&amp;lt;include&amp;gt;&amp;gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="530" y="240" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-19" value="" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="325" y="490" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-20" value="UC7:&amp;nbsp;Přidat stůl" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="345" y="500" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-21" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" target="mg4docPlW04ETTQn-9k0-19" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="515" as="sourcePoint" />
+            <mxPoint x="480" y="820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-22" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" target="mg4docPlW04ETTQn-9k0-9" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="260" as="sourcePoint" />
+            <mxPoint x="330" y="485" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-23" value="" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="300" y="360" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-24" value="UC5:&amp;nbsp;Přihlásit se" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="325" y="370" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-25" value="" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="650" y="360" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-26" value="UC6:&amp;nbsp;Vytvořit účet" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="675" y="370" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-27" value="" style="endArrow=block;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;dashed=1;endFill=0;" parent="1" source="mg4docPlW04ETTQn-9k0-25" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="410" y="680" as="sourcePoint" />
+            <mxPoint x="470" y="385" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-28" value="&lt;b&gt;&amp;lt;&amp;lt;extends&amp;gt;&amp;gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="530" y="360" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-29" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" target="mg4docPlW04ETTQn-9k0-23" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="270" as="sourcePoint" />
+            <mxPoint x="460" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-30" value="" style="endArrow=block;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;dashed=1;endFill=0;" parent="1" source="mg4docPlW04ETTQn-9k0-11" target="mg4docPlW04ETTQn-9k0-14" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="650" y="395" as="sourcePoint" />
+            <mxPoint x="480" y="395" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-31" value="" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="320" y="550" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-32" value="UC9: Úprava rezervace" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="345" y="560" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-33" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" target="mg4docPlW04ETTQn-9k0-31" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="140" y="550" as="sourcePoint" />
+            <mxPoint x="480" y="890" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-34" value="" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="650" y="560" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-35" value="UC10: Upozornění o změně" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="675" y="570" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-36" value="&lt;b&gt;&amp;lt;&amp;lt;include&amp;gt;&amp;gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="530" y="560" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mg4docPlW04ETTQn-9k0-37" value="" style="endArrow=block;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;dashed=1;endFill=0;" parent="1" target="mg4docPlW04ETTQn-9k0-34" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="490" y="585" as="sourcePoint" />
+            <mxPoint x="500" y="715" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MR0T-RpS9AAxxwUeburC-5" value="" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="660" y="490" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="MR0T-RpS9AAxxwUeburC-6" value="UC8:&amp;nbsp;Počet míst" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="685" y="500" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="MR0T-RpS9AAxxwUeburC-7" value="&lt;b&gt;&amp;lt;&amp;lt;include&amp;gt;&amp;gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="555" y="490" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="MR0T-RpS9AAxxwUeburC-8" value="" style="endArrow=block;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;dashed=1;endFill=0;" parent="1" target="MR0T-RpS9AAxxwUeburC-5" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="495" y="515" as="sourcePoint" />
+            <mxPoint x="505" y="645" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MR0T-RpS9AAxxwUeburC-11" value="Restaurační rezervační systém" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="400" y="130" width="190" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
