@@ -1,0 +1,5 @@
+--- /home/elsnoxx/Desktop/UPR/test/test/test-8/stdout
++++ /home/elsnoxx/Desktop/UPR/test/test/test-8/workdir/actual-stdout
+@@ -1 +1 @@
+-Recept 5 lze uvarit 12x
++Recept 2 lze uvarit 2147483647x

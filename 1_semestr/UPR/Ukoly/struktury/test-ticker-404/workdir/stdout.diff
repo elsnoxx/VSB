@@ -1,0 +1,11 @@
+--- /home/elsnoxx/Desktop/UPR/Ukoly/struktury/test-ticker-404/stdout
++++ /home/elsnoxx/Desktop/UPR/Ukoly/struktury/test-ticker-404/workdir/actual-stdout
+@@ -17,7 +17,7 @@
+ 	<td>32_837_163</td>
+ </tr>
+ <tr>
+-	<td>4</td> 	
++	<td>4</td>
+ 	<td>GOOGL</td>
+ 	<td>687.75</td>
+ 	<td>690.60</td>

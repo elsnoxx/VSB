@@ -1,0 +1,131 @@
+Kelvin
+Richard Ficek (FIC0024)
+Logout
+UPR test 20. 12. 2023
+Deadline: 12.01.2024, 15:51, Time remaining: 0 minutes
+Select multiple files using CTRL or SHIFT or drag them to this window
+Assignment
+Tests
+ 
+Verze zadání pro: FIC0024
+
+Hledá se guláš! Zastupitel akademické obce slíbil studentům FEI pořádnou porci guláše jako odměnu za účast ve volbách. Jak už to tak ale bývá, tento slib nebyl dodržen, a tak si musíme guláš uvařit sami. Uvařit guláš ale není jen tak! Každá katedra má svůj vlastní recept na guláš, který by chtěla nechat uvařit, ale zásoby ingrediencí menzy jsou omezené. Musíme tak vybrat, který recept použijeme na uvaření guláše, tak, abychom zasytili co nejvíce studentů.
+
+Pomozte tuto situaci vyřešit tím, že vytvoříte program, který obdrží na vstupu seznam dostupných ingrediencí a seznam receptů, a zjistí, z kterého receptu lze uvařit nejvíce porcí guláše.
+
+Kromě popisu fungování programu se také důkladně podívejte na poznámky k zadání. Pokud čemukoliv v zadání nerozumíte, zeptejte se ihned zkoušejícího dozoru!
+
+Popis fungování programu
+Váš program obdrží pomocí parametrů příkazového řádku dvě celočíselné nezáporné hodnoty:
+
+Počet řádků s ingrediencemi (i).
+Počet řádků s recepty (r).
+Příklad pro 5 řádků s ingrediencemi a 2 řádky s recepty:
+
+$ ./program 5 2
+Počet ingrediencí i receptů bude nezáporné číslo, tj. buď 0, nebo kladné číslo.
+Nemusíte kontrolovat, jestli byly parametry předány, můžete předpokládat, že program vždy oba dva tyto parametry obdrží.
+Ze standardního vstupu načtěte i řádků. Na každém řádku budou následující údaje o jedné ingredienci, která je k dispozici pro vaření, oddělené čárkou:
+
+Název (řetězec, max. 100 znaků, nebude obsahovat čárku)
+Počet (kladné celé číslo větší než 0)
+Například:
+
+Paprika,50
+udává, že máte k dispozici 50 kusů ingredience s názvem Paprika.
+
+Uložte si informace o ingrediencích do pole v paměti.
+
+Názvy ingrediencí ve vstupu budou unikátní. Jinak řečeno, v seznamu ingrediencí se nikdy nebude ingredience se stejným názvem vyskytovat více, než jednou.
+Váš program musí fungovat pro libovolný počet ingrediencí! Nestačí si určit natvrdo konkrétní maximální velikost pole s ingrediencemi v době překladu.
+Ze standardního vstupu dále načtěte r řádků. Na každém řádku bude jeden recept na guláš, který se bude skládat ze sady ingrediencí. Formát řádku s receptem je následující:
+
+<n>;<ingredience 1 název>,<ingredience 1 počet>;<ingredience 2 název>,<ingredience 2 počet>;...
+Na začátku řádku je kladné číslo (n) udávající počet jednotlivých ingrediencí, ze kterých se recept skládá. Po něm následuje středník (;), a dále n ingrediencí oddělených středníkem. Každá ingredience v receptu má stejný formát jako v seznamu ingrediencí na začátku vstupu, tj. název ingredience následovaný čárkou a poté počtem kusů dané ingredience, který je v receptu vyžadován.
+
+Příklad:
+
+3;Coconut oil,2;Tortillas,1;Paprika,5
+Tento řádek udává, že recept vyžaduje tři ingredience. Recept se skládá ze dvou kusů ingredience Coconut oil, jednoho kusu ingredience Tortillas a z pěti kusů ingredience Paprika.
+
+Názvy ingrediencí v receptu budou unikátní. Jinak řečeno, v seznamu ingrediencí receptu se nikdy nebude ingredience se stejným názvem vyskytovat více, než jednou.
+Každý recept bude obsahovat alespoň jednu ingredienci, tj. n bude vždy větší, než 0.
+Počet každé ingredience v receptu bude kladný, tj. každá ingredience bude vždy mít počet větší, než 0.
+Pro každý recept ve vstupu zjistěte, kolik porcí tohoto receptu lze uvařit pomocí dostupných ingrediencí. Poté nalezněte nejlepší recept. Nejlepší recept je ten, ze kterého lze uvařit nejvíce porcí guláše.
+
+Pro výpočet počtu porcí receptu, které lze uvařit, zjistěte, kolik kusů každé ingredience z receptu máte k dispozici (viz seznam ingrediencí na začátku vstupu). Poté vypočítejte, kolik porcí receptu můžete uvařit. Pro každou porci musíte mít k dispozici všechny ingredience receptu v zadaném počtu. Berte v potaz pouze celé porce. Například, pro tento vstup:
+
+Banana,13
+Pizza,6
+Sausage,7
+3;Sausage,3;Banana,2;Pizza,6
+Máte k dispozici 13x ingredienci Banana, 6x ingredienci Pizza a 7x ingredienci Sausage. Dále je ve vstupu jediný recept. Tento recept vyžaduje:
+
+3x Sausage. Této ingredience je k dispozici 7 kusů, takže pouze vzhledem k této ingredienci můžete uvařit maximálně dvě porce.
+2x Banana. Této ingredience je k dispozici 13 kusů, takže pouze vzhledem k této ingredienci můžete uvařit maximálně šest porcí.
+6x Pizza. Této ingredience je k dispozici 6 kusů, takže pouze vzhledem k této ingredienci můžete uvařit maximálně jednu porci.
+Tím pádem tohoto receptu můžete uvařit maximálně jednu porci, protože na více porcí byste už neměli k dispozici ingredienci Pizza.
+
+Na standardní výstup poté vypište jeden řádek s indexem nejlepšího receptu, a počtem porcí, které z něj lze uvařit:
+
+Recept <index> lze uvarit <pocet>x
+Index receptu je dán pořadím daného receptu ve vstupu, a počítáme jej od 1, tj. první recept má index 1, druhý 2 atd.
+Pokud by bylo více nejlepších receptů, tak z nich vypište recept s nejnižším indexem.
+Pokud nelze uvařit ani jeden recept, vypište místo toho řádek Zadny recept nelze uvarit :(.
+Příklad:
+
+Banana,13
+Pizza,6
+Sausage,7
+3;Onion,5;Banana,1;Pizza,1
+2;Pizza,2;Banana,4
+3;Sausage,1;Banana,4;Pizza,4
+1;Sausage,2
+Recept s indexem 1 nelze uvařit ani jednou, protože nemáme k dispozici ingredienci Onion.
+Recept s indexem 2 lze uvařit 3x.
+Recept s indexem 3 lze uvařit 1x.
+Recept s indexem 4 lze uvařit 3x.
+Nejlepší recepty jsou ty s indexy 2 a 4, takže program by měl vypsat, že “vyhrál” recept s indexem 2:
+
+Recept 2 lze uvarit 3x
+Kompletní ukázkové vstupy a výstupy naleznete v záložce Tests.
+
+Poznámky k zadání a řešení
+Použití VLA je zakázáno.
+Nekombinujte funkce scanf a fgets (viz skripta), může to způsobovat problémy. Veškeré načítání textu provádějte pomocí funkce fgets.
+Veškerý text bude ve formátu ASCII.
+Žádný řádek na vstupu nebude mít více než 100 znaků (včetně znaku odřádkování).
+Názvy ingrediencí si můžete ukládat v poli znaků s fixní velikostí, může to být jednodušší, než je alokovat na haldě.
+Při načítání vstupu nemusíte kontrolovat chyby při čtení, tj. můžete očekávat, že vstup programu bude vždy ve validním formátu, který byl popsán výše.
+Dávejte si pozor na existenci znaku odřádkování v načteném řetězci!
+Při lokálním testování používejte přesměrování vstupu, abyste nemuseli neustále psát vstup programu do terminálu.
+Vaše řešení musí být napsáno v jazyce C. Nebojte se využívat funkce pro práci s řetězci a pamětí ze standardní knihovny jazyka C.
+Ujistěte se, že ve vašem programu nejsou paměťové chyby. Váš program musí fungovat se zapnutým Address Sanitizerem, který by neměl oznámit žádné chyby.
+Rozumné řešení by se mělo vejít do ~100—150 řádků. Nevymýšlejte složitosti a radši se zeptejte, kdyby vám něco nebylo jasné.
+Referenční výsledky testů mohou ve výjimečných případech obsahovat chybu. V případě pochyb se vždy řiďte zadáním nebo se poraďte se cvičícím, testy jsou pouze pro kontrolu.
+Důležité informace
+Zdrojový soubor s vaším kódem odevzdávejte do Kelvina. Soubor musí mít koncovku .c a musí jít přeložit překladačem GCC na Linuxu.
+Na úkol máte 105 minut.
+Můžete získat maximálně 15 bodů.
+Během testu můžete používat pouze dokumentaci C a skripta UPR. Googlení, hledání řešení na Stack Overflow atd. je zakázáno. Používání jiných komunikačních prostředků (mobilní telefon, chytré hodinky, Discord, Teams, Messenger atd.) je zakázáno. Používání jakýchkoliv AI technologií je zakázáno. Pokud by vám něco v zadání nebylo jasné, zeptejte se svého cvičícího.
+Pokud Kelvin nebo vyučující nalezne opsané řešení nebo jiný pokus o podvod při psaní testu, všichni studenti s identickým nebo extrémně podobným řešením budou vyloučeni z předmětu.
+Je zakázáno s kýmkoliv sdílet nebo mu ukazovat své řešení úlohy.
+Užitečné funkce
+fgets - načtení řádku ze vstupu do řetězce (pole znaků).
+atoi - převedení řetězce obsahujícího číslice na číslo (int).
+strlen - zjištění délky řetězce.
+strtok - rozdělení řetězce např. podle mezer.
+Testování programu
+Ukázkové vstupy a výstupy naleznete v záložce Tests. Odtud si je také můžete stáhnout. Po nahrání zdrojového souboru se můžete podívat, jestli testy prošly nebo ne. Testujte ale primárně své řešení na lokálním počítači. Takto můžete například spustit váš program se vstupním souborem a zkontrolovat, že vydal správný výstup:
+
+$ ./main 1 2 < test_XX/stdin > output
+$ diff test_XX/stdout output
+Nezapomeňte předat správné parametry příkazové řádky podle vzoru v testu!
+
+Můžete také použít pomocný Python skript, který si můžete stáhnout (spolu se všemi testy) pomocí tlačítka Download all tests v záložce Tests. Skript můžete takto:
+
+$ python3 run-tests.py <cesta-k-binárnímu-souboru-vašeho-řešeni>
+To, že všechny testy prošly, však ještě neznamená, že je váš program správně :) Zároveň pokud některé testy neprojdou, neznamená to ještě samo o sobě, že vaše řešení dostane 0 bodů.
+
+Kontrola paměťových chyb
+Při překladu používejte Address sanitizer nebo Valgrind, abyste mohli rychle odhalit (téměř nevyhnutelné) paměťové chyby.

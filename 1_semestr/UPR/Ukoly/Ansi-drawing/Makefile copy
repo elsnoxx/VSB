@@ -1,0 +1,10 @@
+
+build:
+	gcc main.c -o main
+	clear
+	./main < input.txt
+
+git:
+	git add .
+	git commit -m "schody done"
+	git push -u origin main
