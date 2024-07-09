@@ -1,0 +1,368 @@
+\doxysection{Data Class Reference}
+\hypertarget{class_data}{}\label{class_data}\index{Data@{Data}}
+
+
+Class representing a data entry.  
+
+
+
+
+{\ttfamily \#include $<$Data.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_data_af11f741cb7f587e2e495452a8905a22a}{Data}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_data_ab684d60b9c3f56bdd9397b34a2697fde}{Data}} (const std\+::string \&timestamp, const std\+::string \&hex\+Value)
+\begin{DoxyCompactList}\small\item\em Constructor with timestamp and payload. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_data_a23f2bb3dd84115f9df4c494bd360889e}{get\+Timestamp}} () const
+\begin{DoxyCompactList}\small\item\em Gets the timestamp string. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_data_a3049d1b944e91e6ab6f6a4a3fdd35854}{split\+Timestamp}} (const std\+::string \&timestamp)
+\begin{DoxyCompactList}\small\item\em Splits the timestamp string into its components. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_data_a7b01e5aebbfcc4758c25dc514dbb0964}{get\+B0}} () const
+\begin{DoxyCompactList}\small\item\em Gets sensor reading B0. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_data_adb83c15451a4c54e5e2c6afdbd6f8226}{get\+B1}} () const
+\begin{DoxyCompactList}\small\item\em Gets sensor reading B1. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_data_a48722cce737175ad487af13ab80de227}{get\+B2}} () const
+\begin{DoxyCompactList}\small\item\em Gets sensor reading B2. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_data_a545472d0950a23e4426bdf3e39af341b}{get\+B3}} () const
+\begin{DoxyCompactList}\small\item\em Gets sensor reading B3. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_data_a0bd0a338ed9ac1fae8e12941195c5404}{get\+B4}} () const
+\begin{DoxyCompactList}\small\item\em Gets sensor reading B4. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_data_af47e5aeeaa27ce915608038c13db0fd9}{get\+Year}} () const
+\begin{DoxyCompactList}\small\item\em Get the year. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_data_ab3d6db1197cae2954ef304e825d0cb9b}{get\+Month}} () const
+\begin{DoxyCompactList}\small\item\em Get the month. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_data_a2f0f53eeb7adf41164bdc8e1a31ae78b}{get\+Day}} () const
+\begin{DoxyCompactList}\small\item\em Get the day. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_data_a5dc0c4c6474551840ef55e201eb7fef1}{get\+Hour}} () const
+\begin{DoxyCompactList}\small\item\em Get the hour. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_data_aa6223c808a0c78693ce015e8388fe01c}{get\+Minute}} () const
+\begin{DoxyCompactList}\small\item\em Get the minute. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_data_a27b6367ff7c752852fb7c5584dfa2b0c}{get\+Second}} () const
+\begin{DoxyCompactList}\small\item\em Get the second. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_data_a13a19585671c34ee46d413af78c802f5}{process\+Payload\+To\+Num}} (const std\+::string \&hex\+Value)
+\begin{DoxyCompactList}\small\item\em Processes the hexadecimal payload to extract numerical values. \end{DoxyCompactList}\item 
+std\+::int16\+\_\+t \mbox{\hyperlink{class_data_aaa2523e5583aacd17bddb4d821058fd4}{hex\+To\+Int}} (const std\+::string \&hex\+Str) const
+\begin{DoxyCompactList}\small\item\em Converts hexadecimal string to integer. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_data_a23118b7bb7643d81ced40b4e042b4c01}{int\+To\+Hex}} (std\+::int16\+\_\+t int\+Value) const
+\item 
+std\+::double\+\_\+t \mbox{\hyperlink{class_data_a60b65ed2a3bab58f6ed9a80e3ccbb82c}{get\+Temperature}} () const
+\begin{DoxyCompactList}\small\item\em Gets the temperature value. \end{DoxyCompactList}\item 
+std\+::double\+\_\+t \mbox{\hyperlink{class_data_ac1b50dc79ab4ad37d6d3258bd84e5e41}{get\+Humidity}} () const
+\begin{DoxyCompactList}\small\item\em Gets the humidity value. \end{DoxyCompactList}\item 
+std\+::double\+\_\+t \mbox{\hyperlink{class_data_a344f4cf8c15782635db1fb750eeeff19}{get\+Voltage}} () const
+\begin{DoxyCompactList}\small\item\em Gets the voltage value. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_data_a737a9298b73d6e3d894d6c342b3f064f}{get\+Payload}} () const
+\begin{DoxyCompactList}\small\item\em Gets the payload string. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class representing a data entry. 
+
+This class stores various data fields including timestamps, sensor readings, and other payload information. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_data_af11f741cb7f587e2e495452a8905a22a}\label{class_data_af11f741cb7f587e2e495452a8905a22a} 
+\index{Data@{Data}!Data@{Data}}
+\index{Data@{Data}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{Data()}{Data()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Data\+::\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Default constructor. 
+
+Initializes data fields with default values. \Hypertarget{class_data_ab684d60b9c3f56bdd9397b34a2697fde}\label{class_data_ab684d60b9c3f56bdd9397b34a2697fde} 
+\index{Data@{Data}!Data@{Data}}
+\index{Data@{Data}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{Data()}{Data()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Data\+::\+Data (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{timestamp,  }\item[{const std\+::string \&}]{hex\+Value }\end{DoxyParamCaption})}
+
+
+
+Constructor with timestamp and payload. 
+
+Initializes data fields with the provided timestamp and payload.
+
+
+\begin{DoxyParams}{Parameters}
+{\em timestamp} & The timestamp string. \\
+\hline
+{\em hex\+Value} & The hexadecimal payload. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_data_a7b01e5aebbfcc4758c25dc514dbb0964}\label{class_data_a7b01e5aebbfcc4758c25dc514dbb0964} 
+\index{Data@{Data}!getB0@{getB0}}
+\index{getB0@{getB0}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getB0()}{getB0()}}
+{\footnotesize\ttfamily int Data\+::get\+B0 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Gets sensor reading B0. 
+
+\begin{DoxyReturn}{Returns}
+Sensor reading B0. 
+\end{DoxyReturn}
+\Hypertarget{class_data_adb83c15451a4c54e5e2c6afdbd6f8226}\label{class_data_adb83c15451a4c54e5e2c6afdbd6f8226} 
+\index{Data@{Data}!getB1@{getB1}}
+\index{getB1@{getB1}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getB1()}{getB1()}}
+{\footnotesize\ttfamily int Data\+::get\+B1 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Gets sensor reading B1. 
+
+\begin{DoxyReturn}{Returns}
+Sensor reading B1. 
+\end{DoxyReturn}
+\Hypertarget{class_data_a48722cce737175ad487af13ab80de227}\label{class_data_a48722cce737175ad487af13ab80de227} 
+\index{Data@{Data}!getB2@{getB2}}
+\index{getB2@{getB2}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getB2()}{getB2()}}
+{\footnotesize\ttfamily int Data\+::get\+B2 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Gets sensor reading B2. 
+
+\begin{DoxyReturn}{Returns}
+Sensor reading B2. 
+\end{DoxyReturn}
+\Hypertarget{class_data_a545472d0950a23e4426bdf3e39af341b}\label{class_data_a545472d0950a23e4426bdf3e39af341b} 
+\index{Data@{Data}!getB3@{getB3}}
+\index{getB3@{getB3}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getB3()}{getB3()}}
+{\footnotesize\ttfamily int Data\+::get\+B3 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Gets sensor reading B3. 
+
+\begin{DoxyReturn}{Returns}
+Sensor reading B3. 
+\end{DoxyReturn}
+\Hypertarget{class_data_a0bd0a338ed9ac1fae8e12941195c5404}\label{class_data_a0bd0a338ed9ac1fae8e12941195c5404} 
+\index{Data@{Data}!getB4@{getB4}}
+\index{getB4@{getB4}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getB4()}{getB4()}}
+{\footnotesize\ttfamily int Data\+::get\+B4 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Gets sensor reading B4. 
+
+\begin{DoxyReturn}{Returns}
+Sensor reading B4. 
+\end{DoxyReturn}
+\Hypertarget{class_data_a2f0f53eeb7adf41164bdc8e1a31ae78b}\label{class_data_a2f0f53eeb7adf41164bdc8e1a31ae78b} 
+\index{Data@{Data}!getDay@{getDay}}
+\index{getDay@{getDay}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getDay()}{getDay()}}
+{\footnotesize\ttfamily int Data\+::get\+Day (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the day. 
+
+\begin{DoxyReturn}{Returns}
+The day. 
+\end{DoxyReturn}
+\Hypertarget{class_data_a5dc0c4c6474551840ef55e201eb7fef1}\label{class_data_a5dc0c4c6474551840ef55e201eb7fef1} 
+\index{Data@{Data}!getHour@{getHour}}
+\index{getHour@{getHour}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getHour()}{getHour()}}
+{\footnotesize\ttfamily int Data\+::get\+Hour (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the hour. 
+
+\begin{DoxyReturn}{Returns}
+The hour. 
+\end{DoxyReturn}
+\Hypertarget{class_data_ac1b50dc79ab4ad37d6d3258bd84e5e41}\label{class_data_ac1b50dc79ab4ad37d6d3258bd84e5e41} 
+\index{Data@{Data}!getHumidity@{getHumidity}}
+\index{getHumidity@{getHumidity}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getHumidity()}{getHumidity()}}
+{\footnotesize\ttfamily std\+::double\+\_\+t Data\+::get\+Humidity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Gets the humidity value. 
+
+\begin{DoxyReturn}{Returns}
+The humidity value. 
+\end{DoxyReturn}
+\Hypertarget{class_data_aa6223c808a0c78693ce015e8388fe01c}\label{class_data_aa6223c808a0c78693ce015e8388fe01c} 
+\index{Data@{Data}!getMinute@{getMinute}}
+\index{getMinute@{getMinute}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getMinute()}{getMinute()}}
+{\footnotesize\ttfamily int Data\+::get\+Minute (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the minute. 
+
+\begin{DoxyReturn}{Returns}
+The minute. 
+\end{DoxyReturn}
+\Hypertarget{class_data_ab3d6db1197cae2954ef304e825d0cb9b}\label{class_data_ab3d6db1197cae2954ef304e825d0cb9b} 
+\index{Data@{Data}!getMonth@{getMonth}}
+\index{getMonth@{getMonth}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getMonth()}{getMonth()}}
+{\footnotesize\ttfamily int Data\+::get\+Month (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the month. 
+
+\begin{DoxyReturn}{Returns}
+The month. 
+\end{DoxyReturn}
+\Hypertarget{class_data_a737a9298b73d6e3d894d6c342b3f064f}\label{class_data_a737a9298b73d6e3d894d6c342b3f064f} 
+\index{Data@{Data}!getPayload@{getPayload}}
+\index{getPayload@{getPayload}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getPayload()}{getPayload()}}
+{\footnotesize\ttfamily std\+::string Data\+::get\+Payload (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Gets the payload string. 
+
+\begin{DoxyReturn}{Returns}
+The payload string. 
+\end{DoxyReturn}
+\Hypertarget{class_data_a27b6367ff7c752852fb7c5584dfa2b0c}\label{class_data_a27b6367ff7c752852fb7c5584dfa2b0c} 
+\index{Data@{Data}!getSecond@{getSecond}}
+\index{getSecond@{getSecond}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getSecond()}{getSecond()}}
+{\footnotesize\ttfamily int Data\+::get\+Second (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the second. 
+
+\begin{DoxyReturn}{Returns}
+The second. 
+\end{DoxyReturn}
+\Hypertarget{class_data_a60b65ed2a3bab58f6ed9a80e3ccbb82c}\label{class_data_a60b65ed2a3bab58f6ed9a80e3ccbb82c} 
+\index{Data@{Data}!getTemperature@{getTemperature}}
+\index{getTemperature@{getTemperature}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getTemperature()}{getTemperature()}}
+{\footnotesize\ttfamily std\+::double\+\_\+t Data\+::get\+Temperature (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Gets the temperature value. 
+
+\begin{DoxyReturn}{Returns}
+The temperature value. 
+\end{DoxyReturn}
+\Hypertarget{class_data_a23f2bb3dd84115f9df4c494bd360889e}\label{class_data_a23f2bb3dd84115f9df4c494bd360889e} 
+\index{Data@{Data}!getTimestamp@{getTimestamp}}
+\index{getTimestamp@{getTimestamp}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getTimestamp()}{getTimestamp()}}
+{\footnotesize\ttfamily std\+::string Data\+::get\+Timestamp (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Gets the timestamp string. 
+
+\begin{DoxyReturn}{Returns}
+The timestamp string. 
+\end{DoxyReturn}
+\Hypertarget{class_data_a344f4cf8c15782635db1fb750eeeff19}\label{class_data_a344f4cf8c15782635db1fb750eeeff19} 
+\index{Data@{Data}!getVoltage@{getVoltage}}
+\index{getVoltage@{getVoltage}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getVoltage()}{getVoltage()}}
+{\footnotesize\ttfamily std\+::double\+\_\+t Data\+::get\+Voltage (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Gets the voltage value. 
+
+\begin{DoxyReturn}{Returns}
+The voltage value. 
+\end{DoxyReturn}
+\Hypertarget{class_data_af47e5aeeaa27ce915608038c13db0fd9}\label{class_data_af47e5aeeaa27ce915608038c13db0fd9} 
+\index{Data@{Data}!getYear@{getYear}}
+\index{getYear@{getYear}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{getYear()}{getYear()}}
+{\footnotesize\ttfamily int Data\+::get\+Year (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Get the year. 
+
+\begin{DoxyReturn}{Returns}
+The year. 
+\end{DoxyReturn}
+\Hypertarget{class_data_aaa2523e5583aacd17bddb4d821058fd4}\label{class_data_aaa2523e5583aacd17bddb4d821058fd4} 
+\index{Data@{Data}!hexToInt@{hexToInt}}
+\index{hexToInt@{hexToInt}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{hexToInt()}{hexToInt()}}
+{\footnotesize\ttfamily std\+::int16\+\_\+t Data\+::hex\+To\+Int (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{hex\+Str }\end{DoxyParamCaption}) const}
+
+
+
+Converts hexadecimal string to integer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em hex\+Str} & The hexadecimal string to convert. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The integer value. 
+\end{DoxyReturn}
+\Hypertarget{class_data_a23118b7bb7643d81ced40b4e042b4c01}\label{class_data_a23118b7bb7643d81ced40b4e042b4c01} 
+\index{Data@{Data}!intToHex@{intToHex}}
+\index{intToHex@{intToHex}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{intToHex()}{intToHex()}}
+{\footnotesize\ttfamily std\+::string Data\+::int\+To\+Hex (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{int\+Value }\end{DoxyParamCaption}) const}
+
+\Hypertarget{class_data_a13a19585671c34ee46d413af78c802f5}\label{class_data_a13a19585671c34ee46d413af78c802f5} 
+\index{Data@{Data}!processPayloadToNum@{processPayloadToNum}}
+\index{processPayloadToNum@{processPayloadToNum}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{processPayloadToNum()}{processPayloadToNum()}}
+{\footnotesize\ttfamily void Data\+::process\+Payload\+To\+Num (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{hex\+Value }\end{DoxyParamCaption})}
+
+
+
+Processes the hexadecimal payload to extract numerical values. 
+
+Converts the hexadecimal payload to numerical values for temperature, humidity, and voltage.
+
+
+\begin{DoxyParams}{Parameters}
+{\em hex\+Value} & The hexadecimal payload. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_data_a3049d1b944e91e6ab6f6a4a3fdd35854}\label{class_data_a3049d1b944e91e6ab6f6a4a3fdd35854} 
+\index{Data@{Data}!splitTimestamp@{splitTimestamp}}
+\index{splitTimestamp@{splitTimestamp}!Data@{Data}}
+\doxysubsubsection{\texorpdfstring{splitTimestamp()}{splitTimestamp()}}
+{\footnotesize\ttfamily void Data\+::split\+Timestamp (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{timestamp }\end{DoxyParamCaption})}
+
+
+
+Splits the timestamp string into its components. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timestamp} & The timestamp string to split. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_data_8h}{Data.\+h}}\item 
+\mbox{\hyperlink{_data_8cpp}{Data.\+cpp}}\end{DoxyCompactItemize}

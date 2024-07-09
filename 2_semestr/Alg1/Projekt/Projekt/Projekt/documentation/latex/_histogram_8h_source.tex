@@ -1,0 +1,20 @@
+\doxysection{Histogram.\+h}
+\hypertarget{_histogram_8h_source}{}\label{_histogram_8h_source}\mbox{\hyperlink{_histogram_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_data_8h}{Data.h}}"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_histogram_interval}{HistogramInterval}}\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{struct_histogram_interval_ab75f6a516c8fc4e8fb16bb476c0231a1}{lowerBound}};\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{struct_histogram_interval_a5f8f84507e09731409cbaccb5768015c}{upperBound}};\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_histogram_interval_a09dcd9ec1d81bd7c143c5e07b9a7c390}{frequency}};\ \ \ \ \ }
+\DoxyCodeLine{00015\ \};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00025\ std::vector<HistogramInterval>\ \mbox{\hyperlink{_histogram_8h_ab1cc1a9f3a5aefa12c4ad84599b94113}{buildHistogramTemperature}}(\textcolor{keyword}{const}\ std::map<int,\ Data>\&\ dataMap,\ \textcolor{keywordtype}{int}\ numIntervals);}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00035\ std::vector<HistogramInterval>\ \mbox{\hyperlink{_histogram_8h_a1e2633aa0e75d467ceba4eeaab88e12b}{buildHistogramHumidity}}(\textcolor{keyword}{const}\ std::map<int,\ Data>\&\ dataMap,\ \textcolor{keywordtype}{int}\ numIntervals);}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00044\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{_histogram_8h_a558d91f42862585e3e4aa01456fcddd6}{drawHistogram}}(\textcolor{keyword}{const}\ std::vector<HistogramInterval>\&\ histogram);}
+
+\end{DoxyCode}

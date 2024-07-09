@@ -1,0 +1,76 @@
+\doxysection{Histogram.\+cpp File Reference}
+\hypertarget{_histogram_8cpp}{}\label{_histogram_8cpp}\index{Histogram.cpp@{Histogram.cpp}}
+{\ttfamily \#include "{}Histogram.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{struct_histogram_interval}{Histogram\+Interval}} $>$ \mbox{\hyperlink{_histogram_8cpp_ab1cc1a9f3a5aefa12c4ad84599b94113}{build\+Histogram\+Temperature}} (const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&data\+Map, int num\+Intervals)
+\begin{DoxyCompactList}\small\item\em Builds a histogram for temperature data. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{struct_histogram_interval}{Histogram\+Interval}} $>$ \mbox{\hyperlink{_histogram_8cpp_a1e2633aa0e75d467ceba4eeaab88e12b}{build\+Histogram\+Humidity}} (const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&data\+Map, int num\+Intervals)
+\begin{DoxyCompactList}\small\item\em Builds a histogram for humidity data. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_histogram_8cpp_a558d91f42862585e3e4aa01456fcddd6}{draw\+Histogram}} (const std\+::vector$<$ \mbox{\hyperlink{struct_histogram_interval}{Histogram\+Interval}} $>$ \&histogram)
+\begin{DoxyCompactList}\small\item\em Draws a histogram based on the provided histogram intervals. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{_histogram_8cpp_a1e2633aa0e75d467ceba4eeaab88e12b}\label{_histogram_8cpp_a1e2633aa0e75d467ceba4eeaab88e12b} 
+\index{Histogram.cpp@{Histogram.cpp}!buildHistogramHumidity@{buildHistogramHumidity}}
+\index{buildHistogramHumidity@{buildHistogramHumidity}!Histogram.cpp@{Histogram.cpp}}
+\doxysubsubsection{\texorpdfstring{buildHistogramHumidity()}{buildHistogramHumidity()}}
+{\footnotesize\ttfamily std\+::vector$<$ \mbox{\hyperlink{struct_histogram_interval}{Histogram\+Interval}} $>$ build\+Histogram\+Humidity (\begin{DoxyParamCaption}\item[{const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&}]{data\+Map,  }\item[{int}]{num\+Intervals }\end{DoxyParamCaption})}
+
+
+
+Builds a histogram for humidity data. 
+
+This function calculates the frequency of humidity values falling into specified intervals.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Map} & The unordered map containing the humidity data. \\
+\hline
+{\em num\+Intervals} & The number of intervals to divide the humidity range into. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A vector of \doxylink{struct_histogram_interval}{Histogram\+Interval} objects representing the histogram. 
+\end{DoxyReturn}
+\Hypertarget{_histogram_8cpp_ab1cc1a9f3a5aefa12c4ad84599b94113}\label{_histogram_8cpp_ab1cc1a9f3a5aefa12c4ad84599b94113} 
+\index{Histogram.cpp@{Histogram.cpp}!buildHistogramTemperature@{buildHistogramTemperature}}
+\index{buildHistogramTemperature@{buildHistogramTemperature}!Histogram.cpp@{Histogram.cpp}}
+\doxysubsubsection{\texorpdfstring{buildHistogramTemperature()}{buildHistogramTemperature()}}
+{\footnotesize\ttfamily std\+::vector$<$ \mbox{\hyperlink{struct_histogram_interval}{Histogram\+Interval}} $>$ build\+Histogram\+Temperature (\begin{DoxyParamCaption}\item[{const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&}]{data\+Map,  }\item[{int}]{num\+Intervals }\end{DoxyParamCaption})}
+
+
+
+Builds a histogram for temperature data. 
+
+This function calculates the frequency of temperature values falling into specified intervals.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Map} & The unordered map containing the temperature data. \\
+\hline
+{\em num\+Intervals} & The number of intervals to divide the temperature range into. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A vector of \doxylink{struct_histogram_interval}{Histogram\+Interval} objects representing the histogram. 
+\end{DoxyReturn}
+\Hypertarget{_histogram_8cpp_a558d91f42862585e3e4aa01456fcddd6}\label{_histogram_8cpp_a558d91f42862585e3e4aa01456fcddd6} 
+\index{Histogram.cpp@{Histogram.cpp}!drawHistogram@{drawHistogram}}
+\index{drawHistogram@{drawHistogram}!Histogram.cpp@{Histogram.cpp}}
+\doxysubsubsection{\texorpdfstring{drawHistogram()}{drawHistogram()}}
+{\footnotesize\ttfamily void draw\+Histogram (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \mbox{\hyperlink{struct_histogram_interval}{Histogram\+Interval}} $>$ \&}]{histogram }\end{DoxyParamCaption})}
+
+
+
+Draws a histogram based on the provided histogram intervals. 
+
+This function draws a histogram based on the provided histogram intervals.
+
+
+\begin{DoxyParams}{Parameters}
+{\em histogram} & The vector of \doxylink{struct_histogram_interval}{Histogram\+Interval} objects representing the histogram. \\
+\hline
+\end{DoxyParams}

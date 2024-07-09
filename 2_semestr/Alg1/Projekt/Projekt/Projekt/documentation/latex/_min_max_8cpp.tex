@@ -1,0 +1,116 @@
+\doxysection{Min\+Max.\+cpp File Reference}
+\hypertarget{_min_max_8cpp}{}\label{_min_max_8cpp}\index{MinMax.cpp@{MinMax.cpp}}
+{\ttfamily \#include "{}Min\+Max.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{_min_max_8cpp_a9d5a354441e3353735269c0d93879c6c}{get\+Temperatur\+Min}} (const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&data\+Map)
+\begin{DoxyCompactList}\small\item\em Retrieves the minimum temperature values. \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{_min_max_8cpp_a89e8187d1e168b06d5aacd0f941b9d70}{get\+Temperatur\+Max}} (const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&data\+Map)
+\begin{DoxyCompactList}\small\item\em Retrieves the maximum temperature values. \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{_min_max_8cpp_ab4866c003f4ebe3269c1b8ce2821dba8}{get\+Humidity\+Min}} (const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&data\+Map)
+\begin{DoxyCompactList}\small\item\em Retrieves the minimum humidity values. \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{_min_max_8cpp_ad14bfa4f0ec674aba3a56885f742883b}{get\+Humidity\+Max}} (const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&data\+Map)
+\begin{DoxyCompactList}\small\item\em Retrieves the maximum humidity values. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_min_max_8cpp_a9f53d147e2a96cec28aeff1433ecd98d}{print\+Max\+And\+Min}} (const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&data\+Map)
+\begin{DoxyCompactList}\small\item\em Prints the maximum and minimum humidity and temperature values. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{_min_max_8cpp_ad14bfa4f0ec674aba3a56885f742883b}\label{_min_max_8cpp_ad14bfa4f0ec674aba3a56885f742883b} 
+\index{MinMax.cpp@{MinMax.cpp}!getHumidityMax@{getHumidityMax}}
+\index{getHumidityMax@{getHumidityMax}!MinMax.cpp@{MinMax.cpp}}
+\doxysubsubsection{\texorpdfstring{getHumidityMax()}{getHumidityMax()}}
+{\footnotesize\ttfamily std\+::vector$<$ double $>$ get\+Humidity\+Max (\begin{DoxyParamCaption}\item[{const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&}]{data\+Map }\end{DoxyParamCaption})}
+
+
+
+Retrieves the maximum humidity values. 
+
+Searches for the maximum humidity values in the data map and returns them as a vector.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Map} & The unordered map containing the humidity data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A vector containing the maximum humidity values. 
+\end{DoxyReturn}
+\Hypertarget{_min_max_8cpp_ab4866c003f4ebe3269c1b8ce2821dba8}\label{_min_max_8cpp_ab4866c003f4ebe3269c1b8ce2821dba8} 
+\index{MinMax.cpp@{MinMax.cpp}!getHumidityMin@{getHumidityMin}}
+\index{getHumidityMin@{getHumidityMin}!MinMax.cpp@{MinMax.cpp}}
+\doxysubsubsection{\texorpdfstring{getHumidityMin()}{getHumidityMin()}}
+{\footnotesize\ttfamily std\+::vector$<$ double $>$ get\+Humidity\+Min (\begin{DoxyParamCaption}\item[{const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&}]{data\+Map }\end{DoxyParamCaption})}
+
+
+
+Retrieves the minimum humidity values. 
+
+Searches for the minimum humidity values in the data map and returns them as a vector.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Map} & The unordered map containing the humidity data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A vector containing the minimum humidity values. 
+\end{DoxyReturn}
+\Hypertarget{_min_max_8cpp_a89e8187d1e168b06d5aacd0f941b9d70}\label{_min_max_8cpp_a89e8187d1e168b06d5aacd0f941b9d70} 
+\index{MinMax.cpp@{MinMax.cpp}!getTemperaturMax@{getTemperaturMax}}
+\index{getTemperaturMax@{getTemperaturMax}!MinMax.cpp@{MinMax.cpp}}
+\doxysubsubsection{\texorpdfstring{getTemperaturMax()}{getTemperaturMax()}}
+{\footnotesize\ttfamily std\+::vector$<$ double $>$ get\+Temperatur\+Max (\begin{DoxyParamCaption}\item[{const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&}]{data\+Map }\end{DoxyParamCaption})}
+
+
+
+Retrieves the maximum temperature values. 
+
+Searches for the maximum temperature values in the data map and returns them as a vector.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Map} & The unordered map containing the temperature data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A vector containing the maximum temperature values. 
+\end{DoxyReturn}
+\Hypertarget{_min_max_8cpp_a9d5a354441e3353735269c0d93879c6c}\label{_min_max_8cpp_a9d5a354441e3353735269c0d93879c6c} 
+\index{MinMax.cpp@{MinMax.cpp}!getTemperaturMin@{getTemperaturMin}}
+\index{getTemperaturMin@{getTemperaturMin}!MinMax.cpp@{MinMax.cpp}}
+\doxysubsubsection{\texorpdfstring{getTemperaturMin()}{getTemperaturMin()}}
+{\footnotesize\ttfamily std\+::vector$<$ double $>$ get\+Temperatur\+Min (\begin{DoxyParamCaption}\item[{const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&}]{data\+Map }\end{DoxyParamCaption})}
+
+
+
+Retrieves the minimum temperature values. 
+
+Searches for the minimum temperature values in the data map and returns them as a vector.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Map} & The unordered map containing the temperature data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A vector containing the minimum temperature values. 
+\end{DoxyReturn}
+\Hypertarget{_min_max_8cpp_a9f53d147e2a96cec28aeff1433ecd98d}\label{_min_max_8cpp_a9f53d147e2a96cec28aeff1433ecd98d} 
+\index{MinMax.cpp@{MinMax.cpp}!printMaxAndMin@{printMaxAndMin}}
+\index{printMaxAndMin@{printMaxAndMin}!MinMax.cpp@{MinMax.cpp}}
+\doxysubsubsection{\texorpdfstring{printMaxAndMin()}{printMaxAndMin()}}
+{\footnotesize\ttfamily void print\+Max\+And\+Min (\begin{DoxyParamCaption}\item[{const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&}]{data\+Map }\end{DoxyParamCaption})}
+
+
+
+Prints the maximum and minimum humidity and temperature values. 
+
+This function prints out the maximum and minimum humidity and temperature values found in the data map.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Map} & The unordered map containing the data. \\
+\hline
+\end{DoxyParams}

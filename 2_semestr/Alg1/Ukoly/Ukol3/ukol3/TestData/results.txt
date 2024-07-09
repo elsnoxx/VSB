@@ -1,0 +1,14 @@
+graph1.txt
+Number of vertices: 10
+Number of edges: 12
+Number of connected components: 2
+
+graph2.txt
+Number of vertices: 6
+Number of edges: 6
+Number of connected components: 1
+
+graph3.txt
+Number of vertices: 121424
+Number of edges: 822761
+Number of connected components: 375

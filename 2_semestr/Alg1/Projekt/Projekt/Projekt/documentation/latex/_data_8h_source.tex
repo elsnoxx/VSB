@@ -1,0 +1,69 @@
+\doxysection{Data.\+h}
+\hypertarget{_data_8h_source}{}\label{_data_8h_source}\mbox{\hyperlink{_data_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_projekt_8h}{Projekt.h}}"{}}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_data}{Data}}\ \{}
+\DoxyCodeLine{00011\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{int}\ B0;\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{int}\ B1;\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{int}\ B2;\ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{int}\ B3;\ }
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{int}\ B4;\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{int}\ year;\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{int}\ month;\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{int}\ day;\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{int}\ hour;\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{int}\ minute;\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{int}\ second;\ }
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{class_data_af11f741cb7f587e2e495452a8905a22a}{Data}}()\ :\ year(0),\ month(0),\ day(0),\ hour(0),\ minute(0),\ second(0),\ B0(0),\ B1(0),\ B2(0),\ B3(0),\ B4(0)\ \{\}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{class_data_af11f741cb7f587e2e495452a8905a22a}{Data}}(\textcolor{keyword}{const}\ std::string\&\ timestamp,\ \textcolor{keyword}{const}\ std::string\&\ hexValue);}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00047\ \ \ \ \ std::string\ \mbox{\hyperlink{class_data_a23f2bb3dd84115f9df4c494bd360889e}{getTimestamp}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_data_a3049d1b944e91e6ab6f6a4a3fdd35854}{splitTimestamp}}(\textcolor{keyword}{const}\ std::string\&\ timestamp);}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_data_a7b01e5aebbfcc4758c25dc514dbb0964}{getB0}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_data_adb83c15451a4c54e5e2c6afdbd6f8226}{getB1}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_data_a48722cce737175ad487af13ab80de227}{getB2}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_data_a545472d0950a23e4426bdf3e39af341b}{getB3}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_data_a0bd0a338ed9ac1fae8e12941195c5404}{getB4}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00090\ \ \ \ \ }
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_data_af47e5aeeaa27ce915608038c13db0fd9}{getYear}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_data_ab3d6db1197cae2954ef304e825d0cb9b}{getMonth}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_data_a2f0f53eeb7adf41164bdc8e1a31ae78b}{getDay}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_data_a5dc0c4c6474551840ef55e201eb7fef1}{getHour}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_data_aa6223c808a0c78693ce015e8388fe01c}{getMinute}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_data_a27b6367ff7c752852fb7c5584dfa2b0c}{getSecond}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_data_a13a19585671c34ee46d413af78c802f5}{processPayloadToNum}}(\textcolor{keyword}{const}\ std::string\&\ hexValue);}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00149\ \ \ \ \ std::int16\_t\ \mbox{\hyperlink{class_data_aaa2523e5583aacd17bddb4d821058fd4}{hexToInt}}(\textcolor{keyword}{const}\ std::string\&\ hexStr)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ std::string\ \mbox{\hyperlink{class_data_a23118b7bb7643d81ced40b4e042b4c01}{intToHex}}(std::int16\_t\ intValue)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00158\ \ \ \ \ std::double\_t\ \mbox{\hyperlink{class_data_a60b65ed2a3bab58f6ed9a80e3ccbb82c}{getTemperature}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00165\ \ \ \ \ std::double\_t\ \mbox{\hyperlink{class_data_ac1b50dc79ab4ad37d6d3258bd84e5e41}{getHumidity}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00172\ \ \ \ \ std::double\_t\ \mbox{\hyperlink{class_data_a344f4cf8c15782635db1fb750eeeff19}{getVoltage}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00179\ \ \ \ \ std::string\ \mbox{\hyperlink{class_data_a737a9298b73d6e3d894d6c342b3f064f}{getPayload}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00180\ \};}
+
+\end{DoxyCode}

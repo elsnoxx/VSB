@@ -1,0 +1,148 @@
+\doxysection{Task.\+cpp File Reference}
+\hypertarget{_task_8cpp}{}\label{_task_8cpp}\index{Task.cpp@{Task.cpp}}
+{\ttfamily \#include "{}Task.\+h"{}}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include "{}Data.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_task_8cpp_ab589127bb41e3eb5c5757d4de606e887}{save\+Data\+To\+File}} (const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&data\+Map, const std\+::string \&filename)
+\begin{DoxyCompactList}\small\item\em Saves the data to a file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_task_8cpp_a8d66b3fbb3b32214b6a86c5ad55b922f}{find\+Measurement}} (const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&data\+Map, const std\+::string \&timestamp)
+\begin{DoxyCompactList}\small\item\em Finds and returns the measured values for a given timestamp. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{_task_8cpp_aa4e0336f08c6aebdbac161ae99a1f678}{compare\+Timestamp}} (const \mbox{\hyperlink{class_data}{Data}} \&data1, const \mbox{\hyperlink{class_data}{Data}} \&data2)
+\begin{DoxyCompactList}\small\item\em Compares two timestamps. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{_task_8cpp_a90cc4d28973e07f22ba81046483fc9a5}{partition}} (std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&data\+Map, int low, int high)
+\begin{DoxyCompactList}\small\item\em Partitions the data for quicksort. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_task_8cpp_a0190a8577106a88d24a4b4801c44c036}{quick\+Sort}} (std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&data\+Map, int low, int high)
+\begin{DoxyCompactList}\small\item\em Implements the quicksort algorithm. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_task_8cpp_a350224fa595d1242d3a59ed3e002fd6e}{remove\+Duplicates}} (std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&data\+Map)
+\begin{DoxyCompactList}\small\item\em Removes duplicate entries from the data map based on timestamp. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{_task_8cpp_aa4e0336f08c6aebdbac161ae99a1f678}\label{_task_8cpp_aa4e0336f08c6aebdbac161ae99a1f678} 
+\index{Task.cpp@{Task.cpp}!compareTimestamp@{compareTimestamp}}
+\index{compareTimestamp@{compareTimestamp}!Task.cpp@{Task.cpp}}
+\doxysubsubsection{\texorpdfstring{compareTimestamp()}{compareTimestamp()}}
+{\footnotesize\ttfamily bool compare\+Timestamp (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_data}{Data}} \&}]{data1,  }\item[{const \mbox{\hyperlink{class_data}{Data}} \&}]{data2 }\end{DoxyParamCaption})}
+
+
+
+Compares two timestamps. 
+
+Compares two timestamps for sorting purposes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data1} & The first timestamp to compare. \\
+\hline
+{\em data2} & The second timestamp to compare. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if data1 is earlier than data2, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{_task_8cpp_a8d66b3fbb3b32214b6a86c5ad55b922f}\label{_task_8cpp_a8d66b3fbb3b32214b6a86c5ad55b922f} 
+\index{Task.cpp@{Task.cpp}!findMeasurement@{findMeasurement}}
+\index{findMeasurement@{findMeasurement}!Task.cpp@{Task.cpp}}
+\doxysubsubsection{\texorpdfstring{findMeasurement()}{findMeasurement()}}
+{\footnotesize\ttfamily void find\+Measurement (\begin{DoxyParamCaption}\item[{const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&}]{data\+Map,  }\item[{const std\+::string \&}]{timestamp }\end{DoxyParamCaption})}
+
+
+
+Finds and returns the measured values for a given timestamp. 
+
+Searches for and returns the measured values for a specific timestamp in the data map.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Map} & The unordered map containing the data. \\
+\hline
+{\em timestamp} & The timestamp for which measurements are requested. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{_task_8cpp_a90cc4d28973e07f22ba81046483fc9a5}\label{_task_8cpp_a90cc4d28973e07f22ba81046483fc9a5} 
+\index{Task.cpp@{Task.cpp}!partition@{partition}}
+\index{partition@{partition}!Task.cpp@{Task.cpp}}
+\doxysubsubsection{\texorpdfstring{partition()}{partition()}}
+{\footnotesize\ttfamily int partition (\begin{DoxyParamCaption}\item[{std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&}]{data\+Map,  }\item[{int}]{low,  }\item[{int}]{high }\end{DoxyParamCaption})}
+
+
+
+Partitions the data for quicksort. 
+
+Partitions the data map for the quicksort algorithm.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Map} & The unordered map containing the data to be partitioned. \\
+\hline
+{\em low} & The starting index of the partition. \\
+\hline
+{\em high} & The ending index of the partition. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The partition index. 
+\end{DoxyReturn}
+\Hypertarget{_task_8cpp_a0190a8577106a88d24a4b4801c44c036}\label{_task_8cpp_a0190a8577106a88d24a4b4801c44c036} 
+\index{Task.cpp@{Task.cpp}!quickSort@{quickSort}}
+\index{quickSort@{quickSort}!Task.cpp@{Task.cpp}}
+\doxysubsubsection{\texorpdfstring{quickSort()}{quickSort()}}
+{\footnotesize\ttfamily void quick\+Sort (\begin{DoxyParamCaption}\item[{std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&}]{data\+Map,  }\item[{int}]{low,  }\item[{int}]{high }\end{DoxyParamCaption})}
+
+
+
+Implements the quicksort algorithm. 
+
+Sorts the data map using the quicksort algorithm.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Map} & The unordered map containing the data to be sorted. \\
+\hline
+{\em low} & The starting index of the sort. \\
+\hline
+{\em high} & The ending index of the sort. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{_task_8cpp_a350224fa595d1242d3a59ed3e002fd6e}\label{_task_8cpp_a350224fa595d1242d3a59ed3e002fd6e} 
+\index{Task.cpp@{Task.cpp}!removeDuplicates@{removeDuplicates}}
+\index{removeDuplicates@{removeDuplicates}!Task.cpp@{Task.cpp}}
+\doxysubsubsection{\texorpdfstring{removeDuplicates()}{removeDuplicates()}}
+{\footnotesize\ttfamily void remove\+Duplicates (\begin{DoxyParamCaption}\item[{std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&}]{data\+Map }\end{DoxyParamCaption})}
+
+
+
+Removes duplicate entries from the data map based on timestamp. 
+
+This function iterates through the provided data map and removes duplicate entries based on their timestamp. Only the first occurrence of each unique timestamp is preserved, while all subsequent occurrences are removed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Map} & The unordered map containing the data to be processed. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{_task_8cpp_ab589127bb41e3eb5c5757d4de606e887}\label{_task_8cpp_ab589127bb41e3eb5c5757d4de606e887} 
+\index{Task.cpp@{Task.cpp}!saveDataToFile@{saveDataToFile}}
+\index{saveDataToFile@{saveDataToFile}!Task.cpp@{Task.cpp}}
+\doxysubsubsection{\texorpdfstring{saveDataToFile()}{saveDataToFile()}}
+{\footnotesize\ttfamily void save\+Data\+To\+File (\begin{DoxyParamCaption}\item[{const std\+::map$<$ int, \mbox{\hyperlink{class_data}{Data}} $>$ \&}]{data\+Map,  }\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})}
+
+
+
+Saves the data to a file. 
+
+Saves data to a file.
+
+This function saves the data stored in the provided data map to a file with the specified filename. Each line in the file contains the timestamp and payload of the data.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Map} & The unordered map containing the data to be saved. \\
+\hline
+{\em filename} & The name of the file to save the data to. \\
+\hline
+\end{DoxyParams}
