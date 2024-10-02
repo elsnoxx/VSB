@@ -9,13 +9,7 @@
         public Weight Weight { get; set; }
 
         // Konstruktor
-        public Product(string name, double itemPrice, int? count, Weight weight)
-        {
-            Name = name;
-            ItemPrice = itemPrice;
-            Count = count;
-            Weight = weight;
-        }
+        public Product() { }
     }
 
     // Struktura pro váhu
@@ -27,9 +21,18 @@
         // Metoda pro převedení váhy na kilogramy
         public double GetNormalizedValue()
         {
-            if (Jednotka == Jednotka.Gram)
-                return Hodnota / 1000;
-            return Hodnota;  // Je už v kilogramech
+            // Normalizace hmotnosti na kilogramy
+            switch (Jednotka)
+            {
+                case Jednotka.Gram:
+                    return Hodnota / 1000;
+                case Jednotka.Dekagram:
+                    return Hodnota / 100;
+                case Jednotka.Kilogram:
+                    return Hodnota;
+                default:
+                    return 0;
+            }
         }
     }
 
@@ -37,6 +40,7 @@
     internal enum Jednotka
     {
         Gram,
-        Kilogram
+        Kilogram,
+        Dekagram
     }
 }
