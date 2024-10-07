@@ -1,87 +1,88 @@
-/******************************************************************************
- * 1 Základy SQL, p?íkaz SELECT                                               *
+/****************************************************************************** 
+ * 1 ZÃ¡klady SQL, pÅ™Ã­kaz SELECT                                                *
  ******************************************************************************/
 
-/* 1. Vypiste e-mailové e adresy všech neaktivních zakazníku */
+/* 1. VypiÅ¡te e-mailovÃ© adresy vÅ¡ech neaktivnÃ­ch zÃ¡kaznÃ­kÅ¯ */
 select email from customer where active = 0;
 
-/*2. Vypiste názvy a popisy všech film? s klasifikací (atribut rating) G. Vystup bude set?ízen sestupne podle názvu filmu. */
+/* 2. VypiÅ¡te nÃ¡zvy a popisy vÅ¡ech filmÅ¯ s klasifikacÃ­ (atribut rating) G. VÃ½stup bude seÅ™azen sestupnÄ› podle nÃ¡zvu filmu. */
 select title, description from film where rating = 'G' order by title desc;
 
-/*3. Vypiste všechny údaje o platbách, které prob?hly v roce 2006 nebo pozd?ji a ?ástka byla menší ne 2. */
+/* 3. VypiÅ¡te vÅ¡echny Ãºdaje o platbÃ¡ch, kterÃ© probÄ›hly v roce 2006 nebo pozdÄ›ji a ÄÃ¡stka byla menÅ¡Ã­ neÅ¾ 2. */
 select * from payment where Year(payment_date) = 2006 and amount > 2;
 
-/*4. Vypiste popisy všech film? klasifikovanıch jako G nebo PG */
+/* 4. VypiÅ¡te popisy vÅ¡ech filmÅ¯ klasifikovanÃ½ch jako G nebo PG */
 select description from film where rating in ('G', 'PG');
 
-/* 5. Vypište popisy všech film? klasifikovanıch jako G, PG nebo PG-13. */
+/* 5. VypiÅ¡te popisy vÅ¡ech filmÅ¯ klasifikovanÃ½ch jako G, PG nebo PG-13. */
 select * from film where rating in ('G', 'PG', 'PG-13');
 
-/* 6. Vypište popisy všech film?, které nejsou klasifikovány jako G, PG nebo PG-13. */
+/* 6. VypiÅ¡te popisy vÅ¡ech filmÅ¯, kterÃ© nejsou klasifikovÃ¡ny jako G, PG nebo PG-13. */
 select description from film where rating not in ('G', 'PG', 'PG-13');
 
-/* 7. Vypište všechny údaje film?, jejich délka p?esahuje 50 minut a doba vıp?j?ky je 3 nebo 5 dní. */
-select * from film where length > 50 and rental_duration in  (3, 5);
+/* 7. VypiÅ¡te vÅ¡echny Ãºdaje filmÅ¯, jejichÅ¾ dÃ©lka pÅ™esahuje 50 minut a doba vÃ½pÅ¯jÄky je 3 nebo 5 dnÅ¯. */
+select * from film where length > 50 and rental_duration in (3, 5);
 
 /*
-8. Vypište názvy film?, které obsahují ”RAINBOW“ nebo za?ínají na ”TEXAS“ a jejich délka presahuje 70 minut.
-Zamyslete se nad nejednozna?ností formulace této úlohy v p?irozeném jazyce.
+8. VypiÅ¡te nÃ¡zvy filmÅ¯, kterÃ© obsahujÃ­ 'RAINBOW' nebo zaÄÃ­najÃ­ na 'TEXAS' a jejich dÃ©lka pÅ™esahuje 70 minut.
+Zamyslete se nad nejednoznaÄnostÃ­ formulace tÃ©to Ãºlohy v pÅ™irozenÃ©m jazyce.
 */
 select title from film where title like 'TEXAS%' or title like '%RAINBOW%' and length > 70;
 
-/*9. Vypište názvy všech film?, v jejich popisu se vyskytuje ”And“, jejich délka spadá do intervalu 80 az 90 minut a standardní doba vıp?j?ky (atribut rental duration) je liché ?íslo. */
+/* 9. VypiÅ¡te nÃ¡zvy vÅ¡ech filmÅ¯, v jejichÅ¾ popisu se vyskytuje 'And', jejich dÃ©lka spadÃ¡ do intervalu 80 aÅ¾ 90 minut a standardnÃ­ doba vÃ½pÅ¯jÄky (atribut rental duration) je lichÃ© ÄÃ­slo. */
 select * from film where description like '%And%' and length between 80 and 90 and rental_duration % 2 = 1;
 
-/*10. Vypište vlastnosti (atribut special features) všech film?, kde ?ástka za náhradu škody (atribut replacement cost) je v intervalu 14 az 16. Zaji?t?te, aby se vlastnosti ve vıspisu
-neopakovaly. Set?i?te vybrané vlastnosti abecedn?. Zamyslete se, pro? je vısledek i bez explicitního pozadavku na set?ízení jiz abecedn? set?ízeny.*/
+/* 10. VypiÅ¡te vlastnosti (atribut special features) vÅ¡ech filmÅ¯, kde ÄÃ¡stka za nÃ¡hradu Å¡kody (atribut replacement cost) je v intervalu 14 aÅ¾ 16. ZajistÄ›te, aby se vlastnosti ve vÃ½pisu
+neopakovaly. SeÅ™aÄte vybranÃ© vlastnosti abecednÄ›. Zamyslete se, proÄ je vÃ½sledek i bez explicitnÃ­ho poÅ¾adavku na seÅ™azenÃ­ jiÅ¾ abecednÄ› seÅ™azen. */
 select DISTINCT special_features from film where replacement_cost between 14 and 16 order by special_features desc;
 
-/* 11. Vypište všechny údaje film?, jejich standardní doba vıp?j?ky je menší ne 4 dny, nebo jsou klasifikovány jako PG. Nesmí však spl?ovat ob? podmínky zárove?. */
+/* 11. VypiÅ¡te vÅ¡echny Ãºdaje filmÅ¯, jejichÅ¾ standardnÃ­ doba vÃ½pÅ¯jÄky je menÅ¡Ã­ neÅ¾ 4 dny, nebo jsou klasifikovÃ¡ny jako PG. NesmÃ­ vÅ¡ak splÅˆovat obÄ› podmÃ­nky zÃ¡roveÅˆ. */
 select * from film where (rental_duration < 4 or rating = 'PG') and not (rental_duration < 4 and rating = 'PG');
 
-/* 12. Vypište všechny údaje o adresách, které mají vypln?no PS?. */
+/* 12. VypiÅ¡te vÅ¡echny Ãºdaje o adresÃ¡ch, kterÃ© majÃ­ vyplnÄ›no PSÄŒ. */
 select * from address where postal_code is not null;
 
-/* 13. Vypište ID všech zákazník?, kte?í aktuáln? mají vyp?j?enı n?jakı film. Dokázali byste spo?ítat, kolik takovıch zákazník? je? */
+/* 13. VypiÅ¡te ID vÅ¡ech zÃ¡kaznÃ­kÅ¯, kteÅ™Ã­ aktuÃ¡lnÄ› majÃ­ vypÅ¯jÄenÃ½ nÄ›jakÃ½ film. DokÃ¡zali byste spoÄÃ­tat, kolik takovÃ½ch zÃ¡kaznÃ­kÅ¯ je? */
 select distinct customer_id from rental where return_date is null;
 select count(distinct customer_id) as number_of_customers from rental where return_date is null;
 
-/* 14. Pro kadé ID platby vypište v samostatnıch sloupcích rok, m?síc a den, kdy platba probšhla. Sloupce vhodn? pojmenujte. */
-select YEAR(payment_date) as YEAR, MONTH(payment_date) as month, DAY(payment_date) as day, payment_id  from payment;
+/* 14. Pro kaÅ¾dÃ© ID platby vypiÅ¡te v samostatnÃ½ch sloupcÃ­ch rok, mÄ›sÃ­c a den, kdy platba probÄ›hla. Sloupce vhodnÄ› pojmenujte. */
+select YEAR(payment_date) as YEAR, MONTH(payment_date) as month, DAY(payment_date) as day, payment_id from payment;
 
-/* 15. Vypište filmy, jejich délka názvu není 20 znak?. */
+/* 15. VypiÅ¡te filmy, jejichÅ¾ dÃ©lka nÃ¡zvu nenÃ­ 20 znakÅ¯. */
 select * from film where len(title) != 20;
 
-/* 16. Pro kadou ukon?enou vıp?j?ku (její ID) vypište dobu jejího trvání v minutách. */
-select rental_id, DATEDIFF(MINUTE, rental_date, return_date) as rental_duration_in_min  from rental; 
+/* 16. Pro kaÅ¾dou ukonÄenou vÃ½pÅ¯jÄku (jejÃ­ ID) vypiÅ¡te dobu jejÃ­ho trvÃ¡nÃ­ v minutÃ¡ch. */
+select rental_id, DATEDIFF(MINUTE, rental_date, return_date) as rental_duration_in_min from rental; 
 
-/* 17. Pro kadého aktivního zákazníka vypište jeho celé jméno v jednom sloupci. Vıstup tedy bude obsahovat dva sloupce – customer_id a full_name. */
+/* 17. Pro kaÅ¾dÃ©ho aktivnÃ­ho zÃ¡kaznÃ­ka vypiÅ¡te jeho celÃ© jmÃ©no v jednom sloupci. VÃ½stup tedy bude obsahovat dva sloupce â€“ customer_id a full_name. */
 select customer_id, CONCAT(first_name, ' ' ,last_name) as full_name from customer;
 
-/* 18. Pro kadou adresu (atribut address) vypište PS?. Jestlie PS? nebude vypln?no, bude se místo n?j zobrazovat text ”(prázdné)“. */
-select address, ISNULL(postal_code, '(prázdné)') as PSC from address;
+/* 18. Pro kaÅ¾dou adresu (atribut address) vypiÅ¡te PSÄŒ. JestliÅ¾e PSÄŒ nebude vyplnÄ›no, bude se mÃ­sto nÄ›j zobrazovat text '(prÃ¡zdnÃ½)'. */
+select address, ISNULL(postal_code, '(prÃ¡zdnÃ½)') as PSC from address;
 
-/* 19. Pro všechny uzav?ené vıp?j?ky vypište v jednom sloupci interval od – do (tj. ob? data odd?lená poml?kou), kdy vıp?j?ka probíhala. */
+/* 19. Pro vÅ¡echny uzavÅ™enÃ© vÃ½pÅ¯jÄky vypiÅ¡te v jednom sloupci interval od do (tj. obÄ› data oddÄ›lenÃ¡ pomlÄkou), kdy vÃ½pÅ¯jÄka probÃ­hala. */
 select rental_id, CONCAT(rental_date, ' - ', return_date) from rental;
 
-/* 20. Pro všechny vıp?j?ky vypište v jednom sloupci interval od – do (tj. ob? data odd?lená poml?kou), kdy vıp?j?ka probíhala. Pokud vıp?j?ka dosud nebyla vrácena, vypište pouze datum od. */
+/* 20. Pro vÅ¡echny vÃ½pÅ¯jÄky vypiÅ¡te v jednom sloupci interval od do (tj. obÄ› data oddÄ›lenÃ¡ pomlÄkou), kdy vÃ½pÅ¯jÄka probÃ­hala. Pokud vÃ½pÅ¯jÄka dosud nebyla vrÃ¡cena, vypiÅ¡te pouze datum od. */
 select rental_id, concat(rental_date, isnull(concat(' - ', return_date), '')) as rental_from_to from rental;
 
-/* 21. Vypište po?et všech film? v databázi. */
+/* 21. VypiÅ¡te poÄet vÅ¡ech filmÅ¯ v databÃ¡zi. */
 select count(*) as pocet from film;
 
-/* 22. Vypište po?et r?znıch klasifikací film? (atribut rating). */
-select count( distinct rating) as cnt from film;
+/* 22. VypiÅ¡te poÄet rÅ¯znÃ½ch klasifikacÃ­ filmÅ¯ (atribut rating). */
+select count(distinct rating) as cnt from film;
 
-/* 23. Vypište jedním dotazem po?et adres, po?et adres s vypln?nım PS? a po?et r?znyı PS?. */
+/* 23. VypiÅ¡te jednÃ­m dotazem poÄet adres, poÄet adres s vyplnÄ›nÃ½m PSÄŒ a poÄet rÅ¯znÃ½ch PSÄŒ. */
 select COUNT(address) as pocet_address, COUNT(postal_code) as pocet_PSC, COUNT(distinct postal_code) as pocet_PSC_ruzny from address;
 
-/* 24. Vypište nejmenší, nejv?tší a pr?m?rnou délku všech film?. Ov??te si zjišt?nou pr?um?rnou délku pomocí podílu sou?tu a po?tu. */
-select min(length) as min_delka, max(length) as max_delka, sum(length) / COUNT(*) as prum_delka  from film;select min(length) as min_length, max(length) as max_length, avg(length) as average_length from film;
+/* 24. VypiÅ¡te nejmenÅ¡Ã­, nejvÄ›tÅ¡Ã­ a prÅ¯mÄ›rnou dÃ©lku vÅ¡ech filmÅ¯. OvÄ›Å™te si zjiÅ¡tÄ›nou prÅ¯mÄ›rnou dÃ©lku pomocÃ­ podÃ­lu souÄtu a poÄtu. */
+select min(length) as min_delka, max(length) as max_delka, sum(length) / COUNT(*) as prum_delka from film;
+select min(length) as min_length, max(length) as max_length, avg(length) as average_length from film;
 select sum(length) as sum_of_length_of_all_movies, count(*) as number_of_movies, cast(sum(length) as float) / count(*) as average_length from film;
 
-/* 25. Vypište po?et a sou?et všech plateb, které byly provedeny v roce 2005. */
+/* 25. VypiÅ¡te poÄet a souÄet vÅ¡ech plateb, kterÃ© byly provedeny v roce 2005. */
 select COUNT(*) as pocet, SUM(amount) as celkem from payment where YEAR(payment_date) = 2005;
 
-/* 26. Vypište celkovı po?et znak? v názvech všech film?. */
+/* 26. VypiÅ¡te celkovÃ½ poÄet znakÅ¯ v nÃ¡zvech vÅ¡ech filmÅ¯. */
 select SUM(LEN(title)) as pocet_znaku from film;
