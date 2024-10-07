@@ -1,85 +1,94 @@
 /******************************************************************************
- * 2 Spojování tabulek                                                        *
+ * 2 SpojovÃ¡nÃ­ tabulek                                                        *
  ******************************************************************************/
-/* 1. Vypište všechny informace o m?stech v?etn? odpovídajících informací o státech, kde se tato m?sta nachází. */
-select * from city join country on city.country_id = country.country_id
 
-/* 2. Vypište názvy všech film? v?etn? jejich jazyka. */
-select film.title as movie, language.name as language from film join language on film.language_id = language.language_id;
+/* 1. VypiÅ¡te vÅ¡echny informace o mÄ›stech vÄetnÄ› odpovÃ­dajÃ­cÃ­ch informacÃ­ o stÃ¡tech, kde se tato mÄ›sta nachÃ¡zÃ­. */
+select * from city 
+join country on city.country_id = country.country_id;
 
+/* 2. VypiÅ¡te nÃ¡zvy vÅ¡ech filmÅ¯ vÄetnÄ› jejich jazyka. */
+select film.title as movie, language.name as language 
+from film 
+join language on film.language_id = language.language_id;
 
-/* 3. Vypište ID všech vıp?j?ek zákazníka s p?íjmením SIMPSON. */
-select rental.rental_id from rental join customer on customer.customer_id = rental.rental_id where customer.last_name = 'SIMPSON'
+/* 3. VypiÅ¡te ID vÅ¡ech vÃ½pÅ¯jÄek zÃ¡kaznÃ­ka s pÅ™Ã­jmenÃ­m SIMPSON. */
+select rental.rental_id 
+from rental 
+join customer on customer.customer_id = rental.customer_id -- opraveno rental.rental_id na customer.customer_id
+where customer.last_name = 'SIMPSON';
 
-/* 4. Vypište adresu (atribut address v tabulce address) zákazníka s p?íjmením SIMPSON. Porovnejte tento p?íklad s p?edchozím co do po?tu ?ádk? ve vısledku. */
-select address from customer join address on customer.address_id = address.address_id where customer.last_name = 'SIMPSON'
+/* 4. VypiÅ¡te adresu (atribut address v tabulce address) zÃ¡kaznÃ­ka s pÅ™Ã­jmenÃ­m SIMPSON. Porovnejte tento pÅ™Ã­klad s pÅ™edchozÃ­m co do poÄtu Å™Ã¡dkÅ¯ ve vÃ½sledku. */
+select address.address 
+from customer 
+join address on customer.address_id = address.address_id 
+where customer.last_name = 'SIMPSON';
 
-/* 5. Pro kadého zákazníka (jeho jméno a p?íjmení) vypište adresu bydlišt? v?etn? názvu m?sta. */
+/* 5. Pro kaÅ¾dÃ©ho zÃ¡kaznÃ­ka (jeho jmÃ©no a pÅ™Ã­jmenÃ­) vypiÅ¡te adresu bydliÅ¡tÄ› vÄetnÄ› nÃ¡zvu mÄ›sta. */
 select customer.first_name, customer.last_name, address.address, city.city 
 from customer 
 join address on customer.address_id = address.address_id 
-join city on address.address_id = city.city_id
+join city on address.city_id = city.city_id; -- opraveno address_id na city_id
 
-/* 6. Pro kadého zákazníka (jeho jméno a p?íjmení) vypište název m?sta, kde bydlí. */
+/* 6. Pro kaÅ¾dÃ©ho zÃ¡kaznÃ­ka (jeho jmÃ©no a pÅ™Ã­jmenÃ­) vypiÅ¡te nÃ¡zev mÄ›sta, kde bydlÃ­. */
 select customer.first_name, customer.last_name, city.city 
 from customer 
 join address on customer.address_id = address.address_id 
-join city on address.address_id = city.city_id
+join city on address.city_id = city.city_id; -- opraveno address_id na city_id
 
-/* 7. Vypište ID všech vıp?j?ek v?etn? jména zam?stnance, jména zákazníka a názvu filmu. */
+/* 7. VypiÅ¡te ID vÅ¡ech vÃ½pÅ¯jÄek vÄetnÄ› jmÃ©na zamÄ›stnance, jmÃ©na zÃ¡kaznÃ­ka a nÃ¡zvu filmu. */
 select
-	rental.rental_id,
-	staff.first_name as STAFF_first,
-	staff.last_name as STAFF_last,
-	customer.first_name as CUSTOMER_first,
-	customer.last_name as CUSTOMER_last,
-	film.title
+    rental.rental_id,
+    staff.first_name as staff_first,
+    staff.last_name as staff_last,
+    customer.first_name as customer_first,
+    customer.last_name as customer_last,
+    film.title
 from rental
 join staff on rental.staff_id = staff.staff_id
 join customer on rental.customer_id = customer.customer_id
 join inventory on rental.inventory_id = inventory.inventory_id
 join film on inventory.film_id = film.film_id;
 
-/* 8. Pro kadı film (jeho název) vypište jména a p?íjmení všech herc?, kte?í ve filmu hrají. Kolik ?ádk? bude ve vısledku tohoto dotazu? */
-select film.title, actor.first_name, actor.last_name
+/* 8. Pro kaÅ¾dÃ½ film (jeho nÃ¡zev) vypiÅ¡te jmÃ©na a pÅ™Ã­jmenÃ­ vÅ¡ech hercÅ¯, kteÅ™Ã­ ve filmu hrajÃ­. Kolik Å™Ã¡dkÅ¯ bude ve vÃ½sledku tohoto dotazu? */
+select film.title, actor.first_name, actor.last_name 
+from film 
+join film_actor on film.film_id = film_actor.film_id 
+join actor on film_actor.actor_id = actor.actor_id;
 
-from film
-join film_actor on film.film_id = film_actor.film_id
-join actor on film_actor.actor_id = actor.actor_id
+/* 9. Pro kaÅ¾dÃ©ho herce (jeho jmÃ©no a pÅ™Ã­jmenÃ­) vypiÅ¡te jmÃ©na vÅ¡ech filmÅ¯, kde herec hrÃ¡l. ÄŒÃ­m se bude tento dotaz liÅ¡it od pÅ™edchozÃ­ho? Co mÅ¯Å¾eme Å™Ã­ct o operaci vnitÅ™nÃ­ho spojenÃ­ tabulek? */
+select actor.first_name, actor.last_name, film.title 
+from actor 
+join film_actor on film_actor.actor_id = actor.actor_id 
+join film on film.film_id = film_actor.film_id;
 
-
-/* 9. Pro kadého herce (jeho jméno a p?íjmení) vypište jména všech film?, kde herec hrál. ?ím se bude tento dotaz lišit od p?edchozího? Co m?eme ?íct o operaci vnit?ního spojení tabulek? */
-select actor.first_name, actor.last_name, film.title
-from actor
-join film_actor on film_actor.actor_id = actor.actor_id
-join film on film.film_id = film_actor.film_id
-
-/* 10. Vypište názvy všech film? v kategorii ”Horror“. */
+/* 10. VypiÅ¡te nÃ¡zvy vÅ¡ech filmÅ¯ v kategorii "Horror". */
 select film.title 
-from film
-join film_category on film_category.film_id = film.film_id
-join category on category.category_id = film_category.category_id
-where category.name = 'Horror'
+from film 
+join film_category on film_category.film_id = film.film_id 
+join category on category.category_id = film_category.category_id 
+where category.name = 'Horror';
 
-/* 11. Pro kadı sklad (jeho ID) vypište jméno a p?íjmení jeho správce. Dále vypište adresu skladu a adresu správce (u obou adres sta?í atribut address v tabulce address).
-   ?ešení dále rozši?te o vıpis adresy v?etn? názvu m?sta a státu. */
+/* 11. Pro kaÅ¾dÃ½ sklad (jeho ID) vypiÅ¡te jmÃ©no a pÅ™Ã­jmenÃ­ jeho sprÃ¡vce. DÃ¡le vypiÅ¡te adresu skladu a adresu sprÃ¡vce (u obou adres staÄÃ­ atribut address v tabulce address). Å˜eÅ¡enÃ­ dÃ¡le rozÅ¡iÅ™te o vÃ½pis adresy vÄetnÄ› nÃ¡zvu mÄ›sta a stÃ¡tu. */
 select
-	store.store_id, staff.first_name, staff.last_name,
-	store_address.address as STORE_address,
-	manager_address.address as MANAGER_address
+    store.store_id, 
+    staff.first_name, staff.last_name,
+    store_address.address as store_address,
+    manager_address.address as manager_address
 from store
 join staff on store.manager_staff_id = staff.staff_id
 join address as store_address on store.address_id = store_address.address_id
 join address as manager_address on staff.address_id = manager_address.address_id;
 
+-- RozÅ¡Ã­Å™enÃ© Å™eÅ¡enÃ­ o vÃ½pis mÄ›sta a stÃ¡tu
 select
-	store.store_id, staff.first_name, staff.last_name,
-	store_address.address as STORE_address,
-	store_city.city as STORE_city,
-	store_country.country as STORE_country,
-	manager_address.address as MANAGER_address,
-	manager_city.city as MANAGER_city,
-	manager_country.country as MANAGER_country
+    store.store_id, 
+    staff.first_name, staff.last_name,
+    store_address.address as store_address,
+    store_city.city as store_city,
+    store_country.country as store_country,
+    manager_address.address as manager_address,
+    manager_city.city as manager_city,
+    manager_country.country as manager_country
 from store
 join staff on store.manager_staff_id = staff.staff_id
 join address as store_address on store.address_id = store_address.address_id
@@ -89,110 +98,118 @@ join address as manager_address on staff.address_id = manager_address.address_id
 join city as manager_city on manager_address.city_id = manager_city.city_id
 join country as manager_country on manager_city.country_id = manager_country.country_id;
 
-/* 12. Pro kadı film (ID a název) vypište ID všech herc? a ID všech kategorií, do kterıch film spadá. Tzn. napište dotaz, jeho vısledkem bude tabulka s atributy film_id, actor_id a category_id, set?ízeno dle film_id.
-   Z vısledku pohledem zjist?te, kolik herc? hraje ve filmu s film id = 1, kolik tomuto filmu odpovídá kategorií a kolik je pro tento film celkem ?ádk? ve vısledku. */
-   select 
-   film.film_id, film.title, actor.actor_id, category.category_id
-   from film
-   join film_actor on film_actor.film_id = film.film_id
-   join actor on actor.actor_id = film_actor.actor_id
-   join film_category on film_category.film_id = film.film_id
-   join category on category.category_id = film_category.category_id
-   order by film.film_id
-
--- po?et herc? pro film id = 1
-select count(distinct actor_id) as actor_count
+/* 12. Pro kaÅ¾dÃ½ film (ID a nÃ¡zev) vypiÅ¡te ID vÅ¡ech hercÅ¯ a ID vÅ¡ech kategoriÃ­, do kterÃ½ch film spadÃ¡. SeÅ™aÄte dle film_id. */
+select 
+    film.film_id, film.title, actor.actor_id, category.category_id 
 from film
-join film_actor on film.film_id = film_actor.film_id
+join film_actor on film_actor.film_id = film.film_id
+join actor on actor.actor_id = film_actor.actor_id
+join film_category on film_category.film_id = film.film_id
+join category on category.category_id = film_category.category_id
+order by film.film_id;
+
+-- poÄet hercÅ¯ pro film id = 1
+select count(distinct actor_id) as actor_count 
+from film 
+join film_actor on film.film_id = film_actor.film_id 
 where film.film_id = 1;
 
--- po?et kategorií pro film id = 1
-select count(distinct category_id) as category_count
-from film
-join film_category on film.film_id = film_category.film_id
+-- poÄet kategoriÃ­ pro film id = 1
+select count(distinct category_id) as category_count 
+from film 
+join film_category on film.film_id = film_category.film_id 
 where film.film_id = 1;
 
--- celkovı po?et ?ádk? pro film id = 1
-select count(*) as total_rows
-from film
-join film_actor on film.film_id = film_actor.film_id
-join film_category ON film.film_id = film_category.film_id
+-- celkovÃ½ poÄet Å™Ã¡dkÅ¯ pro film id = 1
+select count(*) as total_rows 
+from film 
+join film_actor on film.film_id = film_actor.film_id 
+join film_category on film.film_id = film_category.film_id 
 where film.film_id = 1;
 
-
-
-/* 13. Vypište všechny kombinace atribut? ID herce a ID kategorie, kde danı herec hrál ve filmu v dané kategorii.
-   Vısledek set?i?te dle ID herce. Dotaz dále rozši?te o vıpis jména a p?íjmení herce a názvu kategorie. */
-select distinct
-	actor.actor_id,	category.category_id
-from actor
-join film_actor on actor.actor_id = film_actor.actor_id
-join film_category on film_actor.film_id = film_category.film_id
-join category on film_category.category_id = category.category_id
+/* 13. VypiÅ¡te vÅ¡echny kombinace atributÅ¯ ID herce a ID kategorie, kde danÃ½ herec hrÃ¡l ve filmu v danÃ© kategorii. SeÅ™aÄte dle ID herce. */
+select distinct 
+    actor.actor_id, category.category_id 
+from actor 
+join film_actor on actor.actor_id = film_actor.actor_id 
+join film_category on film_actor.film_id = film_category.film_id 
+join category on film_category.category_id = category.category_id 
 order by actor.actor_id;
 
-select distinct
-	actor.actor_id, actor.first_name, actor.last_name,
-	category.category_id,
-	category.name as category_name
-from actor
-join film_actor on actor.actor_id = film_actor.actor_id
-join film_category on film_actor.film_id = film_category.film_id
-join category on film_category.category_id = category.category_id
+-- RozÅ¡Ã­Å™eno o jmÃ©no herce a nÃ¡zev kategorie
+select distinct 
+    actor.actor_id, actor.first_name, actor.last_name, 
+    category.category_id, 
+    category.name as category_name 
+from actor 
+join film_actor on actor.actor_id = film_actor.actor_id 
+join film_category on film_actor.film_id = film_category.film_id 
+join category on film_category.category_id = category.category_id 
 order by actor.actor_id;
 
+/* 14. VypiÅ¡te jmÃ©na filmÅ¯, kterÃ© pÅ¯jÄovna vlastnÃ­ alespoÅˆ v jednÃ© kopii. */
+select distinct film.title 
+from film 
+join inventory on film.film_id = inventory.film_id; -- opraveno inventory_id na film_id
 
-
-
-/* 14. Vypište jména film?, které p?j?ovna vlastní alespo? v jedné kopii. */
-select distinct film.title
-from film
-join inventory on film.film_id = inventory.inventory_id
-
-/* 15. Zjist?te jména herc?, kte?í hrají v n?jaké komedii (kategorie ”Comedy“). */
-select distinct actor.first_name, actor.last_name
-from actor
-join film_actor on actor.actor_id = film_actor.actor_id
-join film_category on film_actor.film_id = film_category.film_id
-join category on film_category.category_id = category.category_id
+/* 15. ZjistÄ›te jmÃ©na hercÅ¯, kteÅ™Ã­ hrajÃ­ v nÄ›jakÃ© komedii (kategorie "Comedy"). */
+select distinct actor.first_name, actor.last_name 
+from actor 
+join film_actor on actor.actor_id = film_actor.actor_id 
+join film_category on film_actor.film_id = film_category.film_id 
+join category on film_category.category_id = category.category_id 
 where category.name = 'Comedy';
 
+/* 16. VypiÅ¡te jmÃ©na vÅ¡ech zÃ¡kaznÃ­kÅ¯, kteÅ™Ã­ pochÃ¡zejÃ­ z ItÃ¡lie a nÄ›kdy mÄ›li nebo majÃ­ pÅ¯jÄenÃ½ film s nÃ¡zvem "MOTIONS DETAILS". */
+select distinct customer.first_name, customer.last_name 
+from customer 
+join address on customer.address_id = address.address_id 
+join city on address.city_id = city.city_id 
+join country on city.country_id = country.country_id 
+join rental on customer.customer_id = rental.customer_id 
+join inventory on rental.inventory_id = inventory.inventory_id 
+join film on inventory.film_id = film.film_id 
+where country.country = 'Italy' and film.title = 'MOTIONS DETAILS';
 
-/* 16. Vypište jména všech zákazník?, kte?í pochází z Itálie a n?kdy m?li nebo mají p?j?enı film s názvem MOTIONS DETAILS. */
+/* 17. ZjistÄ›te jmÃ©na a pÅ™Ã­jmenÃ­ vÅ¡ech zÃ¡kaznÃ­kÅ¯, kteÅ™Ã­ majÃ­ aktuÃ¡lnÄ› vypÅ¯jÄenÃ½ nÄ›jakÃ½ film, kde hraje herec SEAN GUINESS. */
+select distinct customer.first_name, customer.last_name 
+from customer 
+join rental on customer.customer_id = rental.customer_id 
+join inventory on rental.inventory_id = inventory.inventory_id 
+join film on inventory.film_id = film.film_id 
+join film_actor on film.film_id = film_actor.film_id 
+join actor on film_actor.actor_id = actor.actor_id 
+where actor.first_name = 'SEAN' and actor.last_name = 'GUINESS' 
+and rental.return_date is null;
 
-
-/* 17. Zjist?te jména a p?íjmení všech zákazník?, kte?í mají aktuáln? vyp?j?enı n?jakı film, kde hraje herec SEAN GUINESS. */
-
-
-/* 18. Vypište ID a ?ástku všech plateb a u kadé platby uve?te datum vıp?j?ky, tj. hodnotu atributu rental_date v tabulce rental. U plateb, které se nevztahují k ádné vıp?j?ce bude datum vıp?j?ky NULL. */
-
-
-/* 19. Pro kadı jazyk vypište názvy všech film? v daném jazyce. Zajist?te, aby byl jazyk ve vısledku obsaen, i kdy k n?mu nebude existovat odpovídající film. */
-
-
-/* 20. Pro kadı film (ID a název) vypište jeho jazyk a jeho p?vodní jazyk. */
-
-/* 21. Vypište názvy film?, které si n?kdy p?j?il zákazník TIM CARY, nebo je jejich délka 48 minut. */
-
-
-/* 22. Vypište názvy film?, které p?j?ovna nevlastní ani v jedné kopii (tj. nejsou obsaeny v inventá?i). */
-
-
-/* 23. Vypište jména a p?íjmení všech zákazník?, kte?í mají n?jakou nezaplacenou vıp?j?ku. */
-
-
-/* 24. U kadého názvu filmu vypište jazyk filmu, pokud jazyk za?íná písmenem ”I“, v opa?ném p?ípad? bude jazyk NULL. */
-
-
-/* 25. Pro kadého zákazníka vypište ID všech plateb s ?ástkou v?tší ne 9. U zákazník?, kte?í takovéto platby nemají, bude payment_id rovno NULL. */
-
-
-/* 26. Pro kadou vıp?j?ku (její ID) vypište název filmu, pokud obsahuje písmeno ”U“, a m?sto a stát zákazníka, jeho adresa obsahuje písmeno ”A“.
-   Podobn? jako v p?edchozích úlohách – jestlie údaj nespl?uje danou podmínku, bude v p?íslušném poli uvedeno NULL. */
+/* 18. VypiÅ¡te ID a ÄÃ¡stku vÅ¡ech plateb a u kaÅ¾dÃ© platby uveÄte datum vÃ½pÅ¯jÄky, tj. hodnotu atributu rental_date v tabulce rental. U plateb, kterÃ© se nevztahujÃ­ 
+k Å¾Ã¡dnÃ© vÃ½pÅ¯jÄce bude datum vÃ½pÅ¯jÄky NULL. */
+select payment.payment_id, payment.amount, rental.rental_date
+from payment
+left join rental on payment.rental_id = rental.rental_id;
 
 
+/* 19. Pro kaÅ¾dÃ½ jazyk vypiÅ¡te nÃ¡zvy vÅ¡ech filmÅ¯ v danÃ©m jazyce. ZajistÄ›te, aby byl jazyk ve vÃ½sledku obsaÅ¾en, i kdyÅ¾ k nÄ›mu nebude existovat odpovÃ­dajÃ­cÃ­ film. */
+select language.name, film.title
+from language
+left join film on film.language_id = language.language_id
 
-/* 27. Vypište všechny dvojice název filmu a p?íjmení zákazníka, kde si zákazník vyp?j?il danı film. Pokud vıp?j?ka prob?hla po datu 1.1.2006, bude p?íjmení zákazníka nevypln?né (tj. NULL).
-       Z vısledku odstra?te duplicitní ?ádky a set?i?te jej podle názvu filmu. */
+/* 20. Pro kaÅ¾dÃ½ film (ID a nÃ¡zev) vypiÅ¡te jeho jazyk a jeho pÅ¯vodnÃ­ jazyk. */
+select film.film_id, film.title, language.name as language, language2.name as language2
+from film
+join language on language.language_id = film.language_id
+left join language as language2 on language2.language_id = film.original_language_id
 
+/* 21. VypiÅ¡te nÃ¡zvy filmÅ¯, kterÃ© si nÄ›kdy pÅ¯jÄil zÃ¡kaznÃ­k TIM CARY, nebo je jejich dÃ©lka 48 minut. */
+select distinct film.title
+from film
+join inventory on film.film_id = inventory.film_id
+join rental on rental.inventory_id = film.film_id
+join customer on customer.customer_id = rental.customer_id
+where (customer.first_name = 'TIM' and customer.last_name = 'CARY') or film.length = 48
+
+/* 22. VypiÅ¡te nÃ¡zvy filmÅ¯, kterÃ© pÅ¯jÄovna nevlastnÃ­ ani v jednÃ© kopii (tj. nejsou obsaÅ¾eny v inventÃ¡Å™i). */
+select film.title
+from film
+where film.film_id not in (select inventory.film_id from inventory);
 
