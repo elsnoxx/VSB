@@ -5,16 +5,16 @@
 
 using namespace std;
 
-void PrintVector(std::vector<int>& pole) {
-    int size = pole.size();
-    for (int i = 0; i <= size - 1; i++) {
-        std::cout << pole[i] << " ";
+void PrintVector(const std::vector<int>& pole) {
+    for (const auto& elem : pole) {
+        std::cout << elem << " ";
     }
-    std::cout << " " << pole.size() << std::endl;
+    std::cout << std::endl;
 }
 
+
 // Algoritmus hrubou silou (brute-force)
-bool UniqueElementsBruteForce(const std::vector<int>& pole) { // Pole jako reference
+bool HasDuplicatesBruteForce(const std::vector<int>& pole) { // Pole jako reference
     int size = pole.size();
     for (int i = 0; i < size - 1; i++) {
         for (int j = i + 1; j < size; j++) {
@@ -28,9 +28,9 @@ bool UniqueElementsBruteForce(const std::vector<int>& pole) { // Pole jako refer
 
 
 
-bool UniqueElements(const std::vector<int>& pole) {
+bool HasDuplicatesSorted(const std::vector<int>& pole) {
 
-    std::vector<int> sortedPole = pole;
+    std::vector<int> sortedPole = std::move(pole);
     sort(sortedPole.begin(), sortedPole.end());
 
     int size = sortedPole.size();
@@ -51,12 +51,12 @@ int main() {
     std::vector<int> test2 = { 5, 2, 8, 7, 6, 4, 10, 9, 10, 3 };
 
     // Testy pro hrubou silu
-    std::cout << "Test 1 (brute-force, bez duplicit): " << (UniqueElementsBruteForce(test1) ? "Unique" : "Duplicit") << std::endl;
-    std::cout << "Test 2 (brute-force, s duplicitami): " << (UniqueElementsBruteForce(test2) ? "Unique" : "Duplicit") << std::endl;
+    std::cout << "Test 1 (brute-force, bez duplicit): " << (HasDuplicatesBruteForce(test1) ? "Unique" : "Duplicit") << std::endl;
+    std::cout << "Test 2 (brute-force, s duplicitami): " << (HasDuplicatesBruteForce(test2) ? "Unique" : "Duplicit") << std::endl;
 
     // Testy pro algoritmus s předtříděním
-    std::cout << "Test 3 (sorted, bez duplicit): " << (UniqueElements(test1) ? "Unique" : "Duplicit") << std::endl;
-    std::cout << "Test 4 (sorted, s duplicitami): " << (UniqueElements(test2) ? "Unique" : "Duplicit") << std::endl;
+    std::cout << "Test 3 (sorted, bez duplicit): " << (HasDuplicatesSorted(test1) ? "Unique" : "Duplicit") << std::endl;
+    std::cout << "Test 4 (sorted, s duplicitami): " << (HasDuplicatesSorted(test2) ? "Unique" : "Duplicit") << std::endl;
 
 
     return 0;
