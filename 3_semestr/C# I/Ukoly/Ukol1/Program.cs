@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO.Pipes;
 using System.Runtime.Intrinsics.X86;
+using System.Text.RegularExpressions;
 
 
 namespace Ukol1
@@ -13,8 +14,8 @@ namespace Ukol1
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            string data = File.ReadAllText(args[0]);
-            //string data = File.ReadAllText(@"C:\\Users\\admin\\Documents\\GitHub\\VSB\\3_semestr\\C# I\\Ukoly\\Ukol1\\data.txt");
+            //string data = File.ReadAllText(args[0]);
+            string data = File.ReadAllText(@"C:\\Users\\admin\\Documents\\GitHub\\VSB\\3_semestr\\C# I\\Ukoly\\Ukol1\\data.txt");
 
 
 
@@ -93,11 +94,13 @@ namespace Ukol1
                     index = line.IndexOf("price: ");
                     if (index != -1)
                     {
-                        double price;
-                        if (double.TryParse(test.Substring(7).Split(":")[1].Trim().Replace(".", ","), out price))
+                        Regex priceRegex = new Regex(@"- price:\s*(\d+(\.\d+)?)");
+                        Match match = priceRegex.Match(line);
+                        if (match.Success)
                         {
-                            currentProduct.ItemPrice = price;
+                            currentProduct.ItemPrice = double.Parse(match.Groups[1].Replace(".", ",").Value);
                         }
+
                     }
                 }
 
