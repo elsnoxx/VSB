@@ -14,7 +14,7 @@ WITH t as (
 	JOIN z_article ON z_journal.jid = z_article.jid AND z_year_field_journal.year = z_article.year
 	JOIN z_article_author ON z_article.aid = z_article_author.aid
 	RIGHT JOIN z_author ON z_article_author.rid = z_author.rid
-	GROUP BY z_author.rid, z_author.name, 	
+	GROUP BY z_author.rid, z_author.name, z_field_of_science.sid, z_field_of_science.name
 )
 
 SELECT * FROM t
