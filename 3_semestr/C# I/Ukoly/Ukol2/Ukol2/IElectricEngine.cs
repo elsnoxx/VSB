@@ -8,7 +8,7 @@ namespace Ukol2
 {
     internal interface IElectricEngine
     {
-        double BatteryCapacity { get; }
+        double BatteryCapacity { init;  }
         double RemainingEnergy { get; }
         void Charge(double quantity);
     }

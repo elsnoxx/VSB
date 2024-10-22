@@ -8,7 +8,7 @@ namespace Ukol2
 {
     internal class GasolineBoat : Boat, IGasolineEngine
     {
-        public double FuelTankSize { get; set; }
+        public double FuelTankSize { get; init; }
         public double AmountOfFuel { get; set; }
 
         public GasolineBoat()

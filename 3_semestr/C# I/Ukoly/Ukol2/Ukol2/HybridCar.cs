@@ -8,9 +8,9 @@ namespace Ukol2
 {
     internal class HybridCar : Car, IElectricEngine, IGasolineEngine
     {
-        public double FuelTankSize { get; set; }
+        public double FuelTankSize { get; init; }
         public double AmountOfFuel { get; set; }
-        public double BatteryCapacity { get; set; }
+        public double BatteryCapacity { get; init; }
         public double RemainingEnergy { get; set; }
 
         public HybridCar()

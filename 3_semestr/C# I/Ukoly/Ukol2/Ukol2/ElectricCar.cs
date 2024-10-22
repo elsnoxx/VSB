@@ -8,7 +8,7 @@ namespace Ukol2
 {
     internal class ElectricCar : Car, IElectricEngine
     {
-        public double BatteryCapacity { get; set; }
+        public double BatteryCapacity { get; init; }
         public double RemainingEnergy { get; set; }
 
         public ElectricCar()

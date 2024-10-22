@@ -8,7 +8,7 @@ namespace Ukol2
 {
     internal class FillingStation
     {
-        public double PricePerLiter { get; private set; }
+        public double PricePerLiter { get; init; }
 
         public FillingStation(double price)
         {

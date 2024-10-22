@@ -8,7 +8,7 @@ namespace Ukol2
 {
     internal class ChargingStation
     {
-        public double PricePerKWh { get; private set; }
+        public double PricePerKWh { get; init; }
 
         public ChargingStation(double price)
         {
