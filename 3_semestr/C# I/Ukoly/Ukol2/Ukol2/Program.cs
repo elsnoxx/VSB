@@ -83,18 +83,19 @@ namespace Ukol2
         }
         static void Refuel(ChargingStation chargingStation, FillingStation fillingStation, Vehicle[] vehicles)
         {
-            foreach (Vehicle vehicle in vehicles)
+            foreach (var vehicle in vehicles)
             {
-                if (vehicle is IGasolineEngine gasolineVehicle)
+                if (vehicle is IGasolineEngine)
                 {
-                    fillingStation.Refuel(gasolineVehicle);
+                    fillingStation.Refuel(vehicle);
                 }
 
-                if (vehicle is IElectricEngine electricVehicle)
+                if (vehicle is IElectricEngine)
                 {
-                    chargingStation.Charge(electricVehicle);
+                    chargingStation.Charge(vehicle);
                 }
             }
         }
+
     }
 }

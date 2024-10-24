@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ukol2
+﻿namespace Ukol2
 {
     internal class FillingStation
     {
@@ -12,15 +6,18 @@ namespace Ukol2
 
         public FillingStation(double price)
         {
-            PricePerLiter = price + 4;
+            PricePerLiter = price ;
         }
 
-        public void Refuel(IGasolineEngine vehicle)
+        public void Refuel(Vehicle vehicle)
         {
-            //double cost = PricePerLiter * vehicle.NumberOfWheels();
-            //double maxFuel = Math.Min(vehicle.FuelTankSize - vehicle.FuelLevel, vehicle.AccountBalance / cost);
-            //vehicle.Refuel(maxFuel);
-            //vehicle.AccountBalance -= maxFuel * cost;
+            if (vehicle is IGasolineEngine gasolineVehicle)
+            {
+                double costPerLiter = PricePerLiter + 4 * vehicle.NumberOfWheels();
+                double maxFuel = Math.Min(gasolineVehicle.FuelTankSize - gasolineVehicle.AmountOfFuel, vehicle.AccountBalance / costPerLiter);
+                gasolineVehicle.Refuel(maxFuel);
+                vehicle.AccountBalance = Math.Round(vehicle.AccountBalance - maxFuel * costPerLiter, 2); ;
+            }
         }
     }
 }

@@ -15,12 +15,15 @@ namespace Ukol2
             PricePerKWh = price;
         }
 
-        public void Charge(IElectricEngine vehicle)
+        public void Charge(Vehicle vehicle)
         {
-            //double cost = PricePerKWh;
-            //double maxCharge = Math.Min(vehicle.BatteryCapacity - vehicle.RemainingEnergy, vehicle.AccountBalance / cost);
-            //vehicle.Charge(maxCharge);
-            //vehicle.AccountBalance -= maxCharge * cost;
+            if (vehicle is IElectricEngine electricVehicle)
+            {
+                double costPerKWh = PricePerKWh + 4 * vehicle.NumberOfWheels();
+                double maxCharge = Math.Min(electricVehicle.BatteryCapacity - electricVehicle.RemainingEnergy, vehicle.AccountBalance / costPerKWh);
+                electricVehicle.Charge(maxCharge);
+                vehicle.AccountBalance = Math.Round(vehicle.AccountBalance - maxCharge * costPerKWh, 2);
+            }
         }
     }
 }

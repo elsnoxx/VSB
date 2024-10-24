@@ -9,9 +9,9 @@ namespace Ukol2
     internal class HybridCar : Car, IElectricEngine, IGasolineEngine
     {
         public double FuelTankSize { get; init; }
-        public double AmountOfFuel { get; set; }
+        public double AmountOfFuel { get; private set; }
         public double BatteryCapacity { get; init; }
-        public double RemainingEnergy { get; set; }
+        public double RemainingEnergy { get; private set; }
 
         public HybridCar()
         {
@@ -32,7 +32,7 @@ namespace Ukol2
         public override void DisplayInfo()
         {
             base.DisplayInfo();
-            Console.WriteLine($"Stav baterie: {(int)(RemainingEnergy * 100 / BatteryCapacity)}%| Stav nádrže: {(int)(AmountOfFuel * 100 / FuelTankSize)}% ");
+            Console.WriteLine($"Stav baterie: {Math.Round(RemainingEnergy * 100 / BatteryCapacity)}% | Stav nádrže: {Math.Round(AmountOfFuel * 100 / FuelTankSize)}%");
         }
 
         
