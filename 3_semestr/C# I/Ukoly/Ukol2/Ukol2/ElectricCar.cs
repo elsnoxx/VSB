@@ -26,10 +26,5 @@ namespace Ukol2
             base.DisplayInfo();
             Console.WriteLine($"Stav baterie: {(int)(RemainingEnergy * 100 / BatteryCapacity)}%");
         }
-
-        public override int NumberOfWheels()
-        {
-            return 4; // Typický počet kol u auta
-        }
     }
 }

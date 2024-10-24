@@ -10,7 +10,7 @@ namespace Ukol2
     {
         public override int NumberOfWheels()
         {
-            throw new NotImplementedException();
+            return 0;
         }
     }
 }

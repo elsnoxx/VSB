@@ -27,10 +27,5 @@ namespace Ukol2
             Console.WriteLine($"Stav nádrže: {(int)(AmountOfFuel * 100 / FuelTankSize)}%");
         }
 
-        public override int NumberOfWheels()
-        {
-            return 4; // Typický počet kol u auta
-        }
-
     }
 }

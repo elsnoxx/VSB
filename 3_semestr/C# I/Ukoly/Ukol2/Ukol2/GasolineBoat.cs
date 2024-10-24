@@ -26,10 +26,5 @@ namespace Ukol2
             base.DisplayInfo();
             Console.WriteLine($"Stav nádrže: {(int)(AmountOfFuel * 100 / FuelTankSize)}%");
         }
-
-        public override int NumberOfWheels()
-        {
-            return 4;
-        }
     }
 }

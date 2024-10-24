@@ -35,9 +35,6 @@ namespace Ukol2
             Console.WriteLine($"Stav baterie: {(int)(RemainingEnergy * 100 / BatteryCapacity)}%| Stav nádrže: {(int)(AmountOfFuel * 100 / FuelTankSize)}% ");
         }
 
-        public override int NumberOfWheels()
-        {
-            return 4;
-        }
+        
     }
 }
