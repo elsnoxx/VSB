@@ -8,7 +8,7 @@ namespace Ukol2
 {
     internal interface IGasolineEngine
     {
-        double FuelTankSize { init;  }
+        double FuelTankSize { get;  init; }
         double AmountOfFuel { get; }
         void Refuel(double quantity);
     }

@@ -2,8 +2,8 @@
 {
     internal abstract class Vehicle
     {
-        public string VehicleName;
-        public double AccountBalance;
+        public string VehicleName { get; set; }
+        public double AccountBalance { get; set; }
 
         public Vehicle() { }
 
