@@ -1,143 +1,79 @@
--- Vytvoření tabulky pro restaurace
-CREATE TABLE Restaurace (
-    RestauraceID INT PRIMARY KEY AUTO_INCREMENT,
-    Nazev VARCHAR(100) NOT NULL,
-    Adresa VARCHAR(255) NOT NULL,
-    Telefon VARCHAR(15),
-    OteviraciHodiny VARCHAR(50)
-);
+CREATE TABLE [Guest] (
+  [guest_id] int PRIMARY KEY IDENTITY(1, 1),
+  [name] varchar(100),
+  [email] varchar(100),
+  [phone] varchar(15)
+)
+GO
 
--- Vytvoření tabulky pro stoly
-CREATE TABLE Stoly (
-    StolID INT PRIMARY KEY AUTO_INCREMENT,
-    RestauraceID INT,
-    CisloStolu INT NOT NULL,
-    Kapacita INT NOT NULL,
-    Status ENUM('volný', 'obsazený', 'rezervovaný') NOT NULL,
-    FOREIGN KEY (RestauraceID) REFERENCES Restaurace(RestauraceID)
-);
+CREATE TABLE [RoomType] (
+  [room_type_id] int PRIMARY KEY IDENTITY(1, 1),
+  [name] varchar(50),
+  [bed_count] int,
+  [price_per_night] decimal(10,2)
+)
+GO
 
--- Vytvoření tabulky pro hosty
-CREATE TABLE Hosty (
-    HostID INT PRIMARY KEY AUTO_INCREMENT,
-    Jmeno VARCHAR(50) NOT NULL,
-    Prijmeni VARCHAR(50) NOT NULL,
-    Telefon VARCHAR(15),
-    Email VARCHAR(100),
-    Poznamka TEXT
-);
+CREATE TABLE [Room] (
+  [room_id] int PRIMARY KEY IDENTITY(1, 1),
+  [room_type_id] int,
+  [room_number] varchar(10),
+  [is_occupied] boolean
+)
+GO
 
--- Vytvoření tabulky pro rezervace
-CREATE TABLE Rezervace (
-    RezervaceID INT PRIMARY KEY AUTO_INCREMENT,
-    StolID INT,
-    HostID INT,
-    DatumCas DATETIME NOT NULL,
-    PocetOsob INT NOT NULL,
-    Poznamka TEXT,
-    FOREIGN KEY (StolID) REFERENCES Stoly(StolID),
-    FOREIGN KEY (HostID) REFERENCES Hosty(HostID)
-);
+CREATE TABLE [Reservation] (
+  [reservation_id] int PRIMARY KEY IDENTITY(1, 1),
+  [guest_id] int,
+  [room_id] int,
+  [employee_id] int,
+  [creation_date] date,
+  [check_in_date] date,
+  [check_out_date] date,
+  [status] varchar(20)
+)
+GO
 
--- Vytvoření tabulky pro jídla (menu)
-CREATE TABLE Jidla (
-    JidloID INT PRIMARY KEY AUTO_INCREMENT,
-    Nazev VARCHAR(100) NOT NULL,
-    Popis TEXT,
-    Cena DECIMAL(10, 2) NOT NULL,
-    Kategorie VARCHAR(50) NOT NULL
-);
+CREATE TABLE [Employee] (
+  [employee_id] int PRIMARY KEY IDENTITY(1, 1),
+  [name] varchar(100),
+  [position] varchar(50)
+)
+GO
 
--- Vytvoření tabulky pro číšníky/servírky
-CREATE TABLE Cisnici (
-    CisnikID INT PRIMARY KEY AUTO_INCREMENT,
-    Jmeno VARCHAR(50) NOT NULL,
-    Prijmeni VARCHAR(50) NOT NULL,
-    Telefon VARCHAR(15),
-    Pozice VARCHAR(50)
-);
+CREATE TABLE [Expense] (
+  [expense_id] int PRIMARY KEY IDENTITY(1, 1),
+  [reservation_id] int,
+  [description] varchar(255),
+  [amount] decimal(10,2),
+  [days] int
+)
+GO
 
--- Vytvoření tabulky pro objednávky
-CREATE TABLE Objednavky (
-    ObjednavkaID INT PRIMARY KEY AUTO_INCREMENT,
-    StolID INT,
-    HostID INT,
-    CisnikID INT,
-    DatumCas DATETIME NOT NULL,
-    CelkovaCastka DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (StolID) REFERENCES Stoly(StolID),
-    FOREIGN KEY (HostID) REFERENCES Hosty(HostID),
-    FOREIGN KEY (CisnikID) REFERENCES Cisnici(CisnikID)
-);
+CREATE TABLE [Payment] (
+  [payment_id] int PRIMARY KEY IDENTITY(1, 1),
+  [reservation_id] int,
+  [total_accommodation] decimal(10,2),
+  [total_expenses] decimal(10,2),
+  [payment_date] date,
+  [is_paid] boolean
+)
+GO
 
--- Vytvoření tabulky pro platby
-CREATE TABLE Platby (
-    PlatbaID INT PRIMARY KEY AUTO_INCREMENT,
-    ObjednavkaID INT,
-    Castka DECIMAL(10, 2) NOT NULL,
-    ZpusobPlatby ENUM('hotově', 'kartou') NOT NULL,
-    DatumCas DATETIME NOT NULL,
-    FOREIGN KEY (ObjednavkaID) REFERENCES Objednavky(ObjednavkaID)
-);
+ALTER TABLE [Room] ADD FOREIGN KEY ([room_type_id]) REFERENCES [RoomType] ([room_type_id])
+GO
 
--- Vytvoření vazební tabulky pro objednaná jídla
-CREATE TABLE ObjednanaJidla (
-    ID INT PRIMARY KEY AUTO_INCREMENT,
-    ObjednavkaID INT,
-    JidloID INT,
-    Mnozstvi INT NOT NULL,
-    Cena DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (ObjednavkaID) REFERENCES Objednavky(ObjednavkaID),
-    FOREIGN KEY (JidloID) REFERENCES Jidla(JidloID)
-);
+ALTER TABLE [Reservation] ADD FOREIGN KEY ([guest_id]) REFERENCES [Guest] ([guest_id])
+GO
 
+ALTER TABLE [Reservation] ADD FOREIGN KEY ([room_id]) REFERENCES [Room] ([room_id])
+GO
 
--- Vložení vzorových dat do tabulky restaurací
-INSERT INTO Restaurace (Nazev, Adresa, Telefon, OteviraciHodiny) VALUES
-('Restaurace U Šéfa', 'Hlavní 123, Praha', '+420 123 456 789', 'Po-Ne 10:00-22:00'),
-('Pizzeria Bella', 'Květinová 456, Brno', '+420 987 654 321', 'Po-Ne 11:00-23:00');
+ALTER TABLE [Reservation] ADD FOREIGN KEY ([employee_id]) REFERENCES [Employee] ([employee_id])
+GO
 
--- Vložení vzorových dat do tabulky stolů
-INSERT INTO Stoly (RestauraceID, CisloStolu, Kapacita, Status) VALUES
-(1, 1, 4, 'volný'),
-(1, 2, 2, 'rezervovaný'),
-(1, 3, 6, 'obsazený'),
-(2, 1, 4, 'volný'),
-(2, 2, 2, 'volný');
+ALTER TABLE [Expense] ADD FOREIGN KEY ([reservation_id]) REFERENCES [Reservation] ([reservation_id])
+GO
 
--- Vložení vzorových dat do tabulky hostů
-INSERT INTO Hosty (Jmeno, Prijmeni, Telefon, Email, Poznamka) VALUES
-('Jan', 'Novák', '+420 111 222 333', 'jan.novak@example.com', 'Alergie na ořechy'),
-('Petr', 'Svoboda', '+420 444 555 666', 'petr.svoboda@example.com', 'Vegetarián');
-
--- Vložení vzorových dat do tabulky rezervací
-INSERT INTO Rezervace (StolID, HostID, DatumCas, PocetOsob, Poznamka) VALUES
-(1, 1, '2024-10-08 18:30:00', 4, 'Žádost o stůl u okna'),
-(2, 2, '2024-10-08 19:00:00', 2, NULL);
-
--- Vložení vzorových dat do tabulky jídel
-INSERT INTO Jidla (Nazev, Popis, Cena, Kategorie) VALUES
-('Pizza Margherita', 'Klasická pizza s rajčaty a mozzarellou', 150.00, 'hlavní jídla'),
-('Caesar Salát', 'Salát s kuřecím masem a parmezánem', 120.00, 'předkrmy'),
-('Tiramisu', 'Tradiční italský dezert', 80.00, 'dezerty');
-
--- Vložení vzorových dat do tabulky číšníků
-INSERT INTO Cisnici (Jmeno, Prijmeni, Telefon, Pozice) VALUES
-('Alice', 'Kleinová', '+420 777 888 999', 'číšník'),
-('Martin', 'Dvořák', '+420 666 555 444', 'servírka');
-
--- Vložení vzorových dat do tabulky objednávek
-INSERT INTO Objednavky (StolID, HostID, CisnikID, DatumCas, CelkovaCastka) VALUES
-(3, 1, 1, '2024-10-08 18:45:00', 400.00),
-(1, 2, 2, '2024-10-08 19:10:00', 220.00);
-
--- Vložení vzorových dat do tabulky plateb
-INSERT INTO Platby (ObjednavkaID, Castka, ZpusobPlatby, DatumCas) VALUES
-(1, 400.00, 'kartou', '2024-10-08 19:00:00'),
-(2, 220.00, 'hotově', '2024-10-08 19:15:00');
-
--- Vložení vzorových dat do tabulky objednaných jídel
-INSERT INTO ObjednanaJidla (ObjednavkaID, JidloID, Mnozstvi, Cena) VALUES
-(1, 1, 2, 300.00), -- 2x Pizza Margherita
-(1, 3, 1, 80.00),  -- 1x Tiramisu
-(2, 2, 1, 120.00);  -- 1x Caesar Salát
+ALTER TABLE [Payment] ADD FOREIGN KEY ([reservation_id]) REFERENCES [Reservation] ([reservation_id])
+GO
