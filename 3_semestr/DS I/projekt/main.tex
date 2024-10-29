@@ -1,0 +1,182 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[left=20mm,right=30mm,top=30mm,bottom=35mm]{geometry} 
+
+\usepackage{graphicx}
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\rhead{Projekt DS I - Hotel}
+\lfoot{Richard Ficek, FIC0024}
+\rfoot{\thepage}
+
+
+
+\title{Projekt DS I - Hotel}
+\author{Richard Ficek, FIC0024}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Specifikace zadání}
+
+\section{Datová analýza}
+\begin{figure}[ht]  
+    \centering
+    \includegraphics[width=1\textwidth]{schema.png}
+    \caption{Konceptuální datový model}
+    \label{fig:obrazek}
+\end{figure}
+
+\section{Lineární zápis}
+Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč}, atribut
+
+\begin{itemize}
+    \item \textbf{Address} – \underline{address\_id}, street, city, postal\_code, country
+    \item \textbf{Guest} – \underline{guest\_id}, firstname, lastname, email, phone, birth\_date, \textit{address\_id}, guest\_type, registration\_date, notes
+    \item \textbf{Employee} – \underline{employee\_id}, firstname, lastname, position, \textit{address\_id}
+    \item \textbf{RoomType} – \underline{room\_type\_id}, name, bed\_count, price\_per\_night
+    \item \textbf{Room} – \underline{room\_id}, \textit{room\_type\_id}, room\_number, is\_occupied
+    \item \textbf{Payment} – \underline{payment\_id}, total\_accommodation, total\_expenses, payment\_date, is\_paid
+    \item \textbf{Reservation} – \underline{reservation\_id}, \textit{guest\_id}, \textit{room\_id}, \textit{employee\_id}, creation\_date, check\_in\_date, check\_out\_date, \textit{payment\_id}, status
+\end{itemize}
+
+
+
+\begin{table}
+\caption{Atributy tabulky Address}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    address\_id           & int                & -              & P             & N              & A               & -              & ID adresy          \\ \hline  
+    street                & varchar            & 255            & -             & N              & -               & -              & Ulice              \\ \hline  
+    city                  & varchar            & 100            & -             & N              & -               & -              & Město              \\ \hline  
+    postal\_code          & char               & 10             & -             & N              & -               & -              & PSČ                \\ 
+    country               & varchar            & 100            & -             & N              & -               & -              & Země               \\ 
+     \hline
+\end{tabular}  
+\label{tab:address}
+
+
+
+
+\caption{Atributy tabulky Guest}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    guest\_id             & int                & -              & P             & N              & A               & -              & ID hosta           \\ \hline  
+    firstname             & varchar            & 50             & -             & N              & -               & -              & Jméno hosta        \\ \hline  
+    lastname              & varchar            & 50             & -             & N              & -               & -              & Příjmení hosta     \\ \hline  
+    email                 & varchar            & 100            & -             & N              & -               & -              & Email hosta        \\ \hline  
+    phone                 & varchar            & 15             & -             & A              & -               & -              & Telefon hosta      \\ \hline  
+    birth\_date           & date               & -              & -             & N              & -               & -              & Datum narození     \\ \hline  
+    address\_id           & int                & -              & F(Address)    & N              & -               & -              & ID adresy          \\ \hline  
+    guest\_type           & varchar            & 50             & -             & N              & -               & -              & Typ hosta          \\ \hline  
+    registration\_date    & date               & -              & -             & N              & -               & -              & Datum registrace    \\ 
+    notes                 & text               & -              & -             & A              & -               & -              & Poznámky hosta     \\ 
+     \hline
+\end{tabular}  
+\label{tab:guest}
+
+
+\caption{Atributy tabulky Employee}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    employee\_id          & int                & -              & P             & N              & A               & -              & ID zaměstnance     \\ \hline  
+    firstname             & varchar            & 50             & -             & N              & -               & -              & Jméno zaměstnance   \\ \hline  
+    lastname              & varchar            & 50             & -             & N              & -               & -              & Příjmení zaměstnance\\ \hline  
+    position              & varchar            & 100            & -             & N              & -               & -              & Pozice zaměstnance  \\ 
+    address\_id           & int                & -              & F(Address)    & N              & -               & -              & ID adresy          \\ 
+     \hline
+\end{tabular}  
+\label{tab:employee}
+
+
+\caption{Atributy tabulky RoomType}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    room\_type\_id       & int                & -              & P             & N              & A               & -              & ID typu pokoje     \\ \hline  
+    name                  & varchar            & 100            & -             & N              & -               & -              & Název typu pokoje   \\ \hline  
+    bed\_count            & int                & -              & -             & N              & -               & -              & Počet postelí      \\ 
+    price\_per\_night     & decimal            & -              & -             & N              & -               & -              & Cena za noc        \\ 
+     \hline
+\end{tabular}  
+\label{tab:roomtype}
+
+
+
+\caption{Atributy tabulky Room}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    room\_id             & int                & -              & P             & N              & A               & -              & ID pokoje          \\ \hline  
+    room\_type\_id       & int                & -              & F(RoomType)   & N              & -               & -              & ID typu pokoje     \\ \hline  
+    room\_number          & varchar            & 10             & -             & N              & -               & -              & Číslo pokoje       \\ 
+    is\_occupied          & boolean            & -              & -             & N              & -               & -              & Obsazenost pokoje  \\ 
+     \hline
+\end{tabular}  
+\label{tab:room}
+\end{table}
+
+\begin{table}
+\caption{Atributy tabulky Payment}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    payment\_id          & int                & -              & P             & N              & A               & -              & ID platby          \\ \hline  
+    total\_accommodation   & decimal            & -              & -             & N              & -               & -              & Celkové náklady na ubytování \\ \hline  
+    total\_expenses       & decimal            & -              & -             & N              & -               & -              & Celkové výdaje     \\ \hline  
+    payment\_date        & date               & -              & -             & N              & -               & -              & Datum platby       \\ 
+    is\_paid             & boolean            & -              & -             & N              & -               & -              & Stav platby        \\ 
+     \hline
+\end{tabular}  
+\label{tab:payment}
+
+
+ 
+\caption{Atributy tabulky Reservation}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    reservation\_id      & int                & -              & P             & N              & A               & -              & ID rezervace       \\ \hline  
+    guest\_id             & int                & -              & F(Guest)      & N              & -               & -              & ID hosta           \\ \hline  
+    room\_id              & int                & -              & F(Room)       & N              & -               & -              & ID pokoje          \\ \hline  
+    employee\_id          & int                & -              & F(Employee)   & N              & -               & -              & ID zaměstnance     \\ \hline  
+    creation\_date        & date               & -              & -             & N              & -               & -              & Datum vytvoření    \\ \hline  
+    check\_in\_date      & date               & -              & -             & N              & -               & -              & Datum příjezdu     \\ \hline  
+    check\_out\_date     & date               & -              & -             & N              & -               & -              & Datum odjezdu      \\ \hline  
+    payment\_id          & int                & -              & F(Payment)    & N              & -               & -              & ID platby          \\ 
+    status                & varchar            & 20             & -             & N              & -               & -              & Stav rezervace     \\ 
+     \hline
+\end{tabular}  
+\label{tab:reservation}
+\end{table}
+
+\newpage
+\newpage
+
+\section{Integritní omezení}
+
+\begin{itemize}
+    \item \textbf{datum\_od} < \textbf{datum\_do} – Ujistěte se, že datum začátku je dříve než datum konce.
+    \item \textbf{guest\_type} – Může nabývat hodnot \{Regular, VIP, Loyalty\}.
+    \item \textbf{status} – Může nabývat hodnot \{Confirmed, Checked In, Checked Out, Cancelled\}.
+    \item \textbf{address\_id} – Odkazuje na existující záznam v tabulce \textbf{Address}.
+    \item \textbf{room\_type\_id} – Odkazuje na existující záznam v tabulce \textbf{RoomType}.
+    \item \textbf{payment\_id} – Odkazuje na existující záznam v tabulce \textbf{Payment}.
+    \item \textbf{is\_paid} – Může nabývat hodnot \{0 (neuhrazeno), 1 (uhrazeno)\}.
+    \item \textbf{room\_number} – Musí být unikátní v rámci tabulky \textbf{Room}.
+\end{itemize}
+
+\end{document}
