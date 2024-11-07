@@ -1,4 +1,6 @@
-﻿namespace ukol3;
+﻿using ZOO.Animals;
+using ZOO;
+namespace ukol3;
 
 class Program
 {
@@ -6,9 +8,9 @@ class Program
     {
         List<IAnimalEnclosure> animalEnclosures = new List<IAnimalEnclosure>();
 
-        var pond = /* Vytvoření instance rybníku s názvem "Velký rybník" */;
-        var mixedAviary = /* Vytvoření instance voliéry s názvem "Smíšená voliéra" */;
-        var owlAviary = /* Vytvoření instance voliéry s názvem "Sovy" */;
+        var pond = new Pond("Velký rybník");
+        var mixedAviary = new Aviary("Smíšená voliéra");
+        var owlAviary = new Aviary("Sovy");
 
 
         animalEnclosures.Add(pond);
@@ -31,7 +33,7 @@ class Program
         {
             Console.WriteLine($"{enclosure.Name} - let:");
             Console.WriteLine("-------------");
-            List<IFlyable> flyables = /* získání seznamu všech IFlyable pomocí metody GetAnimals na výběhu */;
+            List<IFlyable> flyables = enclosure.GetAnimals<IFlyable>();
             foreach (IFlyable animal in flyables)
             {
                 animal.Fly();
@@ -40,7 +42,7 @@ class Program
             Console.WriteLine();
             Console.WriteLine($"{enclosure.Name} - plavání:");
             Console.WriteLine("-------------");
-            List<ISwimmable> swimmables = /* získání seznamu všech ISwimmable pomocí metody GetAnimals na výběhu */;
+            List<ISwimmable> swimmables = enclosure.GetAnimals<ISwimmable>();
             foreach (ISwimmable animal in swimmables)
             {
                 animal.Swim();
