@@ -29,7 +29,7 @@ namespace ZOO
         // Vydávání zvuků všech zvířat v voliéře
         public override void MakeAnimalsSound()
         {
-            Console.WriteLine($"Voliéra {Name}: zvuky zvířat");
+            Console.WriteLine($"Voliéra {Name}:");
             foreach (var animal in animals)
             {
                 if (animal is ISoundEmitter soundEmitter)

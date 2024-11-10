@@ -12,7 +12,7 @@ namespace ZOO.Animals
 
         public void Fly()
         {
-            Console.WriteLine($"Sova {Name} letí");
+            Console.WriteLine($"Sova {Name} letí.");
         }
 
         public void MakeSound()

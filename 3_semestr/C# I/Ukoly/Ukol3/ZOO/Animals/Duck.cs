@@ -12,12 +12,12 @@ namespace ZOO.Animals
 
         public void Fly()
         {
-            Console.WriteLine($"Kachna {Name} letí");
+            Console.WriteLine($"Kachna {Name} letí.");
         }
 
         public void Swim()
         {
-            Console.WriteLine($"Kachna {Name} plave");
+            Console.WriteLine($"Kachna {Name} plave.");
         }
         public void MakeSound()
         {

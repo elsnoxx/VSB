@@ -33,7 +33,7 @@ class Program
         {
             Console.WriteLine($"{enclosure.Name} - let:");
             Console.WriteLine("-------------");
-            List<IFlyable> flyables = enclosure.GetAnimals<IFlyable>();
+            List<IFlyable> flyables = enclosure.GetAnimals<Animal>().OfType<IFlyable>().ToList();
             foreach (IFlyable animal in flyables)
             {
                 animal.Fly();
@@ -42,7 +42,7 @@ class Program
             Console.WriteLine();
             Console.WriteLine($"{enclosure.Name} - plavání:");
             Console.WriteLine("-------------");
-            List<ISwimmable> swimmables = enclosure.GetAnimals<ISwimmable>();
+            List<ISwimmable> swimmables = enclosure.GetAnimals<Animal>().OfType<ISwimmable>().ToList();
             foreach (ISwimmable animal in swimmables)
             {
                 animal.Swim();

@@ -16,7 +16,7 @@ struct Node {
 
 int main() {
     // Otev?ení souboru
-    ifstream file("C:\\Users\\admin\\Documents\\GitHub\\VSB\\3_semestr\\ALG II\\Projekt\\Data\\test0.txt");
+    ifstream file("..\\Data\\test0.txt");
     if (!file) {
         cerr << "Nepoda?ilo se otev?ít soubor." << endl;
         return 1;
@@ -53,6 +53,9 @@ int main() {
         cout << endl;
     }
 
+    int x;
+    cin >> x; 
+    cout << "Your number is: " << x;
 
     return 0;
 }

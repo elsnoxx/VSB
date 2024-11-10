@@ -13,7 +13,7 @@ namespace ZOO.Animals
 
         public void Swim()
         {
-            Console.WriteLine($"Sumec {Name} plave");
+            Console.WriteLine($"Sumec {Name} plave.");
         }
     }
 }
