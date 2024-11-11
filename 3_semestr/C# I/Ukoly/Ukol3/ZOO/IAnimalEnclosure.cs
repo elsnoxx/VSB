@@ -6,6 +6,6 @@ namespace ZOO
     {
         string Name { get; }
         void MakeAnimalsSound();
-        List<T> GetAnimals<T>() where T : Animal;
+        List<T> GetAnimals<T>() where T : class;
     }
 }

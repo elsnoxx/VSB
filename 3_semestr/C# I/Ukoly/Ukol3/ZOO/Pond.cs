@@ -6,7 +6,6 @@ namespace ZOO
 {
     public class Pond : AnimalEnclosure
     {
-        private List<ISwimmable> animals = new List<ISwimmable>();
 
         public Pond(string name)
         {
@@ -18,7 +17,7 @@ namespace ZOO
         {
             if (animal is ISwimmable swimmableAnimal)
             {
-                animals.Add(swimmableAnimal);
+                animals.Add(animal);
             }
             else
             {
@@ -39,10 +38,5 @@ namespace ZOO
             }
         }
 
-        // Získání zvířat požadovaného typu
-        public override List<T> GetAnimals<T>()
-        {
-            return animals.OfType<T>().ToList();
-        }
     }
 }

@@ -6,7 +6,6 @@ namespace ZOO
 {
     public class Aviary : AnimalEnclosure
     {
-        private List<IFlyable> animals = new List<IFlyable>();
 
         public Aviary(string name)
         {
@@ -18,7 +17,7 @@ namespace ZOO
         {
             if (animal is IFlyable flyableAnimal)
             {
-                animals.Add(flyableAnimal);
+                animals.Add(animal);
             }
             else
             {
@@ -37,12 +36,6 @@ namespace ZOO
                     soundEmitter.MakeSound();
                 }
             }
-        }
-
-        // Získání zvířat požadovaného typu
-        public override List<T> GetAnimals<T>()
-        {
-            return animals.OfType<T>().ToList();
         }
     }
 }
