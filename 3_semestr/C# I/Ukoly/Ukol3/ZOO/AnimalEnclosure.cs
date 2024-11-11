@@ -6,7 +6,7 @@ namespace ZOO
 {
     public abstract class AnimalEnclosure : IAnimalEnclosure
     {
-        public string Name { get; protected set; }
+        public string? Name { get; init; }
         protected List<Animal> animals = new List<Animal>();
         public abstract void Add(Animal animal);
         public abstract void MakeAnimalsSound();
