@@ -84,7 +84,7 @@ CREATE TABLE Reservation (
   check_in_date date NOT NULL,
   check_out_date date,
   payment_id int, -- Foreign key to Payment table
-  status varchar(20) NOT NULL CHECK (status IN ('Confirmed', 'Checked In', 'Checked Out', 'Cancelled')),
+  status varchar(20) NOT NULL,
   FOREIGN KEY (guest_id) REFERENCES Guest (guest_id),
   FOREIGN KEY (room_id) REFERENCES Room (room_id),
   FOREIGN KEY (employee_id) REFERENCES Employee (employee_id),
@@ -180,26 +180,26 @@ GO
 -- Insert into Payment table
 INSERT INTO Payment (total_accommodation, total_expenses, payment_date, is_paid)
 VALUES
-(6000.00, 0.00, GETDATE(), 1),  -- Payment for reservation 1
-(4800.00, 200.00, GETDATE(), 1), -- Payment for reservation 3
-(0.00, 0.00, GETDATE(), 0),      -- Pending payment for reservation 2
-(0.00, 0.00, GETDATE(), 0),      -- Pending payment for reservation 4
-(0.00, 0.00, GETDATE(), 0),      -- Pending payment for reservation 5
-(0.00, 0.00, GETDATE(), 0),      -- Pending payment for reservation 7
-(0.00, 0.00, GETDATE(), 1);      -- Payment for the cancelled reservation
+(6000.00, 0.00, GETDATE(), 1),
+(4800.00, 200.00, GETDATE(), 1),
+(0.00, 0.00, GETDATE(), 0),
+(0.00, 0.00, GETDATE(), 0),
+(0.00, 0.00, GETDATE(), 0),
+(0.00, 0.00, GETDATE(), 0),
+(0.00, 0.00, GETDATE(), 1);
 GO
 
 -- Insert into Reservation table
 INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, status, payment_id)
 VALUES 
-(1, 1, 1, GETDATE(), '2024-11-01', '2024-11-05', 'Confirmed', 1),  -- Reservation ID 1: Paid
-(2, 11, 2, GETDATE(), '2024-11-02', NULL, 'Checked In', 3),            -- Reservation ID 2: Pending payment
-(3, 6, 3, GETDATE(), '2024-11-03', '2024-11-06', 'Checked Out', 2), -- Reservation ID 3: Paid
-(4, 3, 1, GETDATE(), '2024-10-30', NULL, 'Checked In', 4),            -- Reservation ID 4: Pending payment
-(5, 8, 2, GETDATE(), '2024-11-07', NULL, 'Checked In', 5),            -- Reservation ID 5: Pending payment
-(6, 1, 1, GETDATE(), '2024-11-07', NULL, 'Checked In', 6),           -- Reservation ID 6: Pending payment
-(1, 2, 1, GETDATE(), '2024-10-28', NULL, 'Cancelled', NULL),          -- Reservation ID 7: Cancelled
-(2, 8, 2, GETDATE(), '2024-10-30', NULL, 'Cancelled', NULL);       -- Reservation ID 8: Cancelled, no payment
+(1, 1, 1, GETDATE(), '2024-11-01', '2024-11-05', 'Confirmed', 1),
+(2, 11, 2, GETDATE(), '2024-11-02', NULL, 'Checked In', 3),
+(3, 6, 3, GETDATE(), '2024-11-03', '2024-11-06', 'Checked Out', 2),
+(4, 3, 1, GETDATE(), '2024-10-30', NULL, 'Checked In', 4),
+(5, 8, 2, GETDATE(), '2024-11-07', NULL, 'Checked In', 5),
+(6, 1, 1, GETDATE(), '2024-11-07', NULL, 'Checked In', 6),
+(1, 2, 1, GETDATE(), '2024-10-28', NULL, 'Cancelled', NULL),
+(2, 8, 2, GETDATE(), '2024-10-30', NULL, 'Cancelled', NULL);
 GO
 
 
