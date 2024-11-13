@@ -27,7 +27,7 @@
 
 \newpage
 
-\section{Specifikace zadání}
+
 
 \section{Datová analýza}
 \begin{figure}[ht]  
@@ -40,14 +40,14 @@
 \section{Lineární zápis}
 Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč}, atribut
 
-\begin{itemize}
-    \item \textbf{Address} – \underline{address\_id}, street, city, postal\_code, country
-    \item \textbf{Guest} – \underline{guest\_id}, firstname, lastname, email, phone, birth\_date, \textit{address\_id}, guest\_type, registration\_date, notes
-    \item \textbf{Employee} – \underline{employee\_id}, firstname, lastname, position, \textit{address\_id}
-    \item \textbf{RoomType} – \underline{room\_type\_id}, name, bed\_count, price\_per\_night
-    \item \textbf{Room} – \underline{room\_id}, \textit{room\_type\_id}, room\_number, is\_occupied
-    \item \textbf{Payment} – \underline{payment\_id}, total\_accommodation, total\_expenses, payment\_date, is\_paid
-    \item \textbf{Reservation} – \underline{reservation\_id}, \textit{guest\_id}, \textit{room\_id}, \textit{employee\_id}, creation\_date, check\_in\_date, check\_out\_date, \textit{payment\_id}, status
+\begin{itemize} 
+\item \textbf{Address} – Jeden záznam v této tabulce reprezentuje jedinečnou adresu, včetně ulice, města, PSČ a země, kterou mohou sdílet hosté nebo zaměstnanci hotelu. 
+\item \textbf{Guest} – Jeden záznam v této tabulce reprezentuje jednotlivého hosta hotelu se základními informacemi jako jméno, příjmení, kontakt, datum narození, typ hosta (např. pravidelný, VIP) a datum registrace. 
+\item \textbf{Employee} – Jeden záznam v této tabulce reprezentuje konkrétního zaměstnance hotelu, včetně jeho identifikátoru, pozice a adresy. 
+\item \textbf{RoomType} – Jeden záznam v této tabulce reprezentuje typ pokoje (např. jednolůžkový, dvoulůžkový), včetně počtu postelí a ceny za noc. 
+\item \textbf{Room} – Jeden záznam v této tabulce reprezentuje jednotlivý pokoj v hotelu s konkrétním číslem, typem pokoje, obsazeností a unikátním identifikátorem. 
+\item \textbf{Payment} – Jeden záznam v této tabulce reprezentuje platbu provedenou hostem, včetně částky za ubytování, celkových výdajů, data platby a informace, zda byla platba provedena. 
+\item \textbf{Reservation} – Jeden záznam v této tabulce reprezentuje rezervaci vytvořenou hostem, včetně identifikátoru hosta, přiděleného pokoje, zodpovědného zaměstnance, datumu vytvoření, datumu příjezdu a odjezdu, platby a stavu rezervace (např. potvrzeno, zrušeno). 
 \end{itemize}
 
 
