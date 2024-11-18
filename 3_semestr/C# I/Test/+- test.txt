@@ -1,0 +1,3 @@
+serializace ,kolekce, generic, I/O, readline, prace se stringy,---knihovna a z kama se to bude spoustet
+
+1,5 h na tohle 

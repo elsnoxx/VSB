@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ukol8", "Ukol8\Ukol8.csproj", "{DE02B314-3214-48B2-8906-36C42E05B9FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockLib", "StockLib\StockLib.csproj", "{03DBEEAC-29C4-42C6-ADA4-F17F4A3E03EE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE02B314-3214-48B2-8906-36C42E05B9FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE02B314-3214-48B2-8906-36C42E05B9FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE02B314-3214-48B2-8906-36C42E05B9FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE02B314-3214-48B2-8906-36C42E05B9FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03DBEEAC-29C4-42C6-ADA4-F17F4A3E03EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03DBEEAC-29C4-42C6-ADA4-F17F4A3E03EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03DBEEAC-29C4-42C6-ADA4-F17F4A3E03EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03DBEEAC-29C4-42C6-ADA4-F17F4A3E03EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
