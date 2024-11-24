@@ -4,13 +4,16 @@ int main() {
     HashTable ht;
 
     // Vložení klíèù a hodnot
-    ht.Insert("Alice", 25);
-    ht.Insert("Bob", 30);
+    ht.Insert("Richard", 25);
+    ht.Insert("Petra", 32);
+    ht.Insert("Daniel", 20);
     ht.Insert("Charlie", 35);
 
     // Zobrazení obsahu
     ht.Report();
 
+
+    cout << "Vyhledani zaznamu: " << endl;
     // Vyhledání hodnoty
     int value;
     if (ht.TryGetValue("Bob", value)) {
@@ -20,8 +23,15 @@ int main() {
         cout << "Klíè 'Bob' nebyl nalezen." << endl;
     }
 
+
+    cout << "Smazani zaznamu: " << endl;
     // Smazání klíèe
     ht.Delete("Alice");
+    ht.Report();
+
+    cout << "Aktualiza zaznamu: "<< endl;
+    //Aktualizece záznamu
+    ht.Insert("Bob", 40);
     ht.Report();
 
     // Zobrazení faktoru naplnìní

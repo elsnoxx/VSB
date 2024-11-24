@@ -8,9 +8,9 @@ using namespace std;
 
 class HashTable {
 public:
-    HashTable();                      // Konstruktor bez parametrù
-    HashTable(const int TableSize);   // Konstruktor s velikostí tabulky
-    ~HashTable();                     // Destruktor
+    HashTable();
+    HashTable(const int TableSize);
+    ~HashTable();
 
     bool ContainsKey(const string& Key) const;
     bool TryGetValue(const string& Key, int& Value) const;
@@ -32,7 +32,7 @@ private:
         int Value;
     };
 
-    vector<vector<KeyValuePair>> Table; // Tabulka jako vektor vektorù
-    size_t TableSize;                   // Velikost tabulky (poèet slotù)
-    size_t NumberOfKeys;                // Poèet klíèù v tabulce
+    vector<vector<KeyValuePair>> Table;
+    size_t TableSize;
+    size_t NumberOfKeys;
 };

@@ -12,24 +12,24 @@ HashTable::HashTable(const int TableSize) : TableSize(TableSize), NumberOfKeys(0
 
 // Destruktor
 HashTable::~HashTable() {
-    Clear(); // Uvolníme všechny záznamy
+    Clear();
 }
 
 // Hašovací funkce
 int HashTable::HashFunction(const string& Key) const {
-    int hash = 0;
+    int hash = 2320;
     for (char c : Key) {
-        hash += c; // Seèteme ASCII hodnoty znakù
+        hash += c;
     }
-    return hash % TableSize; // Vypoèítáme index
+    return hash % TableSize;
 }
 
 // Vložení klíèe a hodnoty
 void HashTable::Insert(const string& Key, const int NewValue) {
-    int index = HashFunction(Key); // Najdeme slot
+    int index = HashFunction(Key);
     for (auto& pair : Table[index]) {
         if (pair.Key == Key) {
-            pair.Value = NewValue; // Pøepíšeme hodnotu
+            pair.Value = NewValue;
             return;
         }
     }
