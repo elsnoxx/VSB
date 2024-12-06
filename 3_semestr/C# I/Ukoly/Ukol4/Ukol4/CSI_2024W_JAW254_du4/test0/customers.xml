@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfCustomer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Customer>
+    <Name>Pepa Novák</Name>
+    <Age>20</Age>
+  </Customer>
+  <Customer>
+    <Name>Zuzana Bělská</Name>
+    <Age>60</Age>
+  </Customer>
+  <Customer>
+    <Name>Monika Štastná</Name>
+    <Age>17</Age>
+  </Customer>
+  <Customer>
+    <Name>Michal Lysý</Name>
+    <Age>18</Age>
+  </Customer>
+  <Customer>
+    <Name>Karel Báňský</Name>
+    <Age>52</Age>
+  </Customer>
+</ArrayOfCustomer>
