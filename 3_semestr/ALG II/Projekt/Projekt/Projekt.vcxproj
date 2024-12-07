@@ -127,6 +127,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cave.cpp" />
+    <ClCompile Include="CaveSystem.cpp" />
+    <ClCompile Include="PathFinder.cpp" />
     <ClCompile Include="Projekt.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +139,11 @@
     <Text Include="..\Data\test2.txt" />
     <Text Include="..\Data\test3.txt" />
     <Text Include="..\Data\trivial_test.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Cave.h" />
+    <ClInclude Include="CaveSystem.h" />
+    <ClInclude Include="PathFinder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

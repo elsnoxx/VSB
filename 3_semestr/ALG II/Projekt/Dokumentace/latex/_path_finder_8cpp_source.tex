@@ -1,0 +1,46 @@
+\doxysection{Path\+Finder.\+cpp}
+\hypertarget{_path_finder_8cpp_source}{}\label{_path_finder_8cpp_source}\index{Projekt/PathFinder.cpp@{Projekt/PathFinder.cpp}}
+\mbox{\hyperlink{_path_finder_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_path_finder_8h}{PathFinder.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <cctype>}}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00008}00008\ \textcolor{keywordtype}{void}\ PathFinder::dfs(\textcolor{keyword}{const}\ std::string\&\ currentCave,\ std::vector<std::string>\&\ path,\ \textcolor{keyword}{const}\ std::map<std::string,\ Cave>\&\ caves)\ \{}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00009}00009\ \ \ \ \ path.push\_back(currentCave);}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00011}00011\ \ \ \ \ \textcolor{keywordflow}{if}\ (currentCave\ ==\ \textcolor{stringliteral}{"{}end"{}})\ \{}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00012}00012\ \ \ \ \ \ \ \ \ allPaths.push\_back(path);}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00013}00013\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00014}00014\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00015}00015\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ std::string\&\ neighbor\ :\ caves.at(currentCave).getPassages())\ \{}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00016}00016\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (islower(neighbor[0])\ \&\&\ std::find(path.begin(),\ path.end(),\ neighbor)\ !=\ path.end())\ \{}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00017}00017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00018}00018\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00019}00019\ \ \ \ \ \ \ \ \ \ \ \ \ dfs(neighbor,\ path,\ caves);}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00020}00020\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00021}00021\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00023}00023\ \ \ \ \ path.pop\_back();}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00024}00024\ \}}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00026}\mbox{\hyperlink{class_path_finder_a2379baab57d9356ec6e9657f6c220d92}{00026}}\ std::vector<std::vector<std::string>>\ \mbox{\hyperlink{class_path_finder_a2379baab57d9356ec6e9657f6c220d92}{PathFinder::findAllPaths}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_cave_system}{CaveSystem}}\&\ caveSystem)\ \{}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00027}00027\ \ \ \ \ allPaths.clear();}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00028}00028\ \ \ \ \ std::vector<std::string>\ path;}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00029}00029\ \ \ \ \ dfs(\textcolor{stringliteral}{"{}start"{}},\ path,\ caveSystem.\mbox{\hyperlink{class_cave_system_a34bf302b27491df4da544a8483f3b719}{getCaves}}());}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00030}00030\ \ \ \ \ \textcolor{keywordflow}{return}\ allPaths;}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00031}00031\ \}}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00033}\mbox{\hyperlink{class_path_finder_a891b8de8c20b425150c202a362293179}{00033}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_path_finder_a891b8de8c20b425150c202a362293179}{PathFinder::printAllPaths}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00034}00034\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ path\ :\ allPaths)\ \{}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00035}00035\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ cave\ :\ path)\ \{}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00036}00036\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ cave\ <<\ \textcolor{stringliteral}{"{}\ "{}};}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00037}00037\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00038}00038\ \ \ \ \ \ \ \ \ std::cout\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00039}00039\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_path_finder_8cpp_source_l00040}00040\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,39 @@
+\doxysection{Projekt.\+cpp}
+\hypertarget{_projekt_8cpp_source}{}\label{_projekt_8cpp_source}\index{Projekt/Projekt.cpp@{Projekt/Projekt.cpp}}
+\mbox{\hyperlink{_projekt_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_cave_system_8h}{CaveSystem.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_path_finder_8h}{PathFinder.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00007}\mbox{\hyperlink{_projekt_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{00007}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{_projekt_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}}()\ \{}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00008}00008\ \ \ \ \ std::vector<std::string>\ files\ =\ \{\ \textcolor{stringliteral}{"{}..\(\backslash\)\(\backslash\)Data\(\backslash\)\(\backslash\)test0.txt"{}},\ \textcolor{stringliteral}{"{}..\(\backslash\)\(\backslash\)Data\(\backslash\)\(\backslash\)test1.txt"{}},\ \textcolor{stringliteral}{"{}..\(\backslash\)\(\backslash\)Data\(\backslash\)\(\backslash\)test2.txt"{}},}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00009}00009\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}..\(\backslash\)\(\backslash\)Data\(\backslash\)\(\backslash\)test3.txt"{}},\ \textcolor{stringliteral}{"{}..\(\backslash\)\(\backslash\)Data\(\backslash\)\(\backslash\)trivial\_test.txt"{}}\ \};}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00011}00011\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ filename\ :\ files)\ \{}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00012}00012\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00013}00013\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_cave_system}{CaveSystem}}\ caveSystem;}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00014}00014\ \ \ \ \ \ \ \ \ \ \ \ \ caveSystem.\mbox{\hyperlink{class_cave_system_a3d739c3a88760c55821648df51a6af28}{loadFromFile}}(filename);}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00016}00016\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_path_finder}{PathFinder}}\ pathFinder;}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00017}00017\ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<std::vector<std::string>>\ allPaths\ =\ pathFinder.\mbox{\hyperlink{class_path_finder_a2379baab57d9356ec6e9657f6c220d92}{findAllPaths}}(caveSystem);}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00019}00019\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ filename\ <<\ \textcolor{stringliteral}{"{}:\ "{}}\ <<\ allPaths.size()\ <<\ \textcolor{stringliteral}{"{}\ paths\ found."{}}\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00021}00021\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Vypiš\ všechny\ nalezené\ cesty}}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00022}00022\ \ \ \ \ \ \ \ \ \ \ \ \ pathFinder.\mbox{\hyperlink{class_path_finder_a891b8de8c20b425150c202a362293179}{printAllPaths}}();}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00024}00024\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00025}00025\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::exception\&\ e)\ \{}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00026}00026\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ e.what()\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00027}00027\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00028}00028\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00029}00029\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00031}00031\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00032}00032\ \}}
+\DoxyCodeLine{\Hypertarget{_projekt_8cpp_source_l00033}00033\ }
+
+\end{DoxyCode}
