@@ -127,7 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="pop3_client.cpp" />
     <ClCompile Include="SMTPandPOP3.cpp" />
+    <ClCompile Include="smtp_client.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pop3_client.h" />
+    <ClInclude Include="smtp_client.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

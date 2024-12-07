@@ -18,5 +18,19 @@
     <ClCompile Include="SMTPandPOP3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="smtp_client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pop3_client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="smtp_client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pop3_client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
