@@ -9,8 +9,29 @@ namespace Ukol4
     public class ObservableList<T> : IEnumerable<T>
     {
         private List<T> items = new List<T>();
+        
+        public int Count => items.Count;
+        public IEnumerator<T> GetEnumerator()
+        {
+            int left = 0;
+            int right = items.Count - 1;
 
-        // Definice delegátů a událostí
+            while (left <= right)
+            {
+                if (left == right)
+                {
+                    yield return items[left];
+                    break;
+                }
+
+                yield return items[left];
+                yield return items[right];
+                left++;
+                right--;
+            }
+        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        
         public delegate void ItemAddedHandler(T addedItem);
         public event ItemAddedHandler OnAdd;
 
@@ -47,9 +68,9 @@ namespace Ukol4
         {
             JsonSerializerOptions options = new JsonSerializerOptions
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase, // Názvy vlastností jako CamelCase
-                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // Bez escapování speciálních znaků
-                WriteIndented = true // Přehledné odsazení a zalamování řádků
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = true
             };
 
             var json = JsonSerializer.Serialize(items, options);
@@ -162,38 +183,15 @@ namespace Ukol4
 
             if (items.Count == 0)
             {
-                return new List<T>(); // Vrátí prázdný seznam, pokud kolekce neobsahuje žádné položky
+                return new List<T>();
             }
 
             var sortedList = new List<T>(items);
             sortedList.Sort(comparer);
             return sortedList;
         }
-
-        // Počet položek
-        public int Count => items.Count;
-        public IEnumerator<T> GetEnumerator()
-        {
-            int left = 0;
-            int right = items.Count - 1;
-
-            while (left <= right)
-            {
-                if (left == right)
-                {
-                    yield return items[left];
-                    break;
-                }
-
-                yield return items[left];
-                yield return items[right];
-                left++;
-                right--;
-            }
-        }
-        // Iterace přes seznam
-     
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        
+       
 
 
     }
