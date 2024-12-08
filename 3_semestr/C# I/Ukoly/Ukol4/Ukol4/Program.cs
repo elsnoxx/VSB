@@ -14,8 +14,9 @@ namespace Ukol4
             list.OnAdd += item => Console.WriteLine($"Přidáno: {item}");
             list.OnRemove += item => Console.WriteLine($"Odebráno: {item}");
 
-            LoadFromBin(list, @"C:\Users\admin\Documents\GitHub\VSB\3_semestr\C# I\Ukoly\Ukol4\Ukol4\CSI_2024W_JAW254_du4\test0\source1.bin");
-
+            // LoadFromBin(list, @"C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\3_semestr\C# I\Ukoly\Ukol4\Ukol4\CSI_2024W_JAW254_du4\test0\source1.bin");
+            LoadFromBin(list, args[0]);
+            
             list.Remove(list[2]);
 
             string json = list.SerializeToJson();
@@ -50,8 +51,8 @@ namespace Ukol4
                 LoadFromTextFile("customers.xml")
                 );
             Print(xmlCustomers);
+            // Console.ReadKey();
         }
-
         private static void Print(ObservableList<Customer> customers)
         {
             Console.WriteLine("Zákazníci:");
@@ -62,19 +63,20 @@ namespace Ukol4
             }
 
 
-            //Console.WriteLine("\n");
-            //Console.WriteLine("Nezletilí zákazníci:");
-            //Console.WriteLine(new string('-', 15));
-            //foreach (Customer num in customers.Filter(
-            //    /*
-            //    Zde bude možné předat libovolnou metodu přijímající Customer a vracející bool.
-            //    Pro otestování zde doplňte metodu viz. zadání.
-            //    */
-            //    // TODO: doplnit...
-            //    ))
-            //{
-            //    Console.WriteLine(num);
-            //}
+            Console.WriteLine("\n");
+            Console.WriteLine("Nezletilí zákazníci:");
+            Console.WriteLine(new string('-', 15));
+            foreach (Customer num in customers.Filter(
+                /*
+                Zde bude možné předat libovolnou metodu přijímající Customer a vracející bool.
+                Pro otestování zde doplňte metodu viz. zadání.
+                */
+                // TODO: doplnit...
+                c => c.Age < 18
+                ))
+            {
+                Console.WriteLine(num);
+            }
 
 
             Console.WriteLine("\n");
@@ -86,8 +88,6 @@ namespace Ukol4
             }
         }
 
-
-
         static void LoadFromBin(ObservableList<Customer> list, string path) 
         {
             using (var stream = new FileStream(path, FileMode.Open))
@@ -96,10 +96,7 @@ namespace Ukol4
                 int recordCount = reader.ReadInt32();
                 for (int i = 0; i < recordCount; i++)
                 {
-                    // Číst string (jméno)
                     string name = reader.ReadString();
-
-                    // Číst Int32 (věk)
                     int age = reader.ReadInt32();
 
                     var customer = new Customer(name, age);
@@ -108,6 +105,21 @@ namespace Ukol4
 
             }
 
+        }
+        
+        public static string LoadFromTextFile(string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                throw new ArgumentException("File path cannot be null or empty.");
+            }
+
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException($"Soubor na cestě {filePath} nebyl nalezen.");
+            }
+
+            return File.ReadAllText(filePath);
         }
 
         public static void SaveToTextFile(string content, string filePath)

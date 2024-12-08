@@ -12,10 +12,11 @@ namespace Ukol4
         {
             if (x == null || y == null)
             {
-                throw new ArgumentNullException("Nelze porovnávat null hodnoty.");
+                throw new ArgumentException("Customers cannot be null.");
             }
 
             return x.Age.CompareTo(y.Age);
         }
     }
+
 }
