@@ -1,0 +1,213 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[left=20mm,right=30mm,top=30mm,bottom=35mm]{geometry} 
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{graphicx}
+\usepackage{float}
+
+
+
+
+
+\begin{document}
+\begin{titlepage}
+    \centering
+    \vspace*{2cm} % Vložení vertikální mezery nahoře
+    
+    
+    
+    \vspace{2cm} % Další mezera mezi tabulkou a případným textem
+    
+    \textbf{\Huge Počítačové sítě} \\[1cm]
+    \textbf{\Large Analýza provozu - HTTP} \\[2cm]
+    
+    
+    \vfill % Posune další text dolů (na konec stránky)
+    
+    \begin{tabular}{|p{5cm}|p{10cm}|}
+        \hline
+        \rowcolor[HTML]{D9E1F2} \textbf{Předmět:} & \textbf{Počítačové sítě} \\ \hline
+        \textbf{Autoři:} & Richard Ficek (FIC0024) \newline Trombik Daniel (TRO0090) \\ \hline
+        \textbf{Datum:} & \today \\ \hline
+    \end{tabular}
+    
+\end{titlepage}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+
+\section{Nastavení prostředí a stažení HTML stránky}
+
+\begin{itemize}
+    \item Proveden restart testovacího počítače.
+    \item Zadání příkazu \texttt{ipconfig /flushdns} do \texttt{cmd} na PC, pro vyčištění cache DNS v počítači.
+    \item Spuštění zachytávání v programu Wireshark.
+    \item Pomocí příkazu \texttt{curl} stáhnu danou stránku tak, aby byl požadavek zachycen ve Wiresharku:
+    \begin{quote}
+        \texttt{curl http://ocel.mysteria.cz/}
+    \end{quote}
+\end{itemize}
+
+
+\section{Analýza provozu}
+
+\subsection{Informace o testovacím přístroji}
+Data získám za pomoci příkazu \texttt{ipconfig /all}
+
+\begin{table}[htp]
+    \centering
+    \begin{tabular}{ll}
+         \textbf{MAC adresa} &  12-E4-F2-94-07-F5 \\
+         \textbf{IPv4 adresa} &  192.168.208.170 \\
+         \textbf{Maska podsítě} &  255.255.255.0 \\
+         \textbf{IPv6 adresa} &  fe80::ffd:4097:f9c1:ca65 \\
+         \textbf{Výchozí brána} &  192.168.208.1 \\
+         \textbf{DNS} &  10.122.246.225 \\
+    \end{tabular}
+    \caption{Informace o testovacím přístroji}
+    \label{tab:my_label}
+\end{table}
+
+\section{DNS}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{dns.png}
+    \caption{Sekvence HTTP požadavku a odpovědi}
+    \label{fig:http_sequence}
+\end{figure}
+
+Na zachyceném provozu (Obr. 1) vidíme dva páry DNS dotazů na IPv4 adresy pomocí typu A. První dotaz (No. 5) na adresu wpad.TRANSYS.Global zaslaný klientem 192.168.208.170 na DNS server 10.122.246.225 vrací odpověď (No. 6) No such name. Druhý dotaz (No. 46) směřuje na server ocel.mysteria.cz, přičemž odpověď (No. 47) obsahuje IPv4 adresu 185.64.219.7. Všechny dotazy probíhají pomocí UDP na DNS server 10.122.246.225 na standardním portu 53.
+
+\section{HTTP}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{http.png}
+    \caption{Sekvence HTTP požadavku a odpovědi}
+    \label{fig:http_sequence}
+\end{figure}
+
+Byla zachycena sekvence jednoho HTTP požadavku a odpovědi na něj. Klient 192.168.208.170 zaslal HTTP GET požadavek na adresu 185.64.208.170 pro získání stránky \texttt{/}. Verze HTTP je 1.1. V detailu lze vidět připojené HTTP hlavičky.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{http-head.png}
+    \caption{HTTP hlavičky v požadavku}
+    \label{fig:http_headers_request}
+\end{figure}
+
+Ze serveru pak přijde odpověď s kódem 200 OK. Požadavek byl tedy v pořádku serverem zpracován. V detailu odpovědi HTTP jde vidět např. typ obsahu (text/html) a velikost obsahu (4349 bajtů). Na konci je vidět, že získaný HTML soubor obsahuje 61 řádků.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{http-response.png}
+    \caption{HTTP hlavičky v odpovědi}
+    \label{fig:http_headers_response}
+\end{figure}
+
+\section{Kompletní TCP komunikace}
+
+
+
+\subsection*{Three Way Handshake}
+
+Nejprve klient odešle segment s příznakem \texttt{SYN}, čímž zahájí proces spojení. Server následně odpoví segmentem s příznaky \texttt{SYN} a \texttt{ACK}, čímž potvrzuje přijetí požadavku klienta. Klient na tuto odpověď reaguje segmentem s příznakem \texttt{ACK}, čímž potvrzuje přijetí odpovědi od serveru. Po těchto třech krocích je spojení úspěšně navázáno a může začít výměna dat.
+
+\subsection*{Four Way Handshake}
+
+Nejprve server odešle segment s příznaky \texttt{FIN} a \texttt{ACK}, čímž signalizuje, že chce ukončit spojení. Klient na tento požadavek odpoví segmentem s příznakem \texttt{ACK}, čímž potvrzuje přijetí ukončení od serveru. Poté klient pošle segment s příznaky \texttt{FIN} a \texttt{ACK} pro uzavření spojení z jeho strany. Server nakonec potvrzuje přijetí požadavku odesláním segmentu s příznakem \texttt{ACK}. Tímto způsobem je spojení bezpečně uzavřeno z obou stran.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{tcp.png}
+    \caption{HTTP hlavičky v odpovědi}
+    \label{fig:http_headers_response}
+\end{figure}
+
+
+\newpage
+
+\section{Závěr}
+
+\subsection{Jaké MAC a IP adresy se komunikace účastnily. Komu která adresa patřila ?}
+
+Na základě analýzy síťové komunikace byly identifikovány následující adresy:
+
+\subsubsection*{IP adresy}
+\begin{itemize}
+    \item \textbf{Klientská adresa:} 
+    \begin{itemize}
+        \item IPv4: \texttt{192.168.208.170}
+        \item IPv6: \texttt{fe80::ffd:4097:f9c1:ca65}
+    \end{itemize}
+    \item \textbf{Serverové adresy:}
+    \begin{itemize}
+        \item HTTP server: \texttt{185.64.219.7}
+        \item DNS server: \texttt{10.122.246.225}
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{DNS dotazy}
+\begin{itemize}
+    \item Dotaz: \texttt{ocel.mysteria.cz} – úspěšný, IP adresa: \texttt{185.64.219.7}
+    \item Použitý DNS server: \texttt{10.122.246.225}.
+\end{itemize}
+
+\vspace*{.8cm}
+
+\subsection{Jaké hodnoty se vyskytovaly v poli typu dat vyšší vrstvy v rámcích (2. vrstva) a IP paketech (3. vrstva)?}
+
+\vspace*{.8cm}
+
+\noindent
+\begin{minipage}[t]{0.45\textwidth}
+    \textbf{V rámcích (2. vrstva):}
+    \begin{itemize}
+        \item \textbf{0x0800} – IPv4
+        \item \textbf{0x86DD} – IPv6
+    \end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+    \textbf{V IP paketech (3. vrstva):}
+    \begin{itemize}
+        \item \textbf{6 (TCP)}
+        \item \textbf{17 (UDP)}
+    \end{itemize}
+\end{minipage}
+
+\vspace*{.8cm}
+
+\subsection{Určete, jaké protokoly byly použity na transportní vrstvě a k čemu?}
+
+Pro dotazy na DNS a pro přenos odpovědí byl použit protokol \texttt{UDP}, který je vhodný pro rychlou a efektivní komunikaci bez nutnosti potvrzování přijatých dat. Na druhé straně komunikace mezi klientem a serverem probíhala pomocí protokolu \texttt{TCP}, který zajišťuje spolehlivý přenos dat s kontrolou chyb a potvrzením odeslaných paketů.
+
+\newpage
+
+\subsection{Od jakého čísla se začaly číslovat bajty navázaného TCP spojení v obou směrech? Pozor na standardní nastavení relativního zobrazení ve Wiresharku.}
+
+\begin{itemize}
+    \item Ze strany \textbf{klienta} začalo číslování na: 2362418334
+    \item Ze strany \textbf{serveru} začalo číslování na: 3069486223
+\end{itemize}
+
+
+
+\subsection{Kolik byte se přeneslo v obou směrech navázaného TCP spojení ?}
+
+\begin{itemize}
+    \item \textbf{Klient} – 362 bajtů
+    \item \textbf{Server} – 5093 bajtů
+\end{itemize}
+
+Celkem přeneseno 5455 bajtů
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{pocet prenesenych bajtu.png}
+\end{figure}
+\end{document}
