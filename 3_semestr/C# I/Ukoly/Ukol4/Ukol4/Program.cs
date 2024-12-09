@@ -88,48 +88,83 @@ namespace Ukol4
             }
         }
 
-        static void LoadFromBin(ObservableList<Customer> list, string path) 
+        static void LoadFromBin(ObservableList<Customer> list, string path)
         {
-            using (var stream = new FileStream(path, FileMode.Open))
-            using (var reader = new BinaryReader(stream))
+            try
             {
-                int recordCount = reader.ReadInt32();
-                for (int i = 0; i < recordCount; i++)
+                if (string.IsNullOrWhiteSpace(path))
                 {
-                    string name = reader.ReadString();
-                    int age = reader.ReadInt32();
-
-                    var customer = new Customer(name, age);
-                    list.Add(customer);
+                    throw new ArgumentException("Path cannot be null or empty.");
                 }
 
-            }
+                if (!File.Exists(path))
+                {
+                    throw new FileNotFoundException($"File not found at the specified path: {path}");
+                }
 
+                using (var stream = new FileStream(path, FileMode.Open))
+                using (var reader = new BinaryReader(stream))
+                {
+                    int recordCount = reader.ReadInt32();
+                    for (int i = 0; i < recordCount; i++)
+                    {
+                        string name = reader.ReadString();
+                        int age = reader.ReadInt32();
+
+                        var customer = new Customer(name, age);
+                        list.Add(customer);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+            }
         }
-        
+
         public static string LoadFromTextFile(string filePath)
         {
-            if (string.IsNullOrWhiteSpace(filePath))
+            try
             {
-                throw new ArgumentException("File path cannot be null or empty.");
-            }
+                if (string.IsNullOrWhiteSpace(filePath))
+                {
+                    throw new ArgumentException("File path cannot be null or empty.");
+                }
 
-            if (!File.Exists(filePath))
+                if (!File.Exists(filePath))
+                {
+                    throw new FileNotFoundException($"File not found at the specified path: {filePath}");
+                }
+
+                return File.ReadAllText(filePath);
+            }
+            catch (Exception ex)
             {
-                throw new FileNotFoundException($"Soubor na cestě {filePath} nebyl nalezen.");
+                Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+                return string.Empty;
             }
-
-            return File.ReadAllText(filePath);
         }
 
         public static void SaveToTextFile(string content, string filePath)
         {
-            if (string.IsNullOrWhiteSpace(content))
+            try
             {
-                throw new ArgumentException("Content cannot be null or empty.");
-            }
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    throw new ArgumentException("Content cannot be null or empty.");
+                }
 
-            File.WriteAllText(filePath, content);
+                if (string.IsNullOrWhiteSpace(filePath))
+                {
+                    throw new ArgumentException("File path cannot be null or empty.");
+                }
+
+                File.WriteAllText(filePath, content);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+            }
         }
     }
 }

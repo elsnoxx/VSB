@@ -32,11 +32,8 @@ namespace Ukol4
         }
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         
-        public delegate void ItemAddedHandler(T addedItem);
-        public event ItemAddedHandler OnAdd;
-
-        public delegate void ItemRemovedHandler(T removedItem);
-        public event ItemRemovedHandler OnRemove;
+        public event Action<T>? OnAdd;
+        public event Action<T>? OnRemove;
 
         public void Add(T item)
         {
