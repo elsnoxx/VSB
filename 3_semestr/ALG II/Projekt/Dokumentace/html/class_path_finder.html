@@ -78,18 +78,25 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Class for finding all paths in a cave system.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_path_finder_8h_source.html">PathFinder.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a2379baab57d9356ec6e9657f6c220d92" id="r_a2379baab57d9356ec6e9657f6c220d92"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2379baab57d9356ec6e9657f6c220d92">findAllPaths</a> (const <a class="el" href="class_cave_system.html">CaveSystem</a> &amp;caveSystem)</td></tr>
+<tr class="memdesc:a2379baab57d9356ec6e9657f6c220d92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds all paths in the given cave system.  <br /></td></tr>
 <tr class="separator:a2379baab57d9356ec6e9657f6c220d92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a891b8de8c20b425150c202a362293179" id="r_a891b8de8c20b425150c202a362293179"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a891b8de8c20b425150c202a362293179">printAllPaths</a> () const</td></tr>
+<tr class="memdesc:a891b8de8c20b425150c202a362293179"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints all paths to the standard output.  <br /></td></tr>
 <tr class="separator:a891b8de8c20b425150c202a362293179"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="_path_finder_8h_source.html#l00009">9</a> of file <a class="el" href="_path_finder_8h_source.html">PathFinder.h</a>.</p>
+<div class="textblock"><p>Class for finding all paths in a cave system. </p>
+<p>This class implements depth-first search (DFS) to find all possible paths from the start cave to the end cave in a given cave system. </p>
+
+<p class="definition">Definition at line <a class="el" href="_path_finder_8h_source.html#l00015">15</a> of file <a class="el" href="_path_finder_8h_source.html">PathFinder.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a2379baab57d9356ec6e9657f6c220d92" name="a2379baab57d9356ec6e9657f6c220d92"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2379baab57d9356ec6e9657f6c220d92">&#9670;&#160;</a></span>findAllPaths()</h2>
@@ -106,7 +113,17 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_path_finder_8cpp_source.html#l00026">26</a> of file <a class="el" href="_path_finder_8cpp_source.html">PathFinder.cpp</a>.</p>
+<p>Finds all paths in the given cave system. </p>
+<p>This function starts from the "start" cave and finds all paths leading to the "end" cave.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">caveSystem</td><td>The cave system in which to search for paths. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A vector of paths, where each path is a vector of strings representing cave names. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_path_finder_8cpp_source.html#l00027">27</a> of file <a class="el" href="_path_finder_8cpp_source.html">PathFinder.cpp</a>.</p>
 
 </div>
 </div>
@@ -125,7 +142,10 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_path_finder_8cpp_source.html#l00033">33</a> of file <a class="el" href="_path_finder_8cpp_source.html">PathFinder.cpp</a>.</p>
+<p>Prints all paths to the standard output. </p>
+<p>Outputs all found paths to the console, with each path on a new line. </p>
+
+<p class="definition">Definition at line <a class="el" href="_path_finder_8cpp_source.html#l00034">34</a> of file <a class="el" href="_path_finder_8cpp_source.html">PathFinder.cpp</a>.</p>
 
 </div>
 </div>

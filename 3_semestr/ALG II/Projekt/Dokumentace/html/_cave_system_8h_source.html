@@ -83,31 +83,30 @@ $(function() { codefold.init(0); });
   <div class="headertitle"><div class="title">CaveSystem.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="_cave_system_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#ifndef CAVESYSTEM_H</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno"><a class="line" href="_cave_system_8h.html#a83c09e0b12e5bf5f6cb91d58da557b10">    4</a></span><span class="preprocessor">#define CAVESYSTEM_H</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;map&gt;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="_cave_8h.html">Cave.h</a>&quot;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="foldopen" id="foldopen00010" data-start="{" data-end="};">
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="class_cave_system.html">   10</a></span><span class="keyword">class </span><a class="code hl_class" href="class_cave_system.html">CaveSystem</a> {</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    std::map&lt;std::string, Cave&gt; caves;</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_cave_system.html#a3d739c3a88760c55821648df51a6af28">loadFromFile</a>(<span class="keyword">const</span> std::string&amp; filename);</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keyword">const</span> std::map&lt;std::string, Cave&gt;&amp; <a class="code hl_function" href="class_cave_system.html#a34bf302b27491df4da544a8483f3b719">getCaves</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>};</div>
+<a href="_cave_system_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef CAVESYSTEM_H</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define CAVESYSTEM_H</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="_cave_8h.html">Cave.h</a>&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
+<div class="foldopen" id="foldopen00014" data-start="{" data-end="};">
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="class_cave_system.html">   14</a></span><span class="keyword">class </span><a class="code hl_class" href="class_cave_system.html">CaveSystem</a> {</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    std::map&lt;std::string, Cave&gt; caves;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_cave_system.html#a3d739c3a88760c55821648df51a6af28">loadFromFile</a>(<span class="keyword">const</span> std::string&amp; filename);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keyword">const</span> std::map&lt;std::string, Cave&gt;&amp; <a class="code hl_function" href="class_cave_system.html#a34bf302b27491df4da544a8483f3b719">getCaves</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>};</div>
 </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#endif </span><span class="comment">// CAVESYSTEM_H</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">#endif </span><span class="comment">// CAVESYSTEM_H</span></div>
 <div class="ttc" id="a_cave_8h_html"><div class="ttname"><a href="_cave_8h.html">Cave.h</a></div></div>
-<div class="ttc" id="aclass_cave_system_html"><div class="ttname"><a href="class_cave_system.html">CaveSystem</a></div><div class="ttdef"><b>Definition</b> <a href="#l00010">CaveSystem.h:10</a></div></div>
-<div class="ttc" id="aclass_cave_system_html_a34bf302b27491df4da544a8483f3b719"><div class="ttname"><a href="class_cave_system.html#a34bf302b27491df4da544a8483f3b719">CaveSystem::getCaves</a></div><div class="ttdeci">const std::map&lt; std::string, Cave &gt; &amp; getCaves() const</div><div class="ttdef"><b>Definition</b> <a href="_cave_system_8cpp_source.html#l00029">CaveSystem.cpp:29</a></div></div>
-<div class="ttc" id="aclass_cave_system_html_a3d739c3a88760c55821648df51a6af28"><div class="ttname"><a href="class_cave_system.html#a3d739c3a88760c55821648df51a6af28">CaveSystem::loadFromFile</a></div><div class="ttdeci">void loadFromFile(const std::string &amp;filename)</div><div class="ttdef"><b>Definition</b> <a href="_cave_system_8cpp_source.html#l00005">CaveSystem.cpp:5</a></div></div>
+<div class="ttc" id="aclass_cave_system_html"><div class="ttname"><a href="class_cave_system.html">CaveSystem</a></div><div class="ttdoc">Represents a system of caves and their connections.</div><div class="ttdef"><b>Definition</b> <a href="#l00014">CaveSystem.h:14</a></div></div>
+<div class="ttc" id="aclass_cave_system_html_a34bf302b27491df4da544a8483f3b719"><div class="ttname"><a href="class_cave_system.html#a34bf302b27491df4da544a8483f3b719">CaveSystem::getCaves</a></div><div class="ttdeci">const std::map&lt; std::string, Cave &gt; &amp; getCaves() const</div><div class="ttdoc">Gets the map of caves.</div><div class="ttdef"><b>Definition</b> <a href="_cave_system_8cpp_source.html#l00029">CaveSystem.cpp:29</a></div></div>
+<div class="ttc" id="aclass_cave_system_html_a3d739c3a88760c55821648df51a6af28"><div class="ttname"><a href="class_cave_system.html#a3d739c3a88760c55821648df51a6af28">CaveSystem::loadFromFile</a></div><div class="ttdeci">void loadFromFile(const std::string &amp;filename)</div><div class="ttdoc">Loads cave connections from a file.</div><div class="ttdef"><b>Definition</b> <a href="_cave_system_8cpp_source.html#l00005">CaveSystem.cpp:5</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

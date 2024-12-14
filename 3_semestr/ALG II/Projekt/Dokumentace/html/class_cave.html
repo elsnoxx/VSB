@@ -78,24 +78,34 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Represents a single cave and its connections to other caves.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_cave_8h_source.html">Cave.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac080f7becad735aa505edd08f34d7d20" id="r_ac080f7becad735aa505edd08f34d7d20"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac080f7becad735aa505edd08f34d7d20">Cave</a> ()=default</td></tr>
+<tr class="memdesc:ac080f7becad735aa505edd08f34d7d20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <br /></td></tr>
 <tr class="separator:ac080f7becad735aa505edd08f34d7d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedbcb9327586287f2145968064870da6" id="r_aedbcb9327586287f2145968064870da6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aedbcb9327586287f2145968064870da6">Cave</a> (const std::string &amp;name)</td></tr>
+<tr class="memdesc:aedbcb9327586287f2145968064870da6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a cave with a given name.  <br /></td></tr>
 <tr class="separator:aedbcb9327586287f2145968064870da6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3411b2b569d265158429a7c2e68d3eb7" id="r_a3411b2b569d265158429a7c2e68d3eb7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3411b2b569d265158429a7c2e68d3eb7">addPassage</a> (const std::string &amp;neighbor)</td></tr>
+<tr class="memdesc:a3411b2b569d265158429a7c2e68d3eb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a passage to a neighboring cave.  <br /></td></tr>
 <tr class="separator:a3411b2b569d265158429a7c2e68d3eb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a344afe197acffe174b09083d54fc7c6e" id="r_a344afe197acffe174b09083d54fc7c6e"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a344afe197acffe174b09083d54fc7c6e">getName</a> () const</td></tr>
+<tr class="memdesc:a344afe197acffe174b09083d54fc7c6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the name of the cave.  <br /></td></tr>
 <tr class="separator:a344afe197acffe174b09083d54fc7c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa2194a94d80f6713211a1003b397473" id="r_aaa2194a94d80f6713211a1003b397473"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaa2194a94d80f6713211a1003b397473">getPassages</a> () const</td></tr>
+<tr class="memdesc:aaa2194a94d80f6713211a1003b397473"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the list of passages.  <br /></td></tr>
 <tr class="separator:aaa2194a94d80f6713211a1003b397473"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="_cave_8h_source.html#l00009">9</a> of file <a class="el" href="_cave_8h_source.html">Cave.h</a>.</p>
+<div class="textblock"><p>Represents a single cave and its connections to other caves. </p>
+<p>This class stores the name of a cave and a list of its neighboring caves. </p>
+
+<p class="definition">Definition at line <a class="el" href="_cave_8h_source.html#l00013">13</a> of file <a class="el" href="_cave_8h_source.html">Cave.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac080f7becad735aa505edd08f34d7d20" name="ac080f7becad735aa505edd08f34d7d20"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac080f7becad735aa505edd08f34d7d20">&#9670;&#160;</a></span>Cave() <span class="overload">[1/2]</span></h2>
@@ -120,6 +130,8 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Default constructor. </p>
+
 </div>
 </div>
 <a id="aedbcb9327586287f2145968064870da6" name="aedbcb9327586287f2145968064870da6"></a>
@@ -136,6 +148,14 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Constructs a cave with a given name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the cave. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="_cave_8cpp_source.html#l00003">3</a> of file <a class="el" href="_cave_8cpp_source.html">Cave.cpp</a>.</p>
 
@@ -157,6 +177,14 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Adds a passage to a neighboring cave. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">neighbor</td><td>The name of the neighboring cave. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="_cave_8cpp_source.html#l00005">5</a> of file <a class="el" href="_cave_8cpp_source.html">Cave.cpp</a>.</p>
 
 </div>
@@ -176,6 +204,9 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Gets the name of the cave. </p>
+<dl class="section return"><dt>Returns</dt><dd>The name of the cave. </dd></dl>
+
 <p class="definition">Definition at line <a class="el" href="_cave_8cpp_source.html#l00009">9</a> of file <a class="el" href="_cave_8cpp_source.html">Cave.cpp</a>.</p>
 
 </div>
@@ -194,6 +225,9 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Gets the list of passages. </p>
+<dl class="section return"><dt>Returns</dt><dd>A constant reference to the vector of neighboring caves. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="_cave_8cpp_source.html#l00013">13</a> of file <a class="el" href="_cave_8cpp_source.html">Cave.cpp</a>.</p>
 

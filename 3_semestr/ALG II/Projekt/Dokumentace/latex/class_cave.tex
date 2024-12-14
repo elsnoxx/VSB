@@ -2,27 +2,34 @@
 \hypertarget{class_cave}{}\label{class_cave}\index{Cave@{Cave}}
 
 
+Represents a single cave and its connections to other caves.  
+
+
+
+
 {\ttfamily \#include $<$Cave.\+h$>$}
 
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{class_cave_ac080f7becad735aa505edd08f34d7d20}{Cave}} ()=default
-\item 
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_cave_aedbcb9327586287f2145968064870da6}{Cave}} (const std\+::string \&name)
-\item 
+\begin{DoxyCompactList}\small\item\em Constructs a cave with a given name. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_cave_a3411b2b569d265158429a7c2e68d3eb7}{add\+Passage}} (const std\+::string \&neighbor)
-\item 
+\begin{DoxyCompactList}\small\item\em Adds a passage to a neighboring cave. \end{DoxyCompactList}\item 
 const std\+::string \& \mbox{\hyperlink{class_cave_a344afe197acffe174b09083d54fc7c6e}{get\+Name}} () const
-\item 
+\begin{DoxyCompactList}\small\item\em Gets the name of the cave. \end{DoxyCompactList}\item 
 const std\+::vector$<$ std\+::string $>$ \& \mbox{\hyperlink{class_cave_aaa2194a94d80f6713211a1003b397473}{get\+Passages}} () const
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Gets the list of passages. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
+Represents a single cave and its connections to other caves. 
 
+This class stores the name of a cave and a list of its neighboring caves. 
 
-Definition at line \mbox{\hyperlink{_cave_8h_source_l00009}{9}} of file \mbox{\hyperlink{_cave_8h_source}{Cave.\+h}}.
+Definition at line \mbox{\hyperlink{_cave_8h_source_l00013}{13}} of file \mbox{\hyperlink{_cave_8h_source}{Cave.\+h}}.
 
 
 
@@ -33,12 +40,25 @@ Definition at line \mbox{\hyperlink{_cave_8h_source_l00009}{9}} of file \mbox{\h
 \doxysubsubsection{\texorpdfstring{Cave()}{Cave()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily Cave\+::\+Cave (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
 
+
+
+Default constructor. 
+
 \Hypertarget{class_cave_aedbcb9327586287f2145968064870da6}\label{class_cave_aedbcb9327586287f2145968064870da6} 
 \index{Cave@{Cave}!Cave@{Cave}}
 \index{Cave@{Cave}!Cave@{Cave}}
 \doxysubsubsection{\texorpdfstring{Cave()}{Cave()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily Cave\+::\+Cave (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name }\end{DoxyParamCaption})}
 
+
+
+Constructs a cave with a given name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The name of the cave. \\
+\hline
+\end{DoxyParams}
 
 
 Definition at line \mbox{\hyperlink{_cave_8cpp_source_l00003}{3}} of file \mbox{\hyperlink{_cave_8cpp_source}{Cave.\+cpp}}.
@@ -54,6 +74,15 @@ Definition at line \mbox{\hyperlink{_cave_8cpp_source_l00003}{3}} of file \mbox{
 
 
 
+Adds a passage to a neighboring cave. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em neighbor} & The name of the neighboring cave. \\
+\hline
+\end{DoxyParams}
+
+
 Definition at line \mbox{\hyperlink{_cave_8cpp_source_l00005}{5}} of file \mbox{\hyperlink{_cave_8cpp_source}{Cave.\+cpp}}.
 
 \Hypertarget{class_cave_a344afe197acffe174b09083d54fc7c6e}\label{class_cave_a344afe197acffe174b09083d54fc7c6e} 
@@ -64,6 +93,13 @@ Definition at line \mbox{\hyperlink{_cave_8cpp_source_l00005}{5}} of file \mbox{
 
 
 
+Gets the name of the cave. 
+
+\begin{DoxyReturn}{Returns}
+The name of the cave. 
+\end{DoxyReturn}
+
+
 Definition at line \mbox{\hyperlink{_cave_8cpp_source_l00009}{9}} of file \mbox{\hyperlink{_cave_8cpp_source}{Cave.\+cpp}}.
 
 \Hypertarget{class_cave_aaa2194a94d80f6713211a1003b397473}\label{class_cave_aaa2194a94d80f6713211a1003b397473} 
@@ -72,6 +108,13 @@ Definition at line \mbox{\hyperlink{_cave_8cpp_source_l00009}{9}} of file \mbox{
 \doxysubsubsection{\texorpdfstring{getPassages()}{getPassages()}}
 {\footnotesize\ttfamily const std\+::vector$<$ std\+::string $>$ \& Cave\+::get\+Passages (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
 
+
+
+Gets the list of passages. 
+
+\begin{DoxyReturn}{Returns}
+A constant reference to the vector of neighboring caves. 
+\end{DoxyReturn}
 
 
 Definition at line \mbox{\hyperlink{_cave_8cpp_source_l00013}{13}} of file \mbox{\hyperlink{_cave_8cpp_source}{Cave.\+cpp}}.

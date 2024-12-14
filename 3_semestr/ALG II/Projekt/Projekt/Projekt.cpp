@@ -1,4 +1,12 @@
-﻿#include <iostream>
+﻿/**
+ * @brief Main function that processes files and finds paths in a cave system.
+ *
+ * This function loads cave system data from text files and, for each file,
+ * finds all possible paths using the PathFinder. The results are printed to the console.
+ *
+ * @return Returns 0 if all files are successfully processed, or 1 if an error occurs.
+ */
+#include <iostream>
 #include <vector>
 #include <string>
 #include "CaveSystem.h"

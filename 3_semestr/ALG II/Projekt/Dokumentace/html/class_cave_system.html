@@ -78,18 +78,25 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Represents a system of caves and their connections.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_cave_system_8h_source.html">CaveSystem.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3d739c3a88760c55821648df51a6af28" id="r_a3d739c3a88760c55821648df51a6af28"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d739c3a88760c55821648df51a6af28">loadFromFile</a> (const std::string &amp;filename)</td></tr>
+<tr class="memdesc:a3d739c3a88760c55821648df51a6af28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads cave connections from a file.  <br /></td></tr>
 <tr class="separator:a3d739c3a88760c55821648df51a6af28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34bf302b27491df4da544a8483f3b719" id="r_a34bf302b27491df4da544a8483f3b719"><td class="memItemLeft" align="right" valign="top">const std::map&lt; std::string, <a class="el" href="class_cave.html">Cave</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a34bf302b27491df4da544a8483f3b719">getCaves</a> () const</td></tr>
+<tr class="memdesc:a34bf302b27491df4da544a8483f3b719"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the map of caves.  <br /></td></tr>
 <tr class="separator:a34bf302b27491df4da544a8483f3b719"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="_cave_system_8h_source.html#l00010">10</a> of file <a class="el" href="_cave_system_8h_source.html">CaveSystem.h</a>.</p>
+<div class="textblock"><p>Represents a system of caves and their connections. </p>
+<p>This class allows loading caves and their connections from a file. </p>
+
+<p class="definition">Definition at line <a class="el" href="_cave_system_8h_source.html#l00014">14</a> of file <a class="el" href="_cave_system_8h_source.html">CaveSystem.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a34bf302b27491df4da544a8483f3b719" name="a34bf302b27491df4da544a8483f3b719"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a34bf302b27491df4da544a8483f3b719">&#9670;&#160;</a></span>getCaves()</h2>
@@ -105,6 +112,9 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Gets the map of caves. </p>
+<dl class="section return"><dt>Returns</dt><dd>A constant reference to the map of caves. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="_cave_system_8cpp_source.html#l00029">29</a> of file <a class="el" href="_cave_system_8cpp_source.html">CaveSystem.cpp</a>.</p>
 
@@ -124,6 +134,21 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Loads cave connections from a file. </p>
+<p>The file should contain lines in the format "cave1-cave2", indicating a bidirectional connection between two caves.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>The path to the file containing cave connections. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>If the file cannot be opened. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="_cave_system_8cpp_source.html#l00005">5</a> of file <a class="el" href="_cave_system_8cpp_source.html">CaveSystem.cpp</a>.</p>
 

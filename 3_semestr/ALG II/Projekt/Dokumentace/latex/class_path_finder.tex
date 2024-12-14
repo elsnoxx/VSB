@@ -2,21 +2,28 @@
 \hypertarget{class_path_finder}{}\label{class_path_finder}\index{PathFinder@{PathFinder}}
 
 
+Class for finding all paths in a cave system.  
+
+
+
+
 {\ttfamily \#include $<$Path\+Finder.\+h$>$}
 
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 std\+::vector$<$ std\+::vector$<$ std\+::string $>$ $>$ \mbox{\hyperlink{class_path_finder_a2379baab57d9356ec6e9657f6c220d92}{find\+All\+Paths}} (const \mbox{\hyperlink{class_cave_system}{Cave\+System}} \&cave\+System)
-\item 
+\begin{DoxyCompactList}\small\item\em Finds all paths in the given cave system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_path_finder_a891b8de8c20b425150c202a362293179}{print\+All\+Paths}} () const
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Prints all paths to the standard output. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
+Class for finding all paths in a cave system. 
 
+This class implements depth-\/first search (DFS) to find all possible paths from the start cave to the end cave in a given cave system. 
 
-Definition at line \mbox{\hyperlink{_path_finder_8h_source_l00009}{9}} of file \mbox{\hyperlink{_path_finder_8h_source}{Path\+Finder.\+h}}.
+Definition at line \mbox{\hyperlink{_path_finder_8h_source_l00015}{15}} of file \mbox{\hyperlink{_path_finder_8h_source}{Path\+Finder.\+h}}.
 
 
 
@@ -29,7 +36,21 @@ Definition at line \mbox{\hyperlink{_path_finder_8h_source_l00009}{9}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{_path_finder_8cpp_source_l00026}{26}} of file \mbox{\hyperlink{_path_finder_8cpp_source}{Path\+Finder.\+cpp}}.
+Finds all paths in the given cave system. 
+
+This function starts from the "{}start"{} cave and finds all paths leading to the "{}end"{} cave.
+
+
+\begin{DoxyParams}{Parameters}
+{\em cave\+System} & The cave system in which to search for paths. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A vector of paths, where each path is a vector of strings representing cave names. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{_path_finder_8cpp_source_l00027}{27}} of file \mbox{\hyperlink{_path_finder_8cpp_source}{Path\+Finder.\+cpp}}.
 
 \Hypertarget{class_path_finder_a891b8de8c20b425150c202a362293179}\label{class_path_finder_a891b8de8c20b425150c202a362293179} 
 \index{PathFinder@{PathFinder}!printAllPaths@{printAllPaths}}
@@ -39,7 +60,11 @@ Definition at line \mbox{\hyperlink{_path_finder_8cpp_source_l00026}{26}} of fil
 
 
 
-Definition at line \mbox{\hyperlink{_path_finder_8cpp_source_l00033}{33}} of file \mbox{\hyperlink{_path_finder_8cpp_source}{Path\+Finder.\+cpp}}.
+Prints all paths to the standard output. 
+
+Outputs all found paths to the console, with each path on a new line. 
+
+Definition at line \mbox{\hyperlink{_path_finder_8cpp_source_l00034}{34}} of file \mbox{\hyperlink{_path_finder_8cpp_source}{Path\+Finder.\+cpp}}.
 
 
 

@@ -2,21 +2,28 @@
 \hypertarget{class_cave_system}{}\label{class_cave_system}\index{CaveSystem@{CaveSystem}}
 
 
+Represents a system of caves and their connections.  
+
+
+
+
 {\ttfamily \#include $<$Cave\+System.\+h$>$}
 
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{class_cave_system_a3d739c3a88760c55821648df51a6af28}{load\+From\+File}} (const std\+::string \&filename)
-\item 
+\begin{DoxyCompactList}\small\item\em Loads cave connections from a file. \end{DoxyCompactList}\item 
 const std\+::map$<$ std\+::string, \mbox{\hyperlink{class_cave}{Cave}} $>$ \& \mbox{\hyperlink{class_cave_system_a34bf302b27491df4da544a8483f3b719}{get\+Caves}} () const
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Gets the map of caves. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
+Represents a system of caves and their connections. 
 
+This class allows loading caves and their connections from a file. 
 
-Definition at line \mbox{\hyperlink{_cave_system_8h_source_l00010}{10}} of file \mbox{\hyperlink{_cave_system_8h_source}{Cave\+System.\+h}}.
+Definition at line \mbox{\hyperlink{_cave_system_8h_source_l00014}{14}} of file \mbox{\hyperlink{_cave_system_8h_source}{Cave\+System.\+h}}.
 
 
 
@@ -29,6 +36,13 @@ Definition at line \mbox{\hyperlink{_cave_system_8h_source_l00010}{10}} of file 
 
 
 
+Gets the map of caves. 
+
+\begin{DoxyReturn}{Returns}
+A constant reference to the map of caves. 
+\end{DoxyReturn}
+
+
 Definition at line \mbox{\hyperlink{_cave_system_8cpp_source_l00029}{29}} of file \mbox{\hyperlink{_cave_system_8cpp_source}{Cave\+System.\+cpp}}.
 
 \Hypertarget{class_cave_system_a3d739c3a88760c55821648df51a6af28}\label{class_cave_system_a3d739c3a88760c55821648df51a6af28} 
@@ -37,6 +51,22 @@ Definition at line \mbox{\hyperlink{_cave_system_8cpp_source_l00029}{29}} of fil
 \doxysubsubsection{\texorpdfstring{loadFromFile()}{loadFromFile()}}
 {\footnotesize\ttfamily void Cave\+System\+::load\+From\+File (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})}
 
+
+
+Loads cave connections from a file. 
+
+The file should contain lines in the format "{}cave1-\/cave2"{}, indicating a bidirectional connection between two caves.
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & The path to the file containing cave connections. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::runtime\+\_\+error} & If the file cannot be opened. \\
+\hline
+\end{DoxyExceptions}
 
 
 Definition at line \mbox{\hyperlink{_cave_system_8cpp_source_l00005}{5}} of file \mbox{\hyperlink{_cave_system_8cpp_source}{Cave\+System.\+cpp}}.
