@@ -1,0 +1,1166 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[left=20mm,right=30mm,top=30mm,bottom=35mm]{geometry} 
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{graphicx}
+\usepackage{float}
+
+
+
+
+
+\begin{document}
+\begin{titlepage}
+    \centering
+    \vspace*{2cm} % Vložení vertikální mezery nahoře
+    
+    
+    
+    \vspace{2cm} % Další mezera mezi tabulkou a případným textem
+    
+    \textbf{\Huge Počítačové sítě} \\[1cm]
+    \textbf{\Large Projekt} \\[2cm]
+    
+    
+    \vfill % Posune další text dolů (na konec stránky)
+    
+    \begin{tabular}{|p{5cm}|p{10cm}|}
+        \hline
+        \rowcolor[HTML]{D9E1F2} \textbf{Předmět:} & \textbf{Počítačové sítě} \\ \hline
+        \textbf{Autoři:} & Richard Ficek (FIC0024) \newline Trombik Daniel (TRO0090) \\ \hline
+        \textbf{Datum:} & \today \\ \hline
+    \end{tabular}
+    
+\end{titlepage}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+
+
+\section{Zadání}
+Navrhněte a zdokumentujte konfiguraci podnikové sítě připojené do Internetu. Řešení po částech realizujte, otestujte a odevzdejte elektronicky konfigurace a protokoly, dokládající funkčnost způsobem, stanoveným cvičícím/tutorem
+
+\vspace{2cm}
+
+\subsection*{Přidělené rozsahy a parametry}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|l|l|}
+    \hline
+    \rowcolor[HTML]{D9E1F2}\textbf{Firma:}                         & phohr \\ \hline
+    \textbf{Číslo topologie:}               & H \\ \hline  
+    \textbf{Čísla VLAN:}                    & VLAN A=138, VLAN B=178, VLAN C=218 \\ \hline  
+    \textbf{Počty stanic na segmentech:}    & VLAN A=250, VLAN B=141 \\ \hline  
+    \textbf{Rozsah veřejných adres:}        & 44.118.72.0/21 \\ \hline
+    \textbf{Rozsah privátních adres:}       & 10.191.73.0/24 \\ \hline
+    \textbf{Rozsah IPv6 adres:}             & 2002:a6a9:dac3::/48 \\ \hline
+    \textbf{Zvláštní segmenty:} \newline    & NAT: VLAN A, DNS: VLAN B (PC1B), \\
+                                            & DHCP: VLAN B, T: VLAN B, N: VLAN B \\ \hline
+    \textbf{NAT pool:}                      & 31 \\ \hline
+    \textbf{Směrovací protokol:}            & RIP \\ \hline
+\end{tabular}  
+\label{tab:address}
+\end{table}
+
+\subsection*{Schéma}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Topologie.png}
+    \caption{Topologie podnikové sítě.}
+    \label{fig:topologie}
+\end{figure}
+
+% \subsection*{Topologie}
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=1.5\textwidth]{topologieL3.png}
+%     \caption{L3 topologie}
+%     \label{fig:topologie}
+% \end{figure}
+
+
+\newpage
+
+
+\section{Adresní plán a konfigurace}
+
+\subsection{Adresní plán}
+
+
+
+\begin{table}[htbp]
+\small
+\caption{Veřejné IPv4 adresy}
+\centering
+\begin{tabular}{|l|l|l|l|l|}
+    \hline
+    \textbf{Název sítě} & \textbf{Síťová adresa} & \textbf{První adresa} & \textbf{Poslední adresa} & \textbf{Broadcast} \\ \hline
+    VLAN B              & 44.118.72.0/24        & 44.118.72.1           & 44.118.72.254            & 44.118.72.255      \\ \hline
+    NAT pool            & 44.118.73.0/27        & 44.118.73.1           & 44.118.73.30             & 44.118.73.31       \\ \hline
+    R1 - R2             & 44.118.73.32/30       & 44.118.73.33          & 44.118.73.34             & 44.118.73.35       \\ \hline
+    R1 - R3             & 44.118.73.36/30       & 44.118.73.37          & 44.118.73.38             & 44.118.73.39       \\ \hline
+    R2 - R3             & 44.118.73.40/30       & 44.118.73.41          & 44.118.73.42             & 44.118.73.43       \\ \hline
+\end{tabular}
+\label{tab:ipv4_adresni_plan}
+\end{table}
+
+\begin{table}[htbp]
+    \small
+    \caption{Privatní IPv4 adresy}
+    \centering
+    \begin{tabular}{|l|l|l|l|l|l|}
+        \hline
+        \textbf{Název sítě}     & \textbf{Síťová adresa}   & \textbf{První adresa}       & \textbf{Poslední adresa}      & \textbf{Broadcast} \\ \hline
+        VLAN A               & 10.191.73.0/24                     & 10.191.73.1     & 10.191.73.254         & 10.191.73.255      \\ \hline
+    \end{tabular}
+    \label{tab:ipv4_adresni_plan}
+\end{table}
+
+\begin{table}[htbp]
+    \small
+    \caption{ISP adresy}
+    \centering
+    \begin{tabular}{|l|l|l|l|l|l|}
+        \hline
+        \textbf{Název sítě}     & \textbf{Síťová adresa}   & \textbf{První adresa}       & \textbf{Poslední adresa}      & \textbf{Broadcast} \\ \hline
+        VLAN C               & 10.0.0.0/30                    & 10.0.0.1     & 10.0.0.2          & 10.0.0.3      \\ \hline
+    \end{tabular}
+    \label{tab:ipv4_adresni_plan}
+\end{table}
+
+\begin{table}[H]
+\small
+\caption{IPv6 adresy}
+\centering
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Název sítě} & \textbf{Síťová adresa}         & \textbf{První adresa}              & \textbf{Poslední adresa}                \\ \hline
+    VLAN A              & 2002:a6a9:dac3::/64           & 2002:a6a9:dac3::1                 & 2002:a6a9:dac3::ffff:ffff:ffff:ffff    \\ \hline
+    VLAN C              & 2002:a6a9:dac3:1::/64         & 2002:a6a9:dac3:1::1               & 2002:a6a9:dac3:1::ffff:ffff:ffff:ffff  \\ \hline
+    VLAN B              & 2002:a6a9:dac3:2::/64         & 2002:a6a9:dac3:2::1               & 2002:a6a9:dac3:2::ffff:ffff:ffff:ffff  \\ \hline
+    NAT pool            & 2002:a6a9:dac3:3::/64         & 2002:a6a9:dac3:3::1               & 2002:a6a9:dac3:3::ffff:ffff:ffff:ffff  \\ \hline
+    R1 - R2             & 2002:a6a9:dac3:4::/64         & 2002:a6a9:dac3:4::1               & 2002:a6a9:dac3:4::ffff:ffff:ffff:ffff  \\ \hline
+    R1 - R3             & 2002:a6a9:dac3:5::/64         & 2002:a6a9:dac3:5::1               & 2002:a6a9:dac3:5::ffff:ffff:ffff:ffff  \\ \hline
+    R2 - R3             & 2002:a6a9:dac3:6::/64         & 2002:a6a9:dac3:6::1               & 2002:a6a9:dac3:6::ffff:ffff:ffff:ffff  \\ \hline
+\end{tabular}
+\label{tab:ipv6_adresni_plan}
+\end{table}
+
+
+
+\begin{figure}[H]  
+    \centering
+    \includegraphics[width=1\textwidth]{topologieL3-marked.png}
+    \caption{L3 topologie marked}
+\end{figure}
+
+\newpage
+
+\subsection{Konfigurace adresace VLAN}
+
+\subsubsection*{VLAN A}
+
+
+\begin{table}[htbp]
+    \centering
+    \caption{Adresace pro VLAN A (138)}
+    \begin{tabular}{|l|c|}
+        \hline
+         \textbf{Počet adres:}             & 250 adres                         \\ \hline
+        \textbf{Maska:}                    & /24                  \\ \hline
+        \textbf{Síťová adresa:}            & 10.191.73.0                      \\ \hline
+        \textbf{Rozsah použitelných adres:}& 10.191.73.1 – 10.191.73.254        \\ \hline
+        \textbf{Brána:}                    & 10.191.73.1                     \\ \hline
+        \textbf{Broadcast:}                & 10.191.73.255                    \\ \hline
+    \end{tabular}
+    \label{tab:vlan_a_nat}
+\end{table} 
+
+\subsubsection*{VLAN B}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Adresace pro VLAN B (178)}
+    \begin{tabular}{|l|c|}
+        \hline
+         \textbf{Počet adres:}             & 141 adres                         \\ \hline
+        \textbf{Maska:}                    & /24                              \\ \hline
+        \textbf{Síťová adresa:}            & 44.118.72.0                      \\ \hline
+        \textbf{Rozsah použitelných adres:}& 44.118.72.1 - 44.118.72.255        \\ \hline
+        \textbf{Brána:}                    & 44.118.72.1                      \\ \hline
+        \textbf{Broadcast:}                & 44.118.72.255               \\ \hline
+    \end{tabular}
+    \label{tab:vlan_b_internal}
+\end{table}
+
+\subsubsection*{VLAN C}
+
+\begin{table}[H]
+    \centering
+    \caption{Adresace pro VLAN C (218)  }
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Maska:}                    & /30                          \\ \hline
+        \textbf{Síťová adresa:}            & 10.0.0.0                      \\ \hline
+        \textbf{Rozsah použitelných adres:}& 10.0.0.1 - 10.0.0.2        \\ \hline
+        \textbf{Brána:}                    & 10.0.0.1                      \\ \hline
+        \textbf{Broadcast:}                & 10.0.0.3             \\ \hline
+    \end{tabular}
+    \label{tab:vlan_b_internal}
+\end{table}
+
+\subsubsection*{NAT Pool}
+
+
+\begin{table}[htbp]
+    \centering
+    \caption{NAT Pool}
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Počet adres:}             & 31 adres                         \\ \hline
+        \textbf{Maska:}                   & /27                              \\ \hline
+        \textbf{Síťová adresa:}           & 44.118.73.0                      \\ \hline
+        \textbf{Rozsah použitelných adres:}& 44.118.73.1–44.118.73.30         \\ \hline
+        \textbf{Broadcast:}               & 44.118.73.31                     \\ \hline
+    \end{tabular}
+    \label{tab:nat_pool}
+\end{table} 
+
+
+
+\newpage
+
+\section{Nastavení síťových prvků}
+
+\begin{figure}[H]  
+    \centering
+    \includegraphics[width=0.8\textwidth]{final-packet-tracer.png}
+    \caption{Výsledný náhled z Packet Traceru}
+\end{figure}
+
+\newpage
+
+
+\subsection{Router R1}
+\begin{verbatim}
+enable
+configure terminal
+no ip domain-lookup
+ip classless
+
+interface FastEthernet0/0
+description ethernetového rozhraní pro NAT a ISP
+ip address 10.0.0.2 255.255.255.252
+ip nat outside
+no shutdown
+exit
+
+interface serial 0/0/0
+description sériového rozhraní mezi R1 a R2
+ip address 44.118.73.33 255.255.255.252
+ip nat inside
+clock rate 64000
+no shutdown
+exit
+
+interface serial 0/0/1
+description sériového rozhraní mezi R1 a R3
+ip address 44.118.73.37 255.255.255.252
+ip nat inside
+clock rate 64000
+no shutdown
+exit
+
+ip route 0.0.0.0 0.0.0.0 FastEthernet0/0
+
+! RIP směrování
+router rip
+network 44.118.73.32
+network 44.118.73.36
+network 10.0.0.0
+no auto-summary
+passive-interface FastEthernet0/0
+default-information originate
+version 2
+exit
+ip nat pool NATPOOL31 44.118.73.0 44.118.73.30 netmask 255.255.255.224
+access-list 1 permit 10.191.73.0 0.0.0.255
+ip nat inside source list 1 pool NATPOOL31 overload
+end
+\end{verbatim}
+
+
+\subsection{Router R2}
+\begin{verbatim}
+enable
+configure terminal
+no ip domain-lookup
+ip classless
+interface serial 0/0/1
+description sériového rozhraní mezi R2 a R1
+ip address 44.118.73.34 255.255.255.252
+no shutdown
+exit
+
+interface serial 0/0/0
+description sériového rozhraní mezi R2 a R3
+ip address 44.118.73.41 255.255.255.252
+clock rate 64000
+no shutdown
+exit
+
+interface fa0/0
+description ethernetového rozhraní VLAN B k SW 1
+ip address 44.118.72.1 255.255.255.0
+no shutdown
+exit
+
+! RIP směrování
+router rip
+version 2
+network 44.118.72.0
+network 44.118.73.32
+network 44.118.73.40
+no auto-summary
+exit
+end
+\end{verbatim}
+
+\subsection{Router R3}
+\begin{verbatim}
+enable
+configure terminal
+no ip domain-lookup
+ip classless
+interface serial 0/0/0
+description sériového rozhraní mezi R3 a R1
+ip address 44.118.73.38 255.255.255.252
+no shutdown
+exit
+
+interface serial 0/0/1
+description sériového rozhraní mezi R3 a R2
+ip address 44.118.73.42 255.255.255.252
+no shutdown
+exit
+
+interface fa0/0
+description ethernetového rozhraní VLAN A k SW 2
+ip address 10.191.73.1 255.255.255.0
+no shutdown
+exit
+
+! RIP směrování
+router rip
+version 2
+network 10.191.73.0
+network 44.118.73.36
+network 44.118.73.40
+no auto-summary
+exit
+end
+\end{verbatim}
+
+\subsection{Switch SW1}
+\begin{verbatim}
+enable
+configure terminal
+! Vytvoření VLAN
+vlan 138
+name VLAN_A
+vlan 178
+name VLAN_B
+vlan 218
+name VLAN_C
+! Přiřazení portů
+interface fa0/1
+description port ve VLAN A
+switchport mode access
+switchport access vlan 138
+exit
+interface fa0/2
+description port ve VLAN B
+switchport mode access
+switchport access vlan 178
+exit
+interface fa0/3
+description port ve VLAN B k R2
+switchport mode access
+switchport access vlan 178
+exit
+interface fa0/4
+description port ve VLAN C k ISP
+switchport mode access
+switchport access vlan 218
+exit
+! Nastavení trunk portu (pro SW2)
+interface gi0/1
+description trunk linka k SW 2
+switchport mode trunk
+switchport trunk allowed vlan 138,178,218
+no shutdown
+exit
+end
+\end{verbatim}
+
+
+\subsection{Switch SW2}
+\begin{verbatim}
+enable
+configure terminal
+! Vytvoření VLAN
+vlan 138
+name VLAN_A
+vlan 178
+name VLAN_B
+vlan 218
+name VLAN_C
+! Přiřazení portů
+interface  fa0/1
+description port ve VLAN A k R3
+switchport mode access
+switchport access vlan 138
+exit
+interface  fa0/2
+description port ve VLAN A k PC2A
+switchport mode access
+switchport access vlan 138
+exit
+interface  fa0/3
+description port ve VLAN B k PC2B
+switchport mode access
+switchport access vlan 178
+exit
+interface fa0/4
+description port ve VLAN C k R1
+switchport mode access
+switchport access vlan 218
+exit
+interface gi0/1
+description trunk linka k SW 1
+switchport mode trunk
+switchport trunk allowed vlan 138,178,218
+no shutdown
+exit
+end
+
+\end{verbatim}
+
+\newpage
+\section{Konfigurace DNS a DHCP}
+
+\subsection{DHCP}
+
+Konfigurace DHCP pro router 3, pro privátní adrresy.
+
+\subsection*{Router R2}
+\begin{verbatim}
+ip dhcp excluded-address 10.191.73.1 10.191.73.10
+ip dhcp pool 138
+ network 10.191.73.0 255.255.255.0
+ default-router 10.191.73.1
+ dns-server 10.191.73.10 50.0.0.12
+ domain-name phohr.isp.cz
+
+\end{verbatim}
+\begin{figure}[H]  
+    \centering
+    \includegraphics[width=0.8\textwidth]{DHCP-PC2A.png}
+    \caption{DHCP nastavení u PC2A}
+\end{figure}
+
+\newpage
+
+\subsection{DNS}
+
+
+\subsection*{Server DNS}
+\subsubsection*{Soubor \texttt{named.conf}}
+\begin{verbatim}
+options {
+    directory "/var/cache/bind";
+    recursion yes;
+};
+
+zone "." {
+    type hint;
+    file "/etc/bind/db.root";
+};
+
+zone "phohr.isp.cz" {
+    type master;
+    file "/etc/bind/db.phohr";
+};
+
+zone "73.191.10.in-addr.arpa" {
+    type master;
+    file "/etc/bind/db.phohr.rev";
+};
+
+zone "72.118.44.in-addr.arpa" {
+    type master;
+    file "/etc/bind/db.phohr.public.rev";
+};
+
+zone "localhost" {
+    type master;
+    file "/etc/bind/db.local";
+};
+
+zone "127.in-addr.arpa" {
+    type master;
+    file "/etc/bind/db.127";
+};
+
+zone "0.in-addr.arpa" {
+    type master;
+    file "/etc/bind/db.0";
+};
+\end{verbatim}
+
+\subsubsection*{Soubor \texttt{db.phohr}}
+\begin{verbatim}
+$ORIGIN isp.cz.
+$TTL 604800
+
+phohr IN SOA ns.phohr.isp.cz. admin.phohr.isp.cz. (
+    2024121401 ; Serial
+    604800     ; Refresh
+    86400      ; Retry
+    2419200    ; Expire
+    604800     ; Minimum TTL
+)
+
+$ORIGIN phohr.isp.cz.
+NS ns
+ns A 10.191.73.10
+TXT "Primární DNS server"
+
+; VLAN A
+R-1-e1 A 10.191.73.1
+R-2-e1 A 10.191.73.2
+R-3-e1 A 10.191.73.3
+
+; VLAN B
+PC1B A 10.191.73.11
+DHCP A 10.191.73.12
+T A 10.191.73.13
+N A 10.191.73.14
+
+; VLAN C
+C1 A 10.191.73.20
+C2 A 10.191.73.21
+\end{verbatim}
+
+\subsubsection*{Soubor \texttt{db.phohr.rev}}
+\begin{verbatim}
+$ORIGIN 73.191.10.in-addr.arpa.
+$TTL 604800
+
+@ IN SOA ns.phohr.isp.cz. admin.phohr.isp.cz. (
+    2024121401 ; Serial
+    604800     ; Refresh
+    86400      ; Retry
+    2419200    ; Expire
+    604800     ; Minimum TTL
+)
+
+@ IN NS ns.phohr.isp.cz.
+
+1 PTR R-1-e1.phohr.isp.cz.
+2 PTR R-2-e1.phohr.isp.cz.
+3 PTR R-3-e1.phohr.isp.cz.
+11 PTR PC1B.phohr.isp.cz.
+12 PTR DHCP.phohr.isp.cz.
+13 PTR T.phohr.isp.cz.
+14 PTR N.phohr.isp.cz.
+20 PTR C1.phohr.isp.cz.
+21 PTR C2.phohr.isp.cz.
+\end{verbatim}
+
+\subsubsection*{Soubor \texttt{db.phohr.public.rev}}
+\begin{verbatim}
+$ORIGIN 72.118.44.in-addr.arpa.
+$TTL 604800
+
+@ IN SOA ns.phohr.isp.cz. admin.phohr.isp.cz. (
+    2024121401 ; Serial
+    604800     ; Refresh
+    86400      ; Retry
+    2419200    ; Expire
+    604800     ; Minimum TTL
+)
+
+@ IN NS ns.phohr.isp.cz.
+
+1 PTR R-1-e1.phohr.isp.cz.
+2 PTR R-2-e1.phohr.isp.cz.
+3 PTR R-3-e1.phohr.isp.cz.
+\end{verbatim}
+\begin{figure}[H]  
+    \centering
+    \includegraphics[width=0.8\textwidth]{DNS-PC1A.png}
+    \caption{DHCP nastavení u PC2A}
+\end{figure}
+
+
+\newpage
+
+\section{Zabezpečení sítě - ACL}
+
+\subsection{Nastavení ACL}
+\begin{verbatim}
+
+access-list 100 permit tcp host 40.0.0.11 eq telnet 44.118.72.0 0.0.0.255 established
+access-list 100 permit tcp any eq www any established
+access-list 100 permit udp any eq 53 any gt 1
+access-list 100 permit tcp any eq 53 any established
+access-list 100 permit udp any host 44.118.72.61 eq 53
+access-list 100 permit tcp any host 44.118.72.61 eq 53
+access-list 100 permit icmp any host 44.118.72.61 echo
+access-list 100 permit icmp any any echo-reply
+access-list 100 permit icmp any host 44.118.72.1 echo
+access-list 100 deny icmp any any echo
+access-list 100 deny ip 44.118.72.0 0.0.0.255 any
+access-list 101 permit tcp 44.118.72.0 0.0.0.255 host 40.0.0.11 eq telnet
+access-list 101 deny tcp 44.118.72.0 0.0.0.63 host 30.0.0.10 eq www
+access-list 101 permit tcp any any eq www
+access-list 101 permit udp any any eq 53
+access-list 101 permit tcp any any eq 53
+access-list 101 permit udp host 44.118.72.61 eq 53 any gt 1
+access-list 101 permit tcp host 44.118.72.61 eq 53 any gt 1
+access-list 101 permit icmp any any echo
+access-list 101 deny ip 10.0.0.0 0.255.255.255 any
+access-list 101 deny ip 172.16.0.0 0.15.255.255 any
+access-list 101 deny ip 192.168.0.0 0.0.255.255 any
+
+
+! Aplikace ACL na rozhraní vedoucí k ISP
+interface FastEthernet0/0
+ ip access-group 100 in
+ ip access-group 101 out
+
+\end{verbatim}
+
+\subsection{Otestování pravidla pro Telnet (příchozí i odchozí)}
+
+\subsubsection*{Ping na DNS server}
+\begin{figure}[H]  
+    \centering
+    \includegraphics[width=0.5\textwidth]{ping-DNS-acl.png}
+    \caption{Ping na DNS server}
+\end{figure}
+
+\subsubsection*{Ping na IP R1 (10.0.0.2)}
+\begin{figure}[H]  
+    \centering
+    \includegraphics[width=0.5\textwidth]{ping-R1.png}
+    \caption{Ping na IP R1 (10.0.0.2}
+\end{figure}
+
+\subsubsection*{Ping na WWW server}
+\begin{figure}[H]  
+    \centering
+    \includegraphics[width=0.5\textwidth]{ping-WWW.png}
+    \caption{Ping na WWW server}
+\end{figure}
+
+\subsubsection*{Připojení na WWW server}
+\begin{figure}[H]  
+    \centering
+    \includegraphics[width=0.5\textwidth]{http-WWW.png}
+    \caption{Připojení na WWW server}
+\end{figure}
+
+
+
+
+\section{Doplnění chybějících požadavků}
+
+\subsection{IP záznamy}
+\begin{figure}[H]  
+    \centering
+    \includegraphics[width=0.8\textwidth]{IP-configuratio.png}
+    \caption{IPv4 a IPv6 nastavení}
+\end{figure}
+
+\subsection{Překlad NAT}
+
+\begin{figure}[H]  
+    \centering
+    \includegraphics[width=0.8\textwidth]{NAT-translation.png}
+    \caption{IPv4 a IPv6 nastavení}
+\end{figure}
+
+\subsection{Ping a tracert na server poskytovatele}
+\begin{figure}[H]  
+    \centering
+    \includegraphics[width=0.8\textwidth]{tracert-ping.png}
+    \caption{Tracert na server poskytovatele}
+\end{figure}
+
+
+\newpage
+
+\subsection{CDP neighbors}
+
+K všem routerům a switchům bylo přidáno nastavení cdp neigbours.
+
+\subsubsection*{R1}
+\begin{verbatim}
+Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge
+                  S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone
+Device ID    Local Intrfce   Holdtme    Capability   Platform    Port ID
+Switch       Fas 0/0          165            S       2960        Fas 0/4
+Router       Ser 0/0/0        143            R       C2800       Ser 0/0/1
+Router       Ser 0/0/1        158            R       C2800       Ser 0/0/0
+\end{verbatim}
+
+\subsubsection*{R2}
+\begin{verbatim}
+Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge
+                  S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone
+Device ID    Local Intrfce   Holdtme    Capability   Platform    Port ID
+Router       Ser 0/0/0        166            R       C2800       Ser 0/0/1
+Switch       Fas 0/0          173            S       2960        Fas 0/3
+Router       Ser 0/0/1        173            R       C2800       Ser 0/0/0
+\end{verbatim}
+
+\subsubsection*{R3}
+\begin{verbatim}
+Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge
+                  S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone
+Device ID    Local Intrfce   Holdtme    Capability   Platform    Port ID
+Switch       Fas 0/0          140            S       2960        Fas 0/1
+Router       Ser 0/0/0        140            R       C2800       Ser 0/0/1
+Router       Ser 0/0/1        178            R       C2800       Ser 0/0/0
+\end{verbatim}
+
+\subsubsection*{SW1}
+\begin{verbatim}
+Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge
+                  S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone
+Device ID    Local Intrfce   Holdtme    Capability   Platform    Port ID
+Switch       Gig 0/1          141            S       2960        Gig 0/1
+RISP         Fas 0/4          141            R       C2800       Fas 0/0
+Router       Fas 0/3          179            R       C2800       Fas 0/0
+\end{verbatim}
+
+\subsubsection*{SW2}
+\begin{verbatim}
+Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge
+                  S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone
+Device ID    Local Intrfce   Holdtme    Capability   Platform    Port ID
+Switch       Gig 0/1          120            S       2960        Gig 0/1
+Router       Fas 0/4          120            R       C2800       Fas 0/0
+Router       Fas 0/1          173            R       C2800       Fas 0/0
+\end{verbatim}
+
+
+\newpage
+
+\subsection{Data směrovacího protokolu a počet naučených záznamů}
+
+\subsubsection*{R1}
+\begin{verbatim}
+Gateway of last resort is 0.0.0.0 to network 0.0.0.0
+
+     10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C       10.0.0.0/30 is directly connected, FastEthernet0/0
+R       10.191.73.0/24 [120/1] via 44.118.73.38, 00:00:23, Serial0/0/1
+     44.0.0.0/8 is variably subnetted, 4 subnets, 2 masks
+R       44.118.72.0/24 [120/1] via 44.118.73.34, 00:00:08, Serial0/0/0
+C       44.118.73.32/30 is directly connected, Serial0/0/0
+C       44.118.73.36/30 is directly connected, Serial0/0/1
+R       44.118.73.40/30 [120/1] via 44.118.73.38, 00:00:23, Serial0/0/1
+                        [120/1] via 44.118.73.34, 00:00:08, Serial0/0/0
+S*   0.0.0.0/0 is directly connected, FastEthernet0/0
+\end{verbatim}
+
+\subsubsection*{R2}
+\begin{verbatim}
+Gateway of last resort is 44.118.73.33 to network 0.0.0.0
+
+     10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+R       10.0.0.0/30 [120/1] via 44.118.73.33, 00:00:25, Serial0/0/1
+R       10.191.73.0/24 [120/1] via 44.118.73.42, 00:00:22, Serial0/0/0
+     44.0.0.0/8 is variably subnetted, 4 subnets, 2 masks
+C       44.118.72.0/24 is directly connected, FastEthernet0/0
+C       44.118.73.32/30 is directly connected, Serial0/0/1
+R       44.118.73.36/30 [120/1] via 44.118.73.42, 00:00:22, Serial0/0/0
+                        [120/1] via 44.118.73.33, 00:00:25, Serial0/0/1
+C       44.118.73.40/30 is directly connected, Serial0/0/0
+R*   0.0.0.0/0 [120/1] via 44.118.73.33, 00:00:25, Serial0/0/1
+\end{verbatim}
+
+\subsubsection*{R3}
+\begin{verbatim}
+Gateway of last resort is 44.118.73.37 to network 0.0.0.0
+
+     10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+R       10.0.0.0/30 [120/1] via 44.118.73.37, 00:00:26, Serial0/0/0
+C       10.191.73.0/24 is directly connected, FastEthernet0/0
+     44.0.0.0/8 is variably subnetted, 4 subnets, 2 masks
+R       44.118.72.0/24 [120/1] via 44.118.73.41, 00:00:05, Serial0/0/1
+R       44.118.73.32/30 [120/1] via 44.118.73.37, 00:00:26, Serial0/0/0
+                        [120/1] via 44.118.73.41, 00:00:05, Serial0/0/1
+C       44.118.73.36/30 is directly connected, Serial0/0/0
+C       44.118.73.40/30 is directly connected, Serial0/0/1
+R*   0.0.0.0/0 [120/1] via 44.118.73.37, 00:00:26, Serial0/0/0
+\end{verbatim}
+
+\newpage
+
+\subsection{Konfigurace RIP}
+
+\subsubsection*{R1}
+\begin{verbatim}
+Routing Protocol is "rip"
+Sending updates every 30 seconds, next due in 18 seconds
+Invalid after 180 seconds, hold down 180, flushed after 240
+Outgoing update filter list for all interfaces is not set
+Incoming update filter list for all interfaces is not set
+Redistributing: rip
+Default version control: send version 2, receive 2
+  Interface             Send  Recv  Triggered RIP  Key-chain
+  Serial0/0/1           22
+  Serial0/0/0           22
+Automatic network summarization is not in effect
+Maximum path: 4
+Routing for Networks:
+	10.0.0.0
+	44.0.0.0
+Passive Interface(s):
+	FastEthernet0/0
+Routing Information Sources:
+	Gateway         Distance      Last Update
+	44.118.73.38         120      00:00:08
+	44.118.73.34         120      00:00:15
+Distance: (default is 120)
+\end{verbatim}
+
+\subsubsection*{R2}
+\begin{verbatim}
+Routing Protocol is "rip"
+Sending updates every 30 seconds, next due in 0 seconds
+Invalid after 180 seconds, hold down 180, flushed after 240
+Outgoing update filter list for all interfaces is not set
+Incoming update filter list for all interfaces is not set
+Redistributing: rip
+Default version control: send version 2, receive 2
+  Interface             Send  Recv  Triggered RIP  Key-chain
+  FastEthernet0/0       22
+  Serial0/0/0           22
+  Serial0/0/1           22
+Automatic network summarization is not in effect
+Maximum path: 4
+Routing for Networks:
+	44.0.0.0
+Passive Interface(s):
+Routing Information Sources:
+	Gateway         Distance      Last Update
+	44.118.73.33         120      00:00:19
+	44.118.73.42         120      00:00:20
+Distance: (default is 120)
+\end{verbatim}
+
+\subsubsection*{R3}
+\begin{verbatim}
+Routing Protocol is "rip"
+Sending updates every 30 seconds, next due in 4 seconds
+Invalid after 180 seconds, hold down 180, flushed after 240
+Outgoing update filter list for all interfaces is not set
+Incoming update filter list for all interfaces is not set
+Redistributing: rip
+Default version control: send version 2, receive 2
+  Interface             Send  Recv  Triggered RIP  Key-chain
+  FastEthernet0/0       22
+  Serial0/0/0           22
+  Serial0/0/1           22
+Automatic network summarization is not in effect
+Maximum path: 4
+Routing for Networks:
+	10.0.0.0
+	44.0.0.0
+Passive Interface(s):
+Routing Information Sources:
+	Gateway         Distance      Last Update
+	44.118.73.37         120      00:00:24
+	44.118.73.41         120      00:00:05
+Distance: (default is 120)
+\end{verbatim}
+
+
+\subsection{Úprava nastavení směrovačů pro IPv6}
+
+\subsubsection*{R1}
+\begin{verbatim}
+enable
+configure terminal
+ipv6 unicast-routing
+no ip domain-lookup
+ip classless
+
+interface FastEthernet0/0
+description ethernetového rozhraní pro NAT a ISP
+ip address 10.0.0.2 255.255.255.252
+ipv6 address 2002:a6a9:dac3:1::1/64
+ipv6 enable
+ip nat outside
+no shutdown
+exit
+
+interface serial 0/0/0
+description sériového rozhraní mezi R1 a R2
+ip address 44.118.73.33 255.255.255.252
+ipv6 address 2002:a6a9:dac3:4::1/64
+ipv6 enable
+ip nat inside
+clock rate 64000
+no shutdown
+exit
+
+interface serial 0/0/1
+description sériového rozhraní mezi R1 a R3
+ip address 44.118.73.37 255.255.255.252
+ipv6 address 2002:a6a9:dac3:5::1/64
+ipv6 enable
+ip nat inside
+clock rate 64000
+no shutdown
+exit
+
+ip route 0.0.0.0 0.0.0.0 FastEthernet0/0
+ipv6 route ::/0 FastEthernet0/0
+
+! RIP směrování
+router rip
+network 44.118.73.32
+network 44.118.73.36
+network 10.0.0.0
+no auto-summary
+passive-interface FastEthernet0/0
+default-information originate
+version 2
+exit
+ipv6 router rip RIPNG
+interface FastEthernet0/0
+ipv6 rip RIPNG enable
+exit
+ip nat pool NATPOOL31 44.118.73.0 44.118.73.30 netmask 255.255.255.224
+access-list 1 permit 10.191.73.0 0.0.0.255
+ip nat inside source list 1 pool NATPOOL31 overload
+end
+
+\end{verbatim}
+
+\subsubsection*{R2}
+\begin{verbatim}
+enable
+configure terminal
+ipv6 unicast-routing
+no ip domain-lookup
+ip classless
+interface serial 0/0/1
+description sériového rozhraní mezi R2 a R1
+ip address 44.118.73.34 255.255.255.252
+ipv6 address 2002:a6a9:dac3:4::2/64
+ipv6 enable
+no shutdown
+exit
+
+interface serial 0/0/0
+description sériového rozhraní mezi R2 a R3
+ip address 44.118.73.41 255.255.255.252
+ipv6 address 2002:a6a9:dac3:6::1/64
+ipv6 enable
+clock rate 64000
+no shutdown
+exit
+
+interface fa0/0
+description ethernetového rozhraní VLAN B k SW 1
+ip address 44.118.72.1 255.255.255.0
+ipv6 address 2002:a6a9:dac3:2::1/64
+ipv6 enable
+no shutdown
+exit
+
+! RIP směrování
+router rip
+version 2
+network 44.118.72.0
+network 44.118.73.32
+network 44.118.73.40
+no auto-summary
+exit
+end
+
+\end{verbatim}
+
+\subsubsection*{R3}
+\begin{verbatim}
+enable
+configure terminal
+ipv6 unicast-routing
+no ip domain-lookup
+ip classless
+interface serial 0/0/0
+description sériového rozhraní mezi R3 a R1
+ip address 44.118.73.38 255.255.255.252
+ipv6 address 2002:a6a9:dac3:5::2/64
+ipv6 enable
+no shutdown
+exit
+
+interface serial 0/0/1
+description sériového rozhraní mezi R3 a R2
+ip address 44.118.73.42 255.255.255.252
+ipv6 address 2002:a6a9:dac3:6::2/64
+ipv6 enable
+no shutdown
+exit
+
+interface fa0/0
+description ethernetového rozhraní VLAN A k SW 2
+ip address 10.191.73.1 255.255.255.0
+ipv6 address 2002:a6a9:dac3::1/64
+ipv6 enable
+no shutdown
+exit
+
+! RIP směrování
+router rip
+version 2
+network 10.191.73.0
+network 44.118.73.36
+network 44.118.73.40
+no auto-summary
+exit
+end
+
+\end{verbatim}
+
+
+\subsection{IPv6 routing}
+\subsubsection*{R1}
+\begin{verbatim}
+IPv6 Routing Table - 17 entries
+Codes: C - Connected, L - Local, S - Static, R - RIP, B - BGP
+       U - Per-user Static route, M - MIPv6
+       I1 - ISIS L1, I2 - ISIS L2, IA - ISIS interarea, IS - ISIS summary
+       ND - ND Default, NDp - ND Prefix, DCE - Destination, NDr - Redirect
+       O - OSPF intra, OI - OSPF inter, OE1 - OSPF ext 1, OE2 - OSPF ext 2
+       ON1 - OSPF NSSA ext 1, ON2 - OSPF NSSA ext 2
+       D - EIGRP, EX - EIGRP external
+S   ::/0 [1/0]
+     via ::, FastEthernet0/0
+C   2001:DB8:1::/64 [0/0]
+     via ::, FastEthernet0/0
+L   2001:DB8:1::1/128 [0/0]
+     via ::, FastEthernet0/0
+C   2001:DB8:2::/64 [0/0]
+     via ::, Serial0/0/0
+L   2001:DB8:2::1/128 [0/0]
+     via ::, Serial0/0/0
+C   2001:DB8:3::/64 [0/0]
+     via ::, Serial0/0/1
+L   2001:DB8:3::1/128 [0/0]
+     via ::, Serial0/0/1
+R   2001:DB8:4::/64 [120/2]
+     via FE80::20C:CFFF:FE6D:2602, Serial0/0/0
+C   2002:A6A9:DAC3:1::/64 [0/0]
+     via ::, FastEthernet0/0
+L   2002:A6A9:DAC3:1::1/128 [0/0]
+     via ::, FastEthernet0/0
+R   2002:A6A9:DAC3:2::/64 [120/2]
+     via FE80::20C:CFFF:FE6D:2602, Serial0/0/0
+C   2002:A6A9:DAC3:4::/64 [0/0]
+     via ::, Serial0/0/0
+L   2002:A6A9:DAC3:4::1/128 [0/0]
+     via ::, Serial0/0/0
+C   2002:A6A9:DAC3:5::/64 [0/0]
+     via ::, Serial0/0/1
+L   2002:A6A9:DAC3:5::1/128 [0/0]
+     via ::, Serial0/0/1
+R   2002:A6A9:DAC3:6::/64 [120/2]
+     via FE80::20C:CFFF:FE6D:2602, Serial0/0/0
+L   FF00::/8 [0/0]
+     via ::, Null0
+\end{verbatim}
+
+\subsubsection*{R2}
+\begin{verbatim}
+IPv6 Routing Table - 16 entries
+Codes: C - Connected, L - Local, S - Static, R - RIP, B - BGP
+       U - Per-user Static route, M - MIPv6
+       I1 - ISIS L1, I2 - ISIS L2, IA - ISIS interarea, IS - ISIS summary
+       ND - ND Default, NDp - ND Prefix, DCE - Destination, NDr - Redirect
+       O - OSPF intra, OI - OSPF inter, OE1 - OSPF ext 1, OE2 - OSPF ext 2
+       ON1 - OSPF NSSA ext 1, ON2 - OSPF NSSA ext 2
+       D - EIGRP, EX - EIGRP external
+R   2001:DB8:1::/64 [120/2]
+     via FE80::20C:85FF:FEB2:B401, Serial0/0/1
+C   2001:DB8:2::/64 [0/0]
+     via ::, Serial0/0/1
+L   2001:DB8:2::2/128 [0/0]
+     via ::, Serial0/0/1
+C   2001:DB8:3::/64 [0/0]
+     via ::, Serial0/0/0
+L   2001:DB8:3::2/128 [0/0]
+     via ::, Serial0/0/0
+C   2001:DB8:4::/64 [0/0]
+     via ::, FastEthernet0/0
+L   2001:DB8:4::1/128 [0/0]
+     via ::, FastEthernet0/0
+R   2002:A6A9:DAC3:1::/64 [120/2]
+     via FE80::20C:85FF:FEB2:B401, Serial0/0/1
+C   2002:A6A9:DAC3:2::/64 [0/0]
+     via ::, FastEthernet0/0
+L   2002:A6A9:DAC3:2::1/128 [0/0]
+     via ::, FastEthernet0/0
+C   2002:A6A9:DAC3:4::/64 [0/0]
+     via ::, Serial0/0/1
+L   2002:A6A9:DAC3:4::2/128 [0/0]
+     via ::, Serial0/0/1
+R   2002:A6A9:DAC3:5::/64 [120/2]
+     via FE80::20C:85FF:FEB2:B401, Serial0/0/1
+C   2002:A6A9:DAC3:6::/64 [0/0]
+     via ::, Serial0/0/0
+L   2002:A6A9:DAC3:6::1/128 [0/0]
+     via ::, Serial0/0/0
+L   FF00::/8 [0/0]
+     via ::, Null0
+\end{verbatim}
+
+\subsubsection*{R3}
+\begin{verbatim}
+IPv6 Routing Table - 7 entries
+Codes: C - Connected, L - Local, S - Static, R - RIP, B - BGP
+       U - Per-user Static route, M - MIPv6
+       I1 - ISIS L1, I2 - ISIS L2, IA - ISIS interarea, IS - ISIS summary
+       ND - ND Default, NDp - ND Prefix, DCE - Destination, NDr - Redirect
+       O - OSPF intra, OI - OSPF inter, OE1 - OSPF ext 1, OE2 - OSPF ext 2
+       ON1 - OSPF NSSA ext 1, ON2 - OSPF NSSA ext 2
+       D - EIGRP, EX - EIGRP external
+C   2002:A6A9:DAC3::/64 [0/0]
+     via ::, FastEthernet0/0
+L   2002:A6A9:DAC3::1/128 [0/0]
+     via ::, FastEthernet0/0
+C   2002:A6A9:DAC3:5::/64 [0/0]
+     via ::, Serial0/0/0
+L   2002:A6A9:DAC3:5::2/128 [0/0]
+     via ::, Serial0/0/0
+C   2002:A6A9:DAC3:6::/64 [0/0]
+     via ::, Serial0/0/1
+L   2002:A6A9:DAC3:6::2/128 [0/0]
+     via ::, Serial0/0/1
+L   FF00::/8 [0/0]
+     via ::, Null0
+\end{verbatim}
+
+
+\end{document}
