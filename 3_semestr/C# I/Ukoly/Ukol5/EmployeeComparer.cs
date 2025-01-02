@@ -1,4 +1,4 @@
-namespace Ukol5;
+using Ukol5;
 
 public class EmployeeComparer : IComparer<Employee>
 {
@@ -7,20 +7,13 @@ public class EmployeeComparer : IComparer<Employee>
         double avgX = CalculateAverageScore(x);
         double avgY = CalculateAverageScore(y);
 
-        return avgY.CompareTo(avgX);  // Seřazení od největšího po nejmenší
+        return avgY.CompareTo(avgX);  // Seřazení od nejvyššího průměru
     }
 
     private double CalculateAverageScore(Employee employee)
     {
-        var totalScore = 0;
-        var count = 0;
-
-        foreach (var score in employee.PerformanceScores)
-        {
-            totalScore += score.Score;
-            count++;
-        }
-
+        var totalScore = employee.PerformanceScores.Sum(s => s.Score);
+        var count = employee.PerformanceScores.Count;
         return count > 0 ? (double)totalScore / count : 0;
     }
 }

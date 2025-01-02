@@ -1,0 +1,87 @@
+[
+  {
+    "employeeId": "E001",
+    "name": "Jan Novák",
+    "department": "Sales",
+    "performanceScores": [
+      {
+        "month": "2024-01",
+        "score": 85
+      },
+      {
+        "month": "2024-02",
+        "score": 90
+      }
+    ],
+    "salary": 45000,
+    "hireDate": "2022-03-15"
+  },
+  {
+    "employeeId": "E002",
+    "name": "Petr Svoboda",
+    "department": "Sales",
+    "performanceScores": [
+      {
+        "month": "2024-01",
+        "score": 75
+      },
+      {
+        "month": "2024-02",
+        "score": 80
+      }
+    ],
+    "salary": 43000,
+    "hireDate": "2021-07-23"
+  },
+  {
+    "employeeId": "E003",
+    "name": "Eva Dvořáková",
+    "department": "Marketing",
+    "performanceScores": [
+      {
+        "month": "2024-01",
+        "score": 92
+      },
+      {
+        "month": "2024-02",
+        "score": 88
+      }
+    ],
+    "salary": 50000,
+    "hireDate": "2020-05-10"
+  },
+  {
+    "employeeId": "E004",
+    "name": "Martin Novotný",
+    "department": "Marketing",
+    "performanceScores": [
+      {
+        "month": "2024-01",
+        "score": 80
+      },
+      {
+        "month": "2024-02",
+        "score": 82
+      }
+    ],
+    "salary": 47000,
+    "hireDate": "2021-09-01"
+  },
+  {
+    "employeeId": "E005",
+    "name": "Jana Černá",
+    "department": "IT",
+    "performanceScores": [
+      {
+        "month": "2024-01",
+        "score": 95
+      },
+      {
+        "month": "2024-02",
+        "score": 98
+      }
+    ],
+    "salary": 55000,
+    "hireDate": "2019-11-18"
+  }
+]

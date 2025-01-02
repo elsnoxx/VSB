@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfEmployee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Employee Id="E005">
+    <Name>Jana Černá</Name>
+    <Department>IT</Department>
+    <PerformanceScores>
+      <PerformanceScore>
+        <Month>2024-01</Month>
+        <Score>95</Score>
+      </PerformanceScore>
+      <PerformanceScore>
+        <Month>2024-02</Month>
+        <Score>98</Score>
+      </PerformanceScore>
+    </PerformanceScores>
+    <HireDate>2019-11-18</HireDate>
+  </Employee>
+  <Employee Id="E003">
+    <Name>Eva Dvořáková</Name>
+    <Department>Marketing</Department>
+    <PerformanceScores>
+      <PerformanceScore>
+        <Month>2024-01</Month>
+        <Score>92</Score>
+      </PerformanceScore>
+      <PerformanceScore>
+        <Month>2024-02</Month>
+        <Score>88</Score>
+      </PerformanceScore>
+    </PerformanceScores>
+    <HireDate>2020-05-10</HireDate>
+  </Employee>
+  <Employee Id="E001">
+    <Name>Jan Novák</Name>
+    <Department>Sales</Department>
+    <PerformanceScores>
+      <PerformanceScore>
+        <Month>2024-01</Month>
+        <Score>85</Score>
+      </PerformanceScore>
+      <PerformanceScore>
+        <Month>2024-02</Month>
+        <Score>90</Score>
+      </PerformanceScore>
+    </PerformanceScores>
+    <HireDate>2022-03-15</HireDate>
+  </Employee>
+  <Employee Id="E004">
+    <Name>Martin Novotný</Name>
+    <Department>Marketing</Department>
+    <PerformanceScores>
+      <PerformanceScore>
+        <Month>2024-01</Month>
+        <Score>80</Score>
+      </PerformanceScore>
+      <PerformanceScore>
+        <Month>2024-02</Month>
+        <Score>82</Score>
+      </PerformanceScore>
+    </PerformanceScores>
+    <HireDate>2021-09-01</HireDate>
+  </Employee>
+  <Employee Id="E002">
+    <Name>Petr Svoboda</Name>
+    <Department>Sales</Department>
+    <PerformanceScores>
+      <PerformanceScore>
+        <Month>2024-01</Month>
+        <Score>75</Score>
+      </PerformanceScore>
+      <PerformanceScore>
+        <Month>2024-02</Month>
+        <Score>80</Score>
+      </PerformanceScore>
+    </PerformanceScores>
+    <HireDate>2021-07-23</HireDate>
+  </Employee>
+</ArrayOfEmployee>
