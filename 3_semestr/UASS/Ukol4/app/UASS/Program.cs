@@ -9,13 +9,17 @@ namespace UASS
         {
             Graph graph = new Graph();
 
-            string filePath = @"C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\3_semestr\UASS\Ukol4\app\email-dnc\email-dnc.edges";
+            // Načtení grafu ze souboru
+            string filePath = @"C:\Users\ficek\Documents\GitHub\VSB\3_semestr\UASS\Ukol4\app\email-dnc\email-dnc.edges";
             graph.LoadFromFile(filePath);
 
-            string outputDirectory = @"C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\3_semestr\UASS\Ukol4\snapshots";
-            graph.ExportSnapshots(outputDirectory, "yyyyMM");
+            // Export kumulativních snímků
+            string outputDirectory = @"C:\Users\ficek\Documents\GitHub\VSB\3_semestr\UASS\Ukol4\GraphSnapshots";
+            int numberOfSnapshots = 5; // Počet kumulativních snímků
 
-            Console.WriteLine("Snapshots have been created successfully.");
+            graph.ExportCumulativeSnapshots(outputDirectory, numberOfSnapshots, "yyyyMM");
+
+            Console.WriteLine("Cumulative snapshots have been created successfully.");
         }
     }
 }

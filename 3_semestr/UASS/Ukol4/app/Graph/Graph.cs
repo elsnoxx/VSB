@@ -75,32 +75,38 @@ namespace Network
             return sortedTimestamps;
         }
 
-        public void ExportSnapshots(string outputDirectory, string format = "yyyyMM")
+        public void ExportCumulativeSnapshots(string outputDirectory, int numberOfSnapshots, string format = "yyyyMM")
         {
             if (!Directory.Exists(outputDirectory))
             {
                 Directory.CreateDirectory(outputDirectory);
             }
 
-            // Rozdělení grafu na snímky podle časového formátu
-            var groupedByTimestamps = Nodes.GroupBy(node => node.Timestamp.ToString(format));
+            var sortedNodes = Nodes.OrderBy(node => node.Timestamp).ToList();
 
-            foreach (var group in groupedByTimestamps)
+            int totalNodes = sortedNodes.Count;
+            int nodesPerSnapshot = totalNodes / numberOfSnapshots;
+
+            List<Point> cumulativeNodes = new List<Point>();
+
+            for (int i = 1; i <= numberOfSnapshots; i++)
             {
-                string timestamp = group.Key;
-                string filePath = Path.Combine(outputDirectory, $"graph_snapshot_{timestamp}.csv");
+                int currentSnapshotLimit = Math.Min(i * nodesPerSnapshot, totalNodes);
+                cumulativeNodes.AddRange(sortedNodes.Take(currentSnapshotLimit));
+
+                string filePath = Path.Combine(outputDirectory, $"cumulative_snapshot_{i}.csv");
 
                 using (StreamWriter writer = new StreamWriter(filePath))
                 {
-                    writer.WriteLine("Source,Target,Weight"); // Hlavička CSV
+                    writer.WriteLine("Source,Target,Weight");
 
-                    foreach (var node in group)
+                    foreach (var node in cumulativeNodes)
                     {
-                        writer.WriteLine($"{node.X},{node.Y},1"); // Weight je zde 1 jako příklad
+                        writer.WriteLine($"{node.X},{node.Y},1");
                     }
                 }
 
-                Console.WriteLine($"Snapshot for {timestamp} exported to {filePath}");
+                Console.WriteLine($"Cumulative snapshot {i} exported to {filePath}");
             }
         }
     }
