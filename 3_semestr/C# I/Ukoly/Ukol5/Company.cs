@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
+using System.Xml;
 using System.Xml.Serialization;
 
 
@@ -58,6 +59,16 @@ public class Company
 
     public void Add(Employee employee)
     {
+        if (employee == null)
+        {
+            throw new ArgumentNullException(nameof(employee), "Nelze pøidat null zamìstnance.");
+        }
+
+        if (string.IsNullOrWhiteSpace(employee.ID))
+        {
+            throw new ArgumentException("ID zamìstnance nesmí být prázdné.");
+        }
+
         Employees.Add(employee);
     }
 
@@ -71,11 +82,17 @@ public class Company
     {
         var serializer = new System.Xml.Serialization.XmlSerializer(typeof(Company));
 
-        using (var writer = new StreamWriter(fileName, false, System.Text.Encoding.UTF8))
+        var settings = new XmlWriterSettings
+        {
+            Indent = true,
+            Encoding = Encoding.UTF8,
+            OmitXmlDeclaration = false,
+            NewLineChars = "\n"
+        };
+
+        using (var writer = XmlWriter.Create(fileName, settings))
         {
             serializer.Serialize(writer, this);
         }
     }
-
-
 }

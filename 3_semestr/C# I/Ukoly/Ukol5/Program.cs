@@ -13,7 +13,8 @@ namespace Ukol5
             CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
 
             // Načtení JSON souboru
-            string jsonFilePath = "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\3_semestr\\C# I\\Ukoly\\Ukol5\\DataIn\\data.json";
+            //string jsonFilePath = "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\3_semestr\\C# I\\Ukoly\\Ukol5\\DataIn\\data.json";
+            string jsonFilePath = "data.json";
             if (!File.Exists(jsonFilePath))
             {
                 Console.WriteLine("Soubor 'data.json' nebyl nalezen.");
@@ -55,7 +56,6 @@ namespace Ukol5
             company.Save("data.xml");
         }
 
-        // Opravená metoda pro deserializaci JSON
         public static List<Employee> DeserializeFromJson(string json)
         {
             if (string.IsNullOrWhiteSpace(json))
@@ -68,7 +68,6 @@ namespace Ukol5
                 PropertyNameCaseInsensitive = true
             };
 
-            // Deserializace na List<Employee>
             return JsonSerializer.Deserialize<List<Employee>>(json, options);
         }
 
