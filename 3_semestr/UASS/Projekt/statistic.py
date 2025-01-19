@@ -84,7 +84,7 @@ def plot_degree_distribution(graph, title):
 # Hlavní funkce
 def main():
     # Statická síť
-    static_network_file = 'path_to_static_network.csv'  # Nahraďte vlastní cestou
+    static_network_file = '\\static\\web-edu\\web-edu.csv'  # Nahraďte vlastní cestou
     static_graph = load_network(static_network_file)
     static_analysis = analyze_static_network(static_graph)
     print("Static Network Analysis:")
