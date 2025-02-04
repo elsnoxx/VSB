@@ -1,0 +1,120 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float} % Pro lepší umístění obrázků
+
+\begin{document}
+
+\title{Simulace SI modelu a kaskádového modelu}
+\author{Richard Ficek}
+\date{}
+\maketitle
+
+\section{Výsledky simulace na football.gml}
+
+\subsection{SI model}
+\begin{itemize}
+    \item Počet kroků: 4
+    \item Počet infikovaných uzlů v každém kroku: [1, 13, 57, 113, 115]
+    \item Průměrný počet infikovaných uzlů na krok: 59.8
+\end{itemize}
+
+\subsection{Kaskádový model}
+\begin{itemize}
+    \item Počet kroků: [5, 5, 5, 5, 5, 5, 4, 5, 5, 7, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 5, 5, 5, 5, 6, 5, 5, 6, 5, 5, 5, 5, 4, 6, 6, 5, 5, 6, 5, 5, 4, 5, 6, 5, 5, 5, 6, 5, 5, 5, 5, 5, 5, 6, 6, 5, 5, 5, 5, 5, 4, 5, 5, 5, 4, 6, 5, 5, 6, 6, 5, 6, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 5]
+    \item Průměrný počet kroků: 5.1
+    \item Pokrytí: [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0]
+    \item Průměrné pokrytí: 100.0 %
+\end{itemize}
+
+\newpage
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figure_1.png}
+        \caption{Krok 1: 1 infikovaný uzel}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figure_2.png}
+        \caption{Krok 2: 13 infikovaných uzlů}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figure_3.png}
+        \caption{Krok 3: 57 infikovaných uzlů}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figure_4.png}
+        \caption{Krok 4: 113 infikovaných uzlů}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figure_5.png}
+        \caption{Krok 5: 115 infikovaných uzlů (celá síť)}
+    \end{subfigure}
+    \caption{Vizualizace průběhu SI modelu.}
+\end{figure}
+
+
+\newpage
+
+\section{Výsledky simulace na polbooks.gml}
+
+\subsection{SI model}
+\begin{itemize}
+    \item Počet kroků: 5
+    \item Počet infikovaných uzlů v každém kroku: [1, 5, 29, 61, 86, 105]
+    \item Průměrný počet infikovaných uzlů na krok: 47.8
+\end{itemize}
+
+\subsection{Kaskádový model}
+\begin{itemize}
+    \item Počet kroků: [7, 8, 7, 7, 7, 8, 7, 9, 7, 6, 8, 7, 6, 8, 7, 8, 7, 7, 7, 7, 7, 8, 6, 6, 8, 6, 7, 7, 7, 7, 8, 7, 8, 7, 8, 9, 7, 7, 8, 7, 7, 8, 7, 6, 6, 7, 9, 8, 7, 6, 7, 7, 7, 7, 8, 9, 8, 6, 8, 8, 7, 9, 7, 9, 9, 7, 8, 6, 7, 10, 7, 7, 7, 7, 6, 5, 7, 6, 7, 8, 7, 6, 6, 7, 7, 7, 6, 6, 6, 8, 9, 9, 8, 9, 6, 7, 6, 8, 8, 9]
+    \item Průměrný počet kroků: 6.5
+    \item Pokrytí: [0.9523809523809524, 100.0, 100.0, 0.9523809523809524, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 0.9523809523809524, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 0.9523809523809524, 100.0, 100.0, 100.0, 2.857142857142857, 100.0, 100.0, 100.0, 100.0, 100.0, 99.04761904761905, 100.0, 100.0, 100.0, 98.09523809523809, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 0.9523809523809524, 100.0, 100.0, 100.0, 100.0, 100.0, 0.9523809523809524, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 98.09523809523809, 100.0, 100.0, 99.04761904761905, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0]
+    \item Průměrné pokrytí: 93.0 %
+\end{itemize}
+
+\newpage
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figure2_1.png}
+        \caption{Krok 1: 1 infikovaný uzel}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figure2_2.png}
+        \caption{Krok 2: 5 infikovaných uzlů}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figure2_3.png}
+        \caption{Krok 3: 29 infikovaných uzlů}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figure2_4.png}
+        \caption{Krok 4: 61 infikovaných uzlů}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figure2_5.png}
+        \caption{Krok 5: 86 infikovaných uzlů (celá síť)}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figure2_6.png}
+        \caption{Krok 6: 105 infikovaných uzlů (celá síť)}
+    \end{subfigure}
+    \caption{Vizualizace průběhu SI modelu.}
+\end{figure}
+
+\end{document}

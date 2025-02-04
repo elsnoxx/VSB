@@ -1,0 +1,79 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{float} % Pro lepší umístění obrázků a tabulek
+\usepackage{caption} % Upravené popisky
+\geometry{margin=1in}
+
+\title{\textbf{Analýza sociálních sítí v Gephi}\\ Úkol č. 1}
+\author{Richard Ficek}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Popis vybrané sítě}
+\noindent
+Tato analýza se zaměřuje na neorientovanou, neváženou síť, která reprezentuje přátelství mezi 34 členy karate klubu na americké univerzitě, jak je popsáno Wayneem Zacharym v roce 1977.
+
+\bigskip
+\noindent
+\textbf{Popis komponent:}
+\begin{itemize}
+    \item \textbf{Vrcholy (Nodes)}: Členové karate klubu, kteří jsou spojeni přátelskými vztahy.
+    \item \textbf{Hrany (Edges)}: Přátelské vztahy mezi jednotlivými členy klubu.
+\end{itemize}
+
+\bigskip
+\noindent
+\textbf{Klíčové vlastnosti sítě:}
+\begin{itemize}
+    \item Síť je tvořena malým počtem uzlů, což umožňuje detailní analýzu vzorců přátelství mezi členy.
+    \item Vztahy mezi členy klubu jsou silné, což je odrazem intenzivní spolupráce a interakce v rámci klubu.
+    \item Barvy vrcholů mohou označovat různé skupiny členů, které byly automaticky detekovány jako komunity. Velikost vrcholů odpovídá počtu přátel (stupni uzlu).
+\end{itemize}
+
+%-----------------------------------------------------------
+\section{Statistiky sítě}
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2} % Zvětší výšku řádků
+    \begin{tabular}{l|r}
+    \toprule
+    \textbf{Metrika} & \textbf{Hodnota} \\
+    \midrule
+    Počet uzlů (Nodes) & 34 \\
+    Počet hran (Edges) & 78 \\
+    Průměrný stupeň (Average Degree) & 4.588 \\
+    Počet komunit & 4 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Klíčové statistiky sítě \textit{Karate Club}.}
+    \label{tab:karate_stats}
+\end{table}
+
+\bigskip
+\noindent
+Tabulka \ref{tab:karate_stats} shrnuje základní statistiky sítě. Síť obsahuje 34 členů, přičemž průměrný stupeň uzlu je 4.588, což naznačuje poměrně silné propojení mezi členy. Počet komunit (4) ukazuje na existenci několika odlišných skupin uvnitř klubu.
+
+%-----------------------------------------------------------
+\section{Vizualizace sítě}
+\subsection{Karate Club Network}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{karate.png}
+    \caption{Vizualizace sítě \textit{Karate Club}.}
+    \label{fig:karate}
+\end{figure}
+
+
+\end{document}

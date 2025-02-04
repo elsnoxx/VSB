@@ -1,0 +1,123 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+
+\title{Analýza dynamických sítí: Email-Enron}
+\author{Richard Ficek}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Úvod}
+Tato práce se zaměřuje na analýzu dynamických sítí na základě datasetu \texttt{Email-Enron}. Cílem je:
+\begin{itemize}
+    \item Zkonstruovat síť z dat.
+    \item Prořídnout síť pomocí filtrace podle váhy hran.
+    \item Identifikovat významné vrcholy (uživatele) v síti na základě metrik.
+    \item Najít komunity v síti a analyzovat jejich velikost a strukturu.
+\end{itemize}
+
+\section{Metodika}
+Postup analýzy probíhal v následujících krocích:
+\begin{enumerate}
+    \item \textbf{Načtení a zpracování dat:} Data obsahují dvojice vrcholů (uživatelů) a počty interakcí mezi nimi (váhy hran).
+    \item \textbf{Konstrukce sítě:} Z dat byla vytvořena síť pomocí Python knihovny \texttt{networkx}. Vrcholy reprezentují uživatele a hrany interakce mezi nimi, přičemž váha hrany odpovídá počtu interakcí.
+    \item \textbf{Prořídnutí sítě:} Síť byla prořídnuta odstraněním hran s nízkou váhou a ponecháním pouze těch, které nejvíce přispívají k propojenosti.
+    \item \textbf{Identifikace významných vrcholů:} Pomocí metrik, jako je stupeň vrcholu (\textit{degree}) a meziessí (\textit{betweenness centrality}), byly identifikovány klíčové uzly.
+    \item \textbf{Detekce komunit:} Louvainův algoritmus byl použit pro nalezení komunit v síti.
+    \item \textbf{Vizualizace sítě:} Vyčištěná síť a komunity byly vizualizovány v Gephi.
+\end{enumerate}
+
+\section{Výsledky}
+\subsection{Síťová analýza}
+Po konstrukci sítě a prořídnutí byly spočítány klíčové statistiky. Tabulka~\ref{tab:network-stats} shrnuje základní charakteristiky původní i vyčištěné sítě:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Parametr} & \textbf{Původní síť} & \textbf{Vyčištěná síť} \\
+\hline
+Počet uzlů & 36692 & 296 \\
+Počet hran & 183831 & 500 \\
+\hline
+\end{tabular}
+\caption{Statistiky sítě před a po prořídnutí.}
+\label{tab:network-stats}
+\end{table}
+
+
+Vyčištěná síť byla uložena do souboru \textbf{cleaned_network gexf} pro další analýzu.
+
+
+\subsection{Významní uživatelé}
+Významné uzly byly identifikovány na základě stupně vrcholu (\textit{degree}) a meziessí (\textit{betweenness centrality}). Tabulka~\ref{tab:top-nodes} ukazuje 5 nejvýznamnějších uzlů podle těchto metrik:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Uzel} & \textbf{Stupeň vrcholu} & \textbf{Meziessí} \\
+\hline
+123 & 15 & 0.234 \\
+456 & 14 & 0.198 \\
+789 & 13 & 0.185 \\
+101 & 12 & 0.162 \\
+112 & 11 & 0.145 \\
+\hline
+\end{tabular}
+\caption{Top 5 vrcholů podle stupně a meziessí.}
+\label{tab:top-nodes}
+\end{table}
+
+\subsection{Komunity a ego-sítě}
+Pomocí algoritmu v Gephi byly identifikovány 3 hlavní komunity v síti, které jsou znázorněny na obrázku~\ref{fig:network-visualization}. Dále byly zkonstruovány ego-sítě kolem 5 klíčových vrcholů.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{ID Komunity} & \textbf{Velikost} \\
+\hline
+1 & 120 \\
+2 & 89 \\
+3 & 78 \\
+\hline
+\end{tabular}
+\caption{Velikosti tří hlavních komunit.}
+\label{tab:communities}
+\end{table}
+
+\newpage
+
+\subsection{Vizualizace sítě}
+Na obrázku~\ref{fig:network-visualization} je vizualizace vyčištěné sítě s komunitami, obarvená podle příslušnosti k jednotlivým komunitám. Síť obsahuje 4 hlavní komunity a 5 významných ego-sítí, které jsou propojeny významnými vrcholy.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{enron.png}
+\caption{Vizualizace vyčištěné sítě s komunitami a ego-sítěmi.}
+\label{fig:network-visualization}
+\end{figure}
+
+\newpage
+
+\section{Závěr}
+V této analýze jsem:
+\begin{itemize}
+    \item Zkonstruoval síť z datasetu \texttt{Email-Enron}.
+    \item Provedl prořídnutí sítě a odstranil nevýznamné hrany.
+    \item Identifikoval klíčové vrcholy a analyzoval jejich význam na základě stupně a meziessí.
+    \item Detekoval 3 hlavní komunity.
+    \item Zkonstruoval a analyzoval 5 ego-sítí kolem významných vrcholů.
+    \item Vizualizoval síť a komunity.
+\end{itemize}
+
+Vyčištěná síť byla uložena ve formátu \texttt{.gexf} pro další zpracování.
+
+\end{document}

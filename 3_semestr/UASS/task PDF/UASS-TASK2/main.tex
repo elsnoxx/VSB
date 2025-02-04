@@ -1,0 +1,125 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{float} % Pro lepší umístění obrázků a tabulek
+\usepackage{caption} % Upravené popisky
+\geometry{margin=1in}
+
+\title{\textbf{Analýza sociálních sítí v Gephi}\\ Úkol č. 2}
+\author{Richard Ficek}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Vizualizace podle prezentací}
+
+\subsection{Les Miserables}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{lemis.png}
+    \caption{Vizualizace sítě \textit{Les Miserables}.}
+    \label{fig:power}
+\end{figure}
+
+\subsection{Dolphin social network}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{dolphins.png}
+    \caption{Vizualizace sítě \textit{Dolphin social network}.}
+    \label{fig:power}
+\end{figure}
+
+
+\subsection{Book about US politc}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{polbooks.png}
+    \caption{Vizualizace sítě \textit{Book about US politc}.}
+    \label{fig:power}
+\end{figure}
+
+
+\subsection{American College Football}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{football.png}
+    \caption{Vizualizace sítě \textit{American College Football}.}
+    \label{fig:power}
+\end{figure}
+
+
+%-----------------------------------------------------------
+\section{Opakování či odlišení}
+
+
+V síťových modelech, jako jsou \textbf{Les Miserables}, \textbf{Dolphin social network}, \textbf{Books about US politics} a \textbf{American College Football}, se mohou opakovat různé vlastnosti a struktury. Například v \textbf{Les Miserables} existují vrcholy (postavy) spojené váženými hranami, jejichž váha odpovídá četnosti interakcí mezi postavami. V \textbf{Dolphin social network} se vrcholy (delfíni) spojují na základě četnosti společného pozorování, přičemž opakující se vztahy mezi delfíny indikují silné sociální vazby. V \textbf{Books about US politics} se opakují vzory nákupů knih, přičemž časté nákupy určitých knih společně jsou reprezentovány hranami mezi nimi. V \textbf{American College Football} se opakují vztahy mezi týmy, kdy jsou pravidelné zápasy mezi týmy v rámci konferencí, přičemž geografie a konferenční struktura ovlivňují četnost utkání. Tyto sítě se od sebe liší v typu vztahů mezi vrcholy (vážené vs. nevážené hrany), typu vrcholů (postavy, delfíni, knihy, týmy) a jejich reprezentaci (např. barvy vrcholů pro komunity, velikost vrcholů podle četnosti interakcí či zápasů).
+
+\newpage
+%-----------------------------------------------------------
+\section{Popis vybrané sítě}
+\noindent
+Tato analýza se zaměřuje na neorientovanou, neváženou síť, která reprezentuje topologii energetické sítě západních Spojených států.
+
+\bigskip
+\noindent
+\textbf{Popis komponent:}
+\begin{itemize}
+    \item \textbf{Vrcholy (Nodes)}: Elektrické uzly, jako jsou elektrárny, transformátory nebo rozvodny, které tvoří součást energetické infrastruktury.
+    \item \textbf{Hrany (Edges)}: Elektrická vedení, která propojují jednotlivé uzly v síti a umožňují přenos elektrické energie mezi různými částmi systému.
+\end{itemize}
+
+\bigskip
+\noindent
+\textbf{Klíčové vlastnosti sítě:}
+\begin{itemize}
+    \item Síť zahrnuje jak hustě propojené oblasti, tak řídce propojené regiony, což odráží geografickou distribuci a fyzická omezení.
+    \item Propojení mezi geograficky blízkými uzly je častější, zatímco vzdálenější uzly jsou spojeny méně často kvůli nákladům na budování přenosových vedení.
+    \item Barvy vrcholů mohou označovat regionální skupiny nebo specifické části infrastruktury. Velikost vrcholů reflektuje důležitost uzlů (například počet připojených vedení).
+\end{itemize}
+
+%-----------------------------------------------------------
+\section{Statistiky sítě}
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.2} % Zvětší výšku řádků
+    \begin{tabular}{l|r}
+    \toprule
+    \textbf{Metrika} & \textbf{Hodnota} \\
+    \midrule
+    Počet uzlů (Nodes) & 4941 \\
+    Počet hran (Edges) & 6594 \\
+    Průměrný stupeň (Average Degree) & 2.669 \\
+    Modularity & 0.934 \\
+    Počet komunit & 37 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Klíčové statistiky sítě \textit{Western States Power Grid}.}
+    \label{tab:power_stats}
+\end{table}
+
+\bigskip
+\noindent
+Tabulka \ref{tab:power_stats} shrnuje základní statistiky sítě. Velká modularita (0.934) naznačuje přítomnost dobře definovaných komunit, což odpovídá logickému rozdělení energetické infrastruktury podle geografických oblastí.
+
+%-----------------------------------------------------------
+\section{Vizualizace sítě}
+\subsection{Western States Power Grid of the United States}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{ukol2.png}
+    \caption{Vizualizace sítě \textit{Western States Power Grid of the United States}.}
+    \label{fig:power}
+\end{figure}
+
+
+\end{document}

@@ -1,0 +1,373 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+
+
+\lstset{
+    language=Python,
+    basicstyle=\scriptsize\ttfamily,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{red},
+    literate={á}{{\'a}}1
+             {č}{{\v c}}1
+             {ď}{{\v d}}1
+             {é}{{\'e}}1
+             {ě}{{\v e}}1
+             {í}{{\'i}}1
+             {ň}{{\v n}}1
+             {ó}{{\'o}}1
+             {ř}{{\v r}}1
+             {š}{{\v s}}1
+             {ť}{{\v t}}1
+             {ú}{{\'u}}1
+             {ů}{{\r u}}1
+             {ý}{{\'y}}1
+             {ž}{{\v z}}1
+             {Á}{{\'A}}1
+             {Č}{{\v C}}1
+             {Ď}{{\v D}}1
+             {É}{{\'E}}1
+             {Ě}{{\v E}}1
+             {Í}{{\'I}}1
+             {Ň}{{\v N}}1
+             {Ó}{{\'O}}1
+             {Ř}{{\v R}}1
+             {Š}{{\v S}}1
+             {Ť}{{\v T}}1
+             {Ú}{{\'U}}1
+             {Ů}{{\r U}}1
+             {Ý}{{\'Y}}1
+             {Ž}{{\v Z}}1
+}
+
+
+\title{Analýza Sítí: Projekt}
+\author{Richard Ficek}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Úvod}
+V této práci jsem se zaměřil na analýzu dvou různých typů sítí. Cílem bylo provést analýzu vlastností obou sítí, interpretovat výsledky a identifikovat zajímavé vzorce v síti.
+
+\section*{Výběr statické sítě}
+Pro tuto analýzu jsem vybral statickou síť \href{http://konect.cc/networks/opsahl-usairport/}{\textbf{US airports}}, která představuje síť letů mezi americkými letišti v roce 2010. Každá hrana představuje spojení mezi dvěma letišti, přičemž váha hrany udává počet letů mezi těmito dvěma letišti v daném směru v roce 2010. 
+
+\section*{Výběr Dynamická síťě}
+Pro tuto analýzu jsem vybral dynamickou síť \href{https://networkrepository.com/contacts-prox-high-school-2013.php}{\textbf{contacts-prox-high-school-2013}}, která představuje kontaktní síť ve střední škole z roku 2013. Každý uzel představuje jednoho studenta a hrany mezi nimi zobrazují jejich fyzickou blízkost a kontakty během školního roku.
+
+\newpage
+
+\section*{Preprocessing a Analýza - Statická síť}
+Statickou síť jsem analyzoval pomocí vlastního kódu v Pythonu a knihovny NetworkX. Vypočítal jsem základní metriky, které popisují strukturu a vlastnosti této sítě.
+
+
+\lstinputlisting[language=Python]{static-network-data.py}
+
+\newpage
+
+\subsection*{Základní metriky pro statickou síť}
+Pro statickou síť jsem spočítal následující vlastnosti:
+\begin{itemize}
+    \item Počet uzlů: 1574
+    \item Počet hran: 17215
+    \item Průměrný stupeň uzlu: 21.87
+    \item Síť je souvislá: Ne
+    \item Velikost největší souvislé komponenty (LCC): 1572
+    \item Počet uzlů v souvislé komponentě: 1572
+    \item Počet hran v souvislé komponentě: 17214
+    \item Průměrná délka cesty v souvislé komponentě: 3.12
+    \item Průměrný průměr grafu (diameter) v souvislé komponentě: 8
+\end{itemize}
+
+\subsection*{Nejdůležitější uzly podle různých metrik}
+Na základě výpočtů jsem identifikoval nejdůležitější uzly podle stupňové centrálnosti:
+\begin{itemize}
+    \item Uzel 46: Centrálnost 0.1996
+    \item Uzel 69: Centrálnost 0.1901
+    \item Uzel 88: Centrálnost 0.1882
+    \item Uzel 165: Centrálnost 0.1856
+    \item Uzel 74: Centrálnost 0.1850
+\end{itemize}
+
+\subsection*{Další vlastnosti grafu}
+Dále jsem spočítal několik dalších vlastností grafu:
+\begin{itemize}
+    \item Hustota grafu: 0.0139
+    \item Giniho koeficient: 0.7534
+    \item Průměrná délka cesty: 3.13685
+    \item Clustering coefficient: 0.384
+\end{itemize}
+
+\section{Největší letiště v USA}
+
+\begin{itemize}
+    \item \textbf{Mezinárodní letiště Hartsfield-Jackson Atlanta (ATL)} – Atlanta, Georgia.
+    \item \textbf{Mezinárodní letiště Dallas/Fort Worth (DFW)} – Dallas/Fort Worth, Texas.
+    \item \textbf{Mezinárodní letiště Denver (DEN)} – Denver, Colorado.
+    \item \textbf{Mezinárodní letiště O'Hare (ORD)} – Chicago, Illinois.
+    \item \textbf{Mezinárodní letiště Los Angeles (LAX)} – Los Angeles, Kalifornie.
+    \item \textbf{Mezinárodní letiště Charlotte Douglas (CLT)} – Charlotte, Severní Karolína.
+    \item \textbf{Mezinárodní letiště Orlando (MCO)} – Orlando, Florida.
+    \item \textbf{Mezinárodní letiště Harryho Reida (LAS)} – Las Vegas, Nevada.
+    \item \textbf{Mezinárodní letiště Phoenix Sky Harbor (PHX)} – Phoenix, Arizona.
+    \item \textbf{Mezinárodní letiště Miami (MIA)} – Miami, Florida.
+\end{itemize}
+
+\newpage
+
+\subsection*{Vizualizace sítě}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{network.png}
+    \caption{Distribuce stupňů v síti}
+\end{figure}
+
+\newpage
+
+\subsection*{Interpretace výsledků}
+Na základě výpočtů a vizualizací jsem identifikoval několik zajímavých vlastností statické sítě:
+
+\subsubsection*{Statická síť}
+V případě statické sítě jsem pozoroval, že většina uzlů má nízký stupeň, ale existuje několik uzlů s vysokým stupněm, což ukazuje na existenci centrálních uzlů v síti. Tento jev je charakteristický pro mnoho reálných sítí, které vykazují vlastnosti tzv. malých světů (small-world networks).
+
+\subsubsection*{Nejdůležitější uzly}
+Uzly s vysokou stupňovou centrálností, jako jsou uzly 46, 69, 88, 165 a 74, hrají klíčovou roli v síťové struktuře a spojení mezi letišti. Tyto uzly jsou velmi propojené s ostatními uzly, což znamená, že jsou důležité pro zajištění plynulého provozu mezi letišti.
+
+\subsubsection*{Hustota grafu}
+Hustota grafu je velmi nízká, což naznačuje, že mezi letišti existuje mnoho nepropojených cest, což může být důsledek geografických nebo provozních omezení. Hustota 0.0139 také ukazuje, že síť není příliš propojená, což může znamenat, že existují oblasti s nízkou frekvencí letů nebo omezeným spojením.
+
+\subsubsection*{Clustering a assortativity}
+Clustering coefficient ukazuje střední úroveň propojení mezi sousedními uzly, což znamená, že existují skupiny uzlů (letišť), které jsou více propojené mezi sebou. Degree assortativity s hodnotou -0.113 naznačuje negativní korelaci mezi stupni propojení uzlů, což znamená, že uzly s vysokým stupněm mají tendenci se propojit s uzly s nízkým stupněm.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{snap1.png}
+        \caption{Nejvýznamější ego, uzel číslo 32, možné Mezinárodní letiště Hartsfield-Jackson Atlanta}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{snap2.png}
+        \caption{Komponenta grafu, uzlem 46, 69, 74,88}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{snap3.png}
+        \caption{Komponenta grafu, uzlem 165, 147}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{snap4.png}
+        \caption{Komponenta grafu, vyznamný uzel 60}
+    \end{subfigure}
+    \caption{Vizualizace největších.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{largest clicque.png}
+        \caption{Největší klika}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{largest star.png}
+        \caption{Největší hvězda}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{highest edge=core.png}
+        \caption{Největší počet hran mezi uzly}
+    \end{subfigure}
+    \caption{Vizualizace největších.}
+\end{figure}
+
+
+\section*{Závěr}
+V této práci jsem analyzoval statickou síť letů mezi letišti v USA v roce 2010. Síť vykazuje typické vlastnosti grafu malého světa a prokázala existenci centrálních uzlů, které jsou klíčové pro zajištění spojení mezi letišti. Hustota grafu a nízká assortativita naznačují možné oblasti, kde dochází k omezenému propojení. Tato analýza poskytuje cenné informace pro porozumění tomu, jak jsou letiště propojena a jaká jsou potenciální slabá místa v síti.
+
+\newpage
+
+\section*{Preprocessing a Analýza - Dynamická síť}
+Dinamickou síť jsem analyzoval pomocí vlastního kódu v Pythonu a knihovny NetworkX. Vypočítal jsem základní metriky, které popisují strukturu a vlastnosti této sítě. Také rozdělil na dané časové úseky.
+
+\lstinputlisting[language=Python]{dynamic-data-procesing.py}
+
+\newpage
+
+\subsection*{Analýza sítě:}
+
+\begin{table}[htbp]
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Snapshot} & \textbf{Nodes} & \textbf{Edges} & \textbf{Average Degree} & \textbf{Avg Weighted Degree} & \textbf{Communities} & \textbf{Average Community Size} & \textbf{Max Community Size} \\
+        \hline
+        1 & 312 & 2242 & 14.6834 & 14.6834 & 1 & 319.0 & 319 \\
+        2 & 326 & 3765 & 23.0982 & 23.0982 & 1 & 326.0 & 326 \\
+        3 & 327 & 4571 & 27.4740 & 27.4740 & 1 & 327.0 & 327 \\
+        4 & 327 & 5301 & 31.9266 & 31.9266 & 1 & 327.0 & 327 \\
+        5 & 327 & 5815 & 35.5841 & 35.5841 & 1 & 327.0 & 327 \\
+        \hline
+\end{tabular}
+}
+\caption{Vývoj průměrného stupně sítě \texttt{contacts-prox-high-school-2013} v čase.}
+\end{table}
+
+\textbf{průměrný stupeň:} ukazuje na posílení propojení v síti (hodnota se zvyšuje).
+To znamená, že počet hran roste v každém časovém snímku.
+průměrný vážený stupeň: ukazuje na zvyšování intenzity mezi uzly to
+znamená, že váha hran taky roste.
+
+\textbf{hustota:} růst hustoty ukazuje na zhuštění grafu, tedy na zvyšování počtu
+hran vůči počtu možných spojení.
+
+\textbf{průměrný shlukovači koeficient:} zvýšení průměrného shlukovacího
+koeficientu znamená, že uzly v grafu mají tendenci vytvářet více uzavřených
+trojúhelníků, ale tato hodnota nezměnila se až tak moc.
+
+\textbf{počet komunit:} vždy využívalo se resolution = 1, ale počet komunit snížil
+se, síť stává více integrovanou s menším počtem, ale většími skupinami
+(komunitami)..
+
+\textbf{vrchol s největším stupněm:} většinou to byl vrchol 106, ale stupeň
+vrcholu aktivně měnil se. V S3 stal vrchol 106 až třetím po velikosti stupňů.
+Ale pak znova stal prvním.
+
+\textbf{distribuce stupňů: } není nějaký stupeň který vyskytoval se by o vele vice
+krát než ostatní, a je zajímavé ze vrchole z malým stupněm nevyskytuje se
+vice než z větším.
+
+\textbf{Zajímavá část grafu s popisem:}
+Tento graf neobsahuje viditelné zajímavé struktury, ale jsem vybrala jeden
+z vrcholu:
+
+\subsection*{Vizualizace}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{snap1-dynamic.png}
+        \caption{Snímek 1}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{snap2-dynamic.png}
+        \caption{Snímek 2}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{snap3-dynamic.png}
+        \caption{Snímek 3}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{snap4-dynamic.png}
+        \caption{Snímek 4}
+    \end{subfigure}
+        \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{snap5-dynamic.png}
+        \caption{Snímek 5}
+    \end{subfigure}
+    \caption{Vizualizace největších.}
+\end{figure}
+
+\newpage
+
+\subsection*{Zajímavá část grafu:}
+Tento graf neobsahuje viditelné zajímavé struktury, ale jsem vybrala jeden z vrcholu:
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{snap1-dynamic-bod-513.png}
+        \caption{Snímek 1}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{snap2-dynamic-bod-513.png}
+        \caption{Snímek 2}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{snap3-dynamic-bod-513.png}
+        \caption{Snímek 3}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{snap4-dynamic-bod-513.png}
+        \caption{Snímek 4}
+    \end{subfigure}
+        \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{snap5-dynamic-bod-513.png}
+        \caption{Snímek 5}
+    \end{subfigure}
+    \caption{Vizualizace největších.}
+\end{figure}
+
+\newpage
+
+\subsection*{Zajímavá struktury:}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{komunit-1.png}
+        \caption{Snímek 1}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{komunit-2.png}
+        \caption{Snímek 2}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{komunit-3.png}
+        \caption{Snímek 3}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{komunit-4.png}
+        \caption{Snímek 4}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{komunit-5.png}
+        \caption{Snímek 5}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{komunit-6.png}
+        \caption{Snímek 6}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{komunit-7.png}
+        \caption{Snímek 7}
+    \end{subfigure}
+\end{figure}
+
+
+
+\end{document}

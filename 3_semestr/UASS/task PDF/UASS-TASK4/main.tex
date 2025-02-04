@@ -1,0 +1,88 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{float}
+
+\title{Analýza dynamických sítí: email-dnc}
+\author{Richard Ficek}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Úvod}
+Tato práce se zaměřuje na analýzu dynamických sítí na základě dvou různých datasetů: \texttt{email-dnc}. V této analýze budeme sledovat, jak se mění struktura sítě v čase, jak se vyvíjí průměrný stupeň, průměrný vážený stupeň, počet komunit, velikost komunit, a souvislé komponenty.
+
+\section{Metodika}
+Data byla rozdělena na 5 snímků, každý představující určitý časový okamžik. Pro každý snímek byla provedena analýza následujících metrik:
+\begin{itemize}
+    \item Průměrný stupeň sítě.
+    \item Průměrný vážený stupeň sítě.
+    \item Počet komunit a souvislých komponent.
+    \item Identifikace vrcholů s vysokým stupněm a váženým stupněm.
+    \item Vývoj vybraného vrcholu v čase.
+    \item Vizualizace jednotlivých snímků.
+\end{itemize}
+
+\section{Výsledky}
+\subsection{email-dnc}
+\subsubsection{Průměrný stupeň sítě}
+Pro dataset \texttt{email-dnc} jsme spočítali průměrný stupeň sítě pro každý z 5 snapshotů. Výsledek ukazuje, jak se mění propojenost mezi jednotlivými vrcholy v čase.
+
+\begin{table}[htbp]
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Snapshot} & \textbf{Nodes} & \textbf{Edges} & \textbf{Average Degree} & \textbf{Avg Weighted Degree} & \textbf{Communities} & \textbf{Average Community Size} & \textbf{Max Community Size} \\
+\hline
+1 & 834 & 1731 & 4.151 & 18.83 & 19 & 43.89 & 810 \\
+2 & 10666 & 2408 & 4.518 & 44.20 & 26 & 41.00 & 1032 \\
+3 & 1302 & 3133 & 4.813 & 72.37 & 32 & 40.69 & 1258 \\
+4 & 1503 & 3725 & 4.957 & 104.48 & 35 & 42.94 & 1456 \\
+5 & 1891 & 4465 & 4.722 & 124.57 & 41 & 46.12 & 1833 \\
+\hline
+\end{tabular}
+}
+\caption{Vývoj průměrného stupně sítě \texttt{email-dnc} v čase.}
+\end{table}
+
+\subsubsection{Vizualizace jednotlivých snímků}
+
+Pro každý snímek jsme vytvořili vizualizace, které ukazují vývoj struktury sítě v čase. Tyto vizualizace zachycují dynamiku komunit a propojení vrcholů.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{snap1.png}
+\caption{Snímek 1: Vývoj struktury sítě.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{snap2.png}
+\caption{Snímek 2: Vývoj struktury sítě.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{snap3.png}
+\caption{Snímek 3: Vývoj struktury sítě.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{snap4.png}
+\caption{Snímek 4: Vývoj struktury sítě.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{snap5.png}
+\caption{Snímek 5: Vývoj struktury sítě.}
+\end{figure}
+
+\end{document}
