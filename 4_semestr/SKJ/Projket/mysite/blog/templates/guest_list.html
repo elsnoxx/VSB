@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Seznam hostů</h1>
+<a href="{% url 'add_guest' %}" class="btn btn-primary">Přidat hosta</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Jméno</th>
+            <th scope="col">Příjmení</th>
+            <th scope="col">Akce</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for guest in guests %}
+            <tr>
+                <td>{{ guest.firstname }}</td>
+                <td>{{ guest.lastname }}</td>
+                <td>
+                    <a href="{% url 'guest_detail' guest_id=guest.guest_id %}" class="btn btn-info btn-sm">Detail</a> |
+                    <a href="{% url 'guest_update' guest.guest_id %}" class="btn btn-warning btn-sm">Editovat</a> |
+                    <a href="{% url 'guest_delete' guest.guest_id %}" class="btn btn-danger btn-sm">Smazat</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
