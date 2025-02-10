@@ -4,44 +4,43 @@
 <div class="container mt-5">
     <h2>Přidat hosta</h2>
     <form method="post" class="mt-3">
+        {% csrf_token %}
         
-        
-        <!-- Jméno -->
         <div class="mb-3">
             <label for="id_firstname" class="form-label">Jméno</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-user"></i></span>
-                {{ form.firstname }}
+                {{ guest_form.firstname }}
             </div>
         </div>
-        
-        <!-- Příjmení -->
+
         <div class="mb-3">
             <label for="id_lastname" class="form-label">Příjmení</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-user"></i></span>
-                {{ form.lastname }}
+                {{ guest_form.lastname }}
             </div>
         </div>
-        
-        <!-- E-mail -->
+
         <div class="mb-3">
             <label for="id_email" class="form-label">E-mail</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                {{ form.email }}
+                {{ guest_form.email }}
             </div>
         </div>
-        
-        <!-- Telefon -->
+
         <div class="mb-3">
             <label for="id_phone" class="form-label">Telefon</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                {{ form.phone }}
+                {{ guest_form.phone }}
             </div>
         </div>
-        
+
+        <!-- Typ hosta (automaticky nastavovaný na "normal") -->
+        <input type="hidden" name="guest_type" value="normal">
+
         <!-- Datum narození (date input) -->
         <div class="mb-3">
             <label for="id_birth_date" class="form-label">Datum narození</label>
@@ -50,25 +49,37 @@
                 <input type="date" id="id_birth_date" name="birth_date" class="form-control" value="{{ form.birth_date.value|date:"Y-m-d" }}">
             </div>
         </div>
-        
-        <!-- Typ hosta -->
-        <div class="mb-3">
-            <label for="id_guest_type" class="form-label">Typ hosta</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
-                {{ form.guest_type }}
-            </div>
-        </div>
-        
-        <!-- Poznámky -->
+
         <div class="mb-3">
             <label for="id_notes" class="form-label">Poznámky</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-sticky-note"></i></span>
-                {{ form.notes }}
+                {{ guest_form.notes }}
             </div>
         </div>
-        
+
+        <!-- Adresa -->
+        <h3>Adresa</h3>
+        <div class="mb-3">
+            <label for="id_street" class="form-label">Ulice</label>
+            {{ address_form.street }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_city" class="form-label">Město</label>
+            {{ address_form.city }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_postal_code" class="form-label">PSČ</label>
+            {{ address_form.postal_code }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_country" class="form-label">Země</label>
+            {{ address_form.country }}
+        </div>
+
         <button type="submit" class="btn btn-primary">Odeslat</button>
     </form>
 </div>

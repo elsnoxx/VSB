@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Úvodní Stránka - Obsazenost Místností</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .floor {
+            margin-bottom: 30px;
+        }
+
+        .floor h2 {
+            font-size: 1.5em;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 20px;
+            justify-items: center;
+        }
+
+        .room {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .room.free {
+            background-color: green;
+        }
+
+        .room.occupied {
+            background-color: red;
+        }
+
+        .room.pending {
+            background-color: orange;
+        }
+
+        .room.disabled {
+            background-color: grey;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Úvodní Stránka - Přehled Patra a Místností</h1>
+
+        <!-- Patro 1 -->
+        <div class="floor">
+            <h2>Patro 1</h2>
+            <div class="room-grid">
+                <div class="room free">Místnost 101</div>
+                <div class="room occupied">Místnost 102</div>
+                <div class="room pending">Místnost 103</div>
+                <div class="room free">Místnost 104</div>
+                <div class="room occupied">Místnost 105</div>
+                <div class="room disabled">Místnost 106</div>
+            </div>
+        </div>
+
+        <!-- Patro 2 -->
+        <div class="floor">
+            <h2>Patro 2</h2>
+            <div class="room-grid">
+                <div class="room free">Místnost 201</div>
+                <div class="room occupied">Místnost 202</div>
+                <div class="room free">Místnost 203</div>
+                <div class="room pending">Místnost 204</div>
+                <div class="room occupied">Místnost 205</div>
+                <div class="room free">Místnost 206</div>
+            </div>
+        </div>
+
+        <!-- Patro 3 -->
+        <div class="floor">
+            <h2>Patro 3</h2>
+            <div class="room-grid">
+                <div class="room free">Místnost 301</div>
+                <div class="room pending">Místnost 302</div>
+                <div class="room occupied">Místnost 303</div>
+                <div class="room free">Místnost 304</div>
+                <div class="room pending">Místnost 305</div>
+                <div class="room occupied">Místnost 306</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

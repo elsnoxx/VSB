@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .floor {
+        margin-bottom: 30px;
+    }
+
+    .floor h2 {
+        font-size: 1.5em;
+        color: #333;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+    .room-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 20px;
+        justify-items: center;
+    }
+
+    .room {
+        width: 120px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        text-transform: uppercase;
+    }
+
+    .room.free {
+        background-color: green;
+    }
+
+    .room.occupied {
+        background-color: red;
+    }
+
+</style>
+
+{% for floor_number, rooms in floors.items %}
+<div class="floor">
+    <h2>Patro {{ floor_number }}</h2>
+    <div class="room-grid">
+        {% for room in rooms %}
+            <a href="{% url 'create_reservation' room.room_id %}" class="room {% if room.is_occupied %}occupied{% else %}free{% endif %}">
+                {{ room.room_number }} <br> 
+                {{ room.room_type.name }} <br>
+                {{room.room_id}}
+            </a>
+        {% endfor %}
+    </div>
+</div>
+{% endfor %}
+
+
+
+{% endblock %}

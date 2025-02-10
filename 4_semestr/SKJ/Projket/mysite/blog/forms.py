@@ -1,10 +1,18 @@
 from django import forms
-from .models import Guest, Reservation, Payment, Employee, Room, RoomType
+from .models import Guest, Reservation, Payment, Employee, Room, RoomType, Address
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ['street', 'city', 'postal_code', 'country']
 
 class GuestForm(forms.ModelForm):
     class Meta:
         model = Guest
-        fields = ['firstname', 'lastname', 'email', 'phone', 'birth_date', 'guest_type', 'notes']
+        fields = ['firstname', 'lastname', 'email', 'phone', 'birth_date', 'notes']
+    
+    # Ujisti se, že guest_type má výchozí hodnotu 'normal'
+    guest_type = forms.CharField(widget=forms.HiddenInput(), initial='normal')
 
 class ReservationForm(forms.ModelForm):
     class Meta:
