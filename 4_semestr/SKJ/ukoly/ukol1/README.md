@@ -1,0 +1,1 @@
+& C:/Users/ficek/AppData/Local/Programs/Python/Python311/python.exe -m pytest tests.py
