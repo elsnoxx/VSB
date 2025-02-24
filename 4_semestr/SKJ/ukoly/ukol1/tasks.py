@@ -8,14 +8,19 @@ def fizzbuzz(num):
         fizzbuzz(15) # FizzBuzz
         fizzbuzz(8) # 8
     """
-    if num % 3 == 0 and num % 5 == 0:
-        return 'FizzBuzz'
-    elif num % 3 == 0:
-        return 'Fizz'
-    elif num % 5 == 0:
-        return 'Buzz'
-    
-    return num
+    try:
+        if num % 3 == 0 and num % 5 == 0:
+            return 'FizzBuzz'
+        elif num % 3 == 0:
+            return 'Fizz'
+        elif num % 5 == 0:
+            return 'Buzz'
+        
+        return num
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return {}
+    pass
 
 
 def fibonacci(n):
@@ -39,7 +44,7 @@ def fibonacci(n):
 
     else:
         return fibonacci(n-1) + fibonacci(n-2)
-
+    pass
 
 
 def dot_product(a, b):
@@ -51,12 +56,17 @@ def dot_product(a, b):
     Example:
         dot_product([1, 2, 3], [0, 3, 4]) == 1*0 + 2*3 + 3*4 == 18
     """
-    sum = 0
-    products_zip = zip(a,b)
-    for product in products_zip:
-        sum += product[0] * product[1]
+    try:
+        sum = 0
+        products_zip = zip(a,b)
+        for product in products_zip:
+            sum += product[0] * product[1]
 
-    return sum
+        return sum
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return {}
+    pass
 
 
 def redact(data, chars):
@@ -67,13 +77,18 @@ def redact(data, chars):
         redact("Hello world!", "lo")        # Hexxx wxrxd!
         redact("Secret message", "mse")     # Sxcrxt xxxxagx
     """
-    data_list = list(data)
-    for char in chars:
-        for i in range(0,len(data)):
-            if char == data_list[i]:
-                data_list[i] = "x"
+    try:
+        data_list = list(data)
+        for char in chars:
+            for i in range(0,len(data)):
+                if char == data_list[i]:
+                    data_list[i] = "x"
 
-    return "".join(data_list)
+        return "".join(data_list)
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return {}
+    pass
 
 
 def count_words(data):
@@ -110,9 +125,10 @@ def count_words(data):
                 dict_data[i] = 1
                 
         return dict_data
-    except:
-        print("An exception occurred")
-    
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return {}
+    pass
 
 
 def bonus_fizzbuzz(num):
@@ -120,8 +136,9 @@ def bonus_fizzbuzz(num):
     Implement the `fizzbuzz` function.
     `if`, match-case and cycles are not allowed.
     """
-    
+    return (num%15==0 and 'FizzBuzz' or num%3==0 and 'Fizz' or num%5==0 and 'Buzz' or num)
     pass
+
 
 
 def bonus_utf8(cp):
@@ -131,28 +148,33 @@ def bonus_utf8(cp):
         bonus_utf8(0x01) == [0x01]
         bonus_utf8(0x1F601) == [0xF0, 0x9F, 0x98, 0x81]
     """
-    # change gpt generated
-    if cp < 0x80:
-        return [cp]
-    elif cp < 0x800:
-        return [
-            0b11000000 | (cp >> 6),
-            0b10000000 | (cp & 0b111111)
-        ]
-    elif cp < 0x10000:
-        return [
-            0b11100000 | (cp >> 12),
-            0b10000000 | ((cp >> 6) & 0b111111),
-            0b10000000 | (cp & 0b111111)
-        ]
-    elif cp < 0x110000:
-        return [
-            0b11110000 | (cp >> 18),
-            0b10000000 | ((cp >> 12) & 0b111111),
-            0b10000000 | ((cp >> 6) & 0b111111),
-            0b10000000 | (cp & 0b111111)
-        ]
-    else:
+    if cp < 0 or cp > 0x10FFFF:
         raise ValueError("Invalid Unicode code point")
+    
+    # Určení počtu bajtů podle velikosti kódového bodu
+    if cp < 0x80:
+        num_bytes = 1
+    elif cp < 0x800:
+        num_bytes = 2
+    elif cp < 0x10000:
+        num_bytes = 3
+    else:
+        num_bytes = 4
+
+    # Maska pro první bajt podle počtu bajtů
+    first_byte_mask = [0b00000000, 0b11000000, 0b11100000, 0b11110000]
+
+    # Inicializace seznamu bajtů
+    utf8_bytes = [0] * num_bytes  
+
+    # Naplnění posledních bajtů (každý začíná "10xxxxxx")
+    for i in range(num_bytes - 1, 0, -1):
+        utf8_bytes[i] = 0b10000000 | (cp & 0b111111)
+        cp >>= 6  
+
+    # První bajt s odpovídající maskou
+    utf8_bytes[0] = first_byte_mask[num_bytes - 1] | cp
+
+    return utf8_bytes
     
     pass
