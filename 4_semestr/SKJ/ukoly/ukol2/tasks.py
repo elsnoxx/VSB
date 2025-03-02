@@ -25,15 +25,20 @@ def cached(f):
         fn(3, 6) == 9 # computed, (1, 2) was now forgotten
         fn(1, 2) == 3 # computed again, (3, 4) was now forgotten
     """
-    cache = []
-    def magic(args):
-        if len(cache) >= 3:
-            cache.pop(0)
-            cache.append((args,f(*args)))
+    cache = {}
+    order = []
+
+    def magic(*args):
+        if args in cache:
             return cache[args]
-        else:
-            return cache[args]
-    
+        result = f(*args)
+        if len(order) >= 3:
+            oldest = order.pop(0)
+            del cache[oldest]
+        cache[args] = result
+        order.append(args)
+        return result
+
     return magic
 
 
