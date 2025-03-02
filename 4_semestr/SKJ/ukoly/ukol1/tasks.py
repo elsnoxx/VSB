@@ -151,7 +151,6 @@ def bonus_utf8(cp):
     if cp < 0 or cp > 0x10FFFF:
         raise ValueError("Invalid Unicode code point")
     
-    # Určení počtu bajtů podle velikosti kódového bodu
     if cp < 0x80:
         num_bytes = 1
     elif cp < 0x800:
@@ -161,18 +160,14 @@ def bonus_utf8(cp):
     else:
         num_bytes = 4
 
-    # Maska pro první bajt podle počtu bajtů
     first_byte_mask = [0b00000000, 0b11000000, 0b11100000, 0b11110000]
 
-    # Inicializace seznamu bajtů
     utf8_bytes = [0] * num_bytes  
 
-    # Naplnění posledních bajtů (každý začíná "10xxxxxx")
     for i in range(num_bytes - 1, 0, -1):
         utf8_bytes[i] = 0b10000000 | (cp & 0b111111)
         cp >>= 6  
 
-    # První bajt s odpovídající maskou
     utf8_bytes[0] = first_byte_mask[num_bytes - 1] | cp
 
     return utf8_bytes
