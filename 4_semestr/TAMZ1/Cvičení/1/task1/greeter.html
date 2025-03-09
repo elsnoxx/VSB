@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+	<script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<ion-header>
+		<ion-toolbar>
+			<ion-title>Birthday Application</ion-title>
+		</ion-toolbar>
+	</ion-header>
+
+	<ion-content class="ion-padding">
+		<h1>Enter your details</h1>
+
+		<ion-item>
+			<ion-input label="Name input" label-placement="floating" fill="solid" placeholder="Enter your name"
+				id="name"></ion-input>
+		</ion-item>
+
+		<ion-item>
+			<ion-datetime-button datetime="datetime"></ion-datetime-button>
+
+			<ion-modal>
+				<ion-datetime id="datetime" presentation="date" display-format="YYYY-MM-DD" cancel-text="Cancel"
+					done-text="Select" show-default-buttons="true">
+					<span slot="title">Select brithday</span>
+				</ion-datetime>
+			</ion-modal>
+		</ion-item>
+
+		<ion-button expand="block" onclick="countDays()">
+			Count days
+		</ion-button>
+
+		<ion-alert id="greeter" header="Greetings"></ion-alert>
+
+	</ion-content>
+
+	<script>
+		function countDays() {
+			const name = document.getElementById('name').value;
+			const dob = document.getElementById('datetime').value;
+
+			if (name === "" || name === undefined) {
+				const alrt = document.getElementById("greeter");
+				alrt.message = "Enter your name!";
+				alrt.buttons = ['Dismiss'];
+				alrt.present();
+			} else if (dob === "" || dob === undefined) {
+				const alrt = document.getElementById("greeter");
+				alrt.message = "Enter your birthday!";
+				alrt.buttons = ['Dismiss'];
+				alrt.present();
+			} else {
+				calculateDays(name, dob);
+			}
+		}
+
+		function calculateDays(name, dob) {
+			let datetimeSplit = dob.split('T')[0];
+			let birthday = new Date(datetimeSplit);
+			const today = new Date();
+
+			birthday.setHours(0, 0, 0, 0);
+			today.setHours(0, 0, 0, 0);
+
+			let diff = today - birthday;
+			let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+			let nextBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate());
+
+			if (today > nextBirthday) {
+				nextBirthday.setFullYear(today.getFullYear() + 1);
+			}
+
+			let daysToBirthday = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
+
+			if (daysToBirthday === 0) {
+				displayAlert(name, daysToBirthday, "birthday");
+			} else if (daysToBirthday > 0) {
+				displayAlert(name, daysToBirthday, "future");
+			} else if (daysToBirthday < 0){
+				displayAlert(name, daysToBirthday, "past");
+			}
+		}
+
+		function displayAlert(name, daysToBirthday, type) {
+			const alrt = document.getElementById("greeter");
+			switch (type) {
+				case "birthday":
+					alrt.header = "Happy Birthday!";
+					alrt.message = "You have your birthday today, " + name + "!";
+					alrt.buttons = ['Dismiss'];
+					alrt.color = "success";
+					alrt.icon = "checkmark-circle";
+					alrt.present();
+					break;
+				case "future":
+					alrt.header = "Upcoming Birthday!";
+					alrt.message = "Hello " + name + "! You will have your birthday in " + daysToBirthday + " days!";
+					alrt.buttons = ['Dismiss'];
+					alrt.color = "warning";
+					alrt.icon = "time";
+					alrt.present();
+					break;
+				case "past":
+					alrt.header = "Past Birthday!";
+					alrt.message = "Hello " + name + "! You already had your birthday " + daysToBirthday + " days ago!";
+					alrt.buttons = ['Dismiss'];
+					alrt.color = "danger";
+					alrt.icon = "close-circle";
+					alrt.present();
+					break;
+				default:
+					break;
+			}
+		}
+
+
+	</script>
+
+</body>
+
+</html>
