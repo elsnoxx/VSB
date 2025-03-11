@@ -210,3 +210,7 @@ def parser_int() -> Parser[int]:
         parser("foo") => ParseResult(value=None, rest="foo")
         ```
     """
+    def parser():
+        return 1
+
+    return parser()
