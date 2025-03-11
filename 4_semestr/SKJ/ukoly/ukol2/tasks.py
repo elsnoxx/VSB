@@ -94,7 +94,16 @@ def parser_char(char: str) -> Parser[str]:
         parser_char("y")("xa") => ParseResult(value=None, rest="xa")
         ```
     """
-
+    if char == "" or len(char) != 1:
+        raise ValueError("Input text is None or in bad format")
+    
+    def parser(text: str) -> ParseResult[str]:
+        if text and text[0] == char:
+            return ParseResult(value=text[0], rest=text[1:])
+        else:
+            return ParseResult.invalid(text)
+        
+    return parser
 
 def parser_repeat(parser: Parser[T]) -> Parser[List[T]]:
     """
@@ -109,6 +118,21 @@ def parser_repeat(parser: Parser[T]) -> Parser[List[T]]:
         parser("xa") => ParseResult(value=[], rest="xa")
         ```
     """
+    
+    def parser(text: str) -> ParseResult[List[T]]:
+        result = []
+        
+        while text:
+            parse_result = parser(text)
+            if parse_result.is_valid():
+                result.append(parse_result.value)
+                text = parse_result.rest
+            else:
+                break
+
+        return ParseResult(value=result, rest=text)
+
+    return parser
 
 
 def parser_seq(parsers: List[Parser]) -> Parser:
@@ -125,6 +149,20 @@ def parser_seq(parsers: List[Parser]) -> Parser:
         parser("ab") => ParseResult(value=None, rest="ab")
         ```
     """
+    def parser(text: str) -> ParseResult:
+        result = []
+        
+        for p in parsers:
+            parse_result = p(text)
+            if parse_result.is_valid():
+                result.append(parse_result.value)
+                text = parse_result.rest
+            else:
+                return ParseResult.invalid(text)
+
+        return ParseResult(value=result, rest=text)
+
+    return parser
 
 
 def parser_choice(parsers: List[Parser]) -> Parser:
@@ -210,7 +248,17 @@ def parser_int() -> Parser[int]:
         parser("foo") => ParseResult(value=None, rest="foo")
         ```
     """
-    def parser():
-        return 1
+    def parser(text: str) -> ParseResult[int]:
+        result = 0
+        i = 0
+        
+        while i < len(text) and text[i].isdigit():
+            result = result * 10 + int(text[i])
+            i += 1
+        
+        if i > 0:
+            return ParseResult(value=result, rest=text[i:])
+        else:
+            return ParseResult.invalid(text)
 
-    return parser()
+    return parser
