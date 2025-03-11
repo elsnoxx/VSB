@@ -8,19 +8,19 @@
     <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <title>My Ionic App</title>
+    <link rel="stylesheet" href="history.css">
+    <title>BMI application</title>
 </head>
 
 <body>
     <ion-tabs>
-        <!-- Přidání atributu selected na první ion-tab pro výchozí aktivní tab -->
         <ion-tab tab="home" selected>
             <div id="home-page">
                 <ion-header>
                     <ion-toolbar>
                         <ion-title>BMI Calculation</ion-title>
                         <ion-buttons slot="end">
-                            <ion-button expand="block" onclick="clearInputValues()">Clear</ion-button>
+                            <ion-button expand="block" onclick="clearSessionStoradge()">Clear cache</ion-button>
                         </ion-buttons>
                     </ion-toolbar>
                 </ion-header>
@@ -137,9 +137,12 @@
             document.getElementById('heightUnitLabel').value = "";
             document.getElementById('weightUnitLabel').value = "";
         }
+
+        
     </script>
     <script src="bmiCalculation.js"></script>
-    <script src="historyLocalstorage.js"></script>
+    <script src="loadingHistory.js"></script>
+    <script src="storage.js"></script>
 </body>
 
 </html>

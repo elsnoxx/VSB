@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("unitSystem").addEventListener("ionChange", updateUnits);
 });
 
+
+
 function updateUnits() {
     const unitSystem = document.getElementById("unitSystem").value;
 
@@ -15,7 +17,6 @@ function updateUnits() {
 }
 
 function countBMI() {
-    console.log("jsem tu");
     const age = document.getElementById('age').value;
     let height = document.getElementById('heightUnitLabel').value;
     let weight = document.getElementById('weightUnitLabel').value;
@@ -30,6 +31,7 @@ function countBMI() {
 
     displayBMI(bmi);
 
+    saveToSessionStorage(age, height, weight, bmi, gender, metric);
     storeDataToLocalStoradge(height, weight, metric, bmi, gender, age);
 }
 
@@ -45,7 +47,7 @@ function calculateBMI(weight, height, metric) {
     }
 
     console.log(result);
-    return result;
+    return Number(result.toFixed(2));
 }
 
 function displayBMI(bmi) {
@@ -87,22 +89,4 @@ function clasificationBMI(bmi) {
 function setProgressBar(range, color) {
     document.getElementById('bmiProgressBar').value = range;
     document.getElementById('bmiProgressBar').color = color;
-}
-
-function storeDataToLocalStoradge(height, weight, metric, bmi, gender, age) {
-    const datetime = new Date();
-    const obj = {
-        date: datetime.getTime(),
-        age: age,
-        height: height,
-        weight: weight,
-        bmi: bmi,
-        gender: gender,
-        metric: metric
-    };
-    let history = JSON.parse(localStorage.getItem("bmiHistory")) || [];
-
-    history.push(obj);
-
-    localStorage.setItem("bmiHistory", JSON.stringify(history));
 }

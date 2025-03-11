@@ -1,0 +1,38 @@
+.bmi-card {
+    border: 2px solid #4CAF50;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bmi-header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px;
+}
+
+.bmi-content {
+    padding: 20px;
+    font-size: 1em;
+}
+
+.bmi-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+.bmi-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    vertical-align: top;
+    text-align: left;
+}
+
+.progress-container {
+    margin-top: 10px;
+}
