@@ -1,0 +1,37 @@
+.gender-radio ion-radio {
+    margin-left: 50px;
+}
+
+#bmiResult {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.progress-container {
+    margin-top: 20px;
+}
+
+.card-container {
+    display: none;
+}
+
+.example-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+ion-input{
+    margin: 7px;
+}
+
+.finalButtons{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.finalButton{
+    flex: 1;
+}

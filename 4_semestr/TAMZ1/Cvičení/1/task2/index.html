@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>My Ionic App</title>
+</head>
+
+<body>
+    <ion-tabs>
+        <!-- Přidání atributu selected na první ion-tab pro výchozí aktivní tab -->
+        <ion-tab tab="home" selected>
+            <div id="home-page">
+                <ion-header>
+                    <ion-toolbar>
+                        <ion-title>BMI Calculation</ion-title>
+                        <ion-buttons slot="end">
+                            <ion-button expand="block" onclick="clearInputValues()">Clear</ion-button>
+                        </ion-buttons>
+                    </ion-toolbar>
+                </ion-header>
+                <ion-content class="example-content">
+                    <div>
+                        <h1>Enter your details</h1>
+
+                        <ion-list>
+                            <!-- Výběr měrné jednotky -->
+                            <ion-item>
+                                <ion-segment id="unitSystem" value="metric" (ionChange)="updateUnits()">
+                                    <ion-segment-button value="metric">
+                                        <ion-label>Metric (SI)</ion-label>
+                                    </ion-segment-button>
+                                    <ion-segment-button value="usc">
+                                        <ion-label>USC Units</ion-label>
+                                    </ion-segment-button>
+                                </ion-segment>
+                            </ion-item>
+
+                            <!-- Vstup pro věk -->
+                            <ion-item>
+                                <ion-input label="Age" label-placement="floating" fill="outline" placeholder="Age"
+                                    id="age"></ion-input>
+                            </ion-item>
+
+                            <!-- Výběr pohlaví -->
+                            <ion-item>
+                                <ion-radio-group value="male" id="gender" class="gender-radio">
+                                    <label>Gender: </label>
+                                    <ion-radio slot="start" value="male">Male</ion-radio>
+                                    <ion-radio slot="start" value="female">Female</ion-radio>
+                                </ion-radio-group>
+                            </ion-item>
+
+                            <!-- Vstup pro výšku -->
+                            <ion-item>
+                                <ion-input id="heightUnitLabel" label="Height" label-placement="floating" fill="outline"
+                                    placeholder="cm"></ion-input>
+                            </ion-item>
+
+                            <!-- Vstup pro váhu -->
+                            <ion-item>
+                                <ion-input id="weightUnitLabel" label="Weight" label-placement="floating" fill="outline"
+                                    placeholder="kg"></ion-input>
+                            </ion-item>
+
+                        </ion-list>
+
+                        <ion-item class="finalButtons">
+                            <ion-button class="finalButton" expand="full" onclick="clearInputValues()" color="danger" size="default">
+                                Reset
+                            </ion-button>
+                            <ion-button class="finalButton" expand="full" onclick="countBMI()" color="primary" size="default">
+                                Count BMI
+                            </ion-button>
+                        </ion-item>
+                        
+                        
+
+                        <!-- Výsledky BMI a klasifikace -->
+                        <ion-card class="card-container">
+                            <ion-card-header>
+                                <ion-card-title>BMI Result<span id="bmiResult"></span></ion-card-title>
+                            </ion-card-header>
+                            <ion-card-content>
+                                <div id="classification"></div>
+                                <!-- Grafické zobrazení pomocí Progress Bar -->
+                                <div class="progress-container">
+                                    <ion-progress-bar id="bmiProgressBar" value="0" color="primary"></ion-progress-bar>
+                                </div>
+                            </ion-card-content>
+                        </ion-card>
+                    </div>
+                </ion-content>
+            </div>
+        </ion-tab>
+
+        <!-- Library tab -->
+        <ion-tab tab="library">
+            <div id="library-page">
+                <ion-header>
+                    <ion-toolbar>
+                        <ion-title>History of </ion-title>
+                        <ion-buttons slot="end">
+                            <ion-button expand="block" onclick="clearLocalStoradge()">Clear</ion-button>
+                        </ion-buttons>
+                    </ion-toolbar>
+                </ion-header>
+                <ion-content class="example-content">
+                    <ion-list id="library-list"></ion-list>
+                    <ion-infinite-scroll>
+                        <ion-infinite-scroll-content></ion-infinite-scroll-content>
+                    </ion-infinite-scroll>
+                </ion-content>
+            </div>
+        </ion-tab>
+
+        <!-- Tab bar for navigation -->
+        <ion-tab-bar slot="bottom">
+            <ion-tab-button tab="home">
+                <ion-icon name="barbell-outline"></ion-icon>
+                BMI index
+            </ion-tab-button>
+            <ion-tab-button tab="library">
+                <ion-icon name="library"></ion-icon>
+                History
+            </ion-tab-button>
+        </ion-tab-bar>
+    </ion-tabs>
+    <script>
+        function clearInputValues(){
+            document.getElementById('age').value = "";
+            document.getElementById('heightUnitLabel').value = "";
+            document.getElementById('weightUnitLabel').value = "";
+        }
+    </script>
+    <script src="bmiCalculation.js"></script>
+    <script src="historyLocalstorage.js"></script>
+</body>
+
+</html>
