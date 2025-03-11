@@ -65,8 +65,7 @@
 		}
 
 		function calculateDays(name, dob) {
-			let datetimeSplit = dob.split('T')[0];
-			let birthday = new Date(datetimeSplit);
+			let birthday = new Date(dob);
 			const today = new Date();
 
 			birthday.setHours(0, 0, 0, 0);
@@ -81,18 +80,18 @@
 				nextBirthday.setFullYear(today.getFullYear() + 1);
 			}
 
-			let daysToBirthday = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
+			let daysToBirthday = Math.round((nextBirthday - today) / (1000 * 60 * 60 * 24));
 
 			if (daysToBirthday === 0) {
-				displayAlert(name, daysToBirthday, "birthday");
+				displayAlert(name, daysToBirthday, "birthday", birthday);
 			} else if (daysToBirthday > 0) {
-				displayAlert(name, daysToBirthday, "future");
+				displayAlert(name, daysToBirthday, "future", birthday);
 			} else if (daysToBirthday < 0){
-				displayAlert(name, daysToBirthday, "past");
+				displayAlert(name, daysToBirthday, "past", birthday);
 			}
 		}
 
-		function displayAlert(name, daysToBirthday, type) {
+		function displayAlert(name, daysToBirthday, type, birthday) {
 			const alrt = document.getElementById("greeter");
 			switch (type) {
 				case "birthday":
@@ -105,7 +104,11 @@
 					break;
 				case "future":
 					alrt.header = "Upcoming Birthday!";
-					alrt.message = "Hello " + name + "! You will have your birthday in " + daysToBirthday + " days!";
+					if (daysToBirthday === 1){
+						alrt.message = "Hello " + name + "! You will have your birthday tomorow!";
+					}else{
+						alrt.message = "Hello " + name + "! You will have your birthday in " + daysToBirthday + " days!";
+					}
 					alrt.buttons = ['Dismiss'];
 					alrt.color = "warning";
 					alrt.icon = "time";
@@ -113,7 +116,11 @@
 					break;
 				case "past":
 					alrt.header = "Past Birthday!";
-					alrt.message = "Hello " + name + "! You already had your birthday " + daysToBirthday + " days ago!";
+					if (daysToBirthday === 1){
+						alrt.message = "Hello " + name + "! You already had your birthday yesterday!";
+					}else{
+						alrt.message = "Hello " + name + "! You already had your birthday " + daysToBirthday + " days ago!";
+					}
 					alrt.buttons = ['Dismiss'];
 					alrt.color = "danger";
 					alrt.icon = "close-circle";
