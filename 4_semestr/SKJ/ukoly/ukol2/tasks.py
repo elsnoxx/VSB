@@ -119,20 +119,18 @@ def parser_repeat(parser: Parser[T]) -> Parser[List[T]]:
         ```
     """
     
-    def parser(text: str) -> ParseResult[List[T]]:
+    def repeated_parser(text: str) -> ParseResult[List[T]]:
         result = []
-        
-        while text:
+        while True:
             parse_result = parser(text)
-            if parse_result.is_valid():
-                result.append(parse_result.value)
-                text = parse_result.rest
-            else:
+            if not parse_result.is_valid():
                 break
+            result.append(parse_result.value)
+            text = parse_result.rest
 
         return ParseResult(value=result, rest=text)
 
-    return parser
+    return repeated_parser
 
 
 def parser_seq(parsers: List[Parser]) -> Parser:
@@ -151,13 +149,15 @@ def parser_seq(parsers: List[Parser]) -> Parser:
     """
     def parser(text: str) -> ParseResult:
         result = []
+        original_text = text
+
         for p in parsers:
             parse_result = p(text)
             if parse_result.is_valid():
                 result.append(parse_result.value)
                 text = parse_result.rest
             else:
-                return ParseResult.invalid(text)
+                return ParseResult.invalid(original_text)
 
         return ParseResult(value=result, rest=text)
 
@@ -211,6 +211,20 @@ def parser_map(parser: Parser[R], map_fn: Callable[[R], Optional[T]]) -> Parser[
         parser("ax") => ParseResult(value=None, rest="ax")
         ```
     """
+    def mapped_parser(text: str) -> ParseResult[T]:
+        result = parser(text)
+
+        if result.is_valid():
+            map_result = map_fn(result.value)
+
+            if map_result is None:
+                return ParseResult.invalid(text)
+            
+            return ParseResult(value=map_result, rest=result.rest)
+
+        return result
+
+    return mapped_parser
 
 
 def parser_matches(filter_fn: Callable[[str], bool]) -> Parser[str]:
@@ -227,6 +241,12 @@ def parser_matches(filter_fn: Callable[[str], bool]) -> Parser[str]:
         parser("") => ParseResult(value=None, rest="")
         ```
     """
+    def parser(text: str) -> ParseResult[str]:
+        if text and filter_fn(text[0]):
+            return ParseResult(value=text[0], rest=text[1:])
+        return ParseResult.invalid(text)
+
+    return parser
 
 
 # Use the functions above to implement the functions below.
@@ -243,20 +263,12 @@ def parser_string(string: str) -> Parser[str]:
         parser("fo") => ParseResult(value=None, rest="fo")
         ```
     """
+    def parser(text: str) -> ParseResult[str]:
+        if text.startswith(string):
+            return ParseResult(value=string, rest=text[len(string):])
+        return ParseResult.invalid(text)
 
-    def praser(inner: str):
-        input = inner
-        output = ""
-
-        for i in range(len(input)):
-            if input[i] == string[i]:
-                output += input[i]
-            else:
-                return ParseResult.invalid(input)
-            
-            return ParseResult(output, input)
-
-    return Parser
+    return parser   
 
 
 def parser_int() -> Parser[int]:
