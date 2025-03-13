@@ -151,7 +151,6 @@ def parser_seq(parsers: List[Parser]) -> Parser:
     """
     def parser(text: str) -> ParseResult:
         result = []
-        
         for p in parsers:
             parse_result = p(text)
             if parse_result.is_valid():
@@ -181,6 +180,16 @@ def parser_choice(parsers: List[Parser]) -> Parser:
         ```
     """
 
+    def parser(string: str):
+        for parser in parsers:
+            result = parser(string)
+
+            if result.is_valid():
+                return result
+
+        return ParseResult.invalid(string)
+    
+    return parser
 
 R = TypeVar("R")
 
@@ -234,6 +243,20 @@ def parser_string(string: str) -> Parser[str]:
         parser("fo") => ParseResult(value=None, rest="fo")
         ```
     """
+
+    def praser(inner: str):
+        input = inner
+        output = ""
+
+        for i in range(len(input)):
+            if input[i] == string[i]:
+                output += input[i]
+            else:
+                return ParseResult.invalid(input)
+            
+            return ParseResult(output, input)
+
+    return Parser
 
 
 def parser_int() -> Parser[int]:
