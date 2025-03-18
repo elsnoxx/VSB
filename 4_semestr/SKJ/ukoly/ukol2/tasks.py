@@ -94,10 +94,14 @@ def parser_char(char: str) -> Parser[str]:
         parser_char("y")("xa") => ParseResult(value=None, rest="xa")
         ```
     """
+    if not isinstance(char, str):
+        raise TypeError("Expected a string as input")
     if char == "" or len(char) != 1:
         raise ValueError("Input text is None or in bad format")
     
     def parser(text: str) -> ParseResult[str]:
+        if not isinstance(text, str):
+            raise TypeError("Expected a string as input")
         if text and text[0] == char:
             return ParseResult(value=text[0], rest=text[1:])
         else:
@@ -118,8 +122,13 @@ def parser_repeat(parser: Parser[T]) -> Parser[List[T]]:
         parser("xa") => ParseResult(value=[], rest="xa")
         ```
     """
+    if not callable(parser):
+        raise TypeError("Expected a parser function as input")
     
     def repeated_parser(text: str) -> ParseResult[List[T]]:
+        if not isinstance(text, str):
+            raise TypeError("Expected a string as input")
+        
         result = []
         while True:
             parse_result = parser(text)
@@ -148,6 +157,8 @@ def parser_seq(parsers: List[Parser]) -> Parser:
         ```
     """
     def parser(text: str) -> ParseResult:
+        if not isinstance(text, str):
+            raise TypeError("Expected a string as input")
         result = []
         original_text = text
 
@@ -181,6 +192,8 @@ def parser_choice(parsers: List[Parser]) -> Parser:
     """
 
     def parser(string: str):
+        if not isinstance(string, str):
+            raise TypeError("Expected a string as input")
         for parser in parsers:
             result = parser(string)
 
@@ -211,7 +224,14 @@ def parser_map(parser: Parser[R], map_fn: Callable[[R], Optional[T]]) -> Parser[
         parser("ax") => ParseResult(value=None, rest="ax")
         ```
     """
+    if not callable(parser):
+        raise TypeError("Expected a parser function as input")
+    if not callable(map_fn):
+        raise TypeError("Expected a mapping function as input")
+    
     def mapped_parser(text: str) -> ParseResult[T]:
+        if not isinstance(text, str):
+            raise TypeError("Expected a string as input")
         result = parser(text)
 
         if result.is_valid():
@@ -263,10 +283,14 @@ def parser_string(string: str) -> Parser[str]:
         parser("fo") => ParseResult(value=None, rest="fo")
         ```
     """
+    if not isinstance(string, str):
+        raise TypeError("Expected a string as input")
+    
     def parser(text: str) -> ParseResult[str]:
         if text.startswith(string):
             return ParseResult(value=string, rest=text[len(string):])
-        return ParseResult.invalid(text)
+        else:
+            return ParseResult.invalid(text)
 
     return parser   
 
@@ -288,6 +312,11 @@ def parser_int() -> Parser[int]:
         i = 0
         
         while i < len(text) and text[i].isdigit():
+            if not isinstance(text, str):
+                raise TypeError("Expected a string as input")
+            if text == "":
+                return ParseResult.invalid(text)
+        
             result = result * 10 + int(text[i])
             i += 1
         
