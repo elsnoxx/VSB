@@ -49,16 +49,10 @@
 			const name = document.getElementById('name').value;
 			const dob = document.getElementById('datetime').value;
 
-			if (name === "" || name === undefined) {
-				const alrt = document.getElementById("greeter");
-				alrt.message = "Enter your name!";
-				alrt.buttons = ['Dismiss'];
-				alrt.present();
-			} else if (dob === "" || dob === undefined) {
-				const alrt = document.getElementById("greeter");
-				alrt.message = "Enter your birthday!";
-				alrt.buttons = ['Dismiss'];
-				alrt.present();
+			if (!name) {
+				showAlert("Enter your name!");
+			} else if (!dob) {
+				showAlert("Enter your birthday!");
 			} else {
 				calculateDays(name, dob);
 			}
@@ -71,9 +65,6 @@
 			birthday.setHours(0, 0, 0, 0);
 			today.setHours(0, 0, 0, 0);
 
-			let diff = today - birthday;
-			let days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
 			let nextBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate());
 
 			if (today > nextBirthday) {
@@ -81,57 +72,27 @@
 			}
 
 			let daysToBirthday = Math.round((nextBirthday - today) / (1000 * 60 * 60 * 24));
+			let dayOfWeek = nextBirthday.toLocaleDateString("cs-CZ", { weekday: 'long', day: 'numeric', month: 'long' });
 
 			if (daysToBirthday === 0) {
-				displayAlert(name, daysToBirthday, "birthday", birthday);
+				showAlert(`Máš dnes narozeniny, ${name}! 🎉`);
 			} else if (daysToBirthday > 0) {
-				displayAlert(name, daysToBirthday, "future", birthday);
-			} else if (daysToBirthday < 0){
-				displayAlert(name, daysToBirthday, "past", birthday);
+				showAlert(`Ahoj ${name}! Narozeniny budeš mít za ${daysToBirthday} dní, v ${dayOfWeek}.`);
+			} else {
+				let nextYearBirthday = new Date(today.getFullYear() + 1, birthday.getMonth(), birthday.getDate());
+				let nextYearDays = Math.round((nextYearBirthday - today) / (1000 * 60 * 60 * 24));
+				let nextYearDayOfWeek = nextYearBirthday.toLocaleDateString("cs-CZ", { weekday: 'long', day: 'numeric', month: 'long' });
+
+				showAlert(`Tvoje narozeniny už letos byly. Příští rok je budeš mít v ${nextYearDayOfWeek}, za ${nextYearDays} dní.`);
 			}
 		}
 
-		function displayAlert(name, daysToBirthday, type, birthday) {
+		function showAlert(message) {
 			const alrt = document.getElementById("greeter");
-			switch (type) {
-				case "birthday":
-					alrt.header = "Happy Birthday!";
-					alrt.message = "You have your birthday today, " + name + "!";
-					alrt.buttons = ['Dismiss'];
-					alrt.color = "success";
-					alrt.icon = "checkmark-circle";
-					alrt.present();
-					break;
-				case "future":
-					alrt.header = "Upcoming Birthday!";
-					if (daysToBirthday === 1){
-						alrt.message = "Hello " + name + "! You will have your birthday tomorow!";
-					}else{
-						alrt.message = "Hello " + name + "! You will have your birthday in " + daysToBirthday + " days!";
-					}
-					alrt.buttons = ['Dismiss'];
-					alrt.color = "warning";
-					alrt.icon = "time";
-					alrt.present();
-					break;
-				case "past":
-					alrt.header = "Past Birthday!";
-					if (daysToBirthday === 1){
-						alrt.message = "Hello " + name + "! You already had your birthday yesterday!";
-					}else{
-						alrt.message = "Hello " + name + "! You already had your birthday " + daysToBirthday + " days ago!";
-					}
-					alrt.buttons = ['Dismiss'];
-					alrt.color = "danger";
-					alrt.icon = "close-circle";
-					alrt.present();
-					break;
-				default:
-					break;
-			}
+			alrt.message = message;
+			alrt.buttons = ['Dismiss'];
+			alrt.present();
 		}
-
-
 	</script>
 
 </body>
