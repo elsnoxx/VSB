@@ -20,11 +20,19 @@ class myApp:
                 result = (v - 32) * 5/9  # F -> C
                 unit = "C"
             
+            self.ent_out.config(state='normal')
             self.ent_out.delete(0, END)
-            self.ent_out.insert(0, f"{round(result, 2)} °{unit}")
+            if unit == "C":
+                self.ent_out.insert(0, f"{round(result, 2)} °{unit}")
+            else:
+                self.ent_out.insert(0, f"{round(result, 2)} {unit}")
+            self.ent_out.config(state='readonly')
         except ValueError:
+            self.ent_out.config(state='normal')
             self.ent_out.delete(0, END)
             self.ent_out.insert(0, "Chyba")
+            self.ent_out.config(state='readonly')
+            
     
     def show_about(self):
         about_window = Toplevel()
@@ -104,17 +112,16 @@ class myApp:
         self.dir.set(1)
         
         self.radio_frame = LabelFrame(self.left_frame, text="Směr převodu")
-        self.radio_c_to_f = Radiobutton(self.radio_frame, text="C -> F", variable=self.dir, value=1)
-        self.radio_f_to_c = Radiobutton(self.radio_frame, text="F -> C", variable=self.dir, value=2)
-        self.radio_c_to_f.pack(anchor="w")
-        self.radio_f_to_c.pack(anchor="w")
+        self.radio_c_to_f = Radiobutton(self.radio_frame, text="°C -> F", variable=self.dir, value=1)
+        self.radio_f_to_c = Radiobutton(self.radio_frame, text="F -> °C", variable=self.dir, value=2)
+        self.radio_c_to_f.grid(row=0, column=0, padx=5, pady=5)
+        self.radio_f_to_c.grid(row=0, column=1, padx=5, pady=5)
         
         self.ent_frame = LabelFrame(self.left_frame, text="Vstup a výstup", padx=10, pady=10, bd=2, relief=GROOVE)
         self.lbl_in = Label(self.ent_frame, text="Vstup")
         self.ent_in = Entry(self.ent_frame, width=10, font=def_font)
-        self.ent_in.insert(0, '0')
         self.lbl_out = Label(self.ent_frame, text="Výstup")
-        self.ent_out = Entry(self.ent_frame, width=10, font=def_font)
+        self.ent_out = Entry(self.ent_frame, width=10, font=def_font, state='readonly')
         self.btn_convert = Button(self.ent_frame, text="Převést", command=self.prevod_teploty)
         
         self.ca = Canvas(self.right_frame, width=300, height=500)
