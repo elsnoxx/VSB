@@ -40,8 +40,9 @@ class Atom:
         :param size_x: width of the world space
         :param size_y: height of the world space
         """
-        
-        pass
+        new_x = (self.pos[0] + self.vel[0]) % size_x
+        new_y = (self.pos[1] + self.vel[1]) % size_y
+        self.pos = (new_x, new_y)
 
 
 class FallDownAtom:
@@ -51,7 +52,20 @@ class FallDownAtom:
     Set gravity factor to ~3.
 
     Each time an atom hits the 'ground' damp the velocity's y-coordinate by ~0.7.
+    
     """
+    graviti_factor = 3
+    velocity_damp = 0.7
+    def apply_speed(self, size_x: int, size_y: int):
+        new_x = (self.pos[0] + self.vel[0]) % size_x
+        new_y = self.pos[1] + self.vel[1] + self.graviti_factor
+
+        if new_y >= size_y:
+            new_y = size_y
+            self.vel = (self.vel[0], -self.vel[1] * self.velocity_damp)
+
+        self.pos = (new_x, new_y)
+
     pass
 
 
@@ -79,7 +93,12 @@ class ExampleWorld:
         :param no_atoms: number of Atom instances
         :param no_falldown_atoms: numbed of FallDownAtom instances
         """
-
+        list_of_atoms = []
+        for i in range(no_atoms):
+            list_of_atoms.append(self.random_atom())
+        for i in range(no_falldown_atoms):
+            list_of_atoms.append(self.random_falldown_atom())
+        return list_of_atoms
         pass
 
     def random_atom(self) -> Atom:
@@ -87,16 +106,20 @@ class ExampleWorld:
         Generates one Atom instance at random position in world, with random velocity, random radius
         and 'green' color.
         """
-
-        pass
+        pos = (random.randint(0, self.width), random.randint(0, self.height))
+        vel = (random.randint(-5, 5), random.randint(-5, 5))
+        rad = random.randint(5, 20)
+        return Atom(pos, vel, rad, 'green')
 
     def random_falldown_atom(self):
         """
         Generates one FalldownAtom instance at random position in world, with random velocity, random radius
         and 'yellow' color.
         """
-
-        pass
+        pos = (random.randint(0, self.width), random.randint(0, self.height))
+        vel = (random.randint(-5, 5), random.randint(-5, 5))
+        rad = random.randint(5, 20)
+        return FallDownAtom(pos, vel, rad, 'yellow')
 
     def add_atom(self, pos_x, pos_y):
         """
@@ -108,8 +131,9 @@ class ExampleWorld:
 
         Method is called by playground on left mouse click.
         """
-
-        pass
+        vel = (random.randint(-5, 5), random.randint(-5, 5))
+        rad = random.randint(5, 20)
+        self.atoms.append(Atom((pos_x, pos_y), vel, rad, 'green'))
 
     def add_falldown_atom(self, pos_x, pos_y):
         """
@@ -121,8 +145,9 @@ class ExampleWorld:
         :param pos_x: x-coordinate of a new FallDownAtom
         :param pos_y: y-coordinate of a new FallDownAtom
         """
-
-        pass
+        vel = (random.randint(-5, 5), random.randint(-5, 5))
+        rad = random.randint(5, 20)
+        self.atoms.append(FallDownAtom((pos_x, pos_y), vel, rad, 'yellow'))
 
     def tick(self):
         """
@@ -130,8 +155,9 @@ class ExampleWorld:
 
         :return: tuple or generator of atom objects, each containing (x, y, radius, color) attributes of atom 
         """
-
-        return ( (120, 60, 15, 'green',), (240, 300, 10, 'yellow',),)
+        for atom in self.atoms:
+            atom.apply_speed(self.width, self.height)
+        return tuple(atom.to_tuple() for atom in self.atoms)
 
 
 if __name__ == '__main__':
