@@ -17,6 +17,21 @@ class Vector:
         v.x # 1.2
         v = Vector(z=1) # == Vector(0, 0, 1)
     """
+    def __init__(self, x=0, y=0, z=0):
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def __setitem__(self, key, value):
+        if key == 0:
+            self.x = value
+        elif key == 1:
+            self.y = value
+        elif key == 2:
+            self.z = value
+        else:
+            raise IndexError("Index out of range. Valid indices are 0, 1, and 2.")
+            
 
     """
     Implement vector addition and subtraction using `+` and `-` operators.
@@ -28,6 +43,17 @@ class Vector:
     Hint:
         You can use isinstance(object, class) to check whether `object` is an instance of `class`.
     """
+    def __add__(self, other):
+        if isinstance(other, Vector):
+            return Vector(self.x + other.x, self.y + other.y, self.z + other.z)
+        else:
+            raise ValueError
+        
+    def __sub__(self, other):
+        if isinstance(other, Vector):
+            return Vector(self.x - other.x, self.y - other.y, self.z - other.z)
+        else:
+            raise ValueError
 
     """
     Implement the `==` comparison operator for Vector that returns True if both vectors have the same attributes.
@@ -37,6 +63,11 @@ class Vector:
         Vector(1, 1, 1) == Vector(2, 1, 1)  # False
         Vector(1, 2, 3) == 5                # False
     """
+    def __eq__(self, other):
+        if isinstance(other, Vector):
+            return self.x == other.x and self.y == other.y and self.z == other.z
+        else:
+            return False
 
     """
     Implement string representation of Vector in the form `(x, y, z)`.
@@ -44,6 +75,8 @@ class Vector:
         str(Vector(1, 2, 3))    # (1, 2, 3)
         print(Vector(0, 0, 0))  # (0, 0, 0)
     """
+    def __str__(self):
+        return f"({self.x}, {self.y}, {self.z})"
 
     """
     Implement indexing for the vector, both for reading and writing.
@@ -56,6 +89,15 @@ class Vector:
 
         v[10] # raises IndexError
     """
+    def __getitem__(self, key):
+        if key == 0:
+            return self.x
+        elif key == 1:
+            return self.y
+        elif key == 2:
+            return self.z
+        else:
+            raise IndexError
 
     """
     Implement the iterator protocol for the vector.
@@ -66,6 +108,10 @@ class Vector:
         for x in v:
             print(x) # prints 1, 2, 3
     """
+    def __iter__(self):
+        yield self.x
+        yield self.y
+        yield self.z 
 
     
 class Observable:
@@ -88,19 +134,28 @@ class Observable:
         unsub1()                        # fn1 is no longer subscribed
         obs.notify(6)                   # should call fn2(6)
     """
+    def __init__(self):
+        self.subscribers = []
 
     def subscribe(self, subscriber):
         """
         Add subscriber to collection of subscribers.
         Return a function that will remove this subscriber from the collection when called.
         """
-        pass
+        self.subscribers.append(subscriber)
+        
+        def unsubscribe():
+            if subscriber in self.subscribers:
+                self.subscribers.remove(subscriber)
 
-    def notify(self):
+        return unsubscribe
+
+    def notify(self, *args, **kwargs):
         """
         Pass all parameters given to this function to all stored subscribers by calling them.
         """
-        pass
+        for subscriber in self.subscribers:
+            subscriber(*args, **kwargs)
 
 
 class UpperCaseDecorator:
@@ -121,7 +176,23 @@ class UpperCaseDecorator:
         ICE TO
 
     """
-    pass
+    def __init__(self, file):
+        self.file = file
+
+    def write(self, text):
+        new_text = []
+        
+        for char in text:
+            if char.islower():
+                new_text.append(char.upper())
+            elif char in " \n":
+                new_text.append(char)
+        
+        self.file.write("".join(new_text))
+
+    def writelines(self, lines):
+        for line in lines:
+            self.write(line)
 
 
 class GameOfLife:
@@ -170,6 +241,7 @@ class GameOfLife:
         Create a constructor that receives the game board and stores it in an attribute called
         'board'.
         """
+        self.board = board
         pass
 
     def move(self):
@@ -177,26 +249,81 @@ class GameOfLife:
         Simulate one iteration of the game and return a new instance of GameOfLife containing
         the new board state.
         """
+        
+        newBoard = []
+        for i in range(len(self.board)):
+            newRow = []
+            for j in range(len(self.board[i])):
+                alive = 0
+                for x in range(-1, 2):
+                    for y in range(-1, 2):
+                        if x == 0 and y == 0:
+                            continue
+                        if 0 <= i + x < len(self.board) and 0 <= j + y < len(self.board[i]):
+                            if self.board[i + x][j + y] == "x":
+                                alive += 1
+                if self.board[i][j] == "x":
+                    if alive < 2 or alive > 3:
+                        newRow.append(".")
+                    else:
+                        newRow.append("x")
+                else:
+                    if alive == 3:
+                        newRow.append("x")
+                    else:
+                        newRow.append(".")
+            newBoard.append(newRow)
+            
+        newBoardTuple = []
+        for row in newBoard:
+            newBoardTuple.append(tuple(row))
+        
+        boardState = tuple(newBoardTuple)
+        
+        return GameOfLife(boardState)
+
         pass
 
     def alive(self):
         """
         Return the number of cells that are alive.
         """
-        pass
+        if not self.board:
+            raise ValueError("The board is empty. Cannot count alive cells.")
+        alive = 0
+        for row in self.board:
+            for cell in row:
+                if cell == "x":
+                    alive += 1
+        return alive
 
     def dead(self):
         """
         Return the number of cells that are dead.
         """
-        pass
+        if not self.board:
+            raise ValueError("The board is empty. Cannot count dead cells.")
+        alive = 0
+        for row in self.board:
+            for cell in row:
+                if cell == ".":
+                    alive += 1
+        return alive
 
     def __repr__(self):
         """
         Return a string that represents the state of the board in a single string (with newlines
         for each board row).
         """
-        pass
+        if not self.board:
+            return "The board is empty."
+        text = ""
+        for row in self.board:
+            for cell in row:
+                text += cell
+            text += "\n"
+        print(text)
+        return text
 
 
 def play_game(game, n):
