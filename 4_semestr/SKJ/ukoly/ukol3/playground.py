@@ -39,8 +39,8 @@ class PlaygroundWindow:
         print(f"Left click at: ({event.x}, {event.y})")
         self.left_mouse_click = True
         self.mouse_event_pos = (event.x, event.y,)
-        self.gravity_point_enabled = True
-        self.gravity_point = (event.x, event.y)
+        #self.gravity_point_enabled = True
+        #self.gravity_point = (event.x, event.y)
 
 
 
@@ -49,7 +49,7 @@ class PlaygroundWindow:
         print(f"Right click at: ({event.x}, {event.y})")
         self.right_mouse_click = True
         self.mouse_event_pos = (event.x, event.y,)
-        self.gravity_point_enabled = False
+        #self.gravity_point_enabled = False
 
     def put_oval_to_canvas(self, atom):
         pos_x, pos_y, rad, col = atom
