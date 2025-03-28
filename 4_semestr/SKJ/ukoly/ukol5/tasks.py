@@ -41,13 +41,26 @@ def create_task(xml_root, student_id, task_id, points):
     Pro daného studenta vytvořte task s body.
     Ujistěte se, že task (s task_id) u studenta neexistuje, jinak: raise Exception('task already exists')
     '''
-
-    pass
+    if xml_root.find(f"student[@student_id='{student_id}']/task[@task_id='{task_id}']") is not None:
+        raise Exception('task already exists')
+    else:
+        task = ET.Element('task')
+        task.set('task_id', task_id)
+        task.text = str(points)
+        
+        student = xml_root.find(f"student[@student_id='{student_id}']")
+        if student is None:
+            raise Exception('student not found')
+        student.append(task)
+    return xml_root
 
 
 def remove_task(xml_root, task_id):
     '''
     Napříč všemi studenty smažte task s daným task_id
     '''
-
-    pass
+    for student in xml_root.findall('student'):
+        task = student.find(f"task[@task_id='{task_id}']")
+        if task is not None:
+            student.remove(task)
+    return xml_root
