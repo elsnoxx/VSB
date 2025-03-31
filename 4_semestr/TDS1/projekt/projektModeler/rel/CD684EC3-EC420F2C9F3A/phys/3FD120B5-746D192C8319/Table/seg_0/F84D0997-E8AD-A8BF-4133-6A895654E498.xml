@@ -1,0 +1,47 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev12c class="oracle.dbtools.crest.model.design.storage.oracle.v12c.TableProxyOraclev12c" name="Address" directorySegmentName="seg_0" id="F84D0997-E8AD-A8BF-4133-6A895654E498">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="street" id="7FA7E560-AC1E-7B46-5D8D-DC2244224028">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="address_id" id="A8026B77-F64C-93EE-22B9-D59F810B1BE4">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<autoIncrementDDL>IDENTITY_CLAUSE</autoIncrementDDL>
+</ColumnProxy>
+<ColumnProxy name="country" id="BA8CAD72-7AA8-85E1-7AEE-1E932B90BA94">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="postal_code" id="F914EBE2-0302-077D-CF03-B32A0D7671A3">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="city" id="FE9CEE4F-19FC-AAED-9E4C-9C8E32479636">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+</columnProxies>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="Address_PK" id="D998831A-F5E6-0F53-E70C-A818D8C62E3D">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<indexSort>SORTED</indexSort>
+</PrimaryKey>
+</primaryKeys>
+</TableProxyOraclev12c>

@@ -1,0 +1,49 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev12c class="oracle.dbtools.crest.model.design.storage.oracle.v12c.TableProxyOraclev12c" name="Room" directorySegmentName="seg_0" id="33559FB8-9508-59C5-7D83-7166DFCE54A2">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="room_type_id" id="147C6D2C-4F93-EB86-1518-0924B3E728F9">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="room_number" id="44A0B719-BEB3-9348-E75B-57D2F17B8B52">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="is_occupied" id="843683E0-C648-8C48-7866-1722B1C9962E">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="room_id" id="FFAB36E2-C02A-57AB-552D-F00AE8264D69">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<autoIncrementDDL>IDENTITY_CLAUSE</autoIncrementDDL>
+</ColumnProxy>
+</columnProxies>
+<foreignKeys>
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="Room_FK0" id="E66588F5-05E0-66CC-FF23-0ACF8A389D79">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:34:35 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ForeignKey>
+</foreignKeys>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="Room_PK" id="01F609B8-E45C-9F01-3715-6B88ABB406CF">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<indexSort>SORTED</indexSort>
+</PrimaryKey>
+</primaryKeys>
+</TableProxyOraclev12c>
