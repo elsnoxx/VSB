@@ -1,0 +1,59 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev12c class="oracle.dbtools.crest.model.design.storage.oracle.v12c.TableProxyOraclev12c" name="ServiceUsage" directorySegmentName="seg_0" id="2444CA4A-B61A-355A-B24A-D9C9CFD7438C">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="quantity" id="2D593BA3-A5C1-BD01-D7E1-7966A3DCA42A">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="reservation_id" id="7630E98A-A211-1FB5-24E6-8EF01440C4B4">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="usage_id" id="8D0AA8BB-1CC7-492F-D1C0-E8180C8B571F">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<autoIncrementDDL>IDENTITY_CLAUSE</autoIncrementDDL>
+</ColumnProxy>
+<ColumnProxy name="service_id" id="A5A91158-D797-1F69-CE98-078F44F41B84">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="total_price" id="AFEA146D-3A26-4FD6-D784-96A2F98625FC">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+</columnProxies>
+<foreignKeys>
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="ServiceUsage_FK0" id="52987E1B-A936-BC99-A258-9FDFA3FB9ADC">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:34:35 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ForeignKey>
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="ServiceUsage_FK1" id="843D091A-940B-A63F-06DF-0A0572211B49">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:34:35 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ForeignKey>
+</foreignKeys>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="ServiceUsage_PK" id="529B002B-1E93-BD29-DAFF-C33ED979DFF9">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<indexSort>SORTED</indexSort>
+</PrimaryKey>
+</primaryKeys>
+</TableProxyOraclev12c>

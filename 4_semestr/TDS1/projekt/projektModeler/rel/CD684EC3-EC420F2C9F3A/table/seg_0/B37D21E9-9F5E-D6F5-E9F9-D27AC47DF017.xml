@@ -1,5 +1,6 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="B37D21E9-9F5E-D6F5-E9F9-D27AC47DF017" name="Payment">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-30 16:33:46 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
@@ -8,16 +9,20 @@
 <existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
 <parsed>true</parsed>
 <columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
-<Column name="Payment_ID" id="03E87605-2FED-045E-9F77-3A8ED81A8DD7">
+<Column name="payment_id" id="03E87605-2FED-045E-9F77-3A8ED81A8DD7">
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-30 16:39:50 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
+<nameHasQuotes>true</nameHasQuotes>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
 <logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementGenerateAlways>true</autoIncrementGenerateAlways>
 <autoIncrementCycle>false</autoIncrementCycle>
-<notNullConstraintName>NNC_Payment_payment_id</notNullConstraintName>
+<autoIncrementOrder>false</autoIncrementOrder>
 </Column>
 <Column name="total_accommodation" id="15A43D34-56FC-FA6A-1306-FE51CA4E472E">
 <createdBy>ficek</createdBy>
@@ -53,15 +58,14 @@
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
 <Column name="is_paid" id="4395FC3E-C86B-47E1-72E0-EBB013B60FE1">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-30 16:39:50 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT006</logicalDatatype>
-<dataTypeSize>1 BYTE</dataTypeSize>
-<ownDataTypeParameters>1 BYTE,,</ownDataTypeParameters>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
 </columns>

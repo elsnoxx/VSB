@@ -1,5 +1,6 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="33559FB8-9508-59C5-7D83-7166DFCE54A2" name="Room">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-30 16:39:58 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
@@ -16,7 +17,11 @@
 <use>1</use>
 <logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementGenerateAlways>true</autoIncrementGenerateAlways>
 <autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
 </Column>
 <Column name="room_type_id" id="147C6D2C-4F93-EB86-1518-0924B3E728F9">
 <createdBy>ficek</createdBy>
@@ -28,29 +33,32 @@
 <logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="9265861D-5248-CC38-BA9A-01A11AB64D71" referredColumn="8F513F50-75DB-70F1-6745-0DC4D080ED48"/>
+</associations>
 </Column>
 <Column name="room_number" id="44A0B719-BEB3-9348-E75B-57D2F17B8B52">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-30 16:41:47 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
+<use>0</use>
 <logicalDatatype>LOGDT024</logicalDatatype>
-<dataTypeSize>250 CHAR</dataTypeSize>
-<ownDataTypeParameters>250 CHAR,,</ownDataTypeParameters>
+<domain>506FCE27-D552-2667-283E-E0F91B5F02AC</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
 <Column name="is_occupied" id="843683E0-C648-8C48-7866-1722B1C9962E">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-30 16:41:47 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT006</logicalDatatype>
-<dataTypeSize>1 BYTE</dataTypeSize>
-<ownDataTypeParameters>1 BYTE,,</ownDataTypeParameters>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
 </columns>
@@ -64,6 +72,16 @@
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
 <colUsage columnID="FFAB36E2-C02A-57AB-552D-F00AE8264D69"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="E66588F5-05E0-66CC-FF23-0ACF8A389D79" name="Room_FK0">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:34:35 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="147C6D2C-4F93-EB86-1518-0924B3E728F9"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

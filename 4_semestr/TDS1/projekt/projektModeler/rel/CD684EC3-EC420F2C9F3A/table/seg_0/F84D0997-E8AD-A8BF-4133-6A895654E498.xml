@@ -1,17 +1,17 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="2084FC4D-BA06-17AA-D1B1-DB726219787E" name="Employee">
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="F84D0997-E8AD-A8BF-4133-6A895654E498" name="Address">
 <sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:44:19 UTC</createdTime>
+<createdTime>2025-03-31 13:41:33 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<ordsAlias>table_6</ordsAlias>
+<ordsAlias>table_5</ordsAlias>
 <allowColumnReorder>false</allowColumnReorder>
 <existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
 <parsed>true</parsed>
 <columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
-<Column name="employee_id" id="DCD099D5-D13F-202E-BD89-C19444D00658">
+<Column name="address_id" id="A8026B77-F64C-93EE-22B9-D59F810B1BE4">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:45:21 UTC</createdTime>
+<createdTime>2025-03-31 13:43:25 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
@@ -23,74 +23,67 @@
 <autoIncrementCycle>false</autoIncrementCycle>
 <autoIncrementOrder>false</autoIncrementOrder>
 </Column>
-<Column name="firstname" id="6FCBB46B-C615-9378-637A-45FED58CEED2">
+<Column name="street" id="7FA7E560-AC1E-7B46-5D8D-DC2244224028">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:45:21 UTC</createdTime>
+<createdTime>2025-03-31 13:43:25 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
+<use>0</use>
 <logicalDatatype>LOGDT024</logicalDatatype>
+<domain>506FCE27-D552-2667-283E-E0F91B5F02AC</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="lastname" id="076FC80A-394C-85D8-5287-5DC6EB86CB58">
+<Column name="city" id="FE9CEE4F-19FC-AAED-9E4C-9C8E32479636">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:45:21 UTC</createdTime>
+<createdTime>2025-03-31 13:43:25 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
+<use>0</use>
 <logicalDatatype>LOGDT024</logicalDatatype>
+<domain>506FCE27-D552-2667-283E-E0F91B5F02AC</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="position" id="AA3E5FAB-1FC7-D4AD-A33A-0598B7EEA68A">
+<Column name="postal_code" id="F914EBE2-0302-077D-CF03-B32A0D7671A3">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:45:21 UTC</createdTime>
+<createdTime>2025-03-31 13:43:25 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
-<logicalDatatype>LOGDT024</logicalDatatype>
+<logicalDatatype>LOGDT025</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="address_id" id="FADE24F1-83A7-DFB4-0306-1C33A4DAD02A">
+<Column name="country" id="BA8CAD72-7AA8-85E1-7AEE-1E932B90BA94">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:45:21 UTC</createdTime>
+<createdTime>2025-03-31 13:43:25 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>506FCE27-D552-2667-283E-E0F91B5F02AC</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
-<associations>
-<colAssociation fkAssociation="7C4DA140-99D0-1BEC-E50D-8E8312026EAE" referredColumn="A8026B77-F64C-93EE-22B9-D59F810B1BE4"/>
-</associations>
 </Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
-<ind_PK_UK id="5F0B86B4-4BBC-5EBE-9672-A7DA5AC030D4" name="Employee_PK">
+<ind_PK_UK id="D998831A-F5E6-0F53-E70C-A818D8C62E3D" name="Address_PK">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 13:47:55 UTC</createdTime>
+<createdTime>2025-03-31 13:43:25 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <pk>true</pk>
 <indexState>Primary Constraint</indexState>
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
-<colUsage columnID="DCD099D5-D13F-202E-BD89-C19444D00658"/>
-</indexColumnUsage>
-</ind_PK_UK>
-<ind_PK_UK id="00AE408F-49B8-ADDF-1200-C5DEEDF3E86A" name="Employee_FK0">
-<createdBy>ficek</createdBy>
-<createdTime>2025-03-31 14:34:35 UTC</createdTime>
-<ownerDesignName>projektModeler</ownerDesignName>
-<indexState>Foreign Key</indexState>
-<isSurrogateKey>false</isSurrogateKey>
-<indexColumnUsage>
-<colUsage columnID="FADE24F1-83A7-DFB4-0306-1C33A4DAD02A"/>
+<colUsage columnID="A8026B77-F64C-93EE-22B9-D59F810B1BE4"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

@@ -1,17 +1,17 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="2084FC4D-BA06-17AA-D1B1-DB726219787E" name="Employee">
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="C6EE36B6-A772-CB8D-0AE5-EAEA18EE112A" name="Feedback">
 <sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:44:19 UTC</createdTime>
+<createdTime>2025-03-31 14:05:13 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<ordsAlias>table_6</ordsAlias>
+<ordsAlias>table_11</ordsAlias>
 <allowColumnReorder>false</allowColumnReorder>
 <existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
 <parsed>true</parsed>
 <columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
-<Column name="employee_id" id="DCD099D5-D13F-202E-BD89-C19444D00658">
+<Column name="feedback_id" id="BA9AFBE4-6DEE-F180-F68C-A95CEB7CE055">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:45:21 UTC</createdTime>
+<createdTime>2025-03-31 14:07:31 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
@@ -23,42 +23,9 @@
 <autoIncrementCycle>false</autoIncrementCycle>
 <autoIncrementOrder>false</autoIncrementOrder>
 </Column>
-<Column name="firstname" id="6FCBB46B-C615-9378-637A-45FED58CEED2">
+<Column name="guest_id" id="07F25A2F-8C48-1125-D77C-1583453A68B7">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:45:21 UTC</createdTime>
-<ownerDesignName>projektModeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT024</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
-</Column>
-<Column name="lastname" id="076FC80A-394C-85D8-5287-5DC6EB86CB58">
-<createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:45:21 UTC</createdTime>
-<ownerDesignName>projektModeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT024</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
-</Column>
-<Column name="position" id="AA3E5FAB-1FC7-D4AD-A33A-0598B7EEA68A">
-<createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:45:21 UTC</createdTime>
-<ownerDesignName>projektModeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT024</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
-</Column>
-<Column name="address_id" id="FADE24F1-83A7-DFB4-0306-1C33A4DAD02A">
-<createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:45:21 UTC</createdTime>
+<createdTime>2025-03-31 14:07:31 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
@@ -67,30 +34,87 @@
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 <associations>
-<colAssociation fkAssociation="7C4DA140-99D0-1BEC-E50D-8E8312026EAE" referredColumn="A8026B77-F64C-93EE-22B9-D59F810B1BE4"/>
+<colAssociation fkAssociation="D1C7E75E-C104-992F-0B92-0FB5BAB9C550" referredColumn="E916839E-A292-501D-636F-8AF3D3F1A726"/>
 </associations>
+</Column>
+<Column name="reservation_id" id="53E470A1-A4AD-7016-65E5-782DCD7E659C">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:07:31 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="B93CF685-F94C-BC83-8645-8332668051F8" referredColumn="FD8FE775-C2E6-A16F-20E0-1A19A6F890B4"/>
+</associations>
+</Column>
+<Column name="rating" id="FB83A3AD-A5B7-3C68-DD19-C8DD986F6902">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:07:31 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="comment" id="1A0B8C95-8915-7556-DA54-7A8148C08AFF">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:07:31 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>0</use>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="feedback_date" id="3E75614D-C53E-D4E6-372F-4E062E49F43C">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:07:31 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT008</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
 </Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
-<ind_PK_UK id="5F0B86B4-4BBC-5EBE-9672-A7DA5AC030D4" name="Employee_PK">
+<ind_PK_UK id="B9209FEE-452D-6785-AE92-B4549EC4D051" name="Feedback_PK">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 13:47:55 UTC</createdTime>
+<createdTime>2025-03-31 14:07:31 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <pk>true</pk>
 <indexState>Primary Constraint</indexState>
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
-<colUsage columnID="DCD099D5-D13F-202E-BD89-C19444D00658"/>
+<colUsage columnID="BA9AFBE4-6DEE-F180-F68C-A95CEB7CE055"/>
 </indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="00AE408F-49B8-ADDF-1200-C5DEEDF3E86A" name="Employee_FK0">
+<ind_PK_UK id="15C69CF4-8F69-55AD-E100-E01CCA10DF7C" name="Feedback_FK0">
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 14:34:35 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <indexState>Foreign Key</indexState>
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
-<colUsage columnID="FADE24F1-83A7-DFB4-0306-1C33A4DAD02A"/>
+<colUsage columnID="07F25A2F-8C48-1125-D77C-1583453A68B7"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="64B8C7A1-2B3B-C14F-A337-C3E030669E40" name="Feedback_FK1">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:34:35 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="53E470A1-A4AD-7016-65E5-782DCD7E659C"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>
