@@ -65,7 +65,10 @@ class Vector:
     """
     def __eq__(self, other):
         if isinstance(other, Vector):
-            return self.x == other.x and self.y == other.y and self.z == other.z
+            if self.x == other.x and self.y == other.y and self.z == other.z:
+                return True
+            else:
+                return False
         else:
             return False
 
@@ -76,7 +79,8 @@ class Vector:
         print(Vector(0, 0, 0))  # (0, 0, 0)
     """
     def __str__(self):
-        return f"({self.x}, {self.y}, {self.z})"
+        text = f"({self.x}, {self.y}, {self.z})"
+        return text
 
     """
     Implement indexing for the vector, both for reading and writing.
@@ -282,7 +286,13 @@ class GameOfLife:
         
         return GameOfLife(boardState)
 
-        pass
+    def count_cells(self, char):
+        cnt = 0
+        for row in self.board:
+            for cell in row:
+                if cell == char:
+                    cnt += 1
+        return cnt
 
     def alive(self):
         """
@@ -290,11 +300,7 @@ class GameOfLife:
         """
         if not self.board:
             raise ValueError("The board is empty. Cannot count alive cells.")
-        alive = 0
-        for row in self.board:
-            for cell in row:
-                if cell == "x":
-                    alive += 1
+        alive = self.count_cells("x")
         return alive
 
     def dead(self):
@@ -303,12 +309,8 @@ class GameOfLife:
         """
         if not self.board:
             raise ValueError("The board is empty. Cannot count dead cells.")
-        alive = 0
-        for row in self.board:
-            for cell in row:
-                if cell == ".":
-                    alive += 1
-        return alive
+        dead = self.count_cells(".")
+        return dead
 
     def __repr__(self):
         """
