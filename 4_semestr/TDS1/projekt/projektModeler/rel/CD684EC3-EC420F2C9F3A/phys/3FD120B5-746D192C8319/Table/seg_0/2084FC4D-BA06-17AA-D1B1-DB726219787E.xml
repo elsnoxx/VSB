@@ -1,0 +1,54 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev12c class="oracle.dbtools.crest.model.design.storage.oracle.v12c.TableProxyOraclev12c" name="Employee" directorySegmentName="seg_0" id="2084FC4D-BA06-17AA-D1B1-DB726219787E">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="lastname" id="076FC80A-394C-85D8-5287-5DC6EB86CB58">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="firstname" id="6FCBB46B-C615-9378-637A-45FED58CEED2">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="position" id="AA3E5FAB-1FC7-D4AD-A33A-0598B7EEA68A">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="employee_id" id="DCD099D5-D13F-202E-BD89-C19444D00658">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<autoIncrementDDL>IDENTITY_CLAUSE</autoIncrementDDL>
+</ColumnProxy>
+<ColumnProxy name="address_id" id="FADE24F1-83A7-DFB4-0306-1C33A4DAD02A">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+</columnProxies>
+<foreignKeys>
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="Employee_FK0" id="00AE408F-49B8-ADDF-1200-C5DEEDF3E86A">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:34:35 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ForeignKey>
+</foreignKeys>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="Employee_PK" id="5F0B86B4-4BBC-5EBE-9672-A7DA5AC030D4">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<indexSort>SORTED</indexSort>
+</PrimaryKey>
+</primaryKeys>
+</TableProxyOraclev12c>

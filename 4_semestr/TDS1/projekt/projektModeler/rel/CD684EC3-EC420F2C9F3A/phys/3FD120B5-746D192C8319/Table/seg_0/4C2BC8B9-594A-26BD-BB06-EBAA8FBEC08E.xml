@@ -1,0 +1,42 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev12c class="oracle.dbtools.crest.model.design.storage.oracle.v12c.TableProxyOraclev12c" name="Service" directorySegmentName="seg_0" id="4C2BC8B9-594A-26BD-BB06-EBAA8FBEC08E">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="name" id="6C434C40-F94B-52FC-F931-D8F61B44BB55">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="service_id" id="9E36B8C3-4CE0-451D-7707-34436AFCBCEA">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<autoIncrementDDL>IDENTITY_CLAUSE</autoIncrementDDL>
+</ColumnProxy>
+<ColumnProxy name="price" id="A1ABB904-F868-828B-653D-8AA3019315A6">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="description" id="B16DCC16-9E43-EC91-7373-122433B22B3D">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+</ColumnProxy>
+</columnProxies>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="Service_PK" id="B01FC947-48CC-0B87-35F4-C14633FF7447">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<indexSort>SORTED</indexSort>
+</PrimaryKey>
+</primaryKeys>
+</TableProxyOraclev12c>

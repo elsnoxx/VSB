@@ -1,0 +1,110 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="2444CA4A-B61A-355A-B24A-D9C9CFD7438C" name="ServiceUsage">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:03:07 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<ordsAlias>table_10</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="usage_id" id="8D0AA8BB-1CC7-492F-D1C0-E8180C8B571F">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:05:11 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementGenerateAlways>true</autoIncrementGenerateAlways>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="reservation_id" id="7630E98A-A211-1FB5-24E6-8EF01440C4B4">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:05:11 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="B8A3F398-0DCB-6233-A9C9-11E8BBB580B6" referredColumn="FD8FE775-C2E6-A16F-20E0-1A19A6F890B4"/>
+</associations>
+</Column>
+<Column name="service_id" id="A5A91158-D797-1F69-CE98-078F44F41B84">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:05:11 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="58A81A43-A24D-54B6-5CD0-3771E87E9772" referredColumn="9E36B8C3-4CE0-451D-7707-34436AFCBCEA"/>
+</associations>
+</Column>
+<Column name="quantity" id="2D593BA3-A5C1-BD01-D7E1-7966A3DCA42A">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:05:11 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="total_price" id="AFEA146D-3A26-4FD6-D784-96A2F98625FC">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:05:11 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT026</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="529B002B-1E93-BD29-DAFF-C33ED979DFF9" name="ServiceUsage_PK">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:05:11 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="8D0AA8BB-1CC7-492F-D1C0-E8180C8B571F"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="52987E1B-A936-BC99-A258-9FDFA3FB9ADC" name="ServiceUsage_FK0">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:34:35 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7630E98A-A211-1FB5-24E6-8EF01440C4B4"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="843D091A-940B-A63F-06DF-0A0572211B49" name="ServiceUsage_FK1">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:34:35 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A5A91158-D797-1F69-CE98-078F44F41B84"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

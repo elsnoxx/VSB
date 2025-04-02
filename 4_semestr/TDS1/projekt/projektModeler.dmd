@@ -1,0 +1,13 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="projektModeler" id="99F404D4-3BDF-58B5-F20F-5A3D97C86CF1" version="3.5">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-30 16:33:30 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>99F404D4-3BDF-58B5-F20F-5A3D97C86CF1</designId>
+<usedDesignStorageDescriptors>
+<designDescr class="oracle.dbtools.crest.model.design.Design$DesignStorageDesc" id="EE06A14F-E454-3DE9-0CAC-B7C9202DAE51">
+<designStoragePath>C:\ddlProjekt</designStoragePath>
+</designDescr>
+</usedDesignStorageDescriptors>
+</OSDM_Design>

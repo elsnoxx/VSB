@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="B8A3F398-0DCB-6233-A9C9-11E8BBB580B6" containerWithKeyObject="2444CA4A-B61A-355A-B24A-D9C9CFD7438C" localFKIndex="52987E1B-A936-BC99-A258-9FDFA3FB9ADC" name="ServiceUsage_FK0">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 14:34:35 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<importedID>28E62C4D-A6B7-F8FE-A383-F912154A6DC4</importedID>
+<referredTableLongName>Reservation</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>D3802613-130A-53E2-953B-B9D38E5D80F9</referredTableID>
+<keyObject>08FE124A-6240-39E5-6335-53353AFA827B</keyObject>
+<referredKeyID>08FE124A-6240-39E5-6335-53353AFA827B</referredKeyID>
+<mandatory>false</mandatory>
+<refColNames>reservation_id</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>
