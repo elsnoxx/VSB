@@ -1,17 +1,19 @@
 import xml.etree.ElementTree as ET
 
+
 def create_student(xml_root, student_id):
     '''
     Vytvořte studenta dle loginu.
     Ujistěte se, že student neexistuje, jinak: raise Exception('student already exists')
     '''
+    if not isinstance(student_id, str) or not student_id.strip():
+        raise ValueError("Invalid student_id. It must be a non-empty string.")
     if xml_root.find(f"student[@student_id='{student_id}']") is not None:
         raise Exception('student already exists')
     student = ET.Element('student')
     student.set('student_id', student_id)
     xml_root.append(student)
     return xml_root
-    pass
 
 
 def remove_student(xml_root, student_id):
