@@ -1,34 +1,31 @@
 import csv
+import json
 
 
-def save_data_to_file(sample_data, filename="data.csv"):
-    csvfile = csv.writer(open("data.csv", "w", newline=""))
+def save_data_to_file(sample_data, filename="data.json"):
+    """
+    Uloží data do JSON souboru.
+    """
     try:
-        for item in sample_data:
-            csvfile.writerow(item)
-        print("Soubor 'data.csv' byl úspěšně otevřen a data byla načtena.")
-    except FileNotFoundError:
-        print("Soubor 'data.csv' nebyl nalezen. Načítání dat selhalo.")
-    except KeyError as e:
-        print(f"Chyba ve struktuře CSV souboru: {e}")
-        
-        
-def load_data_from_file(filnema="data.csv"):
-    sample_data = []
+        with open(filename, mode="w", encoding="utf-8") as file:
+            json.dump(sample_data, file, indent=4)
+        print(f"Soubor '{filename}' byl úspěšně uložen.")
+    except Exception as e:
+        print(f"Chyba při ukládání dat do souboru '{filename}': {e}")
+
+
+def load_data_from_file(filename="data.json"):
+    """
+    Načte data z JSON souboru a vrátí je jako seznam slovníků.
+    """
     try:
-        with open("data.csv", mode="r", newline="", encoding="utf-8") as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                # Převod dat na tuple a přidání do sample_data
-                sample_data.append((
-                    int(row["ID"]),
-                    row["Type"],
-                    row["Manufacturer"],
-                    row["S/N"],
-                    row["Status"]
-                ))
+        with open(filename, mode="r", encoding="utf-8") as file:
+            sample_data = json.load(file)
+        print(f"Soubor '{filename}' byl úspěšně načten.")
         return sample_data
     except FileNotFoundError:
-        print("Soubor 'data.csv' nebyl nalezen. Načítání dat selhalo.")
-    except KeyError as e:
-        print(f"Chyba ve struktuře CSV souboru: {e}")
+        print(f"Soubor '{filename}' nebyl nalezen. Načítání dat selhalo.")
+        return []
+    except json.JSONDecodeError as e:
+        print(f"Chyba při dekódování JSON souboru '{filename}': {e}")
+        return []
