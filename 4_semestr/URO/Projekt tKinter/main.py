@@ -25,6 +25,9 @@ class InventoryApp(tk.Tk):
             self.tree.column(col, width=100)
         self.tree.pack(side="left", fill="both", expand=True)
 
+        # Přidání události pro výběr položky
+        self.tree.bind("<<TreeviewSelect>>", self.on_item_selected)
+
         # Panel s detaily a vyhledáváním
         side_frame = ttk.Frame(main_frame, padding=5)
         side_frame.pack(side="right", fill="y")
@@ -81,7 +84,7 @@ class InventoryApp(tk.Tk):
 
     def load_data(self):
         self.sample_data = load_data_from_file()
-        
+        print(self.sample_data)
         for item in self.sample_data:
             self.tree.insert("", "end", values=item)
 
@@ -152,6 +155,18 @@ class InventoryApp(tk.Tk):
             if device_type and device_type != item[1]:
                 continue
             self.tree.insert("", "end", values=item)
+
+    def on_item_selected(self, event):
+        # Získání vybrané položky
+        selected_item = self.tree.selection()
+        if selected_item:
+            item_values = self.tree.item(selected_item[0], "values")
+            # Naplnění detailních informací
+            fields = ["Type", "User", "Size", "Price", "S/N", "Location", "Purchase date", "Manufacturer", "Note"]
+            for i, field in enumerate(fields):
+                if i < len(item_values):
+                    self.details[field].delete(0, tk.END)
+                    self.details[field].insert(0, item_values[i])
 
 
 if __name__ == "__main__":
