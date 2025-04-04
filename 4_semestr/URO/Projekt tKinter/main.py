@@ -1,8 +1,9 @@
 import tkinter as tk
 from ttkthemes import ThemedTk
 from tkinter import ttk, StringVar, messagebox  # Import messagebox
-import csv
 from tkinter import filedialog
+from PIL import Image, ImageTk
+import os
 
 from utils import save_data_to_file, load_data_from_file
 
@@ -30,11 +31,31 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         style.configure("Treeview.Heading", background="black", foreground="white", font=("Arial", 10, "bold"))
         style.configure("search_frame.TLabel", background="black", foreground="white", font=("Arial", 10, "bold"))
         style.configure("infoFrame.TLabel", background="black", foreground="white", font=("Arial", 10, "bold"))
+        style.configure("infoFrame.TLabelFrame", background="#333333", foreground="white", font=("Arial", 10, "bold"))
+        style.layout("infoFrame.TLabelFrame", [
+            ("LabelFrame.border", {"sticky": "nswe", "children": [
+                ("LabelFrame.padding", {"sticky": "nswe", "children": [
+                    ("LabelFrame.label", {"sticky": "w"})
+                ]})
+            ]})
+        ])
         style.configure("Treeview", rowheight=25)
+        style.configure("SearchFrame.Title.TLabel", background="#333333", foreground="white", font=("Arial", 12, "bold"))
+        style.configure("SearchFrame.TLabelFrame", background="#333333", foreground="white", font=("Arial", 10, "bold"))
         
+        # Vytvoření stylu pro search_frame.TLabelFrame
+        style.configure("SearchFrame.TLabelFrame", background="#333333", foreground="white", font=("Arial", 10, "bold"))
+        style.layout("SearchFrame.TLabelFrame", [
+            ("LabelFrame.border", {"sticky": "nswe", "children": [
+                ("LabelFrame.padding", {"sticky": "nswe", "children": [
+                    ("LabelFrame.label", {"sticky": "w"})  # Nadpis zarovnaný vlevo
+                ]})
+            ]})
+        ])
+
         # Nastavení hlavního okna
-        self.rowconfigure(0, weight=1)  # Hlavní rámec se roztáhne vertikálně
-        self.columnconfigure(0, weight=1)  # Hlavní rámec se roztáhne horizontálně
+        self.rowconfigure(0, weight=1)
+        self.columnconfigure(0, weight=1)
 
         # Přidání menu lišty
         self.create_menu()
@@ -80,10 +101,25 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         side_frame.rowconfigure(1, weight=1)
         side_frame.columnconfigure(0, weight=1)
 
-        # Rámeček pro vyhledávání
-        search_frame = ttk.LabelFrame(side_frame, text="Search Options", padding=10, style="search_frame.TLabel")
-        search_frame.grid(row=0, column=0, sticky="ew", padx=5, pady=5)
-        search_frame.configure(style="SearchFrame.TFrame")
+        # Rámeček pro vyhledávání (hlavní rámec s nadpisem)
+        search_frame_main = ttk.Frame(side_frame, padding=(10, 10), style="SearchFrame.TLabelFrame")
+        search_frame_main.grid(row=0, column=0, sticky="ew", padx=5, pady=5)
+
+        # Nastavení roztažení search_frame v rámci search_frame_main
+        search_frame_main.rowconfigure(1, weight=1)
+        search_frame_main.columnconfigure(0, weight=1)
+
+        # Nadpis ve search_frame_main
+        title_label = ttk.Label(search_frame_main, text="Search Options:", style="SearchFrame.Title.TLabel")
+        title_label.grid(row=0, column=0, sticky="w", padx=5, pady=(0, 5))
+
+        # Vnitřní rámec pro obsah vyhledávání
+        search_frame = ttk.Frame(search_frame_main, padding=(10, 10), style="SearchFrame.TFrame")
+        search_frame.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
+
+        # Nastavení roztažení obsahu uvnitř search_frame
+        search_frame.rowconfigure(0, weight=1)
+        search_frame.columnconfigure(0, weight=1)
 
         # Filtr podle Serial Number
         ttk.Label(search_frame, text="Serial Number:", style="SearchFrame.TLabel").grid(row=0, column=0, sticky="w", padx=5, pady=2)
@@ -91,39 +127,55 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         self.search_serial.grid(row=0, column=1, sticky="ew", padx=5, pady=2, columnspan=3)
 
         # Filtr podle Manufacturer
-        ttk.Label(search_frame, text="Manufacturer:", style="SearchFrame.TLabel").grid(row=2, column=0, sticky="w", padx=5, pady=2)
+        ttk.Label(search_frame, text="Manufacturer:", style="SearchFrame.TLabel").grid(row=1, column=0, sticky="w", padx=5, pady=2)
         self.manufacturer_var = StringVar()
         self.search_manufacturer = ttk.Combobox(search_frame, textvariable=self.manufacturer_var, state="readonly")
         self.search_manufacturer['values'] = Manufacturer
-        self.search_manufacturer.grid(row=2, column=1, sticky="ew", padx=5, pady=2)
+        self.search_manufacturer.grid(row=1, column=1, sticky="ew", padx=5, pady=2)
 
         # Filtr podle Status
-        ttk.Label(search_frame, text="Status:", style="SearchFrame.TLabel").grid(row=2, column=3, sticky="w", padx=5, pady=2)
+        ttk.Label(search_frame, text="Status:", style="SearchFrame.TLabel").grid(row=1, column=3, sticky="w", padx=5, pady=2)
         self.status_var = StringVar()
         self.search_status = ttk.Combobox(search_frame, textvariable=self.status_var, state="readonly")
         self.search_status['values'] = Status
-        self.search_status.grid(row=2, column=4, sticky="ew", padx=5, pady=2)
+        self.search_status.grid(row=1, column=4, sticky="ew", padx=5, pady=2)
 
         # Filtr podle Type
-        ttk.Label(search_frame, text="Type:", style="SearchFrame.TLabel").grid(row=3, column=0, sticky="w", padx=5, pady=2)
+        ttk.Label(search_frame, text="Type:", style="SearchFrame.TLabel").grid(row=2, column=0, sticky="w", padx=5, pady=2)
         self.type_var = StringVar()
         self.search_type = ttk.Combobox(search_frame, textvariable=self.type_var, state="readonly")
         self.search_type['values'] = Type
-        self.search_type.grid(row=3, column=1, sticky="ew", padx=5, pady=2)
+        self.search_type.grid(row=2, column=1, sticky="ew", padx=5, pady=2)
 
         # Filtr podle Location
-        ttk.Label(search_frame, text="Location:", style="SearchFrame.TLabel").grid(row=3, column=3, sticky="w", padx=5, pady=2)
+        ttk.Label(search_frame, text="Location:", style="SearchFrame.TLabel").grid(row=2, column=3, sticky="w", padx=5, pady=2)
         self.location_var = StringVar()
         self.search_locationa = ttk.Combobox(search_frame, textvariable=self.location_var, state="readonly")
         self.search_locationa['values'] = Location
-        self.search_locationa.grid(row=3, column=4, sticky="ew", padx=5, pady=2)
+        self.search_locationa.grid(row=2, column=4, sticky="ew", padx=5, pady=2)
 
         # Tlačítko pro vyhledávání
-        ttk.Button(search_frame, text="Search", style="New.TButton", command=self.search).grid(row=4, column=4, sticky="ew", padx=5, pady=5)
+        ttk.Button(search_frame, text="Search", style="New.TButton", command=self.search).grid(row=3, column=4, sticky="ew", padx=5, pady=5)
 
         # Rámeček pro informace o zařízení
-        info_frame = ttk.LabelFrame(side_frame, text="Device Information", padding=2, style="infoFrame.TLabel")
+        info_frame_main = ttk.Frame(side_frame, padding=(5, 10, 5, 5), style="infoFrame.TLabelFrame")
+        info_frame_main.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
+
+        # Nadpis ve info_frame_main
+        title_label = ttk.Label(info_frame_main, text="Device Information:", style="SearchFrame.Title.TLabel")
+        title_label.grid(row=0, column=0, sticky="w", padx=5, pady=(0, 5))
+
+        # Vnitřní rámec pro obsah informací
+        info_frame = ttk.Frame(info_frame_main, style="infoFrame.TFrame")
         info_frame.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
+
+        # Nastavení roztažení info_frame v rámci info_frame_main
+        info_frame_main.rowconfigure(1, weight=1)
+        info_frame_main.columnconfigure(0, weight=1)
+
+        # Nastavení roztažení obsahu uvnitř info_frame
+        info_frame.rowconfigure(0, weight=1)
+        info_frame.columnconfigure(0, weight=1)
 
         # Přidání Notebooku do info_frame
         notebook = ttk.Notebook(info_frame)
@@ -147,10 +199,9 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         # Základní informace (záložka 1)
         self.basic_details = {}
         for i, field in enumerate(basic_fields):
-            ttk.Label(frame1, text=field).grid(row=i, column=0, sticky="w", padx=5, pady=2)
+            ttk.Label(frame1, text=field, style="SearchFrame.TLabel").grid(row=i, column=0, sticky="w", padx=5, pady=2)
             self.basic_details[field] = ttk.Entry(frame1)
             self.basic_details[field].grid(row=i, column=1, sticky="ew", padx=5, pady=2)
-            self.basic_details[field].configure(state="SearchFrame.TLabel")
             self.basic_details[field].configure(state="readonly")
 
         # Nastavení roztažení sloupců v gridu
@@ -159,10 +210,14 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         # Další informace (záložka 2)
         self.additional_details = {}
         for i, field in enumerate(additional_fields):
-            ttk.Label(frame2, text=field).grid(row=i, column=0, sticky="w", padx=5, pady=2)
+            ttk.Label(frame2, text=field, style="SearchFrame.TLabel").grid(row=i, column=0, sticky="w", padx=5, pady=2)
             self.additional_details[field] = ttk.Entry(frame2)
             self.additional_details[field].grid(row=i, column=1, sticky="ew", padx=5, pady=2)
-            self.additional_details[field].configure(state="SearchFrame.TLabel")
+            self.additional_details[field].configure(state="readonly")
+
+        # Pictures (záložka 3)
+        self.image_label = tk.Label(frame3, background="#999999")
+        self.image_label.pack(padx=10, pady=10)
 
         # Nastavení roztažení sloupců v gridu
         frame2.columnconfigure(1, weight=1)
@@ -355,6 +410,19 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
                             self.additional_details[field].delete(0, tk.END)
                             self.additional_details[field].insert(0, item.get(field, ""))
                             self.additional_details[field].configure(state="readonly")
+
+                    # Načtení a zobrazení obrázku
+                    image_path = item.get("Image Path", "")
+                    if os.path.exists(image_path):
+                        image = Image.open(image_path)
+                        image = image.resize((300, 200))  # Změna velikosti obrázku
+                        photo = ImageTk.PhotoImage(image)
+                        self.image_label.configure(image=photo)
+                        self.image_label.image = photo  # Uložení reference na obrázek
+                    else:
+                        self.image_label.configure(image="", text="No Image Available")
+                        self.image_label.image = None
+
                     break
 
     def show_about(self):

@@ -8,7 +8,7 @@ def generate_random_data(filename, num_records):
     manufacturers = ["Dell", "Adwantech", "HP", "Lenovo", "Asus"]
     statuses = ["Used", "Damaged", "New", "Refurbished"]
     locations = ["Brno", "Prague", "Ostrava", "Plzen", "Olomouc"]
-    sizes = ["Small", "Medium", "Large", "Extra Large"]  # Možné velikosti produktů
+    sizes = ["Small", "Medium", "Large", "Extra Large"]
 
     # Rozsah pro generování náhodného data (např. posledních 5 let)
     start_date = datetime.now() - timedelta(days=5 * 365)
@@ -37,6 +37,9 @@ def generate_random_data(filename, num_records):
         random_date = start_date + timedelta(days=random.randint(0, (end_date - start_date).days))
         purchase_date = random_date.strftime("%Y-%m-%d")  # Formátování data jako "YYYY-MM-DD"
 
+        # Cesta k obrázku na základě typu
+        image_path = os.path.join("images", f"{record_type}.jpg")
+
         # Přidání záznamu do seznamu
         data.append({
             "ID": i,
@@ -47,7 +50,8 @@ def generate_random_data(filename, num_records):
             "Status": status,
             "Location": location,
             "Size": size,
-            "Purchase Date": purchase_date
+            "Purchase Date": purchase_date,
+            "Image Path": image_path  # Přidání cesty k obrázku
         })
 
     # Uložení dat do JSON souboru
