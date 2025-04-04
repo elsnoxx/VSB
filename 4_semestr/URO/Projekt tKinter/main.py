@@ -204,6 +204,7 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
             self.basic_details[field].grid(row=i, column=1, sticky="ew", padx=5, pady=2)
             self.basic_details[field].configure(state="readonly")
 
+        ttk.Button(frame1, text="Change status", style="Change.TButton", command=self.changeStatus).grid(row=5, column=0, padx=5, pady=5, sticky="ew")
         # Nastavení roztažení sloupců v gridu
         frame1.columnconfigure(1, weight=1)
 
@@ -229,7 +230,6 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         
 
         # Tlačítka
-        ttk.Button(button_frame, text="Change status", style="Change.TButton", command=self.changeStatus).grid(row=0, column=0, padx=5, pady=5, sticky="ew")
         ttk.Button(button_frame, text="Delete Device", style="Delete.TButton", command=self.deleteDevice).grid(row=0, column=1, padx=5, pady=5, sticky="ew")
         ttk.Button(button_frame, text="New Device", style="New.TButton", command=self.addNew).grid(row=0, column=2, padx=5, pady=5, sticky="ew")
 
