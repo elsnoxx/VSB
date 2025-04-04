@@ -23,11 +23,12 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
 
         # Vytvoření stylů
         style = ttk.Style()
-        style.configure("Change.TButton", background="#4CAF50", foreground="white", font=("Arial", 15, "bold"))
+        style.configure("Change.TButton", background="#4CAF50", foreground="white", font=("Arial", 10, "bold"), anchor="center")
+        style.configure("Search.TButton", background="#2196F3", foreground="white", font=("Arial", 10, "bold"), anchor="center")
         style.configure("Delete.TButton", background="#F44336", foreground="white", font=("Arial", 15, "bold"))
         style.configure("New.TButton", background="#2196F3", foreground="white", font=("Arial", 15, "bold"))
         style.configure("SearchFrame.TFrame", background="#999999", foreground="black")
-        style.configure("SearchFrame.TLabel", background="#999999", foreground="black")
+        style.configure("SearchFrame.TLabel", background="#999999", foreground="black", anchor="center")
         style.configure("Treeview.Heading", background="black", foreground="white", font=("Arial", 10, "bold"))
         style.configure("search_frame.TLabel", background="black", foreground="white", font=("Arial", 10, "bold"))
         style.configure("infoFrame.TLabel", background="black", foreground="white", font=("Arial", 10, "bold"))
@@ -155,7 +156,7 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         self.search_locationa.grid(row=2, column=4, sticky="ew", padx=5, pady=2)
 
         # Tlačítko pro vyhledávání
-        ttk.Button(search_frame, text="Search", style="New.TButton", command=self.search).grid(row=3, column=4, sticky="ew", padx=5, pady=5)
+        ttk.Button(search_frame, text="Search", style="Search.TButton", command=self.search).grid(row=3, column=4, sticky="ew", padx=5, pady=5)
 
         # Rámeček pro informace o zařízení
         info_frame_main = ttk.Frame(side_frame, padding=(5, 10, 5, 5), style="infoFrame.TLabelFrame")
@@ -173,13 +174,13 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         info_frame_main.rowconfigure(1, weight=1)
         info_frame_main.columnconfigure(0, weight=1)
 
+        # Přidání Notebooku do info_frame
+        notebook = ttk.Notebook(info_frame)
+        notebook.grid(row=0, column=0, sticky="nsew", columnspan=2)
+
         # Nastavení roztažení obsahu uvnitř info_frame
         info_frame.rowconfigure(0, weight=1)
         info_frame.columnconfigure(0, weight=1)
-
-        # Přidání Notebooku do info_frame
-        notebook = ttk.Notebook(info_frame)
-        notebook.pack(fill="both", expand=True)
 
         # Záložka 1: Základní informace
         frame1 = ttk.Frame(notebook, padding=5)
@@ -196,6 +197,7 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         notebook.add(frame3, text="Pictures")
         frame3.configure(style="SearchFrame.TFrame")
 
+
         # Základní informace (záložka 1)
         self.basic_details = {}
         for i, field in enumerate(basic_fields):
@@ -204,14 +206,14 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
             self.basic_details[field].grid(row=i, column=1, sticky="ew", padx=5, pady=2)
             self.basic_details[field].configure(state="readonly")
 
-        ttk.Button(frame1, text="Change status", style="Change.TButton", command=self.changeStatus).grid(row=5, column=0, padx=5, pady=5, sticky="ew")
+        ttk.Button(frame1, text="Edit", style="Change.TButton", command=self.changeStatus).grid(row=5, column=2, padx=5, pady=5)
         # Nastavení roztažení sloupců v gridu
         frame1.columnconfigure(1, weight=1)
 
         # Další informace (záložka 2)
         self.additional_details = {}
         for i, field in enumerate(additional_fields):
-            ttk.Label(frame2, text=field, style="SearchFrame.TLabel").grid(row=i, column=0, sticky="w", padx=5, pady=2)
+            ttk.Label(frame2, text=field, style="SearchFrame.TLabel").grid(row=i, column=0, sticky="e", padx=5, pady=2)
             self.additional_details[field] = ttk.Entry(frame2)
             self.additional_details[field].grid(row=i, column=1, sticky="ew", padx=5, pady=2)
             self.additional_details[field].configure(state="readonly")
@@ -224,19 +226,8 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         frame2.columnconfigure(1, weight=1)
 
         # Tlačítka vedle sebe
-        button_frame = ttk.Frame(side_frame)
-        button_frame.grid(row=2, column=0, sticky="ew", padx=5, pady=5)
-        
-        
-
-        # Tlačítka
-        ttk.Button(button_frame, text="Delete Device", style="Delete.TButton", command=self.deleteDevice).grid(row=0, column=1, padx=5, pady=5, sticky="ew")
-        ttk.Button(button_frame, text="New Device", style="New.TButton", command=self.addNew).grid(row=0, column=2, padx=5, pady=5, sticky="ew")
-
-        # Nastavení roztažení sloupců a řádků
-        button_frame.columnconfigure(0, weight=1)
-        button_frame.columnconfigure(1, weight=1)
-        button_frame.columnconfigure(2, weight=1)
+        ttk.Button(info_frame, text="New Device", style="New.TButton", command=self.addNew).grid(row=1, column=0, padx=5, pady=5, sticky="e")
+        ttk.Button(info_frame, text="Delete Device", style="Delete.TButton", command=self.deleteDevice).grid(row=1, column=1, padx=5, pady=5, sticky="ew")
 
         # Ukázková data
         self.load_data()
