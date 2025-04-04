@@ -429,8 +429,6 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         messagebox.showinfo("About", "Inventory System v1.0\nCreated by FIC0024")
 
     def changeStatus(self):
-        
-
         selected_item = self.tree.selection()
         if not selected_item:
             messagebox.showwarning("Warning", "No device selected!")
