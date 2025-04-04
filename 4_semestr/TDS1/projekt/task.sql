@@ -1,0 +1,2 @@
+-- DD S01 L02 
+-- Explain the difference between the concept of data and information - an example in your project written in English
