@@ -23,10 +23,10 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
 
         # Vytvoření stylů
         style = ttk.Style()
-        style.configure("Change.TButton", background="#4CAF50", foreground="white", font=("Arial", 10, "bold"), anchor="center")
-        style.configure("Search.TButton", background="#2196F3", foreground="white", font=("Arial", 10, "bold"), anchor="center")
-        style.configure("Delete.TButton", background="#F44336", foreground="white", font=("Arial", 15, "bold"))
-        style.configure("New.TButton", background="#2196F3", foreground="white", font=("Arial", 15, "bold"))
+        style.configure("Change.TButton", background="#333333", foreground="white", font=("Arial", 10, "bold"), anchor="center")
+        style.configure("Search.TButton", background="#333333", foreground="white", font=("Arial", 10, "bold"), anchor="center")
+        style.configure("Delete.TButton", background="#666666", foreground="white", font=("Arial", 15, "bold"))
+        style.configure("New.TButton", background="#666666", foreground="white", font=("Arial", 15, "bold"))
         style.configure("SearchFrame.TFrame", background="#999999", foreground="black")
         style.configure("SearchFrame.TLabel", background="#999999", foreground="black", anchor="center")
         style.configure("Treeview.Heading", background="black", foreground="white", font=("Arial", 10, "bold"))
