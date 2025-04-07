@@ -218,9 +218,14 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
             self.additional_details[field].grid(row=i, column=1, sticky="ew", padx=5, pady=2)
             self.additional_details[field].configure(state="readonly")
 
+        ttk.Button(frame2, text="Edit", style="Change.TButton", command=self.changeStatus).grid(row=5, column=2, padx=5, pady=5)
+
         # Pictures (záložka 3)
         self.image_label = tk.Label(frame3, background="#999999")
         self.image_label.pack(padx=10, pady=10)
+        # Tlačítko pro změnu obrázku
+        self.change_image_button = ttk.Button(frame3, text="Change Image", style="Change.TButton", command=self.change_image)
+        self.change_image_button.pack(padx=10, pady=10, side="right")
 
         # Nastavení roztažení sloupců v gridu
         frame2.columnconfigure(1, weight=1)
@@ -434,10 +439,6 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         popup.title("Edit Device")
         popup.geometry("400x300")
 
-        style = ttk.Style()
-        style.configure("SearchFrame.TFrame", background="#999999")
-        popup.configure(style="SearchFrame.TFrame")
-
         # Pole pro zobrazení a úpravu dat
         fields = ["Type", "Manufacturer", "Serial Number", "Status", "Location"]
         combobox_data = {
@@ -518,6 +519,21 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
             self.tree.delete(selected_item)
             print("Deleting device:", values)
         
+    def change_image(self):
+        filepath = filedialog.askopenfilename(
+            filetypes=[("Image files", "*.png;*.jpg;*.jpeg;*.bmp;*.gif"), ("All files", "*.*")],
+            title="Select an image"
+        )
+        if filepath:
+            try:
+                image = Image.open(filepath)
+                image = image.resize((300, 200))  # Změna velikosti obrázku
+                photo = ImageTk.PhotoImage(image)
+                self.image_label.configure(image=photo)
+                self.image_label.image = photo  # Uložení reference na obrázek
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to load image: {e}")
+
 if __name__ == "__main__":
     app = InventoryApp()
     app.mainloop()
