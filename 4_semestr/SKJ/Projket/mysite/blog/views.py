@@ -68,7 +68,7 @@ def add_guest(request):
 
             
             
-            return redirect('guest_list')  # Přesměrování na úspěšnou stránku nebo jinam
+            return redirect('guest_list')
         else:
             print("almost done")
             # Pokud formulář není platný, přidáme do kontextu chyby
