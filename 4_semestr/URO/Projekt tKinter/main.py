@@ -68,7 +68,7 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         main_frame.grid(row=0, column=0, sticky="nsew")
 
         # Nastavení roztažení sloupců a řádků v main_frame
-        main_frame.columnconfigure(0, weight=3)
+        main_frame.columnconfigure(0, weight=4)
         main_frame.columnconfigure(1, weight=1)
         main_frame.rowconfigure(0, weight=1)
 
@@ -250,13 +250,7 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
     def create_menu(self):
         # Vytvoření menu lišty
         menu_bar = tk.Menu(self)
-
-        # Nastavení barev pro menu
-        self.option_add("*Menu.background", "#333333")
-        self.option_add("*Menu.foreground", "white")
-        self.option_add("*Menu.activeBackground", "#4CAF50")
-        self.option_add("*Menu.activeForeground", "white")
-        self.option_add("*Menu.font", ("Arial", 10))
+        menu_bar.config(bg = "GREEN",fg='white',activebackground='red',activeforeground='pink')
 
         # Menu "File"
         file_menu = tk.Menu(menu_bar, tearoff=0)
