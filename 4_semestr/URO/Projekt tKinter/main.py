@@ -14,6 +14,8 @@ Location = ["", "Brno", "Prague", "Ostrava", "Plzen", "Olomouc"]
 basic_fields = ["Type", "Manufacturer", "Price", "Serial Number", "Status"]
 additional_fields = ["Location", "Purchase Date", "Size"]
 
+fields_frame1 = ["Type", "Manufacturer", "Price", "Serial Number", "Status", "Location", "Purchase Date", "Size"]
+
 class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
     def __init__(self):
         super().__init__()
@@ -28,11 +30,11 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         style.configure("Delete.TButton", background="#666666", foreground="white", font=("Arial", 15, "bold"))
         style.configure("New.TButton", background="#666666", foreground="white", font=("Arial", 15, "bold"))
         style.configure("SearchFrame.TFrame", background="#999999", foreground="black")
-        style.configure("SearchFrame.TLabel", background="#999999", foreground="black", anchor="center")
+        style.configure("SearchFrame.TLabel", background="#999999", foreground="black", anchor="center", font=("Arial", 9, "bold"))
         style.configure("Treeview.Heading", background="black", foreground="white", font=("Arial", 10, "bold"))
         style.configure("search_frame.TLabel", background="black", foreground="white", font=("Arial", 10, "bold"))
-        style.configure("infoFrame.TLabel", background="black", foreground="white", font=("Arial", 10, "bold"))
-        style.configure("infoFrame.TLabelFrame", background="#333333", foreground="white", font=("Arial", 10, "bold"))
+        style.configure("infoFrame.TLabel", background="black", foreground="white", font=("Arial", 15, "bold"))
+        style.configure("infoFrame.TLabelFrame", background="#333333", foreground="white", font=("Arial", 15, "bold"))
         style.layout("infoFrame.TLabelFrame", [
             ("LabelFrame.border", {"sticky": "nswe", "children": [
                 ("LabelFrame.padding", {"sticky": "nswe", "children": [
@@ -41,7 +43,7 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
             ]})
         ])
         style.configure("Treeview", rowheight=25)
-        style.configure("SearchFrame.Title.TLabel", background="#333333", foreground="white", font=("Arial", 12, "bold"))
+        style.configure("SearchFrame.Title.TLabel", background="#333333", foreground="white", font=("Arial", 10, "bold"))
         style.configure("SearchFrame.TLabelFrame", background="#333333", foreground="white", font=("Arial", 10, "bold"))
         
         # Vytvoření stylu pro search_frame.TLabelFrame
@@ -49,7 +51,7 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         style.layout("SearchFrame.TLabelFrame", [
             ("LabelFrame.border", {"sticky": "nswe", "children": [
                 ("LabelFrame.padding", {"sticky": "nswe", "children": [
-                    ("LabelFrame.label", {"sticky": "w"})  # Nadpis zarovnaný vlevo
+                    ("LabelFrame.label", {"sticky": "w"})
                 ]})
             ]})
         ])
@@ -118,9 +120,7 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         search_frame = ttk.Frame(search_frame_main, padding=(10, 10), style="SearchFrame.TFrame")
         search_frame.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
 
-        # Nastavení roztažení obsahu uvnitř search_frame
-        search_frame.rowconfigure(0, weight=1)
-        search_frame.columnconfigure(0, weight=1)
+        
 
         # Filtr podle Serial Number
         ttk.Label(search_frame, text="Serial Number:", style="SearchFrame.TLabel").grid(row=0, column=0, sticky="w", padx=5, pady=2)
@@ -154,6 +154,13 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         self.search_locationa = ttk.Combobox(search_frame, textvariable=self.location_var, state="readonly")
         self.search_locationa['values'] = Location
         self.search_locationa.grid(row=2, column=4, sticky="ew", padx=5, pady=2)
+
+        # Nastavení všech řádků a sloupců v gridu
+        for i in range(search_frame.grid_size()[1]):  # Počet řádků
+            search_frame.rowconfigure(i, weight=1)
+
+        for j in range(search_frame.grid_size()[0]):  # Počet sloupců
+            search_frame.columnconfigure(j, weight=2)
 
         # Tlačítko pro vyhledávání
         ttk.Button(search_frame, text="Search", style="Search.TButton", command=self.search).grid(row=3, column=4, sticky="ew", padx=5, pady=5)
@@ -189,42 +196,29 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
 
         # Záložka 2: Další informace
         frame2 = ttk.Frame(notebook, padding=5)
-        notebook.add(frame2, text="Additional Info")
+        notebook.add(frame2, text="Pictures")
         frame2.configure(style="SearchFrame.TFrame")
 
-        # Záložka 3: Obrázky
-        frame3 = ttk.Frame(notebook, padding=5)
-        notebook.add(frame3, text="Pictures")
-        frame3.configure(style="SearchFrame.TFrame")
 
 
         # Základní informace (záložka 1)
         self.basic_details = {}
-        for i, field in enumerate(basic_fields):
+        for i, field in enumerate(fields_frame1):
             ttk.Label(frame1, text=field, style="SearchFrame.TLabel").grid(row=i, column=0, sticky="w", padx=5, pady=2)
             self.basic_details[field] = ttk.Entry(frame1)
             self.basic_details[field].grid(row=i, column=1, sticky="ew", padx=5, pady=2)
             self.basic_details[field].configure(state="readonly")
 
-        ttk.Button(frame1, text="Edit", style="Change.TButton", command=self.changeStatus).grid(row=5, column=2, padx=5, pady=5)
         # Nastavení roztažení sloupců v gridu
         frame1.columnconfigure(1, weight=1)
 
-        # Další informace (záložka 2)
-        self.additional_details = {}
-        for i, field in enumerate(additional_fields):
-            ttk.Label(frame2, text=field, style="SearchFrame.TLabel").grid(row=i, column=0, sticky="e", padx=5, pady=2)
-            self.additional_details[field] = ttk.Entry(frame2)
-            self.additional_details[field].grid(row=i, column=1, sticky="ew", padx=5, pady=2)
-            self.additional_details[field].configure(state="readonly")
-
-        ttk.Button(frame2, text="Edit", style="Change.TButton", command=self.changeStatus).grid(row=5, column=2, padx=5, pady=5)
+        ttk.Button(frame1, text="Edit", style="Change.TButton", command=self.changeStatus).grid(row=10, column=2, padx=5, pady=5)
 
         # Pictures (záložka 3)
-        self.image_label = tk.Label(frame3, background="#999999")
+        self.image_label = tk.Label(frame2, background="#999999")
         self.image_label.pack(padx=10, pady=10)
         # Tlačítko pro změnu obrázku
-        self.change_image_button = ttk.Button(frame3, text="Change Image", style="Change.TButton", command=self.change_image)
+        self.change_image_button = ttk.Button(frame2, text="Change Image", style="Change.TButton", command=self.change_image)
         self.change_image_button.pack(padx=10, pady=10, side="right")
 
         # Nastavení roztažení sloupců v gridu
@@ -257,6 +251,13 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         # Vytvoření menu lišty
         menu_bar = tk.Menu(self)
 
+        # Nastavení barev pro menu
+        self.option_add("*Menu.background", "#333333")
+        self.option_add("*Menu.foreground", "white")
+        self.option_add("*Menu.activeBackground", "#4CAF50")
+        self.option_add("*Menu.activeForeground", "white")
+        self.option_add("*Menu.font", ("Arial", 10))
+
         # Menu "File"
         file_menu = tk.Menu(menu_bar, tearoff=0)
         file_menu.add_command(label="Open", command=self.open_file)
@@ -265,6 +266,14 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         file_menu.add_separator()
         file_menu.add_command(label="Exit", command=self.quit)
         menu_bar.add_cascade(label="File", menu=file_menu)
+
+        # Menu "Edit"
+        edit_menu = tk.Menu(menu_bar, tearoff=0)
+        edit_menu.add_command(label="Change Status", command=self.changeStatus)
+        edit_menu.add_command(label="Add New Device", command=self.addNew)
+        edit_menu.add_command(label="Delete Device", command=self.deleteDevicePopup)
+        edit_menu.add_command(label="Change Image", command=self.change_image)
+        menu_bar.add_cascade(label="Edit", menu=edit_menu)
 
         # Menu "Help"
         help_menu = tk.Menu(menu_bar, tearoff=0)
@@ -392,20 +401,12 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
             for item in self.sample_data:
                 if str(item.get("ID", "")) == str(selected_id):
                     # Naplnění základních informací
-                    for field in basic_fields:
+                    for field in fields_frame1:
                         if field in self.basic_details:
                             self.basic_details[field].configure(state="normal")
                             self.basic_details[field].delete(0, tk.END)
                             self.basic_details[field].insert(0, item.get(field, ""))
                             self.basic_details[field].configure(state="readonly")
-
-                    # Naplnění dalších informací
-                    for field in additional_fields:
-                        if field in self.additional_details:
-                            self.additional_details[field].configure(state="normal")
-                            self.additional_details[field].delete(0, tk.END)
-                            self.additional_details[field].insert(0, item.get(field, ""))
-                            self.additional_details[field].configure(state="readonly")
 
                     # Načtení a zobrazení obrázku
                     image_path = item.get("Image Path", "")
@@ -430,17 +431,50 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
             messagebox.showwarning("Warning", "No device selected!")
             return
 
-        # Získání dat vybraného zařízení
-        values = self.tree.item(selected_item, "values")
+        # Získání hodnot z Treeview
+        tree_values = self.tree.item(selected_item[0], "values")
+        selected_id = tree_values[0]  # Předpokládáme, že "ID" je první sloupec
+
+        # Vyhledání odpovídajícího záznamu v sample_data
+        selected_data = None
+        for item in self.sample_data:
+            if str(item.get("ID", "")) == str(selected_id):
+                selected_data = item
+                break
+
+        if not selected_data:
+            messagebox.showerror("Error", "No data found for the selected device!")
+            return
 
         # Vytvoření popup okna
         popup = tk.Toplevel(self)
-        self.set_theme("black")
         popup.title("Edit Device")
-        popup.geometry("400x300")
+        popup.geometry("400x400")
+        popup.configure(bg="#333333")  # Tmavé pozadí popup okna
+        popup.resizable(False, False)
 
-        # Pole pro zobrazení a úpravu dat
-        fields = ["Type", "Manufacturer", "Serial Number", "Status", "Location"]
+        # Nastavení gridu popup okna
+        popup.rowconfigure(0, weight=1)  # Nadpis
+        popup.rowconfigure(1, weight=1)  # Hlavní rámec
+        popup.rowconfigure(2, weight=1)  # Tlačítka
+        popup.columnconfigure(0, weight=1)
+
+        # Definice stylu pro hlavní rámec
+        style = ttk.Style()
+        style.configure("Light.TFrame", background="#999999")  # Světlejší pozadí
+        style.configure("Dark.TFrame", background="#333333")  # Tmavší pozadí
+        style.configure("Popup.TLabel", background="#333333", foreground="white", font=("Arial", 14, "bold"))
+        style.configure("main_frame.TLabel", background="#999999", foreground="black", font=("Arial", 10))
+
+        # Nadpis
+        title_label = ttk.Label(popup, text="Edit Device", style="Popup.TLabel", anchor="center")
+        title_label.grid(row=0, column=0, pady=(10, 10), padx=10, sticky="nsew")
+
+        # Hlavní rámec
+        main_frame = ttk.Frame(popup, padding=(10, 10), style="Light.TFrame")
+        main_frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+
+        # Pole pro úpravu dat
         combobox_data = {
             "Type": Type,
             "Manufacturer": Manufacturer,
@@ -449,49 +483,109 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
         }
         entries = {}
 
-        for i, field in enumerate(fields):
-            ttk.Label(popup, text=field).grid(row=i, column=0, padx=10, pady=5, sticky="w")
+        for i, field in enumerate(fields_frame1):
+            ttk.Label(main_frame, text=field, style="main_frame.TLabel").grid(row=i, column=0, padx=10, pady=5, sticky="w")
             if field in combobox_data:
                 # Použití Comboboxu pro pole s předdefinovanými hodnotami
-                combobox = ttk.Combobox(popup, values=combobox_data[field], state="readonly")
-                combobox.set(values[i + 1])  # Nastavení aktuální hodnoty
+                combobox = ttk.Combobox(main_frame, values=combobox_data[field], state="readonly")
+                combobox.set(selected_data.get(field, ""))  # Nastavení aktuální hodnoty
                 combobox.grid(row=i, column=1, padx=10, pady=5, sticky="ew")
                 entries[field] = combobox
             else:
                 # Použití Entry pro ostatní pole
-                entry = ttk.Entry(popup)
-                entry.insert(0, values[i + 1])  # Přeskočíme ID
+                entry = ttk.Entry(main_frame)
+                entry.insert(0, selected_data.get(field, ""))  # Naplnění dat z `selected_data`
                 entry.grid(row=i, column=1, padx=10, pady=5, sticky="ew")
                 entries[field] = entry
 
-        # Funkce pro uložení změn
-        def save_changes():
-            new_values = [values[0]] + [entries[field].get() for field in fields]
-            self.tree.item(selected_item, values=new_values)
-            print("Device has been updated:", new_values)
-            popup.destroy()
+        # Nastavení roztažení sloupců v main_frame
+        main_frame.columnconfigure(1, weight=1)
+
+        # Rámec pro tlačítka
+        button_frame = ttk.Frame(popup, padding=10, style="Dark.TFrame")
+        button_frame.grid(row=2, column=0, sticky="ew", padx=10, pady=(0, 10))
 
         # Tlačítka pro uložení nebo zrušení
-        ttk.Button(popup, text="Save", command=save_changes).grid(row=len(fields), column=0, padx=10, pady=10, sticky="ew")
-        ttk.Button(popup, text="Cancel", command=popup.destroy).grid(row=len(fields), column=1, padx=10, pady=10, sticky="ew")
+        ttk.Button(button_frame, text="Save", style="Save.TButton", command=lambda: self.save_changes(entries, selected_item, popup)).grid(row=0, column=0, padx=10, pady=5, sticky="ew")
+        ttk.Button(button_frame, text="Cancel", style="Cancel.TButton", command=popup.destroy).grid(row=0, column=1, padx=10, pady=5, sticky="ew")
 
-        popup.columnconfigure(1, weight=1)
+        # Nastavení roztažení sloupců v button_frame
+        button_frame.columnconfigure(0, weight=1)
+        button_frame.columnconfigure(1, weight=1)
+
+    def save_changes(self, entries, selected_item, popup):
+        # Uložení změn
+        new_values = [self.tree.item(selected_item, "values")[0]] + [entries[field].get() for field in entries]
+        self.tree.item(selected_item, values=new_values)
+        print("Device has been updated:", new_values)
+        popup.destroy()
 
     def addNew(self):
         # Vytvoření popup okna
         popup = tk.Toplevel(self)
         popup.title("Add New Device")
-        popup.geometry("400x300")
+        popup.geometry("400x400")
+        popup.configure(bg="#333333")  # Tmavé pozadí popup okna
+        popup.resizable(False, False)
+
+        # Nastavení gridu popup okna
+        popup.rowconfigure(0, weight=1)  # Horní prostor
+        popup.rowconfigure(1, weight=1)  # Prostor pro main_frame
+        popup.rowconfigure(2, weight=1)  # Spodní prostor
+        popup.columnconfigure(0, weight=1)  # Vycentrování ve sloupci
+
+        # Definice stylu pro hlavní rámec
+        style = ttk.Style()
+        style.configure("Light.TFrame", background="#999999")  # Světlejší pozadí
+        style.configure("Dark.TFrame", background="#333333")  # Tmavší pozadí
+        style.configure("Popup.TLabel", background="#333333", foreground="white", font=("Arial", 20, "bold"))
+        style.configure("main_frame.TLabel", background="#999999", foreground="black", font=("Arial", 9, "bold"))
+
+        # Nadpis
+        title_label = ttk.Label(popup, text="Add New Device", style="Popup.TLabel", anchor="center")
+        title_label.grid(row=0, column=0, pady=(5, 5), padx=5, sticky="nsew")
+
+
+        # Hlavní rámec
+        main_frame = ttk.Frame(popup, padding=(5, 5), style="Light.TFrame")
+        main_frame.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
 
         # Pole pro zadání dat
         fields = ["Type", "Manufacturer", "Serial Number", "Status", "Location"]
+        combobox_data = {
+            "Type": Type,
+            "Manufacturer": Manufacturer,
+            "Status": Status,
+            "Location": Location
+        }
         entries = {}
+        for i, field in enumerate(fields_frame1):
+            ttk.Label(main_frame, text=field, style="main_frame.TLabel").grid(row=i, column=0, padx=10, pady=5, sticky="w")
+            if field in combobox_data:
+                # Použití Comboboxu pro pole s předdefinovanými hodnotami
+                combobox = ttk.Combobox(main_frame, values=combobox_data[field], state="readonly")
+                combobox.grid(row=i, column=1, padx=10, pady=5, sticky="ew")
+                entries[field] = combobox
+            else:
+                # Použití Entry pro ostatní pole
+                entry = ttk.Entry(main_frame)
+                entry.grid(row=i, column=1, padx=10, pady=5, sticky="ew")
+                entries[field] = entry
 
-        for i, field in enumerate(fields):
-            ttk.Label(popup, text=field).grid(row=i, column=0, padx=10, pady=5, sticky="w")
-            entry = ttk.Entry(popup)
-            entry.grid(row=i, column=1, padx=10, pady=5, sticky="ew")
-            entries[field] = entry
+        # Nastavení roztažení sloupců v main_frame
+        main_frame.columnconfigure(1, weight=1)
+
+        # Rámec pro tlačítka
+        button_frame = ttk.Frame(popup, padding=10, style="Dark.TFrame")
+        button_frame.grid(row=2, column=0, sticky="ew", padx=10, pady=(0, 10))
+
+        # Tlačítka pro uložení nebo zrušení
+        ttk.Button(button_frame, text="Save", command=lambda: save_data()).grid(row=0, column=0, padx=10, pady=5, sticky="ew")
+        ttk.Button(button_frame, text="Cancel", command=popup.destroy).grid(row=0, column=1, padx=10, pady=5, sticky="ew")
+
+        # Nastavení roztažení sloupců v button_frame
+        button_frame.columnconfigure(0, weight=1)
+        button_frame.columnconfigure(1, weight=1)
 
         # Funkce pro uložení dat
         def save_data():
@@ -505,12 +599,6 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
             self.tree.insert("", "end", values=values)
             print("New device has been added:", values)
             popup.destroy()
-
-        # Tlačítka pro uložení nebo zrušení
-        ttk.Button(popup, text="Save", command=save_data).grid(row=len(fields), column=0, padx=10, pady=10, sticky="ew")
-        ttk.Button(popup, text="Cancel", command=popup.destroy).grid(row=len(fields), column=1, padx=10, pady=10, sticky="ew")
-
-        popup.columnconfigure(1, weight=1)
 
     def deleteDevice(self):
         selected_items = self.tree.selection()
@@ -533,6 +621,32 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
                 self.image_label.image = photo  # Uložení reference na obrázek
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to load image: {e}")
+
+    def deleteDevicePopup(self):
+        selected_items = self.tree.selection()
+        if not selected_items:
+            messagebox.showwarning("Warning", "No device selected!")
+            return
+
+        # Vytvoření popup okna
+        popup = tk.Toplevel(self)
+        popup.title("Delete Device")
+        popup.geometry("400x150")
+        popup.configure(bg="#333333")
+
+        # Zobrazení varování
+        message = "Are you sure you want to delete the selected device(s)?"
+        ttk.Label(popup, text=message).pack(padx=10, pady=10)
+
+        # Funkce pro potvrzení smazání
+        def confirm_delete():
+            self.deleteDevice()
+            popup.destroy()
+
+        # Tlačítka pro potvrzení nebo zrušení
+        ttk.Button(popup, text="Yes", command=confirm_delete).pack(side="left", padx=10, pady=10)
+        ttk.Button(popup, text="No", command=popup.destroy).pack(side="right", padx=10, pady=10)
+
 
 if __name__ == "__main__":
     app = InventoryApp()
