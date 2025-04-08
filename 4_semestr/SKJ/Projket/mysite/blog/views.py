@@ -121,3 +121,8 @@ def reservation_list(request):
 def reservation_detail(request, reservation_id):
     reservation = get_object_or_404(Reservation, pk=reservation_id)
     return render(request, 'reservation_detail.html', {'reservation': reservation})
+
+
+def room_management(request):
+    rooms = Room.objects.all()
+    return render(request, 'room_management.html', {'rooms': rooms})
