@@ -5,7 +5,7 @@
 
 <table class="table table-striped">
     <thead>
-        <tr>
+        <tr class="text-center"> 
             <th scope="col">Jméno</th>
             <th scope="col">Příjmení</th>
             <th scope="col">Akce</th>
@@ -13,7 +13,7 @@
     </thead>
     <tbody>
         {% for guest in guests %}
-            <tr>
+            <tr class="text-center">
                 <td>{{ guest.firstname }}</td>
                 <td>{{ guest.lastname }}</td>
                 <td>

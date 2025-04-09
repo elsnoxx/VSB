@@ -2,7 +2,7 @@ from datetime import date
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from .models import Guest, Reservation, Room, Employee, Payment
-from .forms import GuestForm, ReservationForm, AddressForm, RoomForm
+from .forms import GuestForm, ReservationForm, AddressForm, RoomForm, EmployeeForm
 from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -21,7 +21,7 @@ def index(request):
         if floor_number in floors:
             floors[floor_number].append(room)
     
-    return render(request, 'reservation_rooms.html', {'floors': floors})
+    return render(request, 'management/reservation/reservation_rooms.html', {'floors': floors})
 
 def create_reservation(request, room_id):
     room = get_object_or_404(Room, room_id=room_id)
@@ -123,7 +123,7 @@ def guest_delete(request, guest_id):
 # Seznam rezervací
 def reservation_list(request):
     reservations = Reservation.objects.all()
-    return render(request, 'reservation_list.html', {'reservations': reservations})
+    return render(request, 'management/reservation/reservation_list.html', {'reservations': reservations})
 
 # Detail rezervace
 def reservation_detail(request, reservation_id):
@@ -145,10 +145,6 @@ def room_create(request):
         form = RoomForm()
     return render(request, 'forms/room_form.html', {'form': form})
 
-
-def room_detail(request, room_id):
-    room = get_object_or_404(Room, pk=room_id)
-    return render(request, 'management/room/room_detail.html', {'room': room})
 
 def room_update(request, room_id):
     room = get_object_or_404(Room, pk=room_id)
@@ -178,8 +174,35 @@ def reservation_success(request, roomid):
     
 def employe_management(request):
     emp = Employee.objects.all()
-    return render(request, 'management/employe_management.html', {'emp': emp})
+    return render(request, 'management/employe/employe_management.html', {'emp': emp})
 
+def employe_create(request):
+    if request.method == 'POST':
+        form = EmployeeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('employe_management')  # Přesměrování na stránku správy zaměstnanců
+    else:
+        form = EmployeeForm()
+    return render(request, 'forms/employe_form.html', {'form': form})
+
+def employe_update(request, employee_id):
+    employee = get_object_or_404(Employee, pk=employee_id)
+    if request.method == "POST":
+        form = EmployeeForm(request.POST, instance=employee)
+        if form.is_valid():
+            form.save()
+            return redirect('employe_management')
+    else:
+        form = EmployeeForm(instance=employee)
+    return render(request, 'forms/employee_form.html', {'form': form})
+
+def employe_delete(request, employee_id):
+    employee = get_object_or_404(Employee, pk=employee_id)
+    if request.method == "POST":
+        employee.delete()
+        return redirect('employe_management')
+    return render(request, 'management/employe/employe_confirm_delete.html', {'employee': employee})
 
 def payment_management(request):
     payment = Payment.objects.all()

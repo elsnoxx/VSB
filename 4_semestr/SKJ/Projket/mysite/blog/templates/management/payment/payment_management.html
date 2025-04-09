@@ -3,7 +3,7 @@
 {% block content %}
 <table class="table table-striped">
     <thead>
-        <tr>
+        <tr class="text-center">
             <th scope="col">ID</th>
             <th scope="col">accommodation</th>
             <th scope="col">expenses</th>
@@ -14,7 +14,7 @@
     </thead>
     <tbody>
         {% for payment in payment %}
-            <tr>
+            <tr class="text-center">
                 <td>{{ payment.payment_id }}</td>
                 <td>{{ payment.total_accommodation }}</td>
                 <td>{{ payment.total_expenses }}</td>

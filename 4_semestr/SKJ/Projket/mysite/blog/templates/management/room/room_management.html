@@ -30,7 +30,6 @@
                     <td class="occupied">Volný</td>
                 {% endif %}
                 <td>
-                    <a href="{% url 'room_detail' room_id=room.room_id %}" class="btn btn-info btn-sm">Detail</a> |
                     <a href="{% url 'room_update' room.room_id %}" class="btn btn-warning btn-sm">Editovat</a> |
                     <a href="{% url 'room_delete' room.room_id %}" class="btn btn-danger btn-sm">Smazat</a>
                 </td>

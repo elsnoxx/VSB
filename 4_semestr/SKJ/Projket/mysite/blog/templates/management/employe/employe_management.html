@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Seznam pracovníků</h1>
+    <a href="{% url 'employe_create' %}" class="btn btn-primary">Přidat pracovníka</a>
+</div>
+<hr>
 <table class="table table-striped">
     <thead>
         <tr>

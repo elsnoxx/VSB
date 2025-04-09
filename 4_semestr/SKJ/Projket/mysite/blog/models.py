@@ -23,6 +23,9 @@ class Guest(models.Model):
     guest_type = models.CharField(max_length=50)
     registration_date = models.DateField(auto_now_add=True)
     notes = models.TextField(null=True, blank=True)
+    
+    def __str__(self):
+        return self.firstname + " " + self.lastname
 
 class Employee(models.Model):
     employee_id = models.AutoField(primary_key=True)
@@ -47,7 +50,7 @@ class Room(models.Model):
     is_occupied = models.BooleanField()
 
     def __str__(self):
-        return f"{self.room_id} (Room {self.room_number})"
+        return f"Room {self.room_number}"
     
 
 class Payment(models.Model):

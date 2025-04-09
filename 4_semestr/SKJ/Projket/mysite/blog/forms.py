@@ -63,7 +63,7 @@ class RoomForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance and self.instance.room_type:
+        if self.instance and hasattr(self.instance, 'room_type') and self.instance.room_type:
             room_type = self.instance.room_type
             self.fields['room_type_details'].initial = (
                 f"Název: {room_type.name}\n"

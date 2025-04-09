@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Vytvořit nového pracovníka</h2>
+<form method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend>Informace o pracovníkovi</legend>
+        {{ form.non_field_errors }}
+        <div>
+            {{ form.first_name.label_tag }} {{ form.first_name }}
+        </div>
+        <div>
+            {{ form.last_name.label_tag }} {{ form.last_name }}
+        </div>
+        <div>
+            {{ form.email.label_tag }} {{ form.email }}
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Adresa bydliště</legend>
+        <div>
+            {{ form.address.label_tag }} {{ form.address }}
+        </div>
+        <div>
+            {{ form.city.label_tag }} {{ form.city }}
+        </div>
+        <div>
+            {{ form.zip_code.label_tag }} {{ form.zip_code }}
+        </div>
+    </fieldset>
+    <button type="submit" class="btn btn-primary">Uložit</button>
+</form>
+{% endblock %}
