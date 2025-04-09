@@ -157,12 +157,12 @@ def room_update(request, room_id):
         form = RoomForm(instance=room)
     return render(request, 'forms/room_form.html', {'form': form})
 
+@csrf_exempt
 def room_delete(request, room_id):
-    room = get_object_or_404(Room, pk=room_id)
     if request.method == "POST":
+        room = get_object_or_404(Room, pk=room_id)
         room.delete()
-        return redirect('room_management')
-    return render(request, 'management/room/room_confirm_delete.html', {'room': room})
+        return redirect('room_management') 
 
 # Rezerzervace 
 def reservation_success(request, roomid):
@@ -224,3 +224,11 @@ def mark_payment_as_paid(request):
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=400)
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
+def mark_payment_as_paid(request, employee_id):
+    if request.method == "POST":
+        payment = get_object_or_404(Payment, pk=employee_id)
+        payment.is_paid = True
+        payment.save()
+        return redirect('payment_management')  # Přesměrování zpět na seznam plateb
+    return JsonResponse({'error': 'Invalid request method'}, status=400)

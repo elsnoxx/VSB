@@ -7,7 +7,7 @@
 </div>
 <hr>
 <table class="table table-striped">
-    <thead class="text-center"> <!-- Center text in the header -->
+    <thead class="text-center">
         <tr>
             <th scope="col">Name</th>
             <th scope="col">Number</th>
@@ -19,7 +19,7 @@
     </thead>
     <tbody>
         {% for room in rooms %}
-            <tr class="text-center"> <!-- Center text in the body rows -->
+            <tr class="text-center">
                 <td>{{ room.room_type.name }}</td>
                 <td>{{ room.room_number }}</td>
                 <td>{{ room.room_type.bed_count }}</td>
@@ -31,11 +31,44 @@
                 {% endif %}
                 <td>
                     <a href="{% url 'room_update' room.room_id %}" class="btn btn-warning btn-sm">Editovat</a> |
-                    <a href="{% url 'room_delete' room.room_id %}" class="btn btn-danger btn-sm">Smazat</a>
+                    <a href="{% url 'room_delete' room.room_id %}" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-room-id="{{ room.room_id }}">Smazat</a>
                 </td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
+
+<!-- Modal pro potvrzení smazání -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Potvrzení smazání</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zavřít"></button>
+            </div>
+            <div class="modal-body">
+                Opravdu chcete smazat tento pokoj?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
+                <form id="deleteForm" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Smazat</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const deleteModal = document.getElementById('deleteModal');
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const roomId = button.getAttribute('data-room-id');
+
+        const deleteForm = document.getElementById('deleteForm');
+        deleteForm.action = `/room/${roomId}/delete/`;
+    });
+</script>
 
 {% endblock %}

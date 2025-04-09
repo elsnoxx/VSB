@@ -23,5 +23,5 @@ urlpatterns = [
     path('employe/<int:employee_id>/update/', views.employe_update, name='employe_update'),
     path('employe/<int:employee_id>/delete/', views.employe_delete, name='employe_delete'),
     path('payment_management/', views.payment_management, name='payment_management'),
-    path('payment/mark-as-paid/', views.mark_payment_as_paid, name='mark_payment_as_paid'),
+    path('payment/<int:employee_id>/mark-as-paid/', views.mark_payment_as_paid, name='mark_payment_as_paid'),
 ]

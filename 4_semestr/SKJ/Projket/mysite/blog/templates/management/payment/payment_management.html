@@ -21,7 +21,10 @@
                 <td>{{ payment.payment_date }}</td>
                 <td>{{ payment.is_paid }}</td>
                 <td>
-                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#paymentModal" data-payment-id="{{ payment.payment_id }}">
+                    <button class="btn btn-primary btn-sm" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#paymentModal" 
+                            data-payment-id="{{ payment.payment_id }}">
                         Paid
                     </button>
                 </td>
@@ -52,4 +55,16 @@
         </div>
     </div>
 </div>
+
+<script>
+    const paymentModal = document.getElementById('paymentModal');
+    paymentModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget; // Tlačítko, které otevřelo modal
+        const paymentId = button.getAttribute('data-payment-id'); // Získání ID platby
+
+        // Nastavení akce formuláře na správnou URL
+        const paymentForm = document.getElementById('paymentForm');
+        paymentForm.action = `/payment/${paymentId}/mark-as-paid/`; // Upravte URL podle vaší konfigurace
+    });
+</script>
 {% endblock %}

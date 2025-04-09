@@ -34,7 +34,7 @@
 
     {% include 'navbar.html' %}  <!-- Zahrnutí navbaru -->
 
-    <div class="container mt-4">
+    <div class="container mt-4 overflow-auto" style="max-height: 80vh;">
         {% block content %}{% endblock %}
     </div>
     
@@ -78,38 +78,6 @@
                     }
                 });
             }
-        });
-
-        const paymentModal = document.getElementById('paymentModal');
-        paymentModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget; // Tlačítko, které otevřelo modal
-            const paymentId = button.getAttribute('data-payment-id'); // Získání ID platby
-            const paymentIdInput = document.getElementById('paymentIdInput');
-            paymentIdInput.value = paymentId; // Nastavení hodnoty do skrytého pole formuláře
-        });
-
-
-        // Příklad AJAX požadavku pro potvrzení platby
-        document.getElementById('confirmPayment').addEventListener('click', function () {
-            const paymentId = document.getElementById('paymentIdInput').value;
-            fetch(`/payments/${paymentId}/confirm/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}', // Django CSRF token
-                },
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Skryjte modální okno
-                    const modal = bootstrap.Modal.getInstance(paymentModal);
-                    modal.hide();
-    
-                    // Aktualizujte stránku nebo odeberte řádek z tabulky
-                    location.reload();
-                } else {
-                    alert('Chyba při potvrzení platby.');
-                }
-            });
         });
     </script>
 </body>
