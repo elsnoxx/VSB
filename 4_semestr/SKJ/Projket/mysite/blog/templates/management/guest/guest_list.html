@@ -19,10 +19,13 @@
                 <td>
                     <a href="{% url 'guest_detail' guest_id=guest.guest_id %}" class="btn btn-info btn-sm">Detail</a> |
                     <a href="{% url 'guest_update' guest.guest_id %}" class="btn btn-warning btn-sm">Editovat</a> |
-                    <a href="{% url 'guest_delete' guest.guest_id %}" class="btn btn-danger btn-sm">Smazat</a>
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-guest-id="{{ guest.guest_id }}" data-guest-name="{{ guest.firstname }} {{ guest.lastname }}">
+                        Smazat
+                    </button>
                 </td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
+
 {% endblock %}

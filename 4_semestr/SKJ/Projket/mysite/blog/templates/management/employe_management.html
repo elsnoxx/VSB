@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Position</th>
+            <th scope="col">Adress</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for emp in emps %}
+            <tr>
+                <td>{{ emp.employee_id }}</td>
+                <td>{{ emp.firstname }} {{ emp.lastname }}</td>
+                <td>{{ emp.position }}</td>
+                <td>{{ emp.address }}</td>
+                <td>
+                    <a href="{% url 'emp_detail' emp_id=emp.employee_id %}" class="btn btn-info btn-sm">Detail</a> |
+                    <a href="{% url 'emp_update' emp.employee_id %}" class="btn btn-warning btn-sm">Editovat</a> |
+                    <a href="{% url 'emp_delete' emp.employee_id %}" class="btn btn-danger btn-sm">Smazat</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

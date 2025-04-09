@@ -1,6 +1,10 @@
+from datetime import date
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Guest, Reservation, Room
-from .forms import GuestForm, ReservationForm, AddressForm
+from django.http import JsonResponse
+from .models import Guest, Reservation, Room, Employee, Payment
+from .forms import GuestForm, ReservationForm, AddressForm, RoomForm
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 # Hlavní stránka
 def index(request):
@@ -21,14 +25,18 @@ def index(request):
 
 def create_reservation(request, room_id):
     room = get_object_or_404(Room, room_id=room_id)
+    room.save()
     print(room.room_number)
     if request.method == 'POST':
-        form = ReservationForm(request.POST)
+        form = ReservationForm(request.POST)        
         if form.is_valid():
             reservation = form.save(commit=False)
+            room = get_object_or_404(Room, room_id=reservation.room.room_id)
+            room.is_occupied = True
             reservation.room = room
             reservation.save()
-            return redirect('reservation_success')  # Přesměrování na stránku potvrzení
+
+            return render(request, 'reservation_rooms.html') 
     else:
         form = ReservationForm()
 
@@ -36,16 +44,16 @@ def create_reservation(request, room_id):
 
 def guest_list(request):
     guests = Guest.objects.all()
-    return render(request, 'guest_list.html', {'guests': guests})
+    return render(request, 'management/guest/guest_list.html', {'guests': guests})
 
 # Detail hosta
 def guest_detail(request, guest_id):
     guest = get_object_or_404(Guest, pk=guest_id)
-    return render(request, 'guest_detail.html', {'guest': guest})
+    return render(request, 'management/guest/guest_detail.html', {'guest': guest})
 
 # Vytvoření hosta
 def guest_create(request):
-    return render(request, 'guest_form.html', {'guest': request})
+    return render(request, 'management/guest/guest_form.html', {'guest': request})
 
 def add_guest(request):
     if request.method == 'POST':
@@ -63,7 +71,7 @@ def add_guest(request):
             
             # Pak přidáme hosta, přiřadíme mu právě uloženou adresu
             guest = guest_form.save(commit=False)
-            guest.address = address  # přiřadíme adresu
+            guest.address = address
             guest.save()
 
             
@@ -109,8 +117,8 @@ def guest_delete(request, guest_id):
     guest = get_object_or_404(Guest, pk=guest_id)
     if request.method == "POST":
         guest.delete()
-        return redirect('guest_list')
-    return render(request, 'guest_confirm_delete.html', {'guest': guest})
+        return JsonResponse({'success': True})  # Vrátí JSON odpověď
+    return JsonResponse({'success': False}, status=400)
 
 # Seznam rezervací
 def reservation_list(request):
@@ -122,7 +130,74 @@ def reservation_detail(request, reservation_id):
     reservation = get_object_or_404(Reservation, pk=reservation_id)
     return render(request, 'reservation_detail.html', {'reservation': reservation})
 
-
 def room_management(request):
-    rooms = Room.objects.all()
-    return render(request, 'room_management.html', {'rooms': rooms})
+    # Získání všech místností a jejich typů
+    rooms = Room.objects.select_related('room_type').all()
+    return render(request, 'management/room/room_management.html', {'rooms': rooms})
+
+def room_create(request):
+    if request.method == 'POST':
+        form = RoomForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('room_management')  # Přesměrování na stránku správy pokojů
+    else:
+        form = RoomForm()
+    return render(request, 'forms/room_form.html', {'form': form})
+
+
+def room_detail(request, room_id):
+    room = get_object_or_404(Room, pk=room_id)
+    return render(request, 'management/room/room_detail.html', {'room': room})
+
+def room_update(request, room_id):
+    room = get_object_or_404(Room, pk=room_id)
+    if request.method == "POST":
+        form = RoomForm(request.POST, instance=room)
+        if form.is_valid():
+            form.save()
+            return redirect('room_management')
+    else:
+        form = RoomForm(instance=room)
+    return render(request, 'forms/room_form.html', {'form': form})
+
+def room_delete(request, room_id):
+    room = get_object_or_404(Room, pk=room_id)
+    if request.method == "POST":
+        room.delete()
+        return redirect('room_management')
+    return render(request, 'management/room/room_confirm_delete.html', {'room': room})
+
+# Rezerzervace 
+def reservation_success(request, roomid):
+    room = get_object_or_404(Room, pk=roomid)
+    if room:
+        room.is_occupied = True
+        room.save()
+        return render(request, 'reservation_success.html', {'room': room})
+    
+def employe_management(request):
+    emp = Employee.objects.all()
+    return render(request, 'management/employe_management.html', {'emp': emp})
+
+
+def payment_management(request):
+    payment = Payment.objects.all()
+    return render(request, 'management/payment/payment_management.html', {'payment': payment})
+
+@csrf_exempt
+def mark_payment_as_paid(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            payment_id = data.get('payment_id')
+            payment = Payment.objects.get(pk=payment_id)
+            payment.is_paid = True
+            payment.payment_date = date.today()  # Nastavení aktuálního data
+            payment.save()
+            return JsonResponse({'success': True})
+        except Payment.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Payment not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)

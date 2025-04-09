@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Seznam pokojů</h1>
+    <a href="{% url 'room_create' %}" class="btn btn-primary">Přidat pokoj</a>
+</div>
+<hr>
+<table class="table table-striped">
+    <thead class="text-center"> <!-- Center text in the header -->
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Number</th>
+            <th scope="col">Capacity</th>
+            <th scope="col">Price</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for room in rooms %}
+            <tr class="text-center"> <!-- Center text in the body rows -->
+                <td>{{ room.room_type.name }}</td>
+                <td>{{ room.room_number }}</td>
+                <td>{{ room.room_type.bed_count }}</td>
+                <td>{{ room.room_type.price_per_night }}</td>
+                {% if room.is_occupied == True %}
+                    <td class="free">Obsazený</td>
+                {% else %}
+                    <td class="occupied">Volný</td>
+                {% endif %}
+                <td>
+                    <a href="{% url 'room_detail' room_id=room.room_id %}" class="btn btn-info btn-sm">Detail</a> |
+                    <a href="{% url 'room_update' room.room_id %}" class="btn btn-warning btn-sm">Editovat</a> |
+                    <a href="{% url 'room_delete' room.room_id %}" class="btn btn-danger btn-sm">Smazat</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        /* Nastavení celé stránky pomocí Flexboxu */
         html, body {
             height: 100%;
             margin: 0;
@@ -15,9 +14,19 @@
             flex-direction: column;
         }
 
-        /* Hlavní obsah se roztáhne, footer se posune dolů */
         .content {
             flex: 1;
+        }
+
+        .free {
+            background-color: #d4edda;
+            color: green;
+            font-weight: bold;
+        }
+        .occupied {
+            background-color: #f8d7da;
+            color: darkred;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -28,9 +37,80 @@
     <div class="container mt-4">
         {% block content %}{% endblock %}
     </div>
+    
 
     {% include 'footer.html' %}  <!-- Zahrnutí footeru -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let guestIdToDelete = null;
+    
+        // Při otevření modálního okna nastavte data
+        const deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            guestIdToDelete = button.getAttribute('data-guest-id');
+            const guestName = button.getAttribute('data-guest-name');
+    
+            // Nastavte jméno hosta do modálního okna
+            document.getElementById('guestName').textContent = guestName;
+        });
+    
+        // Při potvrzení smazání odešlete AJAX požadavek
+        document.getElementById('confirmDelete').addEventListener('click', function () {
+            if (guestIdToDelete) {
+                fetch(`/guests/${guestIdToDelete}/delete/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}', // Django CSRF token
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Skryjte modální okno
+                        const modal = bootstrap.Modal.getInstance(deleteModal);
+                        modal.hide();
+    
+                        // Aktualizujte stránku nebo odeberte řádek z tabulky
+                        location.reload();
+                    } else {
+                        alert('Chyba při mazání hosta.');
+                    }
+                });
+            }
+        });
+
+        const paymentModal = document.getElementById('paymentModal');
+        paymentModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Tlačítko, které otevřelo modal
+            const paymentId = button.getAttribute('data-payment-id'); // Získání ID platby
+            const paymentIdInput = document.getElementById('paymentIdInput');
+            paymentIdInput.value = paymentId; // Nastavení hodnoty do skrytého pole formuláře
+        });
+
+
+        // Příklad AJAX požadavku pro potvrzení platby
+        document.getElementById('confirmPayment').addEventListener('click', function () {
+            const paymentId = document.getElementById('paymentIdInput').value;
+            fetch(`/payments/${paymentId}/confirm/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}', // Django CSRF token
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Skryjte modální okno
+                    const modal = bootstrap.Modal.getInstance(paymentModal);
+                    modal.hide();
+    
+                    // Aktualizujte stránku nebo odeberte řádek z tabulky
+                    location.reload();
+                } else {
+                    alert('Chyba při potvrzení platby.');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

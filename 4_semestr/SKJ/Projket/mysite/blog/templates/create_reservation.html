@@ -3,5 +3,10 @@
 {% block content %}
 <h1>nice</h1>
 
+<form method="POST" action="{% url 'create_reservation' room_id=room.room_id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Reservation</button>
+</form>
 
 {% endblock %}

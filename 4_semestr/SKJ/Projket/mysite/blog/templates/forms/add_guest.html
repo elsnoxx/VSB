@@ -5,43 +5,44 @@
     <h2>Přidat hosta</h2>
     <form method="post" class="mt-3">
         {% csrf_token %}
-        
-        <div class="mb-3">
-            <label for="id_firstname" class="form-label">Jméno</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                {{ guest_form.firstname }}
+
+        <!-- Jméno a příjmení vedle sebe -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="id_firstname" class="form-label">Jméno</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    {{ guest_form.firstname }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="id_lastname" class="form-label">Příjmení</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    {{ guest_form.lastname }}
+                </div>
             </div>
         </div>
 
-        <div class="mb-3">
-            <label for="id_lastname" class="form-label">Příjmení</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                {{ guest_form.lastname }}
+        <!-- E-mail a telefon vedle sebe -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="id_email" class="form-label">E-mail</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    {{ guest_form.email }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="id_phone" class="form-label">Telefon</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    {{ guest_form.phone }}
+                </div>
             </div>
         </div>
 
-        <div class="mb-3">
-            <label for="id_email" class="form-label">E-mail</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                {{ guest_form.email }}
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <label for="id_phone" class="form-label">Telefon</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                {{ guest_form.phone }}
-            </div>
-        </div>
-
-        <!-- Typ hosta (automaticky nastavovaný na "normal") -->
-        <input type="hidden" name="guest_type" value="normal">
-
-        <!-- Datum narození (date input) -->
+        <!-- Datum narození -->
         <div class="mb-3">
             <label for="id_birth_date" class="form-label">Datum narození</label>
             <div class="input-group">
@@ -50,6 +51,7 @@
             </div>
         </div>
 
+        <!-- Poznámky -->
         <div class="mb-3">
             <label for="id_notes" class="form-label">Poznámky</label>
             <div class="input-group">
@@ -60,26 +62,28 @@
 
         <!-- Adresa -->
         <h3>Adresa</h3>
-        <div class="mb-3">
-            <label for="id_street" class="form-label">Ulice</label>
-            {{ address_form.street }}
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="id_street" class="form-label">Ulice</label>
+                {{ address_form.street }}
+            </div>
+            <div class="col-md-6">
+                <label for="id_city" class="form-label">Město</label>
+                {{ address_form.city }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="id_postal_code" class="form-label">PSČ</label>
+                {{ address_form.postal_code }}
+            </div>
+            <div class="col-md-6">
+                <label for="id_country" class="form-label">Země</label>
+                {{ address_form.country }}
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label for="id_city" class="form-label">Město</label>
-            {{ address_form.city }}
-        </div>
-
-        <div class="mb-3">
-            <label for="id_postal_code" class="form-label">PSČ</label>
-            {{ address_form.postal_code }}
-        </div>
-
-        <div class="mb-3">
-            <label for="id_country" class="form-label">Země</label>
-            {{ address_form.country }}
-        </div>
-
+        <!-- Odeslat -->
         <button type="submit" class="btn btn-primary">Odeslat</button>
     </form>
 </div>

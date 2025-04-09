@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Are you sure you want to delete this room?</h1>
+<p>Room Number: {{ room.room_number }}</p>
+<p>Room Type: {{ room.room_type.name }}</p>
+<p>Room Capacity: {{ room.room_type.bed_count }}</p>
+<p>Room Price: {{ room.room_type.price_per_night }}</p>
+<p>Room Status: {% if room.room_type.is_occupied %}Occupied{% else %}Free{% endif %}</p>
+<p>Room ID: {{ room.room_id }}</p>
+<p>Room Type ID: {{ room.room_type.room_type_id }}</p>
+<p>Room Type Name: {{ room.room_type.name }}</p>
+<p>Room Type Bed Count: {{ room.room_type.bed_count }}</p>
+<p>Room Type Price per Night: {{ room.room_type.price_per_night }}</p>
+<p>Room Type Is Occupied: {% if room.room_type.is_occupied %}Yes{% else %}No{% endif %}</p>
+
+{% endblock %}

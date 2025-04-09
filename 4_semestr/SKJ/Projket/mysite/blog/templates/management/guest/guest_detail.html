@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">{{ guest.firstname }} {{ guest.lastname }}</h2>
+            <div>
+                <a href="{% url 'guest_update' guest.guest_id %}" class="btn btn-warning btn-sm">Editovat</a>
+                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-guest-id="{{ guest.guest_id }}" data-guest-name="{{ guest.firstname }} {{ guest.lastname }}">
+                    Smazat
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p><strong>Email:</strong> {{ guest.email }}</p>
+                    <p><strong>Telefon:</strong> {{ guest.phone }}</p>
+                    <p><strong>Datum narození:</strong> {{ guest.birth_date }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Typ hosta:</strong> {{ guest.guest_type }}</p>
+                    <p><strong>Datum registrace:</strong> {{ guest.registration_date }}</p>
+                    <p><strong>Poznámky:</strong> {{ guest.notes|default:"Žádné poznámky" }}</p>
+                </div>
+            </div>
+            <hr>
+            <h5><strong>Adresa</strong></h5>
+            <p><strong>Ulice:</strong> {{ guest.address.street }}</p>
+            <p><strong>Město:</strong> {{ guest.address.city }}</p>
+            <p><strong>PSČ:</strong> {{ guest.address.zip_code }}</p>
+        </div>
+    </div>
+</div>
+
+<!-- Modální okno -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Potvrzení smazání</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zavřít"></button>
+            </div>
+            <div class="modal-body">
+                Opravdu chcete smazat hosta <strong id="guestName"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Smazat</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
