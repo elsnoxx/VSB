@@ -1,34 +1,167 @@
 {% extends 'base.html' %}
-{% block content %}
 
+{% block content %}
 <div class="container mt-4">
-    <div class="card shadow">
+    <div class="card shadow mb-4">
+        <!-- Hlavička s detaily rezervace -->
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h2 class="mb-0">{{ reservation.reservation_id }} {{ reservation.status }}</h2>
+            <h3 class="mb-0">
+                <i class="fas fa-calendar-check me-2"></i>Rezervace #{{ reservation.reservation_id }}
+            </h3>
             <div>
-                <a href="" class="btn btn-warning btn-sm">Editovat</a>
+                <a href="" class="btn btn-warning">
+                    <i class="fas fa-edit me-1"></i>Editovat
+                </a>
             </div>
         </div>
+        
         <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <h4>Gues information</h4>
-                    <p><strong>Guest: </strong>{{ reservation.guest }}</p>
-                    <p><strong>Adress: </strong>{{ reservation.guest.adress }}</p>
-                    
+            <!-- Status rezervace -->
+            <div class="mb-4 text-center">
+                <span class="badge {% if reservation.status == 'Confirmed' %}bg-success{% elif reservation.status == 'Pending' %}bg-warning{% else %}bg-secondary{% endif %} fs-5 p-2">
+                    {{ reservation.status }}
+                </span>
+                <p class="text-muted mt-2">{{ reservation.creation_date }}</p>
+            </div>
+            
+            <div class="row">
+                <!-- Informace o hostovi -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-primary">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0"><i class="fas fa-user me-2"></i>Host</h5>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ guest.firstname }} {{ guest.lastname }}</h5>
+                            <p class="card-text">
+                                <i class="fas fa-envelope me-2"></i>{{ guest.email }}<br>
+                                <i class="fas fa-phone me-2"></i>{{ guest.phone }}
+                            </p>
+                            <a href="{% url 'guest_detail' guest.guest_id %}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-info-circle me-1"></i>Detail hosta
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <h4>Reservation detail</h4>
-                    <p>{{ reservation.room }}</p>
-                    <p>{{ reservation.creation_date }}</p>
-                    <p>{{ reservation.check_in_date }}</p>
-                    <p>{{ reservation.check_out_date }}</p>
+                
+                <!-- Informace o pokoji -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-success">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0"><i class="fas fa-bed me-2"></i>Pokoj</h5>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Pokoj {{ room.room_number }}</h5>
+                            <p class="card-text">
+                                <i class="fas fa-tag me-2"></i>Typ: {{ room.room_type.name }}<br>
+                                <i class="fas fa-coins me-2"></i>Cena za noc: {{ room.room_type.price_per_night }} Kč
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted">
+                                    <i class="fas fa-calendar-alt me-1"></i>Počet postelí: {{ room.room_type.bed_count }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Informace o termínu -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-info">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0"><i class="fas fa-calendar-day me-2"></i>Termín pobytu</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h6><i class="fas fa-sign-in-alt me-2"></i>Check-in</h6>
+                                    <p class="card-text fs-5">{{ reservation.check_in_date }}</p>
+                                </div>
+                                <div class="col-6">
+                                    <h6><i class="fas fa-sign-out-alt me-2"></i>Check-out</h6>
+                                    <p class="card-text fs-5">{{ reservation.check_out_date }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informace o platbě -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-warning">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="fas fa-money-bill-wave me-2"></i>Platba</h5>
+                            <span class="badge {% if payment.is_paid %}bg-success{% else %}bg-danger{% endif %} p-2">
+                                {{ payment.is_paid|yesno:"Zaplaceno,Nezaplaceno" }}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span><i class="fas fa-home me-2"></i>Ubytování:</span>
+                                    <strong>{{ payment.total_accommodation }} Kč</strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span><i class="fas fa-utensils me-2"></i>Další výdaje:</span>
+                                    <strong>{{ payment.total_expenses }} Kč</strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span><i class="fas fa-money-bill-alt me-2"></i>Celkem:</span>
+                                    <strong class="text-primary">{{ payment.total_accommodation|add:payment.total_expenses }} Kč</strong>
+                                </li>
+                            </ul>
+                            {% if not payment.is_paid %}
+                            <button class="btn btn-success btn-block w-100 mt-3" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#paymentModal" 
+                                data-payment-id="{{ payment.payment_id }}">
+                                <i class="fas fa-credit-card me-1"></i>Zaplatit
+                            </button>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer text-muted">
+                            <i class="fas fa-calendar-check me-1"></i>Datum platby: 
+                            {{ payment.payment_date|default:"Nezaplaceno" }}
+                        </div>
+                    </div>
                 </div>
             </div>
-            <hr>
-            <h5>Payment of reservation</h5>
-            <p>{{ reservation.payment.total_accommodation }}</p>
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentModalLabel">Mark Payment as Paid</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to mark this payment as paid?
+                <form id="paymentForm" method="post" action="">
+                    {% csrf_token %}
+                    <input type="hidden" name="payment_id" id="paymentIdInput">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="paymentForm" class="btn btn-success">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const paymentModal = document.getElementById('paymentModal');
+    paymentModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget; // Tlačítko, které otevřelo modal
+        const paymentId = button.getAttribute('data-payment-id'); // Získání ID platby
+
+        // Nastavení akce formuláře na správnou URL
+        const paymentForm = document.getElementById('paymentForm');
+        paymentForm.action = `/payment/${paymentId}/mark-as-paid-from-reservation/`;
+    });
+</script>
 {% endblock %}

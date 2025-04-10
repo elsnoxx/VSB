@@ -14,7 +14,8 @@ urlpatterns = [
     path('reservations/<int:reservation_id>/', views.reservation_detail, name='reservation_detail'),
     path('add-guest/', views.add_guest, name='add_guest'),
     path('reservation/create/<int:room_id>/', views.create_reservation, name='create_reservation'),
-    
+    path('reserbation/<int:reservation_id>/update/', views.reservation_update, name='reservation_update'),
+    path('reservation/<int:reservation_id>/delete/', views.reservation_delete, name='reservation_delete'),
     path('room/management/', views.room_management, name='room_management'),
     path('room/create/', views.room_create, name='room_create'),
     path('room/<int:room_id>/update/', views.room_update, name='room_update'),
@@ -25,4 +26,5 @@ urlpatterns = [
     path('employe/<int:employee_id>/delete/', views.employe_delete, name='employe_delete'),
     path('payment_management/', views.payment_management, name='payment_management'),
     path('payment/<int:employee_id>/mark-as-paid/', views.mark_payment_as_paid, name='mark_payment_as_paid'),
+    path('payment/<int:reservation_id>/mark-as-paid-from-reservation/', views.mark_payment_as_paid_from_reservation, name='mark_payment_as_paid_from_reservation'),
 ]

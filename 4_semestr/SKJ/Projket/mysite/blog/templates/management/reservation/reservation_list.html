@@ -23,12 +23,12 @@
                 <td>{{ reservation.creation_date }}</td>
                 <td>{{ reservation.check_in_date }}</td>
                 <td>{{ reservation.check_out_date }}</td>
-                <td>{{ reservation.payment }}</td>
+                <td>{{ reservation.payment.is_paid|yesno:"Zaplaceno,Nezaplaceno" }}</td>
                 <td>{{ reservation.status }}</td>
                 <td>
                     <a href="{% url 'reservation_detail' reservation_id=reservation.reservation_id %}" class="btn btn-info btn-sm">Detail</a> |
                     <a href="" class="btn btn-warning btn-sm">Editovat</a> |
-                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-guest-id="{{ guest.guest_id }}" data-guest-name="{{ guest.firstname }} {{ guest.lastname }}">
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-reservation-id="{{ reservation.reservation_id }}">
                         Smazat
                     </button>
                 </td>
@@ -36,4 +36,38 @@
         {% endfor %}
     </tbody>
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Smazat rezervaci</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Opravdu chcete smazat tuto rezervaci?
+                <form id="deleteForm" method="post" action="">
+                    {% csrf_token %}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
+                <button type="submit" form="deleteForm" class="btn btn-danger">Smazat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const deleteModal = document.getElementById('deleteModal');
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget; // Tlačítko, které otevřelo modal
+        const reservationId = button.getAttribute('data-reservation-id'); // Získání ID rezervace
+
+        // Nastavení akce formuláře na správnou URL
+        const deleteForm = document.getElementById('deleteForm');
+        deleteForm.action = `/reservation/${reservationId}/delete/`; // Upravte URL podle vaší konfigurace
+    });
+</script>
 {% endblock %}

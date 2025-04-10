@@ -36,7 +36,7 @@ def create_reservation(request, room_id):
             reservation.room = room
             reservation.save()
 
-            return render(request, 'reservation_rooms.html') 
+            return render(request, 'management/reservation/reservation_rooms.html') 
     else:
         form = ReservationForm()
 
@@ -128,8 +128,49 @@ def reservation_list(request):
 # Detail rezervace
 def reservation_detail(request, reservation_id):
     reservation = get_object_or_404(Reservation, pk=reservation_id)
-    reservation2 = Reservation.objects.select_related('guest_id') .all()
-    return render(request, 'management/reservation/reservation_detail.html', {'reservation': reservation})
+    guest = reservation.guest
+    room = reservation.room
+    payment = reservation.payment
+    context = {
+        'reservation': reservation,
+        'guest': guest,
+        'room': room,
+        'payment': payment,
+    }
+    return render(request, 'management/reservation/reservation_detail.html', context)
+
+def mark_payment_as_paid_from_reservation(request, reservation_id):
+    if request.method == "POST":
+        reservation = get_object_or_404(Reservation, pk=reservation_id)
+        payment = reservation.payment
+        if payment:
+            payment.is_paid = True
+            payment.payment_date = date.today()
+            payment.save()
+        return redirect('reservation_detail', reservation_id=reservation_id)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+def reservation_update(request, reservation_id):
+    reservation = get_object_or_404(Reservation, pk=reservation_id)
+    if request.method == "POST":
+        form = ReservationForm(request.POST, instance=reservation)
+        if form.is_valid():
+            form.save()
+            return redirect('reservation_list')
+    else:
+        form = ReservationForm(instance=reservation)
+    return render(request, 'management/reservation/reservation_form.html', {'form': form})
+
+def reservation_delete(request, reservation_id):
+    reservation = get_object_or_404(Reservation, pk=reservation_id)
+    payment = reservation.payment
+    
+
+    if request.method == "POST":
+        reservation.delete()
+        payment.delete() if payment else None
+        return redirect('reservation_list')
+    return render(request, 'management/reservation/reservation_confirm_delete.html', {'reservation': reservation})
 
 def room_management(request):
     # Získání všech místností a jejich typů
@@ -141,7 +182,7 @@ def room_create(request):
         form = RoomForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('room_management')  # Přesměrování na stránku správy pokojů
+            return redirect('room_management')
     else:
         form = RoomForm()
     return render(request, 'forms/room_form.html', {'form': form})
@@ -210,26 +251,20 @@ def payment_management(request):
     return render(request, 'management/payment/payment_management.html', {'payment': payment})
 
 @csrf_exempt
-def mark_payment_as_paid(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            payment_id = data.get('payment_id')
-            payment = Payment.objects.get(pk=payment_id)
-            payment.is_paid = True
-            payment.payment_date = date.today()  # Nastavení aktuálního data
-            payment.save()
-            return JsonResponse({'success': True})
-        except Payment.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Payment not found'}, status=404)
-        except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)}, status=400)
-    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+def mark_payment_as_paid(request, employee_id):
+    if request.method == "POST":
+        payment = get_object_or_404(Payment, pk=employee_id)
+        payment.is_paid = True
+        payment.payment_date = date.today()
+        payment.save()
+        return redirect('payment_management')
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 def mark_payment_as_paid(request, employee_id):
     if request.method == "POST":
         payment = get_object_or_404(Payment, pk=employee_id)
         payment.is_paid = True
         payment.save()
-        return redirect('payment_management')  # Přesměrování zpět na seznam plateb
+        return redirect('payment_management')
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
