@@ -128,7 +128,8 @@ def reservation_list(request):
 # Detail rezervace
 def reservation_detail(request, reservation_id):
     reservation = get_object_or_404(Reservation, pk=reservation_id)
-    return render(request, 'reservation_detail.html', {'reservation': reservation})
+    reservation2 = Reservation.objects.select_related('guest_id') .all()
+    return render(request, 'management/reservation/reservation_detail.html', {'reservation': reservation})
 
 def room_management(request):
     # Získání všech místností a jejich typů

@@ -1,4 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>works reservation</h1>
+<table class="table table-striped">
+    <thead>
+        <tr class="text-center">
+            <th scope="col">ID</th>
+            <th scope="col">Guest</th>
+            <th scope="col">Room</th>
+            <th scope="col">Creation date</th>
+            <th scope="col">Check in date</th>
+            <th scope="col">Check out date</th>
+            <th scope="col">Payment</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reservation in reservations %}
+            <tr class="text-center">
+                <td>{{ reservation.reservation_id }}</td>
+                <td>{{ reservation.guest }}</td>
+                <td>{{ reservation.room }}</td>
+                <td>{{ reservation.creation_date }}</td>
+                <td>{{ reservation.check_in_date }}</td>
+                <td>{{ reservation.check_out_date }}</td>
+                <td>{{ reservation.payment }}</td>
+                <td>{{ reservation.status }}</td>
+                <td>
+                    <a href="{% url 'reservation_detail' reservation_id=reservation.reservation_id %}" class="btn btn-info btn-sm">Detail</a> |
+                    <a href="" class="btn btn-warning btn-sm">Editovat</a> |
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-guest-id="{{ guest.guest_id }}" data-guest-name="{{ guest.firstname }} {{ guest.lastname }}">
+                        Smazat
+                    </button>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
