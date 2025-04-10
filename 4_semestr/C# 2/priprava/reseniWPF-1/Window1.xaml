@@ -1,0 +1,23 @@
+﻿<Window x:Class="reseniWPF_1.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:reseniWPF_1"
+        mc:Ignorable="d"
+        Title="Window1" Height="450" Width="800">
+    <Grid>
+        <StackPanel Margin="10">
+            <TextBlock Text="Nazev:" FontSize="16" Margin="0,0,0,5"/>
+            <TextBox Name="InputBoxNazev" FontSize="14" Width="200" Margin="0,0,0,10"/>
+            <TextBlock Text="DIC:" FontSize="16" Margin="0,0,0,5"/>
+            <TextBox Name="InputBoxDIC" FontSize="14" Width="200" Margin="0,0,0,10"/>
+            <TextBlock Text="Obec:" FontSize="16" Margin="0,0,0,5"/>
+            <TextBox Name="InputBoxObec" FontSize="14" Width="200" Margin="0,0,0,10"/>
+            <TextBlock Text="Poznamka:" FontSize="16" Margin="0,0,0,5"/>
+            <TextBox Name="InputBoxPoznamka" FontSize="14" Width="200" Margin="0,0,0,10"/>
+            <TextBlock Name="ErrorText" Foreground="Red" FontSize="12" Visibility="Collapsed" Margin="0,0,0,10"/>
+            <Button Content="Odeslat" Width="100" Click="SubmitButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
