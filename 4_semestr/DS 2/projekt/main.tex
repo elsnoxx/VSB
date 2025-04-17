@@ -1,0 +1,380 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[left=20mm,right=30mm,top=30mm,bottom=35mm]{geometry} 
+
+\usepackage{graphicx}
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\rhead{Projekt DS I - Hotel}
+\lfoot{Richard Ficek, FIC0024}
+\rfoot{\thepage}
+
+
+
+\title{Projekt DS II - Hotel}
+\author{Richard Ficek, FIC0024}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+
+
+\section{Datová analýza}
+\begin{figure}[ht]  
+    \centering
+    \includegraphics[width=1\textwidth]{schema.png}
+    \caption{Konceptuální datový model}
+    \label{fig:obrazek}
+\end{figure}
+
+\section{Lineární zápis}
+Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč}, atribut
+
+\begin{itemize} 
+\item \textbf{Address} – Jeden záznam v této tabulce reprezentuje jedinečnou adresu, včetně ulice, města, PSČ a země, kterou mohou sdílet hosté nebo zaměstnanci hotelu. 
+\item \textbf{Guest} – Jeden záznam v této tabulce reprezentuje jednotlivého hosta hotelu se základními informacemi jako jméno, příjmení, kontakt, datum narození, typ hosta (např. pravidelný, VIP) a datum registrace. 
+\item \textbf{Employee} – Jeden záznam v této tabulce reprezentuje konkrétního zaměstnance hotelu, včetně jeho identifikátoru, pozice a adresy. 
+\item \textbf{RoomType} – Jeden záznam v této tabulce reprezentuje typ pokoje (např. jednolůžkový, dvoulůžkový), včetně počtu postelí a ceny za noc. 
+\item \textbf{Room} – Jeden záznam v této tabulce reprezentuje jednotlivý pokoj v hotelu s konkrétním číslem, typem pokoje, obsazeností a unikátním identifikátorem. 
+\item \textbf{Payment} – Jeden záznam v této tabulce reprezentuje platbu provedenou hostem, včetně částky za ubytování, celkových výdajů, data platby a informace, zda byla platba provedena. 
+\item \textbf{Reservation} – Jeden záznam v této tabulce reprezentuje rezervaci vytvořenou hostem, včetně identifikátoru hosta, přiděleného pokoje, zodpovědného zaměstnance, datumu vytvoření, datumu příjezdu a odjezdu, platby a stavu rezervace (např. potvrzeno, zrušeno). 
+\end{itemize}
+
+
+
+\begin{table}
+\caption{Atributy tabulky Address}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    address\_id           & int                & -              & P             & N              & A               & -              & ID adresy          \\ \hline  
+    street                & varchar            & 255            & -             & N              & -               & -              & Ulice              \\ \hline  
+    city                  & varchar            & 100            & -             & N              & -               & -              & Město              \\ \hline  
+    postal\_code          & char               & 10             & -             & N              & -               & -              & PSČ                \\ 
+    country               & varchar            & 100            & -             & N              & -               & -              & Země               \\ 
+     \hline
+\end{tabular}  
+\label{tab:address}
+
+
+
+
+\caption{Atributy tabulky Guest}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    guest\_id             & int                & -              & P             & N              & A               & -              & ID hosta           \\ \hline  
+    firstname             & varchar            & 50             & -             & N              & -               & -              & Jméno hosta        \\ \hline  
+    lastname              & varchar            & 50             & -             & N              & -               & -              & Příjmení hosta     \\ \hline  
+    email                 & varchar            & 100            & -             & N              & -               & -              & Email hosta        \\ \hline  
+    phone                 & varchar            & 15             & -             & A              & -               & -              & Telefon hosta      \\ \hline  
+    birth\_date           & date               & -              & -             & N              & -               & -              & Datum narození     \\ \hline  
+    address\_id           & int                & -              & F(Address)    & N              & -               & -              & ID adresy          \\ \hline  
+    guest\_type           & varchar            & 50             & -             & N              & -               & -              & Typ hosta          \\ \hline  
+    registration\_date    & date               & -              & -             & N              & -               & -              & Datum registrace    \\ 
+    notes                 & text               & -              & -             & A              & -               & -              & Poznámky hosta     \\ 
+     \hline
+\end{tabular}  
+\label{tab:guest}
+
+
+\caption{Atributy tabulky Employee}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    employee\_id          & int                & -              & P             & N              & A               & -              & ID zaměstnance     \\ \hline  
+    firstname             & varchar            & 50             & -             & N              & -               & -              & Jméno zaměstnance   \\ \hline  
+    lastname              & varchar            & 50             & -             & N              & -               & -              & Příjmení zaměstnance\\ \hline  
+    position              & varchar            & 100            & -             & N              & -               & -              & Pozice zaměstnance  \\ 
+    address\_id           & int                & -              & F(Address)    & N              & -               & -              & ID adresy          \\ 
+     \hline
+\end{tabular}  
+\label{tab:employee}
+
+
+\caption{Atributy tabulky RoomType}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    room\_type\_id       & int                & -              & P             & N              & A               & -              & ID typu pokoje     \\ \hline  
+    name                  & varchar            & 100            & -             & N              & -               & -              & Název typu pokoje   \\ \hline  
+    bed\_count            & int                & -              & -             & N              & -               & -              & Počet postelí      \\ 
+    price\_per\_night     & decimal            & -              & -             & N              & -               & -              & Cena za noc        \\ 
+     \hline
+\end{tabular}  
+\label{tab:roomtype}
+
+
+
+\caption{Atributy tabulky Room}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    room\_id             & int                & -              & P             & N              & A               & -              & ID pokoje          \\ \hline  
+    room\_type\_id       & int                & -              & F(RoomType)   & N              & -               & -              & ID typu pokoje     \\ \hline  
+    room\_number          & varchar            & 10             & -             & N              & -               & -              & Číslo pokoje       \\ 
+    is\_occupied          & boolean            & -              & -             & N              & -               & -              & Obsazenost pokoje  \\ 
+     \hline
+\end{tabular}  
+\label{tab:room}
+\end{table}
+
+\begin{table}
+\caption{Atributy tabulky Payment}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    payment\_id          & int                & -              & P             & N              & A               & -              & ID platby          \\ \hline  
+    total\_accommodation   & decimal            & -              & -             & N              & -               & -              & Celkové náklady na ubytování \\ \hline  
+    total\_expenses       & decimal            & -              & -             & N              & -               & -              & Celkové výdaje     \\ \hline  
+    payment\_date        & date               & -              & -             & N              & -               & -              & Datum platby       \\ 
+    is\_paid             & boolean            & -              & -             & N              & -               & -              & Stav platby        \\ 
+     \hline
+\end{tabular}  
+\label{tab:payment}
+
+
+ 
+\caption{Atributy tabulky Reservation}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    reservation\_id      & int                & -              & P             & N              & A               & -              & ID rezervace       \\ \hline  
+    guest\_id             & int                & -              & F(Guest)      & N              & -               & -              & ID hosta           \\ \hline  
+    room\_id              & int                & -              & F(Room)       & N              & -               & -              & ID pokoje          \\ \hline  
+    employee\_id          & int                & -              & F(Employee)   & N              & -               & -              & ID zaměstnance     \\ \hline  
+    creation\_date        & date               & -              & -             & N              & -               & -              & Datum vytvoření    \\ \hline  
+    check\_in\_date      & date               & -              & -             & N              & -               & -              & Datum příjezdu     \\ \hline  
+    check\_out\_date     & date               & -              & -             & N              & -               & -              & Datum odjezdu      \\ \hline  
+    payment\_id          & int                & -              & F(Payment)    & N              & -               & -              & ID platby          \\ 
+    status                & varchar            & 20             & -             & N              & -               & -              & Stav rezervace     \\ 
+     \hline
+\end{tabular}  
+\label{tab:reservation}
+\end{table}
+
+\newpage
+\newpage
+
+\section{Integritní omezení}
+
+\begin{itemize}
+    \item \textbf{datum\_od} \< \textbf{datum\_do} – Ujistěte se, že datum začátku je dříve než datum konce.
+    \item \textbf{guest\_type} – Může nabývat hodnot \{Regular, VIP, Loyalty\}.
+    \item \textbf{status} – Může nabývat hodnot \{Confirmed, Checked In, Checked Out, Cancelled\}.
+    \item \textbf{address\_id} – Odkazuje na existující záznam v tabulce \textbf{Address}.
+    \item \textbf{room\_type\_id} – Odkazuje na existující záznam v tabulce \textbf{RoomType}.
+    \item \textbf{payment\_id} – Odkazuje na existující záznam v tabulce \textbf{Payment}.
+    \item \textbf{is\_paid} – Může nabývat hodnot \{0 (neuhrazeno), 1 (uhrazeno)\}.
+    \item \textbf{room\_number} – Musí být unikátní v rámci tabulky \textbf{Room}.
+\end{itemize}
+
+
+\newpage
+\section{Návrh formuláře}
+
+V této části popisuji návrh formuláře pro správu rezervací, který pracuje s více tabulkami a jejich vztahy. Formulář je navržen jako plnohodnotný nástroj pro správu hotelových rezervací a práci se souvisejícími entitami.
+
+\subsection{Popis formuláře}
+Formulář „Správa rezervací" je navržen jako centrální bod pro práci s rezervacemi v hotelovém systému. Umožňuje komplexní správu rezervací včetně vazeb na hosty, pokoje, zaměstnance a platby. Formulář pracuje s následujícími tabulkami:
+
+\begin{itemize}
+    \item \textbf{Reservation} - základní entita rezervace
+    \item \textbf{Guest} - informace o hostovi
+    \item \textbf{Room} - informace o pokoji
+    \item \textbf{Employee} - informace o zaměstnanci, který rezervaci spravuje
+    \item \textbf{Payment} - informace o platbě spojené s rezervací
+\end{itemize}
+
+\subsection{Rozložení formuláře}
+Formulář je rozdělen do několika logických částí:
+
+\begin{itemize}
+    \item \textbf{Hlavní přehled rezervací} - tabulkový výpis všech rezervací s možností filtrování a řazení
+    \item \textbf{Detail rezervace} - detailní zobrazení konkrétní rezervace včetně souvisejících entit
+    \item \textbf{Editační část} - formulářové prvky pro vytváření a úpravu rezervací
+    \item \textbf{Stavový panel} - zobrazení aktuálního stavu rezervace a možnosti změny stavu
+\end{itemize}
+
+\subsection{Seznam funkcí}
+Formulář „Správa rezervací" poskytuje následujících 10 funkcí:
+
+\begin{enumerate}
+    \item \textbf{Vytvoření nové rezervace} - komplexní průvodce vytvořením nové rezervace včetně výběru hosta, pokoje, zaměstnance a termínu. Při vytváření rezervace se automaticky kontroluje dostupnost pokoje ve zvoleném termínu a vypočítává předpokládaná cena.
+    
+    \item \textbf{Úprava existující rezervace} - možnost změnit parametry existující rezervace, jako je pokoj, termín pobytu nebo status. Systém při tom kontroluje, zda je nový pokoj v novém termínu dostupný.
+    
+    \item \textbf{Zrušení rezervace} - možnost označit rezervaci jako zrušenou (změna statusu na „Cancelled") s možností zadání důvodu zrušení. Součástí je také automatické uvolnění pokoje pro další rezervace.
+    
+    \item \textbf{Zobrazení detailů rezervace} - detailní pohled na rezervaci včetně všech souvisejících informací z propojených tabulek (host, pokoj, zaměstnanec, platba). Zobrazení je rozděleno do logických sekcí pro lepší přehlednost.
+    
+    \item \textbf{Přidání platby k rezervaci} - možnost vytvořit novou platbu nebo upravit existující platbu spojenou s rezervací. Zahrnuje zadání částek, označení platby jako zaplacené a aktualizaci data platby.
+    
+    \item \textbf{Úprava údajů o hostovi} - možnost upravit kontaktní a osobní údaje hosta přímo z kontextu rezervace, včetně jména, kontaktních údajů a adresy. Vhodné pro situace, kdy host nahlásí změnu údajů při příjezdu.
+    
+    \item \textbf{Změna statusu rezervace} - možnost změnit status rezervace mezi stavy „Confirmed", „Checked In", „Checked Out" a „Cancelled" s automatickými následnými akcemi (např. označení pokoje jako obsazeného při check-in).
+    
+    \item \textbf{Zobrazení seznamu rezervací podle data} - filtrování a řazení rezervací podle různých datumových kritérií (datum příjezdu, datum odjezdu, datum vytvoření) s možností exportu seznamu.
+    
+    \item \textbf{Označení pokoje jako obsazeného/volného} - možnost přímo změnit stav obsazenosti pokoje z kontextu rezervace, což je užitečné při mimořádných situacích nebo při řešení problémů.
+    
+    \item \textbf{Přidání nového hosta do systému} - možnost vytvořit nového hosta přímo z formuláře rezervace, pokud host ještě není v systému evidován. Součástí je zadání všech povinných údajů a adresy.
+\end{enumerate}
+
+\subsection{Integrace s databází}
+
+Formulář využívá komplexní SQL dotazy pro práci s více tabulkami současně. Příklady hlavních dotazů:
+
+\begin{itemize}
+    \item \textbf{Výpis rezervací s informacemi o hostech a pokojích:}
+    
+    \begin{verbatim}
+SELECT r.reservation_id, r.check_in_date, r.check_out_date, 
+       g.firstname, g.lastname, rm.room_number, r.status, p.is_paid
+FROM Reservation r
+JOIN Guest g ON r.guest_id = g.guest_id
+JOIN Room rm ON r.room_id = rm.room_id
+JOIN Payment p ON r.payment_id = p.payment_id
+WHERE r.check_in_date BETWEEN :start_date AND :end_date
+ORDER BY r.check_in_date;
+    \end{verbatim}
+    
+    \item \textbf{Kontrola dostupnosti pokoje pro novou rezervaci:}
+    
+    \begin{verbatim}
+SELECT r.room_id 
+FROM Room r
+LEFT JOIN Reservation res ON r.room_id = res.room_id
+WHERE r.room_type_id = :room_type_id
+  AND (res.reservation_id IS NULL
+       OR NOT (
+           :new_check_in_date <= res.check_out_date
+           AND :new_check_out_date >= res.check_in_date
+           AND res.status != 'Cancelled'
+       ))
+LIMIT 1;
+    \end{verbatim}
+\end{itemize}
+
+\subsection{Uživatelské rozhraní}
+
+Formulář je navržen s důrazem na uživatelskou přívětivost a efektivitu práce. Obsahuje:
+
+\begin{itemize}
+    \item Přehledné tabulky s možností filtrování a řazení
+    \item Barevné rozlišení stavů rezervací a plateb
+    \item Modální okna pro potvrzování důležitých akcí
+    \item Našeptávače pro rychlý výběr hostů a pokojů
+    \item Kalendářové komponenty pro snadný výběr dat
+    \item Automatické výpočty cen na základě vybraného pokoje a délky pobytu
+\end{itemize}
+
+Tento formulář tak představuje komplexní řešení pro správu rezervací v hotelovém systému s důrazem na efektivitu práce a uživatelskou přívětivost.
+
+
+\newpage
+\section{Minispecifikace}
+
+\subsection{Funkce: Vytvoření rezervace}
+
+\subsubsection{Popis}
+Tato funkce umožňuje vytvoření nové rezervace v hotelovém systému. Zahrnuje ověření dostupnosti pokoje v požadovaném termínu, případné vytvoření nového hosta, zapsání rezervace, přiřazení zaměstnance, založení platby a aktualizaci stavu pokoje.
+
+\subsubsection{Kroky}
+\begin{enumerate}
+    \item \textbf{Kontrola dostupnosti pokoje}
+    \begin{itemize}
+        \item Uživatel zadá požadovaný typ pokoje a termín pobytu (datum příjezdu a odjezdu)
+        \item Systém ověří, zda existují volné pokoje daného typu v požadovaném termínu pomocí dotazu na tabulky Room a Reservation
+        \item Pokud je pokoj dostupný, systém nabídne konkrétní dostupné pokoje
+        \item Pokud není dostupný žádný pokoj daného typu, systém zobrazí upozornění a nabídne alternativní termíny nebo typy pokojů
+    \end{itemize}
+    
+    \item \textbf{Identifikace hosta}
+    \begin{itemize}
+        \item Uživatel vyhledá hosta v systému podle jména, příjmení nebo e-mailu
+        \item Pokud host existuje, jsou jeho údaje načteny do formuláře
+        \item Pokud host neexistuje, uživatel zadá nové údaje hosta (jméno, příjmení, e-mail, telefon, datum narození)
+        \item V případě nového hosta se také zadá adresa (ulice, město, PSČ, země)
+    \end{itemize}
+    
+    \item \textbf{Výběr zaměstnance}
+    \begin{itemize}
+        \item Systém automaticky předvyplní aktuálně přihlášeného zaměstnance
+        \item Uživatel může změnit zaměstnance, který je zodpovědný za rezervaci
+    \end{itemize}
+    
+    \item \textbf{Zadání detailů rezervace}
+    \begin{itemize}
+        \item Uživatel zadá nebo potvrdí datum příjezdu a odjezdu
+        \item Systém zkontroluje, že datum příjezdu je před datem odjezdu
+        \item Uživatel zvolí status rezervace (standardně "Confirmed")
+    \end{itemize}
+    
+    \item \textbf{Výpočet předběžné ceny}
+    \begin{itemize}
+        \item Systém vypočítá délku pobytu v nocích
+        \item Z tabulky RoomType získá cenu za noc pro zvolený typ pokoje
+        \item Vypočítá celkovou cenu za ubytování (délka pobytu $\times$ cena za noc)
+        \item Uživatel může přidat další výdaje (např. polopenze, parkování)
+    \end{itemize}
+    
+    \item \textbf{Vytvoření platby}
+    \begin{itemize}
+        \item Systém vytvoří nový záznam v tabulce Payment s vypočítanou cenou ubytování
+        \item Nastaví příznak is\_paid na hodnotu 0 (nezaplaceno)
+    \end{itemize}
+    
+    \item \textbf{Vytvoření rezervace a aktualizace stavu pokoje}
+    \begin{itemize}
+        \item Systém vytvoří nový záznam v tabulce Reservation s vazbami na hosta, pokoj, zaměstnance a platbu
+        \item Aktualizuje stav pokoje v tabulce Room (is\_occupied = 1)
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Transakční zpracování}
+\begin{itemize}
+    \item Všechny kroky 6 a 7 (vytvoření platby, rezervace a aktualizace pokoje) probíhají v rámci jedné transakce
+    \item V případě jakékoliv chyby během těchto kroků se celá transakce vrátí zpět (ROLLBACK)
+    \item Po úspěšném dokončení všech kroků se transakce potvrdí (COMMIT)
+\end{itemize}
+
+\subsubsection{Ošetření chybových stavů}
+\begin{itemize}
+    \item Kontrola platnosti datumů (datum příjezdu musí být před datem odjezdu)
+    \item Kontrola dostupnosti pokoje v daném termínu
+    \item Kontrola úplnosti zadaných údajů o hostovi
+    \item Kontrola platnosti e-mailu a telefonního čísla
+    \item Ošetření současného přístupu více uživatelů k danému pokoji (zamykání záznamů)
+\end{itemize}
+
+\subsubsection{SQL příklad pro kontrolu dostupnosti pokoje}
+\begin{verbatim}
+SELECT r.room_id, r.room_number, rt.name, rt.price_per_night
+FROM Room r
+JOIN RoomType rt ON r.room_type_id = rt.room_type_id
+WHERE r.room_type_id = :selected_room_type_id
+  AND r.room_id NOT IN (
+    SELECT res.room_id 
+    FROM Reservation res 
+    WHERE res.status != 'Cancelled'
+      AND (
+        (:check_in_date BETWEEN res.check_in_date AND res.check_out_date)
+        OR (:check_out_date BETWEEN res.check_in_date AND res.check_out_date)
+        OR (res.check_in_date BETWEEN :check_in_date AND :check_out_date)
+      )
+  )
+ORDER BY r.room_number;
+\end{verbatim}
+
+\end{document}
