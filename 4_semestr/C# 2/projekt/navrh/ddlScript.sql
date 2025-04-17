@@ -1,20 +1,20 @@
 CREATE TABLE ParkingLot (
-  parking_lot_id INT PRIMARY KEY,
+  parking_lot_id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255),
-  latitude NUMBER(10, 6),
-  longitude NUMBER(10, 6)
+  latitude DECIMAL(10, 6),
+  longitude DECIMAL(10, 6)
 );
 
 CREATE TABLE ParkingSpace (
-  parking_space_id INT PRIMARY KEY,
+  parking_space_id INT AUTO_INCREMENT PRIMARY KEY,
   parking_lot_id INT,
   space_number INT,
-  status VARCHAR2(20),
-  CONSTRAINT chk_status CHECK (status IN ('available', 'occupied', 'under_maintenance'))
+  status VARCHAR(20),
+  CONSTRAINT chk_parking_space_status CHECK (status IN ('available', 'occupied', 'under_maintenance'))
 );
 
 CREATE TABLE Occupancy (
-  occupancy_id INT PRIMARY KEY,
+  occupancy_id INT AUTO_INCREMENT PRIMARY KEY,
   parking_space_id INT,
   license_plate VARCHAR(20),
   start_time DATETIME,
@@ -24,10 +24,11 @@ CREATE TABLE Occupancy (
 );
 
 CREATE TABLE StatusHistory (
-  history_id INT PRIMARY KEY,
+  history_id INT AUTO_INCREMENT PRIMARY KEY,
   parking_space_id INT,
-  CONSTRAINT chk_status CHECK (status IN ('available', 'occupied', 'under_maintenance')),
-  change_time DATETIME
+  status VARCHAR(20),
+  change_time DATETIME,
+  CONSTRAINT chk_status_history_status CHECK (status IN ('available', 'occupied', 'under_maintenance'))
 );
 
 CREATE TABLE Statistics (
