@@ -48,6 +48,9 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
 \item \textbf{Room} – Jeden záznam v této tabulce reprezentuje jednotlivý pokoj v hotelu s konkrétním číslem, typem pokoje, obsazeností a unikátním identifikátorem. 
 \item \textbf{Payment} – Jeden záznam v této tabulce reprezentuje platbu provedenou hostem, včetně částky za ubytování, celkových výdajů, data platby a informace, zda byla platba provedena. 
 \item \textbf{Reservation} – Jeden záznam v této tabulce reprezentuje rezervaci vytvořenou hostem, včetně identifikátoru hosta, přiděleného pokoje, zodpovědného zaměstnance, datumu vytvoření, datumu příjezdu a odjezdu, platby a stavu rezervace (např. potvrzeno, zrušeno). 
+\item \textbf{Service} – Jeden záznam v této tabulce reprezentuje službu nebo doplňkový produkt nabízený hotelem, včetně názvu, popisu a ceny.
+\item \textbf{ServiceUsage} – Jeden záznam v této tabulce reprezentuje využití konkrétní služby hostem během jeho pobytu v rámci určité rezervace, včetně množství a celkové ceny.
+\item \textbf{Feedback} – Jeden záznam v této tabulce reprezentuje hodnocení a komentář od hosta k jeho pobytu v hotelu, včetně číselného hodnocení, textového komentáře a data poskytnutí zpětné vazby.
 \end{itemize}
 
 
@@ -161,6 +164,46 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
      \hline
 \end{tabular}  
 \label{tab:reservation}
+
+\caption{Atributy tabulky Service}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    service\_id          & int                & -              & P             & N              & A               & -              & ID služby          \\ \hline  
+    name                & varchar            & 100            & -             & N              & -               & -              & Název služby       \\ \hline  
+    description         & text               & -              & -             & A              & -               & -              & Popis služby       \\ \hline  
+    price               & decimal            & -              & -             & N              & -               & -              & Cena služby        \\ 
+     \hline
+\end{tabular}  
+\label{tab:service}
+
+\caption{Atributy tabulky ServiceUsage}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    usage\_id            & int                & -              & P             & N              & A               & -              & ID využití služby  \\ \hline  
+    reservation\_id      & int                & -              & F(Reservation) & N              & -               & -              & ID rezervace       \\ \hline  
+    service\_id          & int                & -              & F(Service)    & N              & -               & -              & ID služby          \\ \hline  
+    quantity             & int                & -              & -             & N              & -               & -              & Množství           \\ \hline
+    usage\_date          & date               & -              & -             & N              & -               & -              & Datum využití      \\ \hline  
+    total\_price         & decimal            & -              & -             & N              & -               & -              & Celková cena       \\ 
+     \hline
+\end{tabular}  
+\label{tab:serviceusage}
+
+\caption{Atributy tabulky Feedback}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    feedback\_id         & int                & -              & P             & N              & A               & -              & ID zpětné vazby    \\ \hline  
+    guest\_id            & int                & -              & F(Guest)      & N              & -               & -              & ID hosta           \\ \hline  
+    reservation\_id      & int                & -              & F(Reservation) & N              & -               & -              & ID rezervace       \\ \hline  
+    rating               & int                & -              & -             & N              & -               & -              & Hodnocení (1-5)    \\ \hline  
+    comment              & text               & -              & -             & A              & -               & -              & Komentář           \\ \hline  
+    feedback\_date       & date               & -              & -             & N              & -               & -              & Datum hodnocení    \\ 
+     \hline
+\end{tabular}  
+\label{tab:feedback}
 \end{table}
 
 \newpage
@@ -177,6 +220,12 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
     \item \textbf{payment\_id} – Odkazuje na existující záznam v tabulce \textbf{Payment}.
     \item \textbf{is\_paid} – Může nabývat hodnot \{0 (neuhrazeno), 1 (uhrazeno)\}.
     \item \textbf{room\_number} – Musí být unikátní v rámci tabulky \textbf{Room}.
+    \item \textbf{rating} – Může nabývat hodnot od 1 do 5, představujících hodnocení spokojenosti hosta.
+    \item \textbf{quantity} – Musí být větší než 0, určuje počet využitých jednotek služby.
+    \item \textbf{service\_id} – Odkazuje na existující záznam v tabulce \textbf{Service}.
+    \item \textbf{reservation\_id} v \textbf{ServiceUsage} a \textbf{Feedback} – Odkazuje na existující záznam v tabulce \textbf{Reservation}.
+    \item \textbf{price} v \textbf{Service} – Musí být nezáporná hodnota.
+    \item \textbf{total\_price} v \textbf{ServiceUsage} – Musí být nezáporná hodnota.
 \end{itemize}
 
 
@@ -194,6 +243,9 @@ Formulář „Správa rezervací" je navržen jako centrální bod pro práci s 
     \item \textbf{Room} - informace o pokoji
     \item \textbf{Employee} - informace o zaměstnanci, který rezervaci spravuje
     \item \textbf{Payment} - informace o platbě spojené s rezervací
+    \item \textbf{Service} - informace o dostupných službách
+    \item \textbf{ServiceUsage} - využití služeb v rámci rezervace
+    \item \textbf{Feedback} - zpětná vazba od hostů k jejich pobytu
 \end{itemize}
 
 \subsection{Rozložení formuláře}

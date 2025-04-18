@@ -78,6 +78,42 @@ CREATE TABLE Reservation (
   CONSTRAINT ck_check_dates CHECK (check_in_date < check_out_date)
 );
 
+-- Create Service table
+CREATE TABLE Service (
+  service_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR2(100) NOT NULL,
+  description CLOB,
+  price NUMBER(10,2) NOT NULL,
+  CONSTRAINT ck_service_price CHECK (price >= 0)
+);
+
+-- Create ServiceUsage table
+CREATE TABLE ServiceUsage (
+  usage_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  reservation_id NUMBER NOT NULL,
+  service_id NUMBER NOT NULL,
+  quantity NUMBER NOT NULL,
+  usage_date DATE DEFAULT SYSDATE NOT NULL,
+  total_price NUMBER(10,2) NOT NULL,
+  CONSTRAINT fk_serviceusage_reservation FOREIGN KEY (reservation_id) REFERENCES Reservation(reservation_id),
+  CONSTRAINT fk_serviceusage_service FOREIGN KEY (service_id) REFERENCES Service(service_id),
+  CONSTRAINT ck_serviceusage_quantity CHECK (quantity > 0),
+  CONSTRAINT ck_serviceusage_price CHECK (total_price >= 0)
+);
+
+-- Create Feedback table
+CREATE TABLE Feedback (
+  feedback_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  guest_id NUMBER NOT NULL,
+  reservation_id NUMBER NOT NULL,
+  rating NUMBER NOT NULL,
+  comment CLOB,
+  feedback_date DATE DEFAULT SYSDATE NOT NULL,
+  CONSTRAINT fk_feedback_guest FOREIGN KEY (guest_id) REFERENCES Guest(guest_id),
+  CONSTRAINT fk_feedback_reservation FOREIGN KEY (reservation_id) REFERENCES Reservation(reservation_id),
+  CONSTRAINT ck_feedback_rating CHECK (rating BETWEEN 1 AND 5)
+);
+
 -- Přidání integritního omezení pro guest_type
 ALTER TABLE Guest
   ADD CONSTRAINT ck_guest_type CHECK (guest_type IN ('Regular', 'VIP', 'Loyalty'));
