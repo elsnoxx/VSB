@@ -13,6 +13,17 @@ class Agent:
         # visualizer - instance of the visuzlizer.Visualizer class
         # gameserver - connect to the remote XML-RPC server (url is provided in the XML file, tag 'url')
         # TODO 3     - call method 'add_player' on the server with login as the parameter (use instance variable 'self.login')
+        with open(filename, 'r') as file:
+            tree = ET.parse(file)
+            root = tree.getroot()
+            self.login = root.find('login').text
+            self.data = []
+            self.visualizer = visualizer.Visualizer(self.login)
+            url = root.find('url').text
+            self.gameserver = xmlrpc.client.ServerProxy(url)
+            self.gameserver.add_player(self.login)
+        
+
         pass
 
     def action(self):
