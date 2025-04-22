@@ -1,0 +1,29 @@
+{
+   "groups":[
+      {
+         "mealKindId":1,
+         "rows":[]
+      },
+      {
+         "mealKindId":2,
+         "rows":[
+            {
+               "item":{
+                  "altId":1,
+                  "mealName":"Vepřová plíčka na smetaně, houskové knedlíky",
+                  "mealSize":"150 g",
+                  "countAvailable":25
+               }
+            },
+            {
+               "item":{
+                  "altId":2,
+                  "mealName":"Kuřecí stehno na citrusech, zeleninový bulgur",
+                  "mealSize":"240 g",
+                  "countAvailable":164
+               }
+            }
+         ]
+      }
+   ]
+}
