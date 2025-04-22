@@ -1,9 +1,11 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage[left=20mm,right=30mm,top=30mm,bottom=35mm]{geometry} 
 
+
 \usepackage{graphicx}
 \usepackage{fancyhdr}
 \usepackage{hyperref}
+\usepackage{float}
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
@@ -34,7 +36,7 @@
 \newpage
 
 \section{Datová analýza}
-\begin{figure}[ht]  
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{schema.png}
     \caption{Konceptuální datový model}
@@ -230,7 +232,7 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
 V této části popisuji návrh formuláře pro správu hotelových rezervací, který pracuje s více tabulkami a jejich vztahy. Formulář je navržen jako praktický nástroj pro každodenní správu rezervací, hostů, pokojů a služeb.
 
 \subsection{Popis formuláře}
-Formulář „Správa hotelových rezervací" je centrálním bodem pro práci s rezervacemi v hotelovém systému. Umožňuje vyhledávání, zobrazení detailů a správu rezervací včetně přidružených entit. Formulář pracuje s následujícími tabulkami:
+Formulář Správa hotelových rezervací je centrálním bodem pro práci s rezervacemi v hotelovém systému. Umožňuje vyhledávání, zobrazení detailů a správu rezervací včetně přidružených entit. Formulář pracuje s následujícími tabulkami:
 
 \begin{itemize}
     \item \textbf{Reservation} - základní entita rezervace
@@ -272,6 +274,8 @@ Tyto funkce zobrazují data bez aktivní změny databáze:
     \item \textbf{getPriceOfAccommodation} - Výpočet a zobrazení ceny za ubytování na základě typu pokoje a délky pobytu. Funkce počítá cenu jako násobek počtu nocí a ceny za noc pro daný typ pokoje.
     
     \item \textbf{getUsageService} - Zobrazení seznamu služeb využitých v rámci dané rezervace včetně množství a ceny. V sekci plateb je tabulka s přehledem všech služeb načtených z tabulky ServiceUsage.
+
+    \item \textbf{getPriceOfService} - Výpočet a zobrazení ceny za jednotlivé služby na základě množství a ceny za jednotku. Funkce načítá data z tabulky Service a počítá celkovou cenu jako součin množství a ceny za jednotku.
 \end{enumerate}
 
 \subsubsection{Funkce typu Invocation (vyvolávací)}
@@ -404,15 +408,14 @@ Formulář je navržen s důrazem na přehlednost a efektivitu práce. Grafické
     \label{fig:obrazek01}
 \end{figure}
 
-Tento formulář představuje komplexní řešení pro každodenní správu hotelových rezervací s důrazem na efektivitu práce, přehlednost a intuitivní ovládání. Implementované funkce pokrývají celý životní cyklus rezervace od vytvoření přes správu až po platbu a využívání doplňkových služeb.
 
 \newpage
 \section{Minispecifikace}
 
-\subsection{Funkce: Vytvoření rezervace}
+\subsection{Funkce: Vytvoření rezervace (vše v jedné transakci)}
 
 \subsubsection{Popis}
-Tato funkce umožňuje vytvoření nové rezervace v hotelovém systému. Zahrnuje ověření dostupnosti pokoje v požadovaném termínu, případné vytvoření nového hosta, zapsání rezervace, přiřazení zaměstnance, založení platby a aktualizaci stavu pokoje.
+Tato funkce umožňuje vytvoření nové rezervace v hotelovém systému v rámci jedné databázové transakce. Zahrnuje ověření dostupnosti pokoje v požadovaném termínu, případné vytvoření nového hosta, zapsání rezervace, přiřazení zaměstnance, založení platby (nezaplacené) a aktualizaci stavu pokoje.
 
 \subsubsection{Kroky}
 \begin{enumerate}
@@ -453,14 +456,9 @@ Tato funkce umožňuje vytvoření nové rezervace v hotelovém systému. Zahrnu
         \item Uživatel může přidat další výdaje (např. polopenze, parkování)
     \end{itemize}
     
-    \item \textbf{Vytvoření platby}
+    \item \textbf{Vytvoření platby, rezervace a aktualizace stavu pokoje (vše v jedné transakci)}
     \begin{itemize}
-        \item Systém vytvoří nový záznam v tabulce Payment s vypočítanou cenou ubytování
-        \item Nastaví příznak is\_paid na hodnotu 0 (nezaplaceno)
-    \end{itemize}
-    
-    \item \textbf{Vytvoření rezervace a aktualizace stavu pokoje}
-    \begin{itemize}
+        \item Systém vytvoří nový záznam v tabulce Payment s vypočítanou cenou ubytování, nastaví is\_paid na hodnotu 0 (nezaplaceno)
         \item Systém vytvoří nový záznam v tabulce Reservation s vazbami na hosta, pokoj, zaměstnance a platbu
         \item Aktualizuje stav pokoje v tabulce Room (is\_occupied = 1)
     \end{itemize}
@@ -468,9 +466,9 @@ Tato funkce umožňuje vytvoření nové rezervace v hotelovém systému. Zahrnu
 
 \subsubsection{Transakční zpracování}
 \begin{itemize}
-    \item Všechny kroky 6 a 7 (vytvoření platby, rezervace a aktualizace pokoje) probíhají v rámci jedné transakce
-    \item V případě jakékoliv chyby během těchto kroků se celá transakce vrátí zpět (ROLLBACK)
-    \item Po úspěšném dokončení všech kroků se transakce potvrdí (COMMIT)
+    \item Všechny kroky probíhají v rámci jedné transakce.
+    \item V případě jakékoliv chyby během těchto kroků se celá transakce vrátí zpět (ROLLBACK).
+    \item Po úspěšném dokončení všech kroků se transakce potvrdí (COMMIT).
 \end{itemize}
 
 \subsubsection{Ošetření chybových stavů}
@@ -482,78 +480,8 @@ Tato funkce umožňuje vytvoření nové rezervace v hotelovém systému. Zahrnu
     \item Ošetření současného přístupu více uživatelů k danému pokoji (zamykání záznamů)
 \end{itemize}
 
-\subsubsection{SQL příklad pro kontrolu dostupnosti pokoje}
+\subsubsection{SQL příklad pro vytvoření rezervace v jedné transakci}
 \begin{verbatim}
-SELECT r.room_id, r.room_number, rt.name, rt.price_per_night
-FROM Room r
-JOIN RoomType rt ON r.room_type_id = rt.room_type_id
-WHERE r.room_type_id = :selected_room_type_id
-  AND r.room_id NOT IN (
-    SELECT res.room_id 
-    FROM Reservation res 
-    WHERE res.status != 'Cancelled'
-      AND (
-        (:check_in_date BETWEEN res.check_in_date AND res.check_out_date)
-        OR (:check_out_date BETWEEN res.check_in_date AND res.check_out_date)
-        OR (res.check_in_date BETWEEN :check_in_date AND :check_out_date)
-      )
-  )
-ORDER BY r.room_number;
-\end{verbatim}
-
-\subsection{Funkce: Zpracování platby}
-
-\subsubsection{Popis}
-Tato funkce umožňuje zpracování platby za rezervaci. Zahrnuje výpočet celkové částky (za ubytování a využité služby), zaznamenání platební metody a označení rezervace jako zaplacené.
-
-\subsubsection{Kroky}
-\begin{enumerate}
-    \item \textbf{Výběr rezervace}
-    \begin{itemize}
-        \item Uživatel vybere rezervaci, za kterou chce provést platbu
-        \item Systém načte detaily rezervace včetně spojené platby
-    \end{itemize}
-    
-    \item \textbf{Výpočet celkové částky}
-    \begin{itemize}
-        \item Systém sečte cenu za ubytování (total\_accommodation)
-        \item Systém vypočítá celkovou cenu za využité služby z tabulky ServiceUsage
-        \item Obě hodnoty jsou sečteny do pole total\_expenses
-    \end{itemize}
-    
-    \item \textbf{Výběr platební metody}
-    \begin{itemize}
-        \item Uživatel zvolí platební metodu (hotovost, karta, bankovní převod)
-    \end{itemize}
-    
-    \item \textbf{Dokončení platby}
-    \begin{itemize}
-        \item Systém aktualizuje záznam v tabulce Payment
-        \item Nastaví is\_paid na hodnotu 1 (zaplaceno)
-        \item Zaznamená aktuální datum jako payment\_date
-    \end{itemize}
-\end{enumerate}
-
-\subsubsection{SQL příklad pro dokončení platby}
-\begin{verbatim}
--- Výpočet celkové ceny za služby
-SELECT SUM(total_price)
-FROM ServiceUsage
-WHERE reservation_id = :reservation_id;
-
--- Aktualizace platby
-UPDATE Payment
-SET is_paid = 1,
-    payment_date = SYSDATE,
-    total_expenses = (SELECT SUM(total_price) FROM ServiceUsage 
-                     WHERE reservation_id = :reservation_id) + total_accommodation
-WHERE payment_id = (SELECT payment_id FROM Reservation WHERE reservation_id = :reservation_id);
-\end{verbatim}
-
-\subsection{Funkce: createReservation(int guestId, int roomId, int employeeId, date checkInDate, date checkOutDate)}
-
-\begin{verbatim}
-Začátek transakce:
 BEGIN TRANSACTION;
 
 // Kontrola dostupnosti pokoje v zadaném termínu
@@ -568,7 +496,6 @@ WHERE res.room_id = :roomId
       OR (res.check_in_date BETWEEN :checkInDate AND :checkOutDate)
   );
 
-// Pokud je pokoj obsazený, funkce skončí chybou
 IF p_room_count > 0 THEN
   ROLLBACK;
   RAISE_APPLICATION_ERROR(-20001, 'Pokoj je v daném termínu již obsazený');
@@ -602,7 +529,7 @@ WHERE r.room_id = :roomId;
 p_nights := :checkOutDate - :checkInDate;
 p_total_accommodation := p_nights * p_price_per_night;
 
-// Vytvoření záznamu platby
+// Vytvoření záznamu platby (nezaplacené)
 INSERT INTO Payment (total_accommodation, total_expenses, payment_date, is_paid)
 VALUES (p_total_accommodation, p_total_accommodation, NULL, 0)
 RETURNING payment_id INTO p_payment_id;
@@ -621,65 +548,99 @@ WHERE room_id = :roomId;
 COMMIT;
 \end{verbatim}
 
+\subsubsection{Poznámky}
+\begin{itemize}
+    \item Platba je při vytvoření rezervace vždy nezaplacená (is\_paid = 0). Platí se až po ubytování hosta.
+    \item Pokud je potřeba platbu označit jako zaplacenou, provádí se to samostatnou funkcí mimo tuto transakci.
+\end{itemize}
+
 \newpage
-\subsection{Funkce: processPayment(int reservationId, string paymentMethod)}
+
+\subsection{SQL kód pro vytvoření rezervace}
 
 \begin{verbatim}
-Začátek transakce:
-BEGIN TRANSACTION;
+CREATE OR REPLACE PROCEDURE create_reservation(
+    p_room_id         IN NUMBER,
+    p_guest_id        IN NUMBER,
+    p_employee_id     IN NUMBER,
+    p_check_in_date   IN DATE,
+    p_check_out_date  IN DATE
+) AS
+    v_room_count         NUMBER;
+    v_guest_count        NUMBER;
+    v_room_type_id       NUMBER;
+    v_price_per_night    NUMBER;
+    v_nights             NUMBER;
+    v_total_accommodation NUMBER;
+    v_payment_id         NUMBER;
+BEGIN
+    -- Kontrola dostupnosti pokoje
+    SELECT COUNT(*)
+      INTO v_room_count
+      FROM Reservation res
+     WHERE res.room_id = p_room_id
+       AND res.status != 'Cancelled'
+       AND (
+            (p_check_in_date BETWEEN res.check_in_date AND res.check_out_date)
+         OR (p_check_out_date BETWEEN res.check_in_date AND res.check_out_date)
+         OR (res.check_in_date BETWEEN p_check_in_date AND p_check_out_date)
+       );
 
-// Ověření, že rezervace existuje
-SELECT COUNT(*)
-INTO p_reservation_count
-FROM Reservation
-WHERE reservation_id = :reservationId;
+    IF v_room_count > 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Pokoj je v daném termínu již obsazený');
+    END IF;
 
-IF p_reservation_count = 0 THEN
-  ROLLBACK;
-  RAISE_APPLICATION_ERROR(-20001, 'Rezervace s tímto ID neexistuje');
-END IF;
+    -- Kontrola platnosti datumů
+    IF p_check_in_date >= p_check_out_date THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Datum příjezdu musí být před datem odjezdu');
+    END IF;
 
-// Ověření, že rezervace ještě nebyla zaplacena
-SELECT p.is_paid, p.payment_id, p.total_accommodation
-INTO p_is_paid, p_payment_id, p_total_accommodation
-FROM Reservation r
-JOIN Payment p ON r.payment_id = p.payment_id
-WHERE r.reservation_id = :reservationId;
+    -- Ověření existence hosta
+    SELECT COUNT(*)
+      INTO v_guest_count
+      FROM Guest
+     WHERE guest_id = p_guest_id;
 
-IF p_is_paid = 1 THEN
-  ROLLBACK;
-  RAISE_APPLICATION_ERROR(-20002, 'Tato rezervace je již zaplacena');
-END IF;
+    IF v_guest_count = 0 THEN
+        RAISE_APPLICATION_ERROR(-20003, 'Host v systému neexistuje');
+    END IF;
 
-// Výpočet celkové ceny za služby
-SELECT NVL(SUM(total_price), 0)
-INTO p_service_total
-FROM ServiceUsage
-WHERE reservation_id = :reservationId;
+    -- Získání typu pokoje a ceny za noc
+    SELECT rt.room_type_id, rt.price_per_night
+      INTO v_room_type_id, v_price_per_night
+      FROM Room r
+      JOIN RoomType rt ON r.room_type_id = rt.room_type_id
+     WHERE r.room_id = p_room_id;
 
-// Celková částka k platbě
-p_total_expenses := p_total_accommodation + p_service_total;
+    -- Výpočet délky pobytu a celkové ceny
+    v_nights := p_check_out_date - p_check_in_date;
+    v_total_accommodation := v_nights * v_price_per_night;
 
-// Zaznamenání platby podle zvoleného platebního způsobu
-IF :paymentMethod NOT IN ('cash', 'card', 'bank_transfer') THEN
-  ROLLBACK;
-  RAISE_APPLICATION_ERROR(-20003, 'Neplatný způsob platby');
-END IF;
+    -- Vytvoření platby (nezaplacené)
+    INSERT INTO Payment (total_accommodation, total_expenses, payment_date, is_paid)
+         VALUES (v_total_accommodation, v_total_accommodation, NULL, 0)
+      RETURNING payment_id INTO v_payment_id;
 
-// Aktualizace platby
-UPDATE Payment
-SET is_paid = 1,
-    payment_date = SYSDATE,
-    total_expenses = p_total_expenses,
-    payment_method = :paymentMethod
-WHERE payment_id = p_payment_id;
+    -- Vytvoření rezervace
+    INSERT INTO Reservation (
+        guest_id, room_id, employee_id, creation_date,
+        check_in_date, check_out_date, payment_id, status
+    ) VALUES (
+        p_guest_id, p_room_id, p_employee_id, SYSDATE,
+        p_check_in_date, p_check_out_date, v_payment_id, 'Confirmed'
+    );
 
-// Přidání záznamu o platbě do logu
-INSERT INTO PaymentLog (payment_id, payment_date, payment_method, amount, employee_id)
-VALUES (p_payment_id, SYSDATE, :paymentMethod, p_total_expenses, 
-        (SELECT employee_id FROM Reservation WHERE reservation_id = :reservationId));
+    -- Aktualizace stavu pokoje
+    UPDATE Room
+       SET is_occupied = 1
+     WHERE room_id = p_room_id;
 
-COMMIT;
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE;
+END create_reservation;
 \end{verbatim}
 
 \end{document}
