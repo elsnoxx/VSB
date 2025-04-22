@@ -1,0 +1,132 @@
+#Prace se soubory
+openedFile = open(path).read()
+  lines = openedFile.split("\n")
+
+  for line in lines:
+      # 17,ahoj,prosim
+      parts = line.split(",")
+      value1 = parts[1] #17
+      value2 = parts[2] #ahoj
+      value3 = parts[3] #prosim
+
+
+#Strip smaze prazdne znaky a mezery, split mi to rozdeli na jednotlive polozky
+def nejcastejsi_glyfy(soubor_adresy):
+    
+    with open(soubor_adresy, 'r') as file:
+        rows = file.readlines()
+
+    result = {}
+
+    for row in rows:
+        glyphs = row.strip().split()
+
+  
+
+
+# Result je dict a result[glyph] = 1 -> priradim klicy (glyph) jeho hodnotu (kolikrat se vyskytl)
+with open(soubor_adresy, 'r') as file:
+        rows = file.readlines()
+
+    result = {}
+
+    for row in rows:
+        glyphs = row.strip().split()
+
+        for glyph in glyphs:
+            if glyph not in result:
+                result[glyph] = 1
+            
+            else:
+                result[glyph] += 1
+
+
+#Prvni ukol 3D Pole
+def spocti_krychli(soubor_souradnice):
+    with open(soubor_souradnice, 'r') as file:
+        rows = file.readlines()
+    
+    x, y, z = [], [], []
+
+    for row in rows:
+        stripped = row.strip().split(',')
+        x1, y1, z1 = map(int, stripped)
+
+        x.append(x1)
+        y.append(y1)
+        z.append(z1)
+
+    #print("Obsah proměnné x1:", x)
+    #print("Obsah proměnné y1:", y)
+    #print("Obsah proměnné z1:", z)
+
+    x_min, x_max = min(x), max(x)
+    y_min, y_max = min(y), max(y)
+    z_min, z_max = min(z), max(z)
+
+    x_size = abs(x_min) + abs(x_max)
+    y_size = abs(y_min) + abs(y_max)
+    z_size = abs(z_min) + abs(z_max)
+
+    return x_size * y_size * z_size
+
+
+# Max hodnoty do nové dict a ze staré odstraním
+ new_dict = {}
+    for i in range(5):
+        max_key = max(result, key=result.get)
+        max_value = result[max_key]
+
+        new_dict[max_key] = max_value
+        result.pop(max_key)
+
+    sorted_glyphs = sorted(result.items(), key=lambda x: (-x[1], x[0]))
+    return result
+
+
+#Zjistí mi klíč z dictionary a k němu hodnotu
+max_key = max(result, key=result.get)
+        max_value = result[max_key]
+
+
+# Zjistí mi hodnotu z dictionary k ní klíč
+min_value = min(result.values())
+min_key = min(result, key=result.get)
+
+
+#strip() mi odstraní prázdné meezry a \n
+
+lines = ['Hello,\n', 'this is a test file.\n', 'It contains multiple lines.\n']
+stripped_lines = [line.rstrip('\n') for line in lines]
+
+#Rozdíly mezi read, readline a readlines
+
+READ
+Hello,
+this is a test file.
+
+READLINE
+Hello,
+
+this is a test file.
+
+
+READLINES
+['Hello,\n', 'this is a test file.\n']
+
+
+#Prochazeni seznamu, pokud ho upravuju
+for human in self.people[:]: # VZDY VYTVORIT KOPII!
+    self.people.remove(human)
+
+
+
+#DICT V DICT a accesovani
+dict = {}
+klic1 = "klic1"
+klic2 = "klic2"
+
+dict[klic1] = {}
+dict[klic1][klic2] = 1
+print(dict)
+{ klic1 : {klic2:1}}
