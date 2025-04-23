@@ -1,0 +1,9 @@
+C:/Users/ficek/OneDrive/Dokumenty/GitHub/VSB/4_semestr/URO/QtProjekt/projektUro/evidence/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/CMakeFiles/evidence.dir
+C:/Users/ficek/OneDrive/Dokumenty/GitHub/VSB/4_semestr/URO/QtProjekt/projektUro/evidence/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/CMakeFiles/edit_cache.dir
+C:/Users/ficek/OneDrive/Dokumenty/GitHub/VSB/4_semestr/URO/QtProjekt/projektUro/evidence/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/ficek/OneDrive/Dokumenty/GitHub/VSB/4_semestr/URO/QtProjekt/projektUro/evidence/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/CMakeFiles/list_install_components.dir
+C:/Users/ficek/OneDrive/Dokumenty/GitHub/VSB/4_semestr/URO/QtProjekt/projektUro/evidence/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/CMakeFiles/install.dir
+C:/Users/ficek/OneDrive/Dokumenty/GitHub/VSB/4_semestr/URO/QtProjekt/projektUro/evidence/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/CMakeFiles/install/local.dir
+C:/Users/ficek/OneDrive/Dokumenty/GitHub/VSB/4_semestr/URO/QtProjekt/projektUro/evidence/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/CMakeFiles/install/strip.dir
+C:/Users/ficek/OneDrive/Dokumenty/GitHub/VSB/4_semestr/URO/QtProjekt/projektUro/evidence/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/CMakeFiles/evidence_autogen_timestamp_deps.dir
+C:/Users/ficek/OneDrive/Dokumenty/GitHub/VSB/4_semestr/URO/QtProjekt/projektUro/evidence/build/Desktop_Qt_6_9_0_MinGW_64_bit-Debug/CMakeFiles/evidence_autogen.dir
