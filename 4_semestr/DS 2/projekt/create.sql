@@ -1,12 +1,3 @@
--- Create Address table
-CREATE TABLE Address (
-  address_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  street VARCHAR2(255) NOT NULL,
-  city VARCHAR2(100) NOT NULL,
-  postal_code CHAR(10) NOT NULL,
-  country VARCHAR2(100) NOT NULL
-);
-
 -- Create Guest table
 CREATE TABLE Guest (
   guest_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -15,11 +6,14 @@ CREATE TABLE Guest (
   email VARCHAR2(100) NOT NULL,
   phone VARCHAR2(15) NULL,
   birth_date DATE NOT NULL,
-  address_id NUMBER NOT NULL,
+  street VARCHAR2(255) NOT NULL,
+  city VARCHAR2(100) NOT NULL,
+  postal_code CHAR(10) NOT NULL,
+  country VARCHAR2(100) NOT NULL,
   guest_type VARCHAR2(50) NOT NULL,
   registration_date DATE DEFAULT SYSDATE,
   notes CLOB,
-  CONSTRAINT fk_guest_address FOREIGN KEY (address_id) REFERENCES Address(address_id)
+  CONSTRAINT ck_guest_type CHECK (guest_type IN ('Regular', 'VIP', 'Loyalty'))
 );
 
 -- Create Employee table
@@ -28,8 +22,10 @@ CREATE TABLE Employee (
   firstname VARCHAR2(100) NOT NULL,
   lastname VARCHAR2(100) NOT NULL,
   position VARCHAR2(50) NOT NULL,
-  address_id NUMBER NOT NULL,
-  CONSTRAINT fk_employee_address FOREIGN KEY (address_id) REFERENCES Address(address_id)
+  street VARCHAR2(255) NOT NULL,
+  city VARCHAR2(100) NOT NULL,
+  postal_code CHAR(10) NOT NULL,
+  country VARCHAR2(100) NOT NULL
 );
 
 -- Create RoomType table
@@ -55,7 +51,7 @@ CREATE TABLE Payment (
   payment_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   total_accommodation NUMBER(10,2) NOT NULL,
   total_expenses NUMBER(10,2) NOT NULL,
-  payment_date DATE NOT NULL,
+  payment_date DATE,
   is_paid NUMBER(1) NOT NULL
 );
 
@@ -113,7 +109,3 @@ CREATE TABLE Feedback (
   CONSTRAINT fk_feedback_reservation FOREIGN KEY (reservation_id) REFERENCES Reservation(reservation_id),
   CONSTRAINT ck_feedback_rating CHECK (rating BETWEEN 1 AND 5)
 );
-
--- Přidání integritního omezení pro guest_type
-ALTER TABLE Guest
-  ADD CONSTRAINT ck_guest_type CHECK (guest_type IN ('Regular', 'VIP', 'Loyalty'));
