@@ -281,25 +281,12 @@ Tyto funkce aktivně mění data v databázi:
 
 \newpage
 
-\subsection{Integrace s databází}
+\subsection{Detailní popis vybraných funkcí}
 
-Formulář využívá následující SQL dotazy pro implementaci klíčových funkcí:
+\paragraph{Filtrování rezervací podle data příjezdu (getReservationByCheckin)}
+Funkce umožňuje uživateli zobrazit pouze rezervace s konkrétním datem příjezdu. Implementováno pomocí SQL dotazu s podmínkou na datum příjezdu.
 
-\begin{itemize}
-    \item \textbf{getReservation - Získání všech rezervací:}
-    
-    \begin{verbatim}
-SELECT r.reservation_id, g.firstname, g.lastname, rm.room_number, 
-       r.check_in_date, r.status
-FROM Reservation r
-JOIN Guest g ON r.guest_id = g.guest_id
-JOIN Room rm ON r.room_id = rm.room_id
-ORDER BY r.check_in_date;
-    \end{verbatim}
-    
-    \item \textbf{getReservationByCheckin - Filtrování podle data příjezdu:}
-    
-    \begin{verbatim}
+\begin{verbatim}
 SELECT r.reservation_id, g.firstname, g.lastname, rm.room_number, 
        r.check_in_date, r.status
 FROM Reservation r
@@ -307,19 +294,12 @@ JOIN Guest g ON r.guest_id = g.guest_id
 JOIN Room rm ON r.room_id = rm.room_id
 WHERE r.check_in_date = TO_DATE(:selected_date, 'DD.MM.YYYY')
 ORDER BY r.reservation_id;
-    \end{verbatim}
-    
-    \item \textbf{changeStatusReservation - Změna statusu rezervace:}
-    
-    \begin{verbatim}
-UPDATE Reservation
-SET status = :new_status
-WHERE reservation_id = :selected_reservation_id;
-    \end{verbatim}
-    
-    \item \textbf{getPriceOfAccommodation - Výpočet ceny ubytování:}
-    
-    \begin{verbatim}
+\end{verbatim}
+
+\paragraph{Výpočet ceny ubytování (getPriceOfAccommodation)}
+Funkce vypočítá celkovou cenu za ubytování na základě typu pokoje a délky pobytu. Cena je určena jako součin počtu nocí a ceny za noc podle typu pokoje.
+
+\begin{verbatim}
 SELECT 
     rt.price_per_night,
     (r.check_out_date - r.check_in_date) AS nights,
@@ -328,15 +308,48 @@ FROM Reservation r
 JOIN Room rm ON r.room_id = rm.room_id
 JOIN RoomType rt ON rm.room_type_id = rt.room_type_id
 WHERE r.reservation_id = :selected_reservation_id;
-    \end{verbatim}
-    
-    \item \textbf{addService - Přidání služby k rezervaci:}
-    
-    \begin{verbatim}
+\end{verbatim}
+
+\paragraph{Přidání služby k rezervaci (addService)}
+Funkce umožňuje přidat novou službu k existující rezervaci. Celková cena služby je vypočtena jako součin množství a ceny za jednotku. Vše je zapsáno do tabulky ServiceUsage.
+
+\begin{verbatim}
 INSERT INTO ServiceUsage (reservation_id, service_id, quantity, usage_date, total_price)
 VALUES (:reservation_id, :service_id, :quantity, SYSDATE, 
         :quantity * (SELECT price FROM Service WHERE service_id = :service_id));
-    \end{verbatim}
+\end{verbatim}
+
+\paragraph{Změna pokoje pro rezervaci (changeRoom)}
+Funkce umožňuje změnit pokoj u existující rezervace. Nejprve ověří dostupnost nového pokoje v požadovaném termínu. Pokud je pokoj volný, provede změnu v rámci transakce.
+
+\begin{verbatim}
+-- Kontrola dostupnosti nového pokoje
+SELECT COUNT(*) 
+FROM Reservation res
+WHERE res.room_id = :new_room_id
+  AND res.reservation_id != :current_reservation_id
+  AND res.status != 'Cancelled'
+  AND (
+      (:check_in_date BETWEEN res.check_in_date AND res.check_out_date)
+      OR (:check_out_date BETWEEN res.check_in_date AND res.check_out_date)
+      OR (res.check_in_date BETWEEN :check_in_date AND :check_out_date)
+  );
+
+-- Pokud je pokoj dostupný, provedeme změnu
+UPDATE Reservation
+SET room_id = :new_room_id
+WHERE reservation_id = :current_reservation_id;
+\end{verbatim}
+
+\paragraph{Označení platby jako dokončené (payForReservation)}
+Funkce označí platbu za rezervaci jako zaplacenou a uloží datum platby. Provádí se aktualizací příslušného záznamu v tabulce Payment.
+
+\begin{verbatim}
+UPDATE Payment
+SET is_paid = 1,
+    payment_date = SYSDATE
+WHERE payment_id = (SELECT payment_id FROM Reservation WHERE reservation_id = :reservation_id);
+\end{verbatim}
 
 \newpage
     
