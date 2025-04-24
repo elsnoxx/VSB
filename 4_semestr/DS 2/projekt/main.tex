@@ -1,7 +1,8 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage[left=20mm,right=30mm,top=30mm,bottom=35mm]{geometry} 
 
-
+\usepackage[czech]{babel}
+\usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
 \usepackage{hyperref}
@@ -45,19 +46,24 @@
 
 \newpage
 
+\section*{\textcolor{red}{Opravy:}}
+
+
 \section{Lineární zápis}
 Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč}, atribut
 
 \begin{itemize} 
-\item \textbf{Guest} – Jeden záznam v této tabulce reprezentuje jednotlivého hosta hotelu se základními informacemi jako jméno, příjmení, kontakt, datum narození, adresa (ulice, město, PSČ, země), typ hosta (např. Regular, VIP, Loyalty) a datum registrace.
-\item \textbf{Employee} – Jeden záznam v této tabulce reprezentuje konkrétního zaměstnance hotelu, včetně jeho identifikátoru, jména, příjmení, pozice a adresy (ulice, město, PSČ, země).
-\item \textbf{RoomType} – Jeden záznam v této tabulce reprezentuje typ pokoje (např. jednolůžkový, dvoulůžkový), včetně počtu postelí a ceny za noc.
-\item \textbf{Room} – Jeden záznam v této tabulce reprezentuje jednotlivý pokoj v hotelu s konkrétním číslem, typem pokoje, obsazeností a unikátním identifikátorem.
-\item \textbf{Payment} – Jeden záznam v této tabulce reprezentuje platbu provedenou hostem, včetně částky za ubytování, celkových výdajů, data platby a informace, zda byla platba provedena.
-\item \textbf{Reservation} – Jeden záznam v této tabulce reprezentuje rezervaci vytvořenou hostem, včetně identifikátoru hosta, přiděleného pokoje, zodpovědného zaměstnance, datumu vytvoření, datumu příjezdu a odjezdu, platby a stavu rezervace (např. Confirmed, Checked In, Checked Out, Cancelled).
-\item \textbf{Service} – Jeden záznam v této tabulce reprezentuje službu nebo doplňkový produkt nabízený hotelem, včetně názvu, popisu a ceny.
-\item \textbf{ServiceUsage} – Jeden záznam v této tabulce reprezentuje využití konkrétní služby hostem během jeho pobytu v rámci určité rezervace, včetně množství, data využití a celkové ceny.
-\item \textbf{Feedback} – Jeden záznam v této tabulce reprezentuje hodnocení a komentář od hosta k jeho pobytu v hotelu, včetně číselného hodnocení, textového komentáře a data poskytnutí zpětné vazby.
+    \item \textbf{Guest} – Jeden záznam v této tabulce reprezentuje jednotlivého hosta hotelu se základními informacemi jako jméno, příjmení, kontakt, datum narození, adresa (ulice, město, PSČ, země), typ hosta (např. Regular, VIP, Loyalty) a datum registrace.
+    \item \textbf{Employee} – Jeden záznam v této tabulce reprezentuje konkrétního zaměstnance hotelu, včetně jeho identifikátoru, jména, příjmení, pozice a adresy (ulice, město, PSČ, země).
+    \item \textbf{RoomType} – Jeden záznam v této tabulce reprezentuje typ pokoje (např. jednolůžkový, dvoulůžkový), včetně počtu postelí. Cena za noc je evidována pouze v tabulce \textbf{RoomTypePriceHistory}.
+    \item \textbf{Room} – Jeden záznam v této tabulce reprezentuje jednotlivý pokoj v hotelu s konkrétním číslem, typem pokoje, obsazeností a unikátním identifikátorem.
+    \item \textbf{Payment} – Jeden záznam v této tabulce reprezentuje platbu provedenou hostem, včetně částky za ubytování, celkových výdajů, data platby a informace, zda byla platba provedena.
+    \item \textbf{Reservation} – Jeden záznam v této tabulce reprezentuje rezervaci vytvořenou hostem, včetně identifikátoru hosta, přiděleného pokoje, zodpovědného zaměstnance, datumu vytvoření, datumu příjezdu a odjezdu, platby a stavu rezervace (např. Confirmed, Checked In, Checked Out, Cancelled).
+    \item \textbf{Service} – Jeden záznam v této tabulce reprezentuje službu nebo doplňkový produkt nabízený hotelem, včetně názvu a popisu. Cena služby je evidována pouze v tabulce \textbf{ServicePriceHistory}.
+    \item \textbf{ServiceUsage} – Jeden záznam v této tabulce reprezentuje využití konkrétní služby hostem během jeho pobytu v rámci určité rezervace, včetně množství a celkové ceny.
+    \item \textbf{Feedback} – Jeden záznam v této tabulce reprezentuje hodnocení a komentář od hosta k jeho pobytu v hotelu, včetně číselného hodnocení, textového komentáře a data poskytnutí zpětné vazby.
+    \item \textbf{ServicePriceHistory} – Historie cen služeb, každý záznam obsahuje službu, cenu a období platnosti.
+    \item \textbf{RoomTypePriceHistory} – Historie cen typů pokojů, každý záznam obsahuje typ pokoje, cenu za noc a období platnosti.
 \end{itemize}
 
 \begin{table}
@@ -69,7 +75,7 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
     firstname             & varchar            & 100            & -             & N              & -               & -              & Jméno hosta        \\ \hline  
     lastname              & varchar            & 100            & -             & N              & -               & -              & Příjmení hosta     \\ \hline  
     email                 & varchar            & 100            & -             & N              & -               & -              & Email hosta        \\ \hline  
-    phone                 & varchar            & 15             & -             & A              & -               & -              & Telefon hosta      \\ \hline  
+    phone                 & varchar            & 30             & -             & A              & -               & -              & Telefon hosta      \\ \hline  
     birth\_date           & date               & -              & -             & N              & -               & -              & Datum narození     \\ \hline  
     street                & varchar            & 255            & -             & N              & -               & -              & Ulice              \\ \hline  
     city                  & varchar            & 100            & -             & N              & -               & -              & Město              \\ \hline  
@@ -78,7 +84,7 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
     guest\_type           & varchar            & 50             & -             & N              & -               & -              & Typ hosta          \\ \hline  
     registration\_date    & date               & -              & -             & A              & -               & -              & Datum registrace    \\ \hline
     notes                 & clob               & -              & -             & A              & -               & -              & Poznámky hosta     \\ 
-     \hline
+        \hline
 \end{tabular}  
 \label{tab:guest}
 
@@ -94,7 +100,7 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
     city                  & varchar            & 100            & -             & N              & -               & -              & Město              \\ \hline  
     postal\_code          & char               & 10             & -             & N              & -               & -              & PSČ                \\ \hline
     country               & varchar            & 100            & -             & N              & -               & -              & Země               \\ 
-     \hline
+        \hline
 \end{tabular}  
 \label{tab:employee}
 
@@ -103,10 +109,9 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
     \hline
     \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
     room\_type\_id       & int                & -              & P             & N              & A               & -              & ID typu pokoje     \\ \hline  
-    name                  & varchar            & 50             & -             & N              & -               & -              & Název typu pokoje   \\ \hline  
-    bed\_count            & int                & -              & -             & N              & -               & -              & Počet postelí      \\ \hline
-    price\_per\_night     & decimal            & -              & -             & N              & -               & -              & Cena za noc        \\ 
-     \hline
+    name                  & varchar            & 100            & -             & N              & -               & -              & Název typu pokoje   \\ \hline  
+    bed\_count            & int                & -              & -             & N              & -               & -              & Počet postelí      \\ 
+        \hline
 \end{tabular}  
 \label{tab:roomtype}
 
@@ -116,9 +121,9 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
     \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
     room\_id             & int                & -              & P             & N              & A               & -              & ID pokoje          \\ \hline  
     room\_type\_id       & int                & -              & F(RoomType)   & N              & -               & -              & ID typu pokoje     \\ \hline  
-    room\_number          & varchar            & 10             & -             & N              & U               & -              & Číslo pokoje       \\ \hline
+    room\_number          & varchar            & 20             & -             & N              & U               & -              & Číslo pokoje       \\ \hline
     is\_occupied          & boolean            & -              & -             & N              & -               & -              & Obsazenost pokoje  \\ 
-     \hline
+        \hline
 \end{tabular}  
 \label{tab:room}
 \end{table}
@@ -133,7 +138,7 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
     total\_expenses       & decimal            & -              & -             & N              & -               & -              & Celkové výdaje     \\ \hline  
     payment\_date        & date               & -              & -             & A              & -               & -              & Datum platby       \\ \hline
     is\_paid             & boolean            & -              & -             & N              & -               & -              & Stav platby        \\ 
-     \hline
+        \hline
 \end{tabular}  
 \label{tab:payment}
 
@@ -149,8 +154,8 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
     check\_in\_date      & date               & -              & -             & N              & -               & -              & Datum příjezdu     \\ \hline  
     check\_out\_date     & date               & -              & -             & N              & -               & -              & Datum odjezdu      \\ \hline  
     payment\_id          & int                & -              & F(Payment)    & N              & -               & -              & ID platby          \\ \hline
-    status                & varchar            & 20             & -             & N              & -               & -              & Stav rezervace     \\ 
-     \hline
+    status                & varchar            & 30             & -             & N              & -               & -              & Stav rezervace     \\ 
+        \hline
 \end{tabular}  
 \label{tab:reservation}
 
@@ -160,9 +165,8 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
     \textbf{Název}          & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
     service\_id          & int                & -              & P             & N              & A               & -              & ID služby          \\ \hline  
     name                & varchar            & 100            & -             & N              & -               & -              & Název služby       \\ \hline  
-    description         & clob               & -              & -             & A              & -               & -              & Popis služby       \\ \hline  
-    price               & decimal            & -              & -             & N              & -               & -              & Cena služby        \\ 
-     \hline
+    description         & clob               & -              & -             & A              & -               & -              & Popis služby       \\ 
+        \hline
 \end{tabular}  
 \label{tab:service}
 
@@ -174,9 +178,8 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
     reservation\_id      & int                & -              & F(Reservation) & N              & -               & -              & ID rezervace       \\ \hline  
     service\_id          & int                & -              & F(Service)    & N              & -               & -              & ID služby          \\ \hline  
     quantity             & int                & -              & -             & N              & -               & -              & Množství           \\ \hline
-    usage\_date          & date               & -              & -             & N              & -               & -              & Datum využití      \\ \hline  
     total\_price         & decimal            & -              & -             & N              & -               & -              & Celková cena       \\ 
-     \hline
+        \hline
 \end{tabular}  
 \label{tab:serviceusage}
 
@@ -189,10 +192,36 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
     reservation\_id      & int                & -              & F(Reservation) & N              & -               & -              & ID rezervace       \\ \hline  
     rating               & int                & -              & -             & N              & -               & -              & Hodnocení (1-5)    \\ \hline  
     comment              & clob               & -              & -             & A              & -               & -              & Komentář           \\ \hline  
-    feedback\_date       & date               & -              & -             & N              & -               & -              & Datum hodnocení    \\ 
-     \hline
+    feedback\_date       & date               & -              & -             & A              & -               & -              & Datum hodnocení    \\ 
+        \hline
 \end{tabular}  
 \label{tab:feedback}
+
+\caption{Atributy tabulky ServicePriceHistory}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}   & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    sph\_id          & int                & -              & P             & N             & A              & -           & ID záznamu historie \\ \hline
+    service\_id      & int                & -              & F(Service)    & N             & -              & -           & ID služby          \\ \hline
+    price            & decimal            & -              & -             & N             & -              & -           & Cena služby        \\ \hline
+    valid\_from      & date               & -              & -             & N             & -              & -           & Začátek platnosti  \\ \hline
+    valid\_to        & date               & -              & -             & A             & -              & -           & Konec platnosti    \\
+    \hline
+\end{tabular}
+\label{tab:servicepricehistory}
+
+\caption{Atributy tabulky RoomTypePriceHistory}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Název}        & \textbf{Dat. Typ} & \textbf{Délka} & \textbf{Klíč} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Význam} \\ \hline
+    rtph\_id              & int                & -              & P             & N             & A              & -           & ID záznamu historie \\ \hline
+    room\_type\_id        & int                & -              & F(RoomType)   & N             & -              & -           & ID typu pokoje      \\ \hline
+    price\_per\_night     & decimal            & -              & -             & N             & -              & -           & Cena za noc         \\ \hline
+    valid\_from           & date               & -              & -             & N             & -              & -           & Začátek platnosti   \\ \hline
+    valid\_to             & date               & -              & -             & A             & -              & -           & Konec platnosti     \\
+    \hline
+\end{tabular}
+\label{tab:roomtypepricehistory}
 \end{table}
 
 \newpage
@@ -203,7 +232,6 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
     \item \textbf{check\_in\_date} $<$ \textbf{check\_out\_date} – Datum příjezdu musí být dříve než datum odjezdu.
     \item \textbf{guest\_type} – Může nabývat hodnot \{Regular, VIP, Loyalty\}.
     \item \textbf{status} – Může nabývat hodnot \{Confirmed, Checked In, Checked Out, Cancelled\}.
-    \item \textbf{address\_id} – Odkazuje na existující záznam v tabulce \textbf{Address}.
     \item \textbf{room\_type\_id} – Odkazuje na existující záznam v tabulce \textbf{RoomType}.
     \item \textbf{payment\_id} – Odkazuje na existující záznam v tabulce \textbf{Payment}.
     \item \textbf{is\_paid} – Může nabývat hodnot \{0 (neuhrazeno), 1 (uhrazeno)\}.
@@ -216,6 +244,11 @@ Legenda: \textbf{Tabulka}, \underline{primární klíč}, \textit{cizí klíč},
     \item \textbf{total\_price} v \textbf{ServiceUsage} – Musí být nezáporná hodnota.
     \item \textbf{email} – Musí obsahovat znak @ a platnou doménu.
     \item \textbf{total\_accommodation} a \textbf{total\_expenses} – Musí být nezáporné hodnoty.
+    \item \textbf{service\_id} v \textbf{ServicePriceHistory} – Odkazuje na existující záznam v tabulce \textbf{Service}.
+    \item \textbf{room\_type\_id} v \textbf{RoomTypePriceHistory} – Odkazuje na existující záznam v tabulce \textbf{RoomType}.
+    \item \textbf{price} v \textbf{ServicePriceHistory} – Musí být nezáporná hodnota.
+    \item \textbf{price\_per\_night} v \textbf{RoomTypePriceHistory} – Musí být nezáporná hodnota.
+    \item \textbf{valid\_from} $<$ \textbf{valid\_to} – Začátek platnosti musí být dříve než konec platnosti (pokud je konec vyplněn).
 \end{itemize}
 
 \newpage
@@ -233,39 +266,78 @@ Formulář Správa hotelových rezervací je centrálním bodem pro práci s rez
 
 \newpage
 
-\subsection{Seznam implementovaných funkcí}
+\subsection{Popis formuláře}
+
+% \subsubsection{Proměnné formuláře:}
+
+% \begin{itemize}
+%     \item \textbf{vf\_id\_reservation}: ID aktuální rezervace, inicializováno na null.
+%     \item \textbf{vf\_id\_guest}: ID aktuálního hosta, inicializováno na null.
+%     \item \textbf{vf\_id\_room}: ID vybraného pokoje, inicializováno na null.
+%     \item \textbf{vf\_id\_payment}: ID platby k rezervaci, inicializováno na null.
+%     \item \textbf{vf\_check\_in\_date}: Datum příjezdu, vstupní parametr.
+%     \item \textbf{vf\_check\_out\_date}: Datum odjezdu, vstupní parametr.
+%     \item \textbf{vf\_status}: Stav rezervace (Confirmed, Checked-In, Checked-Out, Cancelled).
+%     \item \textbf{vf\_guest\_type}: Typ hosta (Regular, VIP, Loyalty).
+%     \item \textbf{vf\_room\_type}: Typ pokoje (např. jednolůžkový, dvoulůžkový).
+%     \item \textbf{vf\_total\_accommodation}: Cena za ubytování, vypočtená hodnota.
+%     \item \textbf{vf\_total\_services}: Cena za služby, vypočtená hodnota.
+%     \item \textbf{vf\_is\_paid}: Stav platby (0/1), aktualizováno po zaplacení.
+%     \item \textbf{vf\_service\_list}: Seznam služeb přidaných k rezervaci.
+%     \item \textbf{vf\_selected\_service}: ID vybrané služby pro přidání.
+%     \item \textbf{vf\_service\_quantity}: Počet jednotek vybrané služby.
+% \end{itemize}
+
+\subsubsection{Návrh formuláře:}
+
+\begin{itemize}
+    \item \textbf{Vyhledání rezervace:} Zadáním data příjezdu a stiskem tlačítka „Vyhledat“ se spustí funkce \textbf{getReservationByCheckin}, která zobrazí odpovídající rezervace.
+
+    \item \textbf{Výběr rezervace:} Kliknutím na řádek v tabulce rezervací se načtou detailní informace pomocí funkce \textbf{getReservationDetail}.
+
+    \item \textbf{Změna stavu rezervace:} Změnou hodnoty v poli „State“ se volá funkce \textbf{changeStatusReservation}.
+
+    \item \textbf{Změna pokoje:} Výběrem jiného pokoje v poli „Room no“ se použije funkce \textbf{changeRoom}, která ověří dostupnost a provede změnu.
+
+    \item \textbf{Zaplacení rezervace:} Stiskem tlačítka „Pay“ se provede funkce \textbf{payForReservation}, která označí rezervaci jako zaplacenou.
+
+    \item \textbf{Přidání služby:} Výběrem služby a zadáním množství, následně stiskem tlačítka „Add“, se použije funkce \textbf{addService}.
+
+    \item \textbf{Odebrání služby:} Stiskem tlačítka „Del“ u konkrétní služby se použije funkce \textbf{deleteService}.
+
+    \item \textbf{Zobrazení cen a služeb:} Pro výpočet a zobrazení cen za ubytování a služby jsou využity funkce \textbf{getPriceOfAccommodation}, \textbf{getUsageService} a \textbf{getPriceOfService}.
+
+\end{itemize}
+
+\newpage
+
+\subsection{Seznam funkcí}
 Formulář Správa hotelových rezervací poskytuje následujících 10 funkcí, které jsou rozděleny na dvě kategorie podle způsobu volání:
 
 \subsubsection{Funkce typu Result (výsledkové)}
-Tyto funkce zobrazují data bez aktivní změny databáze:
 
 \begin{enumerate}
     \item \textbf{getReservationList} - Zobrazení seznamu všech rezervací v přehledové tabulce. Funkce načítá data ze všech relevantních tabulek a zobrazuje klíčové informace jako ID rezervace, jméno hosta, číslo pokoje, datum příjezdu a status rezervace.
-
-    \item \textbf{getReservationDetail} - Zobrazení detailních informací o vybrané rezervaci. Po kliknutí na konkrétní rezervaci v seznamu se zobrazí podrobnosti včetně jména hosta, čísla pokoje, datumu příjezdu a odjezdu a stavu rezervace.
-    
-    \item \textbf{getRoomType} - Zobrazení informací o typu pokoje včetně počtu lůžek a standardní ceny. Funkce získává data z tabulky RoomType pro vybraný pokoj a zobrazuje je v detailu rezervace.
     
     \item \textbf{getPriceOfAccommodation} - Výpočet a zobrazení ceny za ubytování na základě typu pokoje a délky pobytu. Funkce počítá cenu jako násobek počtu nocí a ceny za noc pro daný typ pokoje.
     
     \item \textbf{getUsageService} - Zobrazení seznamu služeb využitých v rámci dané rezervace včetně množství a ceny. V sekci plateb je tabulka s přehledem všech služeb načtených z tabulky ServiceUsage.
 
-    \item \textbf{getPriceOfService} - Výpočet a zobrazení ceny za jednotlivé služby na základě množství a ceny za jednotku. Funkce načítá data z tabulky Service a počítá celkovou cenu jako součin množství a ceny za jednotku.
+    \item \textbf{getPriceOfServices} - Výpočet a zobrazení ceny za jednotlivé služby na základě množství a ceny za jednotku. Funkce načítá data z tabulky Service a počítá celkovou cenu jako součin množství a ceny za jednotku.
 
     \item \textbf{getRoomList} - Načtení seznamu všech pokojů pro plnění výběrového pole při vytváření nebo úpravě rezervace.
 
     \item \textbf{getServiceList} - Načtení seznamu všech dostupných služeb pro výběr při přidávání služby k rezervaci.
 
-    \item \textbf{getGuestType} - Načtení seznamu typů hostů pro plnění výběrového pole při vytváření nebo úpravě rezervace.
-
     \item \textbf{getReservationState} - Načtení seznamu stavů rezervací pro plnění výběrového pole při vytváření nebo úpravě rezervace.
+
+    \item \textbf{getReservationDetail } - Načtení detailních informací o rezervaci na základě ID rezervace. Funkce zobrazuje všechny relevantní informace včetně hosta, pokoje, služeb.
 
 \end{enumerate}
 
 \subsubsection{Funkce typu Invocation (vyvolávací)}
-Tyto funkce aktivně mění data v databázi:
 
-\begin{enumerate}\setcounter{enumi}{10}
+\begin{enumerate}\setcounter{enumi}{8}
     \item \textbf{getReservationByCheckin} - Filtrování seznamu rezervací podle data příjezdu. Uživatel zadá požadované datum do pole ve vyhledávací části a systém zobrazí pouze rezervace s odpovídajícím datem příjezdu.
     
     \item \textbf{changeStatusReservation} - Změna statusu rezervace (Confirmed, Checked-In, Checked-Out, Cancelled). Pomocí rozbalovacího seznamu v detailu rezervace lze změnit stav rezervace, což automaticky aktualizuje databázi a může spustit související procesy (např. označení pokoje jako obsazeného).
@@ -279,114 +351,103 @@ Tyto funkce aktivně mění data v databázi:
     \item \textbf{deleteService} - Odstranění služby z rezervace. Pomocí tlačítka "Delete" lze odstranit vybranou službu z tabulky ServiceUsage, což aktualizuje celkovou cenu rezervace.
 \end{enumerate}
 
-\newpage
+\subsection{Detailní popis funkcí}
 
-\subsection{Detailní popis vybraných funkcí}
+\subsubsection{getPriceOfAccommodation}
+\textbf{Vstupy:} \\
+p\_reservation\_id
 
-\paragraph{Filtrování rezervací podle data příjezdu (getReservationByCheckin)}
-Funkce umožňuje uživateli zobrazit pouze rezervace s konkrétním datem příjezdu. Implementováno pomocí SQL dotazu s podmínkou na datum příjezdu.
+\textbf{Algoritmus:}
+\begin{enumerate}
+    \item Zjisti typ pokoje a termín rezervace podle p\_reservation\_id.
+    \item Zjisti cenu za noc z tabulky RoomTypePriceHistory podle data příjezdu.
+    \item Spočítej počet nocí (rozdíl check\_out\_date - check\_in\_date).
+    \item Vynásob počet nocí cenou za noc.
+\end{enumerate}
 
-\begin{verbatim}
-SELECT r.reservation_id, g.firstname, g.lastname, rm.room_number, 
-       r.check_in_date, r.status
-FROM Reservation r
-JOIN Guest g ON r.guest_id = g.guest_id
-JOIN Room rm ON r.room_id = rm.room_id
-WHERE r.check_in_date = TO_DATE(:selected_date, 'DD.MM.YYYY')
-ORDER BY r.reservation_id;
-\end{verbatim}
-
-\paragraph{Výpočet ceny ubytování (getPriceOfAccommodation)}
-Funkce vypočítá celkovou cenu za ubytování na základě typu pokoje a délky pobytu. Cena je určena jako součin počtu nocí a ceny za noc podle typu pokoje.
-
+\textbf{SQL:}
 \begin{verbatim}
 SELECT 
-    rt.price_per_night,
-    (r.check_out_date - r.check_in_date) AS nights,
-    rt.price_per_night * (r.check_out_date - r.check_in_date) AS total_price
+  (r.check_out_date - r.check_in_date) * rh.price_per_night AS total_price
 FROM Reservation r
 JOIN Room rm ON r.room_id = rm.room_id
 JOIN RoomType rt ON rm.room_type_id = rt.room_type_id
-WHERE r.reservation_id = :selected_reservation_id;
+JOIN RoomTypePriceHistory rh ON rh.room_type_id = rt.room_type_id
+  AND r.check_in_date BETWEEN rh.valid_from AND NVL(rh.valid_to, r.check_in_date)
+WHERE r.reservation_id = :p_reservation_id;
 \end{verbatim}
 
-\paragraph{Přidání služby k rezervaci (addService)}
-Funkce umožňuje přidat novou službu k existující rezervaci. Celková cena služby je vypočtena jako součin množství a ceny za jednotku. Vše je zapsáno do tabulky ServiceUsage.
+\subsubsection{getPriceOfService}
+\textbf{Vstupy:} \\
+p\_service\_id, p\_quantity, p\_usage\_date
 
+\textbf{Algoritmus:}
+\begin{enumerate}
+    \item Zjisti jednotkovou cenu služby z tabulky ServicePriceHistory podle p\_service\_id a data využití služby.
+    \item Vypočítej celkovou cenu služby (jednotková cena * množství).
+\end{enumerate}
+
+\textbf{SQL:}
 \begin{verbatim}
-INSERT INTO ServiceUsage (reservation_id, service_id, quantity, usage_date, total_price)
-VALUES (:reservation_id, :service_id, :quantity, SYSDATE, 
-        :quantity * (SELECT price FROM Service WHERE service_id = :service_id));
+SELECT sph.price * :p_quantity AS total_price
+FROM ServicePriceHistory sph
+WHERE sph.service_id = :p_service_id
+  AND :p_usage_date BETWEEN sph.valid_from AND NVL(sph.valid_to, :p_usage_date);
 \end{verbatim}
 
-\paragraph{Změna pokoje pro rezervaci (changeRoom)}
-Funkce umožňuje změnit pokoj u existující rezervace. Nejprve ověří dostupnost nového pokoje v požadovaném termínu. Pokud je pokoj volný, provede změnu v rámci transakce.
+\subsubsection{addService}
+\textbf{Vstupy:} \\
+p\_reservation\_id, p\_service\_id, p\_quantity, p\_usage\_date
 
+\textbf{Algoritmus:}
+\begin{enumerate}
+    \item Zjisti cenu služby podle p\_service\_id a p\_usage\_date z tabulky ServicePriceHistory.
+    \item Vypočítej celkovou cenu služby (cena * množství).
+    \item Vlož záznam do tabulky ServiceUsage.
+\end{enumerate}
+
+\textbf{SQL:}
 \begin{verbatim}
--- Kontrola dostupnosti nového pokoje
-SELECT COUNT(*) 
-FROM Reservation res
-WHERE res.room_id = :new_room_id
-  AND res.reservation_id != :current_reservation_id
-  AND res.status != 'Cancelled'
-  AND (
-      (:check_in_date BETWEEN res.check_in_date AND res.check_out_date)
-      OR (:check_out_date BETWEEN res.check_in_date AND res.check_out_date)
-      OR (res.check_in_date BETWEEN :check_in_date AND :check_out_date)
-  );
-
--- Pokud je pokoj dostupný, provedeme změnu
-UPDATE Reservation
-SET room_id = :new_room_id
-WHERE reservation_id = :current_reservation_id;
+INSERT INTO ServiceUsage (reservation_id, service_id, quantity, total_price)
+SELECT :p_reservation_id, :p_service_id, :p_quantity, (sph.price * :p_quantity)
+FROM ServicePriceHistory sph
+WHERE sph.service_id = :p_service_id
+  AND :p_usage_date BETWEEN sph.valid_from AND NVL(sph.valid_to, :p_usage_date);
 \end{verbatim}
 
-\paragraph{Označení platby jako dokončené (payForReservation)}
-Funkce označí platbu za rezervaci jako zaplacenou a uloží datum platby. Provádí se aktualizací příslušného záznamu v tabulce Payment.
+\subsubsection{payForReservation}
+\textbf{Vstupy:} \\
+p\_payment\_id
 
+\textbf{Algoritmus:}
+\begin{enumerate}
+    \item Označ platbu jako zaplacenou a nastav datum platby na aktuální datum.
+\end{enumerate}
+
+\textbf{SQL:}
 \begin{verbatim}
-UPDATE Payment
-SET is_paid = 1,
-    payment_date = SYSDATE
-WHERE payment_id = (SELECT payment_id FROM Reservation WHERE reservation_id = :reservation_id);
+UPDATE Payment SET is_paid = 1, payment_date = CURRENT_DATE WHERE payment_id = :p_payment_id;
 \end{verbatim}
 
-\newpage
-    
-    \item \textbf{changeRoom - Změna pokoje pro rezervaci:}
-    
-    \begin{verbatim}
--- Nejprve kontrola dostupnosti nového pokoje
-SELECT COUNT(*) 
-FROM Reservation res
-WHERE res.room_id = :new_room_id
-  AND res.reservation_id != :current_reservation_id
-  AND res.status != 'Cancelled'
-  AND (
-      (:check_in_date BETWEEN res.check_in_date AND res.check_out_date)
-      OR (:check_out_date BETWEEN res.check_in_date AND res.check_out_date)
-      OR (res.check_in_date BETWEEN :check_in_date AND :check_out_date)
-  );
-  
--- Pokud je pokoj dostupný, provedeme změnu
-UPDATE Reservation
-SET room_id = :new_room_id
-WHERE reservation_id = :current_reservation_id;
-    \end{verbatim}
-    
-    \item \textbf{payForReservation - Označení platby jako dokončené:}
-    
-    \begin{verbatim}
-UPDATE Payment
-SET is_paid = 1,
-    payment_date = SYSDATE
-WHERE payment_id = (SELECT payment_id FROM Reservation WHERE reservation_id = :reservation_id);
-    \end{verbatim}
-\end{itemize}
+\subsubsection{getReservationDetail}
+\textbf{Vstupy:} \\
+p\_reservation\_id
 
-\newpage
+\textbf{Algoritmus:}
+\begin{enumerate}
+    \item Načti základní údaje o rezervaci podle p\_reservation\_id.
+    \item Načti údaje o hostovi, pokoji, platbě a využitých službách.
+    \item Zobraz detailní informace uživateli.
+\end{enumerate}
 
-
+\textbf{SQL:}
+\begin{verbatim}
+SELECT * FROM Reservation r
+JOIN Guest g ON r.guest_id = g.guest_id
+JOIN Room rm ON r.room_id = rm.room_id
+JOIN Payment p ON r.payment_id = p.payment_id
+WHERE r.reservation_id = :p_reservation_id;
+\end{verbatim}
 
 
 \newpage
@@ -394,79 +455,17 @@ WHERE payment_id = (SELECT payment_id FROM Reservation WHERE reservation_id = :r
 
 \subsection{Transakce: Vytvoření rezervace}
 
-\subsubsection{Popis}
-Tato funkce umožňuje vytvoření nové rezervace v hotelovém systému v rámci jedné databázové transakce. Zahrnuje ověření dostupnosti pokoje v požadovaném termínu, případné vytvoření nového hosta, zapsání rezervace, přiřazení zaměstnance, založení platby (nezaplacené) a aktualizaci stavu pokoje.
+\subsubsection{Popis transakce}
+Transakce zajistí vytvoření nové rezervace v hotelovém systému. Ověří dostupnost pokoje, případně založí nového hosta, vytvoří rezervaci, založí platbu a nastaví pokoj jako obsazený. Vše probíhá atomicky – v případě chyby se provede rollback.
 
-\subsubsection{Kroky}
+\subsubsection{Kroky transakce}
 \begin{enumerate}
-    \item \textbf{Kontrola dostupnosti pokoje}
+    \item \textbf{Start transakce}
+    \item \textbf{Ověření dostupnosti pokoje:}
     \begin{itemize}
-        \item Uživatel zadá požadovaný typ pokoje a termín pobytu (datum příjezdu a odjezdu)
-        \item Systém ověří, zda existují volné pokoje daného typu v požadovaném termínu pomocí dotazu na tabulky Room a Reservation
-        \item Pokud je pokoj dostupný, systém nabídne konkrétní dostupné pokoje
-        \item Pokud není dostupný žádný pokoj daného typu, systém zobrazí upozornění a nabídne alternativní termíny nebo typy pokojů
-    \end{itemize}
-    
-    \item \textbf{Identifikace hosta}
-    \begin{itemize}
-        \item Uživatel vyhledá hosta v systému podle jména, příjmení nebo e-mailu
-        \item Pokud host existuje, jsou jeho údaje načteny do formuláře
-        \item Pokud host neexistuje, uživatel zadá nové údaje hosta (jméno, příjmení, e-mail, telefon, datum narození)
-        \item V případě nového hosta se také zadá adresa (ulice, město, PSČ, země)
-    \end{itemize}
-    
-    \item \textbf{Výběr zaměstnance}
-    \begin{itemize}
-        \item Systém automaticky předvyplní aktuálně přihlášeného zaměstnance
-        \item Uživatel může změnit zaměstnance, který je zodpovědný za rezervaci
-    \end{itemize}
-    
-    \item \textbf{Zadání detailů rezervace}
-    \begin{itemize}
-        \item Uživatel zadá nebo potvrdí datum příjezdu a odjezdu
-        \item Systém zkontroluje, že datum příjezdu je před datem odjezdu
-        \item Uživatel zvolí status rezervace (standardně "Confirmed")
-    \end{itemize}
-    
-    \item \textbf{Výpočet předběžné ceny}
-    \begin{itemize}
-        \item Systém vypočítá délku pobytu v nocích
-        \item Z tabulky RoomType získá cenu za noc pro zvolený typ pokoje
-        \item Vypočítá celkovou cenu za ubytování (délka pobytu $\times$ cena za noc)
-        \item Uživatel může přidat další výdaje (např. polopenze, parkování)
-    \end{itemize}
-    
-    \item \textbf{Vytvoření platby, rezervace a aktualizace stavu pokoje (vše v jedné transakci)}
-    \begin{itemize}
-        \item Systém vytvoří nový záznam v tabulce Payment s vypočítanou cenou ubytování, nastaví is\_paid na hodnotu 0 (nezaplaceno)
-        \item Systém vytvoří nový záznam v tabulce Reservation s vazbami na hosta, pokoj, zaměstnance a platbu
-        \item Aktualizuje stav pokoje v tabulce Room (is\_occupied = 1)
-    \end{itemize}
-\end{enumerate}
-
-\subsubsection{Transakční zpracování}
-\begin{itemize}
-    \item Všechny kroky probíhají v rámci jedné transakce.
-    \item V případě jakékoliv chyby během těchto kroků se celá transakce vrátí zpět (ROLLBACK).
-    \item Po úspěšném dokončení všech kroků se transakce potvrdí (COMMIT).
-\end{itemize}
-
-\subsubsection{Ošetření chybových stavů}
-\begin{itemize}
-    \item Kontrola platnosti datumů (datum příjezdu musí být před datem odjezdu)
-    \item Kontrola dostupnosti pokoje v daném termínu
-    \item Kontrola úplnosti zadaných údajů o hostovi
-    \item Kontrola platnosti e-mailu a telefonního čísla
-    \item Ošetření současného přístupu více uživatelů k danému pokoji (zamykání záznamů)
-\end{itemize}
-
-\subsubsection{SQL příklad pro vytvoření rezervace v jedné transakci}
+        \item Zjisti, zda je pokoj v požadovaném termínu volný:
 \begin{verbatim}
-BEGIN TRANSACTION;
-
-// Kontrola dostupnosti pokoje v zadaném termínu
 SELECT COUNT(*)
-INTO p_room_count
 FROM Reservation res
 WHERE res.room_id = :roomId
   AND res.status != 'Cancelled'
@@ -475,63 +474,57 @@ WHERE res.room_id = :roomId
       OR (:checkOutDate BETWEEN res.check_in_date AND res.check_out_date)
       OR (res.check_in_date BETWEEN :checkInDate AND :checkOutDate)
   );
-
-IF p_room_count > 0 THEN
-  ROLLBACK;
-  RAISE_APPLICATION_ERROR(-20001, 'Pokoj je v daném termínu již obsazený');
-END IF;
-
-// Kontrola platnosti datumů
-IF :checkInDate >= :checkOutDate THEN
-  ROLLBACK;
-  RAISE_APPLICATION_ERROR(-20002, 'Datum příjezdu musí být před datem odjezdu');
-END IF;
-
-// Ověření existence hosta, pokud neexistuje, je třeba ho nejprve vytvořit
-SELECT COUNT(*)
-INTO p_guest_count
-FROM Guest
-WHERE guest_id = :guestId;
-
-IF p_guest_count = 0 THEN
-  ROLLBACK;
-  RAISE_APPLICATION_ERROR(-20003, 'Host v systému neexistuje');
-END IF;
-
-// Získání typu pokoje a ceny za noc
-SELECT rt.room_type_id, rt.price_per_night
-INTO p_room_type, p_price_per_night
+\end{verbatim}
+        \item Pokud není volný, proveď rollback a ukonči transakci.
+    \end{itemize}
+    \item \textbf{Ověření platnosti dat:}
+    \begin{itemize}
+        \item Zkontroluj, že datum příjezdu je před datem odjezdu.
+        \item Pokud ne, rollback a ukončení transakce.
+    \end{itemize}
+    \item \textbf{Ověření existence hosta:}
+    \begin{itemize}
+        \item Pokud host neexistuje, založ nového hosta a adresu.
+        \item Pokud host existuje, pokračuj.
+    \end{itemize}
+    \item \textbf{Získání ceny za noc a výpočet ceny:}
+    \begin{itemize}
+        \item Zjisti typ pokoje a cenu za noc:
+\begin{verbatim}
+SELECT rh.price_per_night
 FROM Room r
 JOIN RoomType rt ON r.room_type_id = rt.room_type_id
+JOIN RoomTypePriceHistory rh ON rh.room_type_id = rt.room_type_id
+  AND :checkInDate BETWEEN rh.valid_from AND NVL(rh.valid_to, :checkInDate)
 WHERE r.room_id = :roomId;
-
-// Výpočet délky pobytu a celkové ceny
-p_nights := :checkOutDate - :checkInDate;
-p_total_accommodation := p_nights * p_price_per_night;
-
-// Vytvoření záznamu platby (nezaplacené)
-INSERT INTO Payment (total_accommodation, total_expenses, payment_date, is_paid)
-VALUES (p_total_accommodation, p_total_accommodation, NULL, 0)
-RETURNING payment_id INTO p_payment_id;
-
-// Vytvoření záznamu rezervace
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, 
-                      check_in_date, check_out_date, payment_id, status)
-VALUES (:guestId, :roomId, :employeeId, SYSDATE, 
-        :checkInDate, :checkOutDate, p_payment_id, 'Confirmed');
-
-// Aktualizace stavu pokoje
-UPDATE Room
-SET is_occupied = 1
-WHERE room_id = :roomId;
-
-COMMIT;
 \end{verbatim}
+        \item Spočítej počet nocí a celkovou cenu.
+    \end{itemize}
+    \item \textbf{Vložení platby:}
+    \begin{itemize}
+        \item Vlož záznam do tabulky Payment s vypočtenou cenou, is\_paid = 0.
+        \item Získej payment\_id.
+    \end{itemize}
+    \item \textbf{Vložení rezervace:}
+    \begin{itemize}
+        \item Vlož záznam do tabulky Reservation s vazbou na hosta, pokoj, zaměstnance a platbu.
+    \end{itemize}
+    \item \textbf{Nastavení pokoje jako obsazeného:}
+    \begin{itemize}
+        \item Aktualizuj stav pokoje:
+\begin{verbatim}
+UPDATE Room SET is_occupied = 1 WHERE room_id = :roomId;
+\end{verbatim}
+    \end{itemize}
+    \item \textbf{Commit transakce}
+    \item \textbf{V případě chyby rollback a ukončení transakce}
+\end{enumerate}
 
 \subsubsection{Poznámky}
 \begin{itemize}
-    \item Platba je při vytvoření rezervace vždy nezaplacená (is\_paid = 0). Platí se až po ubytování hosta.
+    \item Všechny kroky probíhají v rámci jedné transakce.
     \item Pokud je potřeba platbu označit jako zaplacenou, provádí se to samostatnou funkcí mimo tuto transakci.
+    \item Ošetřuje se souběh více uživatelů (zamykání záznamů).
 \end{itemize}
 
 

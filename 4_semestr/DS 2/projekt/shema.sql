@@ -29,7 +29,6 @@ Table RoomType {
   room_type_id int [pk, increment]
   name varchar
   bed_count int
-  price_per_night decimal
 }
 
 Table Room {
@@ -63,7 +62,6 @@ Table Service {
   service_id int [pk, increment]
   name varchar
   description text
-  price decimal
 }
 
 Table ServiceUsage {
