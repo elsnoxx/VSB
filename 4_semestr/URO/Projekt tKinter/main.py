@@ -226,7 +226,7 @@ class InventoryApp(ThemedTk):  # Změna z tk.Tk na ThemedTk
 
         # Tlačítka vedle sebe
         ttk.Button(info_frame, text="New Device", style="New.TButton", command=self.addNew).grid(row=1, column=0, padx=5, pady=5, sticky="e")
-        ttk.Button(info_frame, text="Delete Device", style="Delete.TButton", command=self.deleteDevice).grid(row=1, column=1, padx=5, pady=5, sticky="ew")
+        ttk.Button(info_frame, text="Delete Device", style="Delete.TButton", command=self.deleteDevicePopup).grid(row=1, column=1, padx=5, pady=5, sticky="ew")
 
         # Ukázková data
         self.load_data()
