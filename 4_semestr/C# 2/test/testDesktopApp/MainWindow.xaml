@@ -1,0 +1,22 @@
+﻿<Window x:Class="testDesktopApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:testDesktopApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <GridView.ColumnCollection>
+            <GridViewColumn Header="IČO" Width="100" DisplayMemberBinding="{Binding ico}"/>
+            <GridViewColumn Header="DIČ" Width="100" DisplayMemberBinding="{Binding dic}"/>
+            <GridViewColumn Header="Obchodní jméno" Width="200" DisplayMemberBinding="{Binding obchodniJmeno}"/>
+            <GridViewColumn Header="Sídlo" Width="200" DisplayMemberBinding="{Binding sidlo.nazevObce}"/>
+        </GridView.ColumnCollection>
+        
+        <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
+            <TextBox Name="inputIco" TextChanged="textChangeInputIco" Width="200" Margin="0,0,10,0"></TextBox>
+            <Button Name="AddIco" Click="AddNewConpany" IsEnabled="False" Content="Add new"></Button>
+        </StackPanel>
+    </Grid>
+</Window>
