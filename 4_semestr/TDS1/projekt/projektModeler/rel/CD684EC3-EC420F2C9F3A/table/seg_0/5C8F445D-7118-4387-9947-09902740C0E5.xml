@@ -1,20 +1,20 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="33559FB8-9508-59C5-7D83-7166DFCE54A2" name="Room">
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="5C8F445D-7118-4387-9947-09902740C0E5" name="RoomTypePriceHistory">
 <sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:39:58 UTC</createdTime>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<ordsAlias>table_4</ordsAlias>
+<importedID>2567D2EE-35A8-90CF-45FE-F6B62B4EB6FF</importedID>
 <allowColumnReorder>false</allowColumnReorder>
 <existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
 <parsed>true</parsed>
 <columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
-<Column name="room_id" id="FFAB36E2-C02A-57AB-552D-F00AE8264D69">
+<Column name="rtph_id" id="4C921E96-7B9B-0E84-E40F-82C8F0E67EA0">
 <sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:41:47 UTC</createdTime>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<useDomainConstraints>false</useDomainConstraints>
+<importedID>78399C81-95AB-6944-AB9B-A4031063A75B</importedID>
 <use>0</use>
 <logicalDatatype>LOGDT019</logicalDatatype>
 <domain>109F5ED6-9F53-C729-3EA1-FD21D6706B36</domain>
@@ -25,79 +25,81 @@
 <autoIncrementCycle>false</autoIncrementCycle>
 <autoIncrementOrder>false</autoIncrementOrder>
 </Column>
-<Column name="room_type_id" id="147C6D2C-4F93-EB86-1518-0924B3E728F9">
+<Column name="room_type_id" id="F4116E31-C702-610D-98E8-5178AB0ACADB">
 <sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:41:47 UTC</createdTime>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<useDomainConstraints>false</useDomainConstraints>
+<importedID>73AAC679-0D49-E5C2-F872-F2FC82749AB4</importedID>
 <use>0</use>
 <logicalDatatype>LOGDT019</logicalDatatype>
 <domain>109F5ED6-9F53-C729-3EA1-FD21D6706B36</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 <associations>
-<colAssociation fkAssociation="9265861D-5248-CC38-BA9A-01A11AB64D71" referredColumn="8F513F50-75DB-70F1-6745-0DC4D080ED48"/>
+<colAssociation fkAssociation="B7487470-8940-DBD5-0604-EA896F40D46C" referredColumn="8F513F50-75DB-70F1-6745-0DC4D080ED48"/>
 </associations>
 </Column>
-<Column name="room_number" id="44A0B719-BEB3-9348-E75B-57D2F17B8B52">
+<Column name="price_per_night" id="A3485461-8F1A-862E-2C75-2EB386D1D119">
 <sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:41:47 UTC</createdTime>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<useDomainConstraints>false</useDomainConstraints>
+<importedID>3CE6DF4D-04B7-FAE2-950F-532B151B379C</importedID>
 <use>0</use>
-<logicalDatatype>LOGDT024</logicalDatatype>
-<domain>C9BBD1FB-6927-9BE9-6D58-F35EEDCA2E0A</domain>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>31E65C6B-F352-5AD0-4739-44939A4E5CF9</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="is_occupied" id="843683E0-C648-8C48-7866-1722B1C9962E">
+<Column name="valid_from" id="B58416B9-9E8D-F9A5-23BD-E37EDE8E0D45">
 <sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:41:47 UTC</createdTime>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<useDomainConstraints>false</useDomainConstraints>
+<importedID>BCEBD3D1-C05C-0FDC-B081-CE4075A65D6B</importedID>
 <use>0</use>
-<logicalDatatype>LOGDT019</logicalDatatype>
-<domain>1F388CE6-779B-F368-B098-50CEDB4303F7</domain>
-<defaultValue>0</defaultValue>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<domain>57A04E11-12D9-363F-C597-B57F4C6B2FC1</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="valid_to" id="386E8D01-7016-8EC5-EB0C-F61DC82C0C23">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<importedID>D72DE6E4-DAE7-67B9-3BAA-50031C2B06E0</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT007</logicalDatatype>
+<domain>57A04E11-12D9-363F-C597-B57F4C6B2FC1</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
-<ind_PK_UK id="01F609B8-E45C-9F01-3715-6B88ABB406CF" name="Room_PK">
-<createdBy>ficek</createdBy>
-<createdTime>2025-03-30 16:41:47 UTC</createdTime>
-<ownerDesignName>projektModeler</ownerDesignName>
-<pk>true</pk>
-<indexState>Primary Constraint</indexState>
-<isSurrogateKey>false</isSurrogateKey>
-<indexColumnUsage>
-<colUsage columnID="FFAB36E2-C02A-57AB-552D-F00AE8264D69"/>
-</indexColumnUsage>
-</ind_PK_UK>
-<ind_PK_UK id="D883FF72-9F8E-C423-E3C9-F9E0646AEC7A" name="uq_room_number">
+<ind_PK_UK id="A8EA98F8-78CC-A48E-AD0B-A096347217C6" name="RoomTypePriceHistory_PK">
 <sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
 <createdTime>2025-04-26 04:42:17 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<importedID>237F5329-636E-29FF-3874-D73EF01D28A9</importedID>
-<indexState>Unique Constraint</indexState>
+<importedID>2AEB31EF-233D-1FDD-E961-9195E24689EA</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
-<colUsage columnID="44A0B719-BEB3-9348-E75B-57D2F17B8B52"/>
+<colUsage columnID="4C921E96-7B9B-0E84-E40F-82C8F0E67EA0"/>
 </indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="E66588F5-05E0-66CC-FF23-0ACF8A389D79" name="fk_room_roomtype">
+<ind_PK_UK id="C0CFE490-D331-BDDA-299F-853185A96D2C" name="fk_rtph_roomtype">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 14:34:35 UTC</createdTime>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <indexState>Foreign Key</indexState>
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
-<colUsage columnID="147C6D2C-4F93-EB86-1518-0924B3E728F9"/>
+<colUsage columnID="F4116E31-C702-610D-98E8-5178AB0ACADB"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

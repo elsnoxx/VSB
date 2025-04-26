@@ -1,108 +1,121 @@
-CREATE TABLE "Address" (
-  "address_id" int GENERATED AS IDENTITY PRIMARY KEY,
-  "street" varchar,
-  "city" varchar,
-  "postal_code" char,
-  "country" varchar
+-- Guest table
+CREATE TABLE Guest (
+  guest_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  firstname VARCHAR2(100) NOT NULL,
+  lastname VARCHAR2(100) NOT NULL,
+  email VARCHAR2(100) NOT NULL,
+  phone VARCHAR2(30),
+  birth_date DATE NOT NULL,
+  street VARCHAR2(255) NOT NULL,
+  city VARCHAR2(100) NOT NULL,
+  postal_code CHAR(10) NOT NULL,
+  country VARCHAR2(100) NOT NULL,
+  guest_type VARCHAR2(50) NOT NULL,
+  registration_date DATE DEFAULT SYSDATE,
+  notes CLOB
 );
 
-CREATE TABLE "Guest" (
-  "guest_id" int GENERATED AS IDENTITY PRIMARY KEY,
-  "firstname" varchar,
-  "lastname" varchar,
-  "email" varchar,
-  "phone" varchar,
-  "birth_date" date,
-  "address_id" int,
-  "guest_type" varchar,
-  "registration_date" date,
-  "notes" text
+-- Employee table
+CREATE TABLE Employee (
+  employee_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  firstname VARCHAR2(100) NOT NULL,
+  lastname VARCHAR2(100) NOT NULL,
+  position VARCHAR2(50) NOT NULL,
+  street VARCHAR2(255) NOT NULL,
+  city VARCHAR2(100) NOT NULL,
+  postal_code CHAR(10) NOT NULL,
+  country VARCHAR2(100) NOT NULL
 );
 
-CREATE TABLE "Employee" (
-  "employee_id" int GENERATED AS IDENTITY PRIMARY KEY,
-  "firstname" varchar,
-  "lastname" varchar,
-  "position" varchar,
-  "address_id" int
+-- RoomType table
+CREATE TABLE RoomType (
+  room_type_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR2(100) NOT NULL,
+  bed_count NUMBER NOT NULL
 );
 
-CREATE TABLE "RoomType" (
-  "room_type_id" int GENERATED AS IDENTITY PRIMARY KEY,
-  "name" varchar,
-  "bed_count" int,
-  "price_per_night" decimal
+-- Room table
+CREATE TABLE Room (
+  room_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  room_type_id NUMBER NOT NULL,
+  room_number VARCHAR2(20) NOT NULL,
+  is_occupied NUMBER(1) DEFAULT 0 NOT NULL,
+  CONSTRAINT fk_room_roomtype FOREIGN KEY (room_type_id) REFERENCES RoomType(room_type_id),
+  CONSTRAINT uq_room_number UNIQUE (room_number)
 );
 
-CREATE TABLE "Room" (
-  "room_id" int GENERATED AS IDENTITY PRIMARY KEY,
-  "room_type_id" int,
-  "room_number" varchar,
-  "is_occupied" boolean
+-- Payment table
+CREATE TABLE Payment (
+  payment_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  total_accommodation NUMBER(10,2) NOT NULL,
+  total_expenses NUMBER(10,2) NOT NULL,
+  payment_date DATE,
+  is_paid NUMBER(1) DEFAULT 0 NOT NULL
 );
 
-CREATE TABLE "Payment" (
-  "payment_id" int GENERATED AS IDENTITY PRIMARY KEY,
-  "total_accommodation" decimal,
-  "total_expenses" decimal,
-  "payment_date" date,
-  "is_paid" boolean
+-- Reservation table
+CREATE TABLE Reservation (
+  reservation_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  guest_id NUMBER NOT NULL,
+  room_id NUMBER NOT NULL,
+  employee_id NUMBER NOT NULL,
+  creation_date DATE DEFAULT SYSDATE NOT NULL,
+  check_in_date DATE NOT NULL,
+  check_out_date DATE NOT NULL,
+  payment_id NUMBER NOT NULL,
+  status VARCHAR2(30) NOT NULL,
+  CONSTRAINT fk_reservation_guest FOREIGN KEY (guest_id) REFERENCES Guest(guest_id),
+  CONSTRAINT fk_reservation_room FOREIGN KEY (room_id) REFERENCES Room(room_id),
+  CONSTRAINT fk_reservation_employee FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
+  CONSTRAINT fk_reservation_payment FOREIGN KEY (payment_id) REFERENCES Payment(payment_id)
 );
 
-CREATE TABLE "Reservation" (
-  "reservation_id" int GENERATED AS IDENTITY PRIMARY KEY,
-  "guest_id" int,
-  "room_id" int,
-  "employee_id" int,
-  "creation_date" date,
-  "check_in_date" date,
-  "check_out_date" date,
-  "payment_id" int,
-  "status" varchar
+-- Service table
+CREATE TABLE Service (
+  service_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR2(100) NOT NULL,
+  description CLOB
 );
 
-CREATE TABLE "Service" (
-  "service_id" int GENERATED AS IDENTITY PRIMARY KEY,
-  "name" varchar,
-  "description" text,
-  "price" decimal
+-- ServiceUsage table
+CREATE TABLE ServiceUsage (
+  usage_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  reservation_id NUMBER NOT NULL,
+  service_id NUMBER NOT NULL,
+  quantity NUMBER NOT NULL,
+  total_price NUMBER(10,2) NOT NULL,
+  CONSTRAINT fk_serviceusage_reservation FOREIGN KEY (reservation_id) REFERENCES Reservation(reservation_id),
+  CONSTRAINT fk_serviceusage_service FOREIGN KEY (service_id) REFERENCES Service(service_id)
 );
 
-CREATE TABLE "ServiceUsage" (
-  "usage_id" int GENERATED AS IDENTITY PRIMARY KEY,
-  "reservation_id" int,
-  "service_id" int,
-  "quantity" int,
-  "total_price" decimal
+-- Feedback table
+CREATE TABLE Feedback (
+  feedback_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  guest_id NUMBER NOT NULL,
+  reservation_id NUMBER NOT NULL,
+  rating NUMBER NOT NULL,
+  comment CLOB,
+  feedback_date DATE DEFAULT SYSDATE NOT NULL,
+  CONSTRAINT fk_feedback_guest FOREIGN KEY (guest_id) REFERENCES Guest(guest_id),
+  CONSTRAINT fk_feedback_reservation FOREIGN KEY (reservation_id) REFERENCES Reservation(reservation_id)
 );
 
-CREATE TABLE "Feedback" (
-  "feedback_id" int GENERATED AS IDENTITY PRIMARY KEY,
-  "guest_id" int,
-  "reservation_id" int,
-  "rating" int,
-  "comment" text,
-  "feedback_date" date
+-- ServicePriceHistory table
+CREATE TABLE ServicePriceHistory (
+  sph_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  service_id NUMBER NOT NULL,
+  price NUMBER(10,2) NOT NULL,
+  valid_from DATE NOT NULL,
+  valid_to DATE,
+  CONSTRAINT fk_sph_service FOREIGN KEY (service_id) REFERENCES Service(service_id)
 );
 
-ALTER TABLE "Guest" ADD FOREIGN KEY ("address_id") REFERENCES "Address" ("address_id");
-
-ALTER TABLE "Employee" ADD FOREIGN KEY ("address_id") REFERENCES "Address" ("address_id");
-
-ALTER TABLE "Room" ADD FOREIGN KEY ("room_type_id") REFERENCES "RoomType" ("room_type_id");
-
-ALTER TABLE "Reservation" ADD FOREIGN KEY ("guest_id") REFERENCES "Guest" ("guest_id");
-
-ALTER TABLE "Reservation" ADD FOREIGN KEY ("room_id") REFERENCES "Room" ("room_id");
-
-ALTER TABLE "Reservation" ADD FOREIGN KEY ("employee_id") REFERENCES "Employee" ("employee_id");
-
-ALTER TABLE "Reservation" ADD FOREIGN KEY ("payment_id") REFERENCES "Payment" ("payment_id");
-
-ALTER TABLE "ServiceUsage" ADD FOREIGN KEY ("reservation_id") REFERENCES "Reservation" ("reservation_id");
-
-ALTER TABLE "ServiceUsage" ADD FOREIGN KEY ("service_id") REFERENCES "Service" ("service_id");
-
-ALTER TABLE "Feedback" ADD FOREIGN KEY ("guest_id") REFERENCES "Guest" ("guest_id");
-
-ALTER TABLE "Feedback" ADD FOREIGN KEY ("reservation_id") REFERENCES "Reservation" ("reservation_id");
+-- RoomTypePriceHistory table
+CREATE TABLE RoomTypePriceHistory (
+  rtph_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  room_type_id NUMBER NOT NULL,
+  price_per_night NUMBER(10,2) NOT NULL,
+  valid_from DATE NOT NULL,
+  valid_to DATE,
+  CONSTRAINT fk_rtph_roomtype FOREIGN KEY (room_type_id) REFERENCES RoomType(room_type_id)
+);

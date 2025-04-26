@@ -1,5 +1,5 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="B8A3F398-0DCB-6233-A9C9-11E8BBB580B6" containerWithKeyObject="2444CA4A-B61A-355A-B24A-D9C9CFD7438C" localFKIndex="52987E1B-A936-BC99-A258-9FDFA3FB9ADC" name="ServiceUsage_FK0">
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="B8A3F398-0DCB-6233-A9C9-11E8BBB580B6" containerWithKeyObject="2444CA4A-B61A-355A-B24A-D9C9CFD7438C" localFKIndex="52987E1B-A936-BC99-A258-9FDFA3FB9ADC" name="fk_serviceusage_reservation">
 <sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 14:34:35 UTC</createdTime>

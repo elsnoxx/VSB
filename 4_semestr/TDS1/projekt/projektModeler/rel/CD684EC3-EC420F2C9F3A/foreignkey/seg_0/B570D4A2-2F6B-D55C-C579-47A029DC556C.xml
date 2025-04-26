@@ -1,16 +1,16 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="58A81A43-A24D-54B6-5CD0-3771E87E9772" containerWithKeyObject="2444CA4A-B61A-355A-B24A-D9C9CFD7438C" localFKIndex="843D091A-940B-A63F-06DF-0A0572211B49" name="fk_serviceusage_service">
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="B570D4A2-2F6B-D55C-C579-47A029DC556C" containerWithKeyObject="484D906E-C566-6433-EBA8-C2E9AC8A9D18" localFKIndex="4B668A5C-BC8B-D627-74FC-ECE559A8DDE1" name="fk_sph_service">
 <sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 14:34:35 UTC</createdTime>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<importedID>FE509D89-8097-2E4D-CE14-DFFC22A00CD3</importedID>
+<importedID>0887FF5D-01D0-9AEE-13DF-2ED20F058F8C</importedID>
 <referredTableLongName>Service</referredTableLongName>
 <deleteRule>NO ACTION</deleteRule>
 <referredTableID>4C2BC8B9-594A-26BD-BB06-EBAA8FBEC08E</referredTableID>
 <keyObject>B01FC947-48CC-0B87-35F4-C14633FF7447</keyObject>
 <referredKeyID>B01FC947-48CC-0B87-35F4-C14633FF7447</referredKeyID>
-<mandatory>false</mandatory>
+<mandatory>true</mandatory>
 <refColNames>service_id</refColNames>
 <transferable>true</transferable>
 <rely>false</rely>

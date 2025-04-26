@@ -1,7 +1,7 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <TableProxyOraclev12c class="oracle.dbtools.crest.model.design.storage.oracle.v12c.TableProxyOraclev12c" name="Feedback" directorySegmentName="seg_0" id="C6EE36B6-A772-CB8D-0AE5-EAEA18EE112A">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<createdTime>2025-04-26 04:40:20 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <logging>YES</logging>
 <partitionedRowMovement>DISABLE</partitionedRowMovement>
@@ -11,52 +11,53 @@
 <columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
 <ColumnProxy name="guest_id" id="07F25A2F-8C48-1125-D77C-1583453A68B7">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<createdTime>2025-04-26 04:40:20 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 </ColumnProxy>
 <ColumnProxy name="comment" id="1A0B8C95-8915-7556-DA54-7A8148C08AFF">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<createdTime>2025-04-26 04:40:20 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 </ColumnProxy>
 <ColumnProxy name="feedback_date" id="3E75614D-C53E-D4E6-372F-4E062E49F43C">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<createdTime>2025-04-26 04:40:20 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
+<defaultValue>SYSDATE</defaultValue>
 </ColumnProxy>
 <ColumnProxy name="reservation_id" id="53E470A1-A4AD-7016-65E5-782DCD7E659C">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<createdTime>2025-04-26 04:40:20 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 </ColumnProxy>
 <ColumnProxy name="feedback_id" id="BA9AFBE4-6DEE-F180-F68C-A95CEB7CE055">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<createdTime>2025-04-26 04:40:20 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <autoIncrementDDL>IDENTITY_CLAUSE</autoIncrementDDL>
 </ColumnProxy>
 <ColumnProxy name="rating" id="FB83A3AD-A5B7-3C68-DD19-C8DD986F6902">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<createdTime>2025-04-26 04:40:20 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 </ColumnProxy>
 </columnProxies>
 <foreignKeys>
-<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="Feedback_FK0" id="15C69CF4-8F69-55AD-E100-E01CCA10DF7C">
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="fk_feedback_guest" id="15C69CF4-8F69-55AD-E100-E01CCA10DF7C">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 14:34:35 UTC</createdTime>
+<createdTime>2025-04-26 04:40:20 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 </ForeignKey>
-<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="Feedback_FK1" id="64B8C7A1-2B3B-C14F-A337-C3E030669E40">
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="fk_feedback_reservation" id="64B8C7A1-2B3B-C14F-A337-C3E030669E40">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 14:34:35 UTC</createdTime>
+<createdTime>2025-04-26 04:40:20 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 </ForeignKey>
 </foreignKeys>
 <primaryKeys>
 <PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="Feedback_PK" id="B9209FEE-452D-6785-AE92-B4549EC4D051">
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 14:18:52 UTC</createdTime>
+<createdTime>2025-04-26 04:40:20 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <indexSort>SORTED</indexSort>
 </PrimaryKey>

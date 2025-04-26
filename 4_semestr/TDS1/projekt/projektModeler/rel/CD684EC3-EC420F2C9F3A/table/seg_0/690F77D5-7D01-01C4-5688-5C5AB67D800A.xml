@@ -9,12 +9,14 @@
 <parsed>true</parsed>
 <columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
 <Column name="guest_id" id="E916839E-A292-501D-636F-8AF3D3F1A726">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 13:47:12 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>109F5ED6-9F53-C729-3EA1-FD21D6706B36</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementColumn>true</autoIncrementColumn>
 <identityColumn>true</identityColumn>
@@ -27,11 +29,10 @@
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 13:47:12 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>0</use>
 <logicalDatatype>LOGDT024</logicalDatatype>
-<domain>506FCE27-D552-2667-283E-E0F91B5F02AC</domain>
+<domain>6804B8F4-C226-612D-5ADA-BE8D2477EA39</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
@@ -40,11 +41,10 @@
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 13:47:12 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>0</use>
 <logicalDatatype>LOGDT024</logicalDatatype>
-<domain>506FCE27-D552-2667-283E-E0F91B5F02AC</domain>
+<domain>6804B8F4-C226-612D-5ADA-BE8D2477EA39</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
@@ -53,11 +53,10 @@
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 13:47:12 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>0</use>
 <logicalDatatype>LOGDT024</logicalDatatype>
-<domain>506FCE27-D552-2667-283E-E0F91B5F02AC</domain>
+<domain>6804B8F4-C226-612D-5ADA-BE8D2477EA39</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
@@ -70,7 +69,7 @@
 <useDomainConstraints>false</useDomainConstraints>
 <use>0</use>
 <logicalDatatype>LOGDT024</logicalDatatype>
-<domain>506FCE27-D552-2667-283E-E0F91B5F02AC</domain>
+<domain>FB19EB9A-95F0-1058-7C27-A2CEA48A8768</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
@@ -78,10 +77,94 @@
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 13:47:12 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT008</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="street" id="1C540476-EB23-FF5E-BF1A-607F8A278E10">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<importedID>E00F8DDF-F702-0DD1-B0AB-2F9AF9B109E3</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>2F9DF033-71C2-7EB9-DE3E-F30797078749</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="city" id="27371B9B-07AE-6A3B-BC72-B5B73CA59622">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<importedID>36CE3D9F-3A1B-21D0-5403-2D6416615694</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>6804B8F4-C226-612D-5ADA-BE8D2477EA39</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="postal_code" id="EF40ED96-B27E-1DEA-1028-FDEA24E5C61A">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<importedID>6D030E89-E692-15E5-2E13-6F7942F692C6</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT025</logicalDatatype>
+<domain>A8E9F1F2-E444-11F3-4848-9F804B4793F9</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="country" id="18C39D78-DB3C-AD2E-B2F9-A9D2874D9EF9">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<importedID>F408D78F-BD7C-C3C6-483E-60CD8EBA1D89</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>6804B8F4-C226-612D-5ADA-BE8D2477EA39</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="guest_type" id="86D02751-3C69-4174-39BB-CCC701098CF2">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 13:47:12 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>A6A1E67D-15FD-3A72-3DD1-BDDA621D4765</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="registration_date" id="C4BA41B7-15AB-F561-9C62-E5D664271626">
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 13:47:12 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
 <nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
 <logicalDatatype>LOGDT008</logicalDatatype>
+<defaultValue>SYSDATE</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="notes" id="991EB688-95C8-261C-33DA-F173A757E4E0">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
+<createdBy>ficek</createdBy>
+<createdTime>2025-03-31 13:47:12 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>0</use>
+<logicalDatatype>LOGDT028</logicalDatatype>
+<domain>819A5AD6-5278-EE6A-4300-706BE913A9B1</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
@@ -98,41 +181,6 @@
 <associations>
 <colAssociation fkAssociation="20FBC56C-10AD-9EAD-8877-957748A6B1D2" referredColumn="A8026B77-F64C-93EE-22B9-D59F810B1BE4"/>
 </associations>
-</Column>
-<Column name="guest_type" id="86D02751-3C69-4174-39BB-CCC701098CF2">
-<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
-<createdBy>ficek</createdBy>
-<createdTime>2025-03-31 13:47:12 UTC</createdTime>
-<ownerDesignName>projektModeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
-<useDomainConstraints>false</useDomainConstraints>
-<use>0</use>
-<logicalDatatype>LOGDT024</logicalDatatype>
-<domain>506FCE27-D552-2667-283E-E0F91B5F02AC</domain>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
-</Column>
-<Column name="registration_date" id="C4BA41B7-15AB-F561-9C62-E5D664271626">
-<createdBy>ficek</createdBy>
-<createdTime>2025-03-31 13:47:12 UTC</createdTime>
-<ownerDesignName>projektModeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT008</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
-</Column>
-<Column name="notes" id="991EB688-95C8-261C-33DA-F173A757E4E0">
-<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
-<createdBy>ficek</createdBy>
-<createdTime>2025-03-31 13:47:12 UTC</createdTime>
-<ownerDesignName>projektModeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
-<useDomainConstraints>false</useDomainConstraints>
-<use>0</use>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
 </Column>
 <Column name="Column_10" id="38136E76-22B6-9C4D-C44C-1D1475CA03D1">
 <createdBy>ficek</createdBy>

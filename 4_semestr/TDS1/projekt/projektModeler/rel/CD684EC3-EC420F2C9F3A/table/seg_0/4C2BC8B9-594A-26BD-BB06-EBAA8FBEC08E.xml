@@ -10,12 +10,14 @@
 <parsed>true</parsed>
 <columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
 <Column name="service_id" id="9E36B8C3-4CE0-451D-7707-34436AFCBCEA">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 14:03:02 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>109F5ED6-9F53-C729-3EA1-FD21D6706B36</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementColumn>true</autoIncrementColumn>
 <identityColumn>true</identityColumn>
@@ -28,11 +30,10 @@
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 14:03:02 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>0</use>
 <logicalDatatype>LOGDT024</logicalDatatype>
-<domain>506FCE27-D552-2667-283E-E0F91B5F02AC</domain>
+<domain>6804B8F4-C226-612D-5ADA-BE8D2477EA39</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
@@ -44,6 +45,8 @@
 <nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>0</use>
+<logicalDatatype>LOGDT028</logicalDatatype>
+<domain>819A5AD6-5278-EE6A-4300-706BE913A9B1</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
