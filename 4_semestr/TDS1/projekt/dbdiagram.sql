@@ -1,11 +1,3 @@
-Table Address {
-  address_id int [pk, increment]
-  street varchar
-  city varchar
-  postal_code char
-  country varchar
-}
-
 Table Guest {
   guest_id int [pk, increment]
   firstname varchar
@@ -13,7 +5,10 @@ Table Guest {
   email varchar
   phone varchar
   birth_date date
-  address_id int [ref: > Address.address_id]
+  street varchar
+  city varchar
+  postal_code char
+  country varchar
   guest_type varchar
   registration_date date
   notes text
@@ -24,14 +19,16 @@ Table Employee {
   firstname varchar
   lastname varchar
   position varchar
-  address_id int [ref: > Address.address_id]
+  street varchar
+  city varchar
+  postal_code char
+  country varchar
 }
 
 Table RoomType {
   room_type_id int [pk, increment]
   name varchar
   bed_count int
-  price_per_night decimal
 }
 
 Table Room {
@@ -65,7 +62,6 @@ Table Service {
   service_id int [pk, increment]
   name varchar
   description text
-  price decimal
 }
 
 Table ServiceUsage {
@@ -83,4 +79,20 @@ Table Feedback {
   rating int
   comment text
   feedback_date date
+}
+
+Table ServicePriceHistory {
+  sph_id int [pk, increment]
+  service_id int [ref: > Service.service_id]
+  price decimal
+  valid_from date
+  valid_to date
+}
+
+Table RoomTypePriceHistory {
+  rtph_id int [pk, increment]
+  room_type_id int [ref: > RoomType.room_type_id]
+  price_per_night decimal
+  valid_from date
+  valid_to date
 }

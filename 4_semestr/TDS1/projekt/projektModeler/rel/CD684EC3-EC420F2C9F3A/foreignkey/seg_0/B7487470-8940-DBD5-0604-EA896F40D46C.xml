@@ -1,16 +1,16 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="9265861D-5248-CC38-BA9A-01A11AB64D71" containerWithKeyObject="33559FB8-9508-59C5-7D83-7166DFCE54A2" localFKIndex="E66588F5-05E0-66CC-FF23-0ACF8A389D79" name="fk_room_roomtype">
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="B7487470-8940-DBD5-0604-EA896F40D46C" containerWithKeyObject="5C8F445D-7118-4387-9947-09902740C0E5" localFKIndex="C0CFE490-D331-BDDA-299F-853185A96D2C" name="fk_rtph_roomtype">
 <sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
-<createdTime>2025-03-31 14:34:35 UTC</createdTime>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<importedID>CDE16AD3-CD08-50B0-4CAE-F7C84175ADAB</importedID>
+<importedID>6E3C9A08-7F04-C6C7-7F9D-215E7D600CBA</importedID>
 <referredTableLongName>RoomType</referredTableLongName>
 <deleteRule>NO ACTION</deleteRule>
 <referredTableID>248C56D7-88DF-9937-C703-977E0D0C6459</referredTableID>
 <keyObject>5CFEC7EB-84FE-0946-46E2-A08ADCB871B6</keyObject>
 <referredKeyID>5CFEC7EB-84FE-0946-46E2-A08ADCB871B6</referredKeyID>
-<mandatory>false</mandatory>
+<mandatory>true</mandatory>
 <refColNames>room_type_id</refColNames>
 <transferable>true</transferable>
 <rely>false</rely>

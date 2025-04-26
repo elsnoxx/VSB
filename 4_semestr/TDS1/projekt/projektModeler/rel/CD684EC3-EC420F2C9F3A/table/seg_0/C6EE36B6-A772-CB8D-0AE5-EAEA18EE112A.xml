@@ -10,12 +10,14 @@
 <parsed>true</parsed>
 <columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
 <Column name="feedback_id" id="BA9AFBE4-6DEE-F180-F68C-A95CEB7CE055">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 14:07:31 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
 <useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>109F5ED6-9F53-C729-3EA1-FD21D6706B36</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementColumn>true</autoIncrementColumn>
 <identityColumn>true</identityColumn>
@@ -24,13 +26,14 @@
 <autoIncrementOrder>false</autoIncrementOrder>
 </Column>
 <Column name="guest_id" id="07F25A2F-8C48-1125-D77C-1583453A68B7">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 14:07:31 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>109F5ED6-9F53-C729-3EA1-FD21D6706B36</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 <associations>
@@ -38,13 +41,14 @@
 </associations>
 </Column>
 <Column name="reservation_id" id="53E470A1-A4AD-7016-65E5-782DCD7E659C">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 14:07:31 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>109F5ED6-9F53-C729-3EA1-FD21D6706B36</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 <associations>
@@ -52,13 +56,14 @@
 </associations>
 </Column>
 <Column name="rating" id="FB83A3AD-A5B7-3C68-DD19-C8DD986F6902">
+<sourceDDLFile>ddlProjekt.sql</sourceDDLFile>
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 14:07:31 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>109F5ED6-9F53-C729-3EA1-FD21D6706B36</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
@@ -70,6 +75,8 @@
 <nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>0</use>
+<logicalDatatype>LOGDT028</logicalDatatype>
+<domain>819A5AD6-5278-EE6A-4300-706BE913A9B1</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
@@ -77,10 +84,10 @@
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 14:07:31 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
 <logicalDatatype>LOGDT008</logicalDatatype>
+<defaultValue>SYSDATE</defaultValue>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
@@ -97,7 +104,7 @@
 <colUsage columnID="BA9AFBE4-6DEE-F180-F68C-A95CEB7CE055"/>
 </indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="15C69CF4-8F69-55AD-E100-E01CCA10DF7C" name="Feedback_FK0">
+<ind_PK_UK id="15C69CF4-8F69-55AD-E100-E01CCA10DF7C" name="fk_feedback_guest">
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 14:34:35 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>
@@ -107,7 +114,7 @@
 <colUsage columnID="07F25A2F-8C48-1125-D77C-1583453A68B7"/>
 </indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="64B8C7A1-2B3B-C14F-A337-C3E030669E40" name="Feedback_FK1">
+<ind_PK_UK id="64B8C7A1-2B3B-C14F-A337-C3E030669E40" name="fk_feedback_reservation">
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 14:34:35 UTC</createdTime>
 <ownerDesignName>projektModeler</ownerDesignName>

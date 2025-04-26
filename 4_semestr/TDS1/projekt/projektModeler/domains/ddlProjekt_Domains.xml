@@ -1,6 +1,47 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <DomainFile class="oracle.dbtools.crest.model.design.DomainFileWrapper" fileName="ddlProjekt_Domains">
 <domains>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="NUMERIC_0_0_0" id="109F5ED6-9F53-C729-3EA1-FD21D6706B36">
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<fileName>ddlProjekt_Domains</fileName>
+<logicalDatatype>LOGDT019</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="NUMERIC_1_0_0" id="1F388CE6-779B-F368-B098-50CEDB4303F7">
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>1</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>0</dataTypeSize>
+<fileName>ddlProjekt_Domains</fileName>
+<logicalDatatype>LOGDT019</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_255" id="2F9DF033-71C2-7EB9-DE3E-F30797078749">
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>255</dataTypeSize>
+<fileName>ddlProjekt_Domains</fileName>
+<logicalDatatype>LOGDT024</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="NUMERIC_10_2_0" id="31E65C6B-F352-5AD0-4739-44939A4E5CF9">
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>10</dataTypePrecision>
+<dataTypeScale>2</dataTypeScale>
+<dataTypeSize>0</dataTypeSize>
+<fileName>ddlProjekt_Domains</fileName>
+<logicalDatatype>LOGDT019</logicalDatatype>
+</Domain>
 <Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_0" id="506FCE27-D552-2667-283E-E0F91B5F02AC">
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 14:34:35 UTC</createdTime>
@@ -9,6 +50,33 @@
 <fileName>ddlProjekt_Domains</fileName>
 <logicalDatatype>LOGDT024</logicalDatatype>
 </Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="Date_0_0_0" id="57A04E11-12D9-363F-C597-B57F4C6B2FC1">
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<fileName>ddlProjekt_Domains</fileName>
+<logicalDatatype>LOGDT007</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_100" id="6804B8F4-C226-612D-5ADA-BE8D2477EA39">
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>100</dataTypeSize>
+<fileName>ddlProjekt_Domains</fileName>
+<logicalDatatype>LOGDT024</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="CLOB_0_0_0" id="819A5AD6-5278-EE6A-4300-706BE913A9B1">
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<fileName>ddlProjekt_Domains</fileName>
+<logicalDatatype>LOGDT028</logicalDatatype>
+</Domain>
 <Domain class="oracle.dbtools.crest.model.design.Domain" name="Integer_0_0_0" id="96190E8F-882F-2CEA-4DB3-B3BBFD29E766">
 <createdBy>ficek</createdBy>
 <createdTime>2025-03-31 14:34:35 UTC</createdTime>
@@ -16,6 +84,50 @@
 <avTSortOrder>0</avTSortOrder>
 <fileName>ddlProjekt_Domains</fileName>
 <logicalDatatype>LOGDT011</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_50" id="A6A1E67D-15FD-3A72-3DD1-BDDA621D4765">
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>50</dataTypeSize>
+<fileName>ddlProjekt_Domains</fileName>
+<logicalDatatype>LOGDT024</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="CHAR_0_0_10" id="A8E9F1F2-E444-11F3-4848-9F804B4793F9">
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>10</dataTypeSize>
+<fileName>ddlProjekt_Domains</fileName>
+<logicalDatatype>LOGDT025</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_20" id="C9BBD1FB-6927-9BE9-6D58-F35EEDCA2E0A">
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>20</dataTypeSize>
+<fileName>ddlProjekt_Domains</fileName>
+<logicalDatatype>LOGDT024</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_30" id="FB19EB9A-95F0-1058-7C27-A2CEA48A8768">
+<createdBy>ficek</createdBy>
+<createdTime>2025-04-26 04:42:17 UTC</createdTime>
+<ownerDesignName>projektModeler</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>30</dataTypeSize>
+<fileName>ddlProjekt_Domains</fileName>
+<logicalDatatype>LOGDT024</logicalDatatype>
 </Domain>
 </domains>
 </DomainFile>
