@@ -157,4 +157,5 @@ def nejcastejsi_glyfy(soubor_adresy):
 
     return sort_temp
 
-print(nejcastejsi_glyfy("planety_test.txt"))
+
+
