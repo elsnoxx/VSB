@@ -12,6 +12,8 @@
 #include <QComboBox>
 #include <QPlainTextEdit>
 #include <QMap>
+#include <QMessageBox>
+#include <QHeaderView>
 
 // Statická data
 struct Record {
@@ -55,6 +57,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QAction *smazatVseAkce = new QAction("Smazat vše", this);
     QAction *ukoncitAkce = new QAction("Ukončit", this);
 
+    // Přidání menu "Nápověda" s položkou "O aplikaci"
+    QMenu *helpMenu = new QMenu("Nápověda", this);
+    QAction *aboutAction = new QAction("O aplikaci", this);
+    helpMenu->addAction(aboutAction);
+    menuBar->addMenu(helpMenu);
+
     // Přidání akcí do menu
     souborMenu->addAction(novaAkce);
     souborMenu->addAction(smazatVseAkce);
@@ -69,6 +77,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     connect(novaAkce, &QAction::triggered, this, &MainWindow::addRecord);
     connect(smazatVseAkce, &QAction::triggered, this, &MainWindow::clearAllRecords);
     connect(ukoncitAkce, &QAction::triggered, this, &MainWindow::close);
+    connect(aboutAction, &QAction::triggered, this, [=]() {
+        QMessageBox::about(this, "O aplikaci", "Tato aplikace slouží pro evidenci IT zařízení.\nAutor: Richard Ficek FIC0024\n(c) 2025");
+    });
 
     // Vyhledávací pole
     QLabel *serialLabel = new QLabel("Serial Number:");
@@ -105,8 +116,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     // Tabulka
     table = new QTableWidget(0, 9);
     table->setHorizontalHeaderLabels({"ID", "Type", "Manufacturer", "Price", "Serial Number", "Status", "Location", "Size", "Purchase Date"});
+    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     mainLayout->addWidget(table);
-    setFixedSize(950, 600);
+
 
     // Naplnění statickými daty
     for (const auto &rec : staticData) {
