@@ -334,99 +334,86 @@ Formulář Správa hotelových rezervací poskytuje následujících 10 funkcí,
 \subsubsection{Funkce typu Result (výsledkové)}
 
 \begin{enumerate}
-    \item \textbf{getReservationList} - Zobrazení seznamu všech rezervací v přehledové tabulce. Funkce načítá data ze všech relevantních tabulek a zobrazuje klíčové informace jako ID rezervace, jméno hosta, číslo pokoje, datum příjezdu a status rezervace.
-    
-    \item \textbf{getPriceOfAccommodation} - Výpočet a zobrazení ceny za ubytování na základě typu pokoje a délky pobytu. Funkce počítá cenu jako násobek počtu nocí a ceny za noc pro daný typ pokoje.
-    
-    \item \textbf{getUsageService} - Zobrazení seznamu služeb využitých v rámci dané rezervace včetně množství a ceny. V sekci plateb je tabulka s přehledem všech služeb načtených z tabulky ServiceUsage.
-
-    \item \textbf{getPriceOfServices} - Výpočet a zobrazení ceny za jednotlivé služby na základě množství a ceny za jednotku. Funkce načítá data z tabulky Service a počítá celkovou cenu jako součin množství a ceny za jednotku.
-
-    \item \textbf{getRoomList} - Načtení seznamu všech pokojů pro plnění výběrového pole při vytváření nebo úpravě rezervace.
-
-    \item \textbf{getServiceList} - Načtení seznamu všech dostupných služeb pro výběr při přidávání služby k rezervaci.
-
-    \item \textbf{getReservationState} - Načtení seznamu stavů rezervací pro plnění výběrového pole při vytváření nebo úpravě rezervace.
-
-    \item \textbf{getReservationDetail } - Načtení detailních informací o rezervaci na základě ID rezervace. Funkce zobrazuje všechny relevantní informace včetně hosta, pokoje, služeb.
-
+    \item getGuestInformation(reservation\_id) – Načte informace o hostovi podle zadané rezervace (jméno, příjmení, email, telefon, adresa).
+    \item getReservationList() – Vrátí seznam všech rezervací včetně jména hosta, čísla pokoje, data příjezdu a stavu rezervace.
+    \item getPriceOfAccommodation(reservation\_id) – Vrátí cenu za ubytování uloženou v rezervaci (hodnota \texttt{accommodation\_price} v tabulce Reservation pro dané \texttt{reservation\_id}).
+    \item getPriceOfServiceUsage(reservation\_id) – Vrátí seznam služeb využitých v rámci rezervace včetně množství a ceny.
+    \item getPriceOfServices(reservation\_id) – Spočítá a zobrazí celkovou cenu za všechny služby v rámci rezervace.
+    \item getFreeRoomList(check\_in\_date, check\_out\_date) – Vrátí seznam volných pokojů pro zadaný termín.
+    \item getServiceList() – Vrátí seznam všech dostupných služeb.
+    \item getReservationState() – Vrátí seznam možných stavů rezervace.
+    \item getReservationDetail(reservation\_id) – Vrátí detailní informace o rezervaci (host, pokoj, platba, služby).
 \end{enumerate}
 
 \subsubsection{Funkce typu Invocation (vyvolávací)}
 
-\begin{enumerate}\setcounter{enumi}{8}
-    \item \textbf{getReservationByCheckin} - Filtrování seznamu rezervací podle data příjezdu. Uživatel zadá požadované datum do pole ve vyhledávací části a systém zobrazí pouze rezervace s odpovídajícím datem příjezdu.
-    
-    \item \textbf{changeStatusReservation} - Změna statusu rezervace (Confirmed, Checked-In, Checked-Out, Cancelled). Pomocí rozbalovacího seznamu v detailu rezervace lze změnit stav rezervace, což automaticky aktualizuje databázi a může spustit související procesy (např. označení pokoje jako obsazeného).
-    
-    \item \textbf{changeRoom} - Změna přiřazeného pokoje pro existující rezervaci. Pomocí formulářového pole v detailu rezervace lze změnit číslo pokoje, přičemž systém automaticky ověří dostupnost nového pokoje v daném termínu.
-    
-    \item \textbf{payForReservation} - Označení rezervace jako zaplacené. Pomocí tlačítka Pay v sekci plateb lze označit platbu jako dokončenou, což aktualizuje pole ispaid v tabulce Payment.
-    
-    \item \textbf{addService} - Přidání nové služby k vybrané rezervaci. Pomocí tlačítka "Add" lze přidat novou službu z katalogu, zadat množství a systém automaticky vypočítá celkovou cenu a přidá záznam do tabulky ServiceUsage.
-
-    \item \textbf{deleteService} - Odstranění služby z rezervace. Pomocí tlačítka "Delete" lze odstranit vybranou službu z tabulky ServiceUsage, což aktualizuje celkovou cenu rezervace.
-
+\begin{enumerate}\setcounter{enumi}{9}
+    \item getReservationByCheckin(check\_in\_date) – Filtrování rezervací podle data příjezdu.
+    \item changeStatusReservation(reservation\_id, new\_status) – Změní stav rezervace na zvolenou hodnotu.
+    \item changeRoom(reservation\_id, new\_room\_id) – Změní přiřazený pokoj v rezervaci, ověří dostupnost a přepočítá cenu.
+    \item payForReservation(payment\_id) – Označí rezervaci jako zaplacenou a nastaví datum platby.
+    \item addService(reservation\_id, service\_id, quantity, usage\_date) – Přidá službu k rezervaci, vypočítá cenu a uloží záznam.
+    \item deleteService(usage\_id) – Odstraní službu z rezervace a aktualizuje celkovou cenu.
 \end{enumerate}
 
-\subsection{Detailní popis funkcí}
+% \subsection{Detailní popis funkcí}
 
-\subsubsection{getPriceOfAccommodation}
-\textbf{Vstupy:} \\
-p\_reservation\_id
+% \subsubsection{getPriceOfAccommodation}
+% \textbf{Vstupy:} \\
+% p\_reservation\_id
 
-\textbf{Postup:}
-\begin{enumerate}
-    \item Zjisti typ pokoje a termín rezervace podle \texttt{Reservation} (dle \texttt{reservation\_id}).
-    \item Zjisti cenu za noc z tabulky \texttt{RoomTypePriceHistory} podle typu pokoje a data příjezdu (\texttt{check\_in\_date} spadá do platnosti ceny).
-    \item Spočítej počet nocí jako rozdíl \texttt{check\_out\_date} a \texttt{check\_in\_date}.
-    \item Výsledná cena = počet nocí $\times$ cena za noc.
-\end{enumerate}
+% \textbf{Postup:}
+% \begin{enumerate}
+%     \item Zjisti typ pokoje a termín rezervace podle \texttt{Reservation} (dle \texttt{reservation\_id}).
+%     \item Zjisti cenu za noc z tabulky \texttt{RoomTypePriceHistory} podle typu pokoje a data příjezdu (\texttt{check\_in\_date} spadá do platnosti ceny).
+%     \item Spočítej počet nocí jako rozdíl \texttt{check\_out\_date} a \texttt{check\_in\_date}.
+%     \item Výsledná cena = počet nocí $\times$ cena za noc.
+% \end{enumerate}
 
-\subsubsection{getPriceOfService}
-\textbf{Vstupy:} \\
-p\_service\_id, p\_quantity, p\_usage\_date
+% \subsubsection{getPriceOfService}
+% \textbf{Vstupy:} \\
+% p\_service\_id, p\_quantity, p\_usage\_date
 
-\textbf{Postup:}
-\begin{enumerate}
-    \item Zjisti jednotkovou cenu služby z tabulky \texttt{ServicePriceHistory} podle zadaného \texttt{service\_id} a data využití služby (\texttt{usage\_date} spadá do platnosti ceny).
-    \item Vypočítej celkovou cenu služby jako jednotková cena vynásobená množstvím.
-\end{enumerate}
-
-
-\subsubsection{addService}
-\textbf{Vstupy:} \\
-p\_reservation\_id, p\_service\_id, p\_quantity, p\_usage\_date
-
-\textbf{Postup:}
-\begin{enumerate}
-    \item Zjisti jednotkovou cenu služby z tabulky \texttt{ServicePriceHistory} podle \texttt{service\_id} a data využití.
-    \item Vypočítej celkovou cenu služby (jednotková cena krát množství).
-    \item Vlož nový záznam o využití služby do tabulky \texttt{ServiceUsage} s příslušnými hodnotami.
-\end{enumerate}
+% \textbf{Postup:}
+% \begin{enumerate}
+%     \item Zjisti jednotkovou cenu služby z tabulky \texttt{ServicePriceHistory} podle zadaného \texttt{service\_id} a data využití služby (\texttt{usage\_date} spadá do platnosti ceny).
+%     \item Vypočítej celkovou cenu služby jako jednotková cena vynásobená množstvím.
+% \end{enumerate}
 
 
-\subsubsection{payForReservation}
-\textbf{Vstupy:} \\
-p\_payment\_id
+% \subsubsection{addService}
+% \textbf{Vstupy:} \\
+% p\_reservation\_id, p\_service\_id, p\_quantity, p\_usage\_date
 
-\textbf{Postup:}
-\begin{enumerate}
-    \item Najdi platbu podle \texttt{payment\_id}.
-    \item Označ platbu jako zaplacenou a nastav datum platby na aktuální datum.
-\end{enumerate}
+% \textbf{Postup:}
+% \begin{enumerate}
+%     \item Zjisti jednotkovou cenu služby z tabulky \texttt{ServicePriceHistory} podle \texttt{service\_id} a data využití.
+%     \item Vypočítej celkovou cenu služby (jednotková cena krát množství).
+%     \item Vlož nový záznam o využití služby do tabulky \texttt{ServiceUsage} s příslušnými hodnotami.
+% \end{enumerate}
 
 
-\subsubsection{getReservationDetail}
-\textbf{Vstupy:} \\
-p\_reservation\_id
+% \subsubsection{payForReservation}
+% \textbf{Vstupy:} \\
+% p\_payment\_id
 
-\textbf{Postup:}
-\begin{enumerate}
-    \item Načti základní údaje o rezervaci podle \texttt{reservation\_id}.
-    \item Získej informace o hostovi, pokoji, platbě a využitých službách spojených s touto rezervací.
-    \item Zobraz detailní informace uživateli.
-\end{enumerate}
+% \textbf{Postup:}
+% \begin{enumerate}
+%     \item Najdi platbu podle \texttt{payment\_id}.
+%     \item Označ platbu jako zaplacenou a nastav datum platby na aktuální datum.
+% \end{enumerate}
+
+
+% \subsubsection{getReservationDetail}
+% \textbf{Vstupy:} \\
+% p\_reservation\_id
+
+% \textbf{Postup:}
+% \begin{enumerate}
+%     \item Načti základní údaje o rezervaci podle \texttt{reservation\_id}.
+%     \item Získej informace o hostovi, pokoji, platbě a využitých službách spojených s touto rezervací.
+%     \item Zobraz detailní informace uživateli.
+% \end{enumerate}
 
 
 
@@ -508,6 +495,10 @@ Transakce zajistí změnu přiřazeného pokoje pro existující rezervaci. Ově
 \subsubsection{Kroky transakce}
 \begin{enumerate}
     \item \textbf{Start transakce}
+    \item \textbf{Načtení dat rezervace:}
+    \begin{itemize}
+        \item Získej \texttt{check\_in\_date}, \texttt{check\_out\_date}, \texttt{room\_id}, \texttt{accommodation\_price} z tabulky Reservation podle \texttt{reservation\_id}.
+    \end{itemize}
     \item \textbf{Ověření dostupnosti nového pokoje:}
     \begin{itemize}
         \item Zjisti, zda je nový pokoj v požadovaném termínu volný:
@@ -524,28 +515,19 @@ WHERE res.room_id = :newRoomId
 \end{verbatim}
         \item Pokud není volný, proveď rollback a ukonči transakci.
     \end{itemize}
-    \item \textbf{Ověření platnosti dat:}
-    \begin{itemize}
-        \item Zkontroluj, že datum příjezdu je před datem odjezdu.
-        \item Pokud ne, rollback a ukončení transakce.
-    \end{itemize}
     \item \textbf{Aktualizace rezervace:}
     \begin{itemize}
-        \item Aktualizuj záznam v tabulce Reservation – nastav nový room\_id:
+        \item \textbf{Výpočet nové ceny ubytování:}
+    \begin{itemize}
+        \item Spočítej novou cenu za ubytování podle nového pokoje a termínu (například pomocí funkce \texttt{getPriceOfAccommodation}).
+    \end{itemize}
+        \item Spočítej novou cenu pomocí funkce \texttt{getPriceOfAccommodation} (použij nový pokoj, check\_in\_date, check\_out\_date).
+        \item Aktualizuj záznam v tabulce Reservation – nastav nový \texttt{room\_id} a \texttt{accommodation\_price}:
 \begin{verbatim}
 UPDATE Reservation
-SET room_id = :newRoomId
+SET room_id = :newRoomId,
+    accommodation_price = :newAccommodationPrice
 WHERE reservation_id = :reservationId;
-\end{verbatim}
-    \end{itemize}
-    \item \textbf{Aktualizace ceny ubytování:}
-    \begin{itemize}
-        \item Spočítej novou cenu pomocí funkce getPriceOfAccommodation.
-        \item Aktualizuj platbu:
-\begin{verbatim}
-UPDATE Payment
-SET total_accommodation = :newTotal
-WHERE payment_id = :paymentId;
 \end{verbatim}
     \end{itemize}
     \item \textbf{Commit transakce}

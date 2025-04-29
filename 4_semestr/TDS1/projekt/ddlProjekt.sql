@@ -64,6 +64,8 @@ CREATE TABLE Reservation (
   check_out_date DATE NOT NULL,
   payment_id NUMBER NOT NULL,
   status VARCHAR2(30) NOT NULL,
+  accommodation_price NUMBER(10,2),
+  services_price NUMBER(10,2),
   CONSTRAINT fk_reservation_guest FOREIGN KEY (guest_id) REFERENCES Guest(guest_id),
   CONSTRAINT fk_reservation_room FOREIGN KEY (room_id) REFERENCES Room(room_id),
   CONSTRAINT fk_reservation_employee FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),

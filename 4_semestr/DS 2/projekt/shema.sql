@@ -35,7 +35,6 @@ Table Room {
   room_id int [pk, increment]
   room_type_id int [ref: > RoomType.room_type_id]
   room_number varchar
-  is_occupied boolean
 }
 
 Table Payment {
@@ -56,6 +55,7 @@ Table Reservation {
   check_out_date date
   payment_id int [ref: > Payment.payment_id]
   status varchar
+  accommodation_price decimal
 }
 
 Table Service {

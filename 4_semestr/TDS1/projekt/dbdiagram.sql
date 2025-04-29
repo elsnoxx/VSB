@@ -56,6 +56,8 @@ Table Reservation {
   check_out_date date
   payment_id int [ref: > Payment.payment_id]
   status varchar
+  accommodation_price decimal
+  services_price decimal
 }
 
 Table Service {
