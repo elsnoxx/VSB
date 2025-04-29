@@ -18,7 +18,7 @@ class Agent:
             root = tree.getroot()
             self.login = root.find('login').text
             self.data = []
-            self.visualizer = visualizer.Visualizer(self.login)
+            self.visualizer = visualizer.Visualizer()
             url = root.find('url').text
             self.gameserver = xmlrpc.client.ServerProxy(url)
             self.gameserver.add_player(self.login)
@@ -46,15 +46,30 @@ class Agent:
         # "o" rock (wall)
         # "f" tiled floor
         # "p" player
+        result = self.gameserver.make_action(self.login, 'look', '')
+
+        self.data = result
+
+        self.visualizer.visualize(self.data)
+        
         pass
     
     def __repr__(self):
         # TODO 5 - Returns human readable representation of stored data form 'self.data' variable.
-        pass
+        if not self.data:
+            return "No data available"
+        pretty_data = ""
+        for i in self.data:
+            for j in i:
+                pretty_data += j
+
+            pretty_data += '\n'
+        return pretty_data
 
     def save_data(self):
         # TODO 6 - Store data into the 'data.txt' filename.
-        pass
+        with open('data.txt', 'w') as file:
+            file.write(self.__repr__())
 
 class AgentRandom(Agent):
     # TODO 7 - This agent will extend from the previous agent and
@@ -62,14 +77,34 @@ class AgentRandom(Agent):
     # the passed parameter will be one the directions: 'north', 'west', 'south', 'east'.
     # These directions will be randomly selected
     # (find the appropriate method from the random package).
-    pass
+    def action(self):
+        direction = random.choice(['north', 'south', 'east', 'west'])
+        result = self.gameserver.make_action(self.login, 'move', direction)
+        self.data = result
+        self.visualizer.visualize(self.data)
+        return result
+    
 
 class AgentLeftRight(Agent):
     # TODO 8 - This agent will be moving just to the left until it hits a barrier.
     # Then it rurn to the right and moves until it hits the barrier again.
     # It repeats such behavior.
-    pass
+    def __init__(self, filename):
+        super().__init__(filename)
 
+        self.direction = 'west'
+        self.hit = False
+    def action(self):
+        result = self.gameserver.make_action(self.login, 'move', self.direction)
+        self.data = result
+        if self.direction == 'west' and self.data[5][4] in ['o', 't', '~']:
+            self.direction = 'east'
+        elif self.direction == 'east' and self.data[5][6] in ['o', 't', '~']:
+            self.direction = 'west'
+        
+        self.visualizer.visualize(self.data)
+        return result
+    
 def main():
     agent = None
     try:
