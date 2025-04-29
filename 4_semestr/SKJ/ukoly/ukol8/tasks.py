@@ -13,7 +13,39 @@ def brackets_depth(input):
     
     Hint: You can count the sequence of opening (+=1) and closing (-=1) brackets, or you can use a stack.
     """
-    pass
+    
+    depth = 0
+    restult = []
+    stack = []
+    add_flag = True
+
+    if not input:
+        return [0]
+    
+    for char in input:
+        if char in '({<[':
+            depth += 1
+            stack.append(char)
+            add_flag = True
+
+        elif char in ')]>}':
+            stack.pop()
+
+            if add_flag:
+                restult.append(depth)
+                add_flag = False
+            
+            depth -= 1
+    
+        print(stack)
+
+    if restult == []:
+        return [0]
+    else:
+        return restult
+
+    
+    
 
 def validate(input):
     """
@@ -35,4 +67,35 @@ def validate(input):
     
     Hint: Use a stack.
     """
-    pass
+    if not input:
+        return True
+    
+    stack = []
+    for char in input:
+        if char not in '({<[\'\")]}>':
+            continue
+        # print(stack)
+        # Zpracování uvozovek
+        if char in "'\"":
+            if stack and stack[-1] == char:
+                stack.pop()
+            else:
+                stack.append(char)
+        elif char in '({<[':
+            stack.append(char)
+        elif char in ')}]>':
+            if char == ')' and stack and stack[-1] == '(':
+                stack.pop()
+            elif char == ']' and stack and stack[-1] == '[':
+                stack.pop()
+            elif char == '}' and stack and stack[-1] == '{':
+                stack.pop()
+            elif char == '>' and stack and stack[-1] == '<':
+                stack.pop()
+            else:
+                return False
+
+    return not stack
+
+input = "'a'"
+print(validate(input))
