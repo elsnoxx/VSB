@@ -314,7 +314,7 @@ Formulář Správa hotelových rezervací je centrálním bodem pro práci s rez
 
     \item \textbf{Změna stavu rezervace:} Změnou hodnoty v poli „State“ se volá funkce \textbf{changeStatusReservation}.
 
-    \item \textbf{Změna pokoje:} Výběrem jiného pokoje v poli „Room no“ se použije funkce \textbf{changeRoom}, která ověří dostupnost a provede změnu.
+    \item \textbf{Změna pokoje:} Výběrem jiného pokoje v poli „Room no“. Po stisku tlačítka „Change“ se použije funkce \textbf{changeRoom}, která ověří dostupnost pokoje a přepočítá cenu.
 
     \item \textbf{Zaplacení rezervace:} Stiskem tlačítka „Pay“ se provede funkce \textbf{payForReservation}, která označí rezervaci jako zaplacenou.
 
@@ -337,17 +337,16 @@ Formulář Správa hotelových rezervací poskytuje následujících 10 funkcí,
     \item getGuestInformation(reservation\_id) – Načte informace o hostovi podle zadané rezervace (jméno, příjmení, email, telefon, adresa).
     \item getReservationList() – Vrátí seznam všech rezervací včetně jména hosta, čísla pokoje, data příjezdu a stavu rezervace.
     \item getPriceOfAccommodation(reservation\_id) – Vrátí cenu za ubytování uloženou v rezervaci (hodnota \texttt{accommodation\_price} v tabulce Reservation pro dané \texttt{reservation\_id}).
-    \item getPriceOfServiceUsage(reservation\_id) – Vrátí seznam služeb využitých v rámci rezervace včetně množství a ceny.
+    \item getUsedServices(reservation\_id) – Vrátí seznam služeb využitých v rámci rezervace včetně množství a ceny.
     \item getPriceOfServices(reservation\_id) – Spočítá a zobrazí celkovou cenu za všechny služby v rámci rezervace.
     \item getFreeRoomList(check\_in\_date, check\_out\_date) – Vrátí seznam volných pokojů pro zadaný termín.
     \item getServiceList() – Vrátí seznam všech dostupných služeb.
     \item getReservationState() – Vrátí seznam možných stavů rezervace.
-    \item getReservationDetail(reservation\_id) – Vrátí detailní informace o rezervaci (host, pokoj, platba, služby).
 \end{enumerate}
 
 \subsubsection{Funkce typu Invocation (vyvolávací)}
 
-\begin{enumerate}\setcounter{enumi}{9}
+\begin{enumerate}\setcounter{enumi}{8}
     \item getReservationByCheckin(check\_in\_date) – Filtrování rezervací podle data příjezdu.
     \item changeStatusReservation(reservation\_id, new\_status) – Změní stav rezervace na zvolenou hodnotu.
     \item changeRoom(reservation\_id, new\_room\_id) – Změní přiřazený pokoj v rezervaci, ověří dostupnost a přepočítá cenu.
@@ -490,18 +489,20 @@ Formulář Správa hotelových rezervací poskytuje následujících 10 funkcí,
 \subsection{changeRoom}
 
 \subsubsection{Transakce: Popis transakce}
-Transakce zajistí změnu přiřazeného pokoje pro existující rezervaci. Ověří dostupnost nového pokoje v požadovaném termínu, aktualizuje rezervaci a případně provede další související změny. Vše probíhá atomicky – v případě chyby se provede rollback.
+Transakce zajišťuje změnu přiřazeného pokoje pro existující rezervaci. Ověří dostupnost nového pokoje v požadovaném termínu, aktualizuje rezervaci a provede změnu atomicky. V případě chyby dojde k rollbacku.
 
 \subsubsection{Kroky transakce}
 \begin{enumerate}
     \item \textbf{Start transakce}
-    \item \textbf{Načtení dat rezervace:}
+    
+    \item \textbf{Načtení dat rezervace}
     \begin{itemize}
-        \item Získej \texttt{check\_in\_date}, \texttt{check\_out\_date}, \texttt{room\_id}, \texttt{accommodation\_price} z tabulky Reservation podle \texttt{reservation\_id}.
+        \item Získej \texttt{check\_in\_date}, \texttt{check\_out\_date}, \texttt{room\_id}, \texttt{accommodation\_price} z tabulky \texttt{Reservation} podle \texttt{reservation\_id}.
     \end{itemize}
-    \item \textbf{Ověření dostupnosti nového pokoje:}
+    
+    \item \textbf{Ověření dostupnosti nového pokoje}
     \begin{itemize}
-        \item Zjisti, zda je nový pokoj v požadovaném termínu volný:
+        \item Zkontroluj, zda je nový pokoj v požadovaném termínu volný:
 \begin{verbatim}
 SELECT COUNT(*)
 FROM Reservation res
@@ -513,16 +514,13 @@ WHERE res.room_id = :newRoomId
       OR (res.check_in_date BETWEEN :checkInDate AND :checkOutDate)
   );
 \end{verbatim}
-        \item Pokud není volný, proveď rollback a ukonči transakci.
+        \item Pokud je výsledek větší než 0, proveď rollback a ukonči transakci.
     \end{itemize}
-    \item \textbf{Aktualizace rezervace:}
+
+    \item \textbf{Aktualizace rezervace}
     \begin{itemize}
-        \item \textbf{Výpočet nové ceny ubytování:}
-    \begin{itemize}
-        \item Spočítej novou cenu za ubytování podle nového pokoje a termínu (například pomocí funkce \texttt{getPriceOfAccommodation}).
-    \end{itemize}
-        \item Spočítej novou cenu pomocí funkce \texttt{getPriceOfAccommodation} (použij nový pokoj, check\_in\_date, check\_out\_date).
-        \item Aktualizuj záznam v tabulce Reservation – nastav nový \texttt{room\_id} a \texttt{accommodation\_price}:
+        \item Spočítej novou cenu pomocí funkce \texttt{getPriceOfAccommodation}.
+        \item Proveď aktualizaci záznamu:
 \begin{verbatim}
 UPDATE Reservation
 SET room_id = :newRoomId,
@@ -530,8 +528,11 @@ SET room_id = :newRoomId,
 WHERE reservation_id = :reservationId;
 \end{verbatim}
     \end{itemize}
+
     \item \textbf{Commit transakce}
+
     \item \textbf{V případě chyby rollback a ukončení transakce}
 \end{enumerate}
+
 
 \end{document}
