@@ -45,7 +45,20 @@ def brackets_depth(input):
         return restult
 
     
-    
+def create_stack():
+    return []
+
+def check_empty(stack):
+    print(f'Check empty: {len(stack)}')
+    return len(stack) == 0
+
+def push(stack, item):
+    stack.append(item)
+
+def pop(stack):
+    if check_empty(stack):
+        return None
+    return stack.pop()
 
 def validate(input):
     """
@@ -69,33 +82,64 @@ def validate(input):
     """
     if not input:
         return True
-    
-    stack = []
-    for char in input:
-        if char not in '({<[\'\")]}>':
-            continue
-        # print(stack)
-        # Zpracování uvozovek
-        if char in "'\"":
-            if stack and stack[-1] == char:
-                stack.pop()
+    if not any(c in '({[<)]}>\'"' for c in input):
+        return False
+    cnt = 0
+    stack = create_stack()
+    while cnt < len(input):
+        curent = input[cnt]
+        print(f'Current: {curent}, Stack: {stack}, Count: {cnt}')
+        # Pokud jsme uvnitř stringu (na stacku je quote)
+        if not check_empty(stack) and stack[-1] in "\'\"":
+            quote = stack[-1]
+            if curent == '\\' and cnt + 1 < len(input):
+                cnt += 2
+                continue
+            elif curent == quote:
+                pop(stack)
+                cnt += 1
+                continue
             else:
-                stack.append(char)
-        elif char in '({<[':
-            stack.append(char)
-        elif char in ')}]>':
-            if char == ')' and stack and stack[-1] == '(':
-                stack.pop()
-            elif char == ']' and stack and stack[-1] == '[':
-                stack.pop()
-            elif char == '}' and stack and stack[-1] == '{':
-                stack.pop()
-            elif char == '>' and stack and stack[-1] == '<':
-                stack.pop()
+                cnt += 1
+                continue
+
+        if curent in "\"":
+            push(stack, "\"")
+            cnt += 1
+            continue
+        elif curent == '\'':
+            push(stack, "'")
+            cnt += 1
+            continue
+
+        if curent in '({<[':
+            push(stack, curent)
+            cnt += 1
+            continue
+
+        if curent in ')}]>':
+            if check_empty(stack):
+                return False
+            if curent == ')' and stack[-1] == '(':
+                pop(stack)
+            elif curent == ']' and stack[-1] == '[':
+                pop(stack)
+            elif curent == '}' and stack[-1] == '{':
+                pop(stack)
+            elif curent == '>' and stack[-1] == '<':
+                pop(stack)
             else:
                 return False
+            cnt += 1
+            continue
 
-    return not stack
+        cnt += 1
 
-input = "'a'"
+    return check_empty(stack)
+            
+            
+
+
+input = '"as\'df"()\'<{[(\'{asdf}' # "as'df"()'<{[('{asdf}
+print(input)
 print(validate(input))
