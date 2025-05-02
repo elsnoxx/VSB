@@ -334,26 +334,42 @@ Formulář Správa hotelových rezervací poskytuje následujících 10 funkcí,
 \subsubsection{Funkce typu Result (výsledkové)}
 
 \begin{enumerate}
-    \item getGuestInformation(reservation\_id) – Načte informace o hostovi podle zadané rezervace (jméno, příjmení, email, telefon, adresa).
-    \item getReservationList() – Vrátí seznam všech rezervací včetně jména hosta, čísla pokoje, data příjezdu a stavu rezervace.
-    \item getPriceOfAccommodation(reservation\_id) – Vrátí cenu za ubytování uloženou v rezervaci (hodnota \texttt{accommodation\_price} v tabulce Reservation pro dané \texttt{reservation\_id}).
-    \item getUsedServices(reservation\_id) – Vrátí seznam služeb využitých v rámci rezervace včetně množství a ceny.
-    \item getPriceOfServices(reservation\_id) – Spočítá a zobrazí celkovou cenu za všechny služby v rámci rezervace.
-    \item getFreeRoomList(check\_in\_date, check\_out\_date) – Vrátí seznam volných pokojů pro zadaný termín.
-    \item getServiceList() – Vrátí seznam všech dostupných služeb.
-    \item getReservationState() – Vrátí seznam možných stavů rezervace.
+    \item \textbf{getGuestInformation(reservation\_id)} – Na základě ID rezervace vyhledá příslušného hosta a vrátí jeho osobní údaje (jméno, příjmení, email, telefon, adresa). Interně provádí \texttt{SELECT} s \texttt{JOIN} mezi tabulkami \texttt{Reservation} a \texttt{Guest} přes cizí klíč \texttt{guest\_id}.
+
+    \item \textbf{getReservationList()} – Vrací seznam všech rezervací včetně údajů o hostovi, čísla pokoje, data příjezdu a stavu rezervace. Používá \texttt{SELECT} s vícenásobnými \texttt{JOIN} mezi tabulkami \texttt{Reservation}, \texttt{Guest} a \texttt{Room}.
+
+    \item \textbf{getPriceOfAccommodation(reservation\_id)} – Vrací cenu za ubytování z tabulky \texttt{Reservation}. Jde o jednoduchý \texttt{SELECT} na sloupec \texttt{accommodation\_price} s filtrem přes \texttt{reservation\_id}.
+
+    \item \textbf{getUsedServices(reservation\_id)} – Vrací seznam všech služeb využitých v rámci rezervace včetně názvu, množství a ceny. Využívá \texttt{SELECT} s \texttt{JOIN} mezi \texttt{ServiceUsage} a \texttt{Service}.
+
+    \item \textbf{getPriceOfServices(reservation\_id)} – Spočítá celkovou cenu všech služeb v rámci rezervace pomocí agregační funkce \texttt{SUM(total\_price)} s filtrem dle \texttt{reservation\_id} v tabulce \texttt{ServiceUsage}.
+
+    \item \textbf{getFreeRoomList(check\_in\_date, check\_out\_date)} – Vyhledá všechny pokoje, které nejsou obsazeny v daném termínu. Provádí \texttt{SELECT} z tabulky \texttt{Room} s \texttt{NOT EXISTS} nebo \texttt{LEFT JOIN} a časovým filtrem podle konfliktu s existujícími rezervacemi.
+
+    \item \textbf{getServiceList()} – Vrací seznam všech dostupných služeb. Jednoduchý \texttt{SELECT} z tabulky \texttt{Service}.
+
+    \item \textbf{getReservationState()} – Vrací různé stavy rezervací. Může být realizováno jako \texttt{SELECT DISTINCT status} z tabulky \texttt{Reservation}.
 \end{enumerate}
 
 \subsubsection{Funkce typu Invocation (vyvolávací)}
 
 \begin{enumerate}\setcounter{enumi}{8}
-    \item getReservationByCheckin(check\_in\_date) – Filtrování rezervací podle data příjezdu.
-    \item changeStatusReservation(reservation\_id, new\_status) – Změní stav rezervace na zvolenou hodnotu.
-    \item changeRoom(reservation\_id, new\_room\_id) – Změní přiřazený pokoj v rezervaci, ověří dostupnost a přepočítá cenu.
-    \item payForReservation(payment\_id) – Označí rezervaci jako zaplacenou a nastaví datum platby.
-    \item addService(reservation\_id, service\_id, quantity, usage\_date) – Přidá službu k rezervaci, vypočítá cenu a uloží záznam.
-    \item deleteService(usage\_id) – Odstraní službu z rezervace a aktualizuje celkovou cenu.
+    \item \textbf{getReservationByCheckin(check\_in\_date)} – Vrací všechny rezervace, které mají zadané datum příjezdu. Používá \texttt{SELECT} s filtrem na \texttt{check\_in\_date} v tabulce \texttt{Reservation}.
+
+    \item \textbf{changeStatusReservation(reservation\_id, new\_status)} – Aktualizuje stav rezervace na novou hodnotu. Provádí \texttt{UPDATE} v tabulce \texttt{Reservation} na základě \texttt{reservation\_id}.
+
+    \item \textbf{changeRoom(reservation\_id, new\_room\_id)} – Změní přiřazený pokoj v rezervaci. Nejprve ověřuje dostupnost nového pokoje (pomocí \texttt{SELECT}), následně provádí \texttt{UPDATE} tabulky \texttt{Reservation}, případně aktualizuje cenu (např. z \texttt{RoomTypePriceHistory}).
+
+    \item \textbf{payForReservation(payment\_id)} – Označí rezervaci jako zaplacenou a nastaví datum platby. Provádí \texttt{UPDATE} v tabulce \texttt{Payment} na základě \texttt{payment\_id}.
+
+    \item \textbf{addService(reservation\_id, service\_id, quantity, usage\_date)} – Přidá novou službu k rezervaci. Nejprve zjistí aktuální cenu služby (např. z \texttt{ServicePriceHistory}), vypočítá celkovou cenu a vloží nový záznam do tabulky \texttt{ServiceUsage} pomocí \texttt{INSERT}.
+
+    \item \textbf{deleteService(usage\_id)} – Odstraní službu přidělenou k rezervaci. Provádí \texttt{DELETE} z tabulky \texttt{ServiceUsage} podle \texttt{usage\_id}.
 \end{enumerate}
+
+
+
+
 
 % \subsection{Detailní popis funkcí}
 
@@ -497,29 +513,60 @@ Transakce zajišťuje změnu přiřazeného pokoje pro existující rezervaci. O
     
     \item \textbf{Načtení dat rezervace}
     \begin{itemize}
-        \item Získej \texttt{check\_in\_date}, \texttt{check\_out\_date}, \texttt{room\_id}, \texttt{accommodation\_price} z tabulky \texttt{Reservation} podle \texttt{reservation\_id}.
+        \item Získej \texttt{check\_in\_date}, \texttt{check\_out\_date}, \texttt{room\_id}, \texttt{accommodation\_price} z tabulky \texttt{Reservation} podle \texttt{reservation\_id}:
+\begin{verbatim}
+SELECT check_in_date, check_out_date, room_id, accommodation_price
+FROM Reservation
+WHERE reservation_id = :reservationId;
+\end{verbatim}
     \end{itemize}
     
     \item \textbf{Ověření dostupnosti nového pokoje}
     \begin{itemize}
         \item Zkontroluj, zda je nový pokoj v požadovaném termínu volný:
 \begin{verbatim}
+-- Zjisti počet kolizních rezervací pro daný pokoj a termín
 SELECT COUNT(*)
-FROM Reservation res
-WHERE res.room_id = :newRoomId
-  AND res.status != 'Cancelled'
+FROM Reservation
+WHERE room_id = :newRoomId
+  AND status != 'Cancelled'
   AND (
-      (:checkInDate BETWEEN res.check_in_date AND res.check_out_date)
-      OR (:checkOutDate BETWEEN res.check_in_date AND res.check_out_date)
-      OR (res.check_in_date BETWEEN :checkInDate AND :checkOutDate)
+      (:checkInDate BETWEEN check_in_date AND check_out_date)
+      OR (:checkOutDate BETWEEN check_in_date AND check_out_date)
+      OR (check_in_date BETWEEN :checkInDate AND :checkOutDate)
   );
 \end{verbatim}
-        \item Pokud je výsledek větší než 0, proveď rollback a ukonči transakci.
+        \item Pokud je výsledek větší než 0:
+        \begin{itemize}
+            \item Proveď rollback transakce
+            \item Ukonči transakci s chybou "Pokoj není v daném termínu volný"
+        \end{itemize}
+        \item Jinak pokračuj v transakci
     \end{itemize}
 
     \item \textbf{Aktualizace rezervace}
     \begin{itemize}
-        \item Spočítej novou cenu pomocí funkce \texttt{getPriceOfAccommodation}.
+        \item Zjisti typ pokoje a termín rezervace podle \texttt{Reservation} (dle \texttt{reservation\_id}).
+\begin{verbatim}
+SELECT room_id, check_in_date, check_out_date
+FROM Reservation
+WHERE reservation_id = :reservationId;
+\end{verbatim}
+        \item Zjisti typ pokoje podle nového \texttt{room\_id}:
+\begin{verbatim}
+SELECT room_type_id
+FROM Room
+WHERE room_id = :newRoomId;
+\end{verbatim}
+        \item Zjisti cenu za noc z tabulky \texttt{RoomTypePriceHistory} podle typu pokoje a data příjezdu (\texttt{check\_in\_date} spadá do platnosti ceny):
+\begin{verbatim}
+SELECT price_per_night
+FROM RoomTypePriceHistory
+WHERE room_type_id = :roomTypeId
+  AND :checkInDate BETWEEN valid_from AND NVL(valid_to, :checkInDate);
+\end{verbatim}
+        \item Spočítej počet nocí jako rozdíl \texttt{check\_out\_date} a \texttt{check\_in\_date}.
+        \item Spočítej novou cenu: \texttt{accommodation\_price = počet\_nocí * cena\_za\_noc}
         \item Proveď aktualizaci záznamu:
 \begin{verbatim}
 UPDATE Reservation
