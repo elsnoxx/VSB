@@ -7,7 +7,8 @@ import About from './pages/About';
 import VersionContainer from './components/VersionContainer';
 import Waypoints from './pages/Waypoints';
 import Navigate from './pages/Navigate';
-import SelectPoint from './pages/SelectPoint';
+import NearestCache from './pages/NearestCache';
+import CacheDetail from './pages/CacheDetail';
 
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
@@ -39,10 +40,10 @@ const App: React.FC = () => (
               <IonItem routerLink="/home" routerDirection="root">Domů</IonItem>
             </IonMenuToggle>
             <IonMenuToggle autoHide={false}>
-              <IonItem routerLink="/navigate" routerDirection="root">Navigate</IonItem>
+              <IonItem routerLink="/navigate" routerDirection="root">Navigovat</IonItem>
             </IonMenuToggle>
             <IonMenuToggle autoHide={false}>
-              <IonItem routerLink="/waypoints" routerDirection="root">Waypoints</IonItem>
+              <IonItem routerLink="/waypoints" routerDirection="root">Kešky</IonItem>
             </IonMenuToggle>
             <IonMenuToggle autoHide={false}>
               <IonItem routerLink="/about" routerDirection="root">O aplikaci</IonItem>
@@ -74,11 +75,14 @@ const App: React.FC = () => (
           <Route exact path="/about">
             <About />
           </Route>
-          <Route exact path="/select-point">
-            <SelectPoint />
+          <Route exact path="/cache-detail">
+            <CacheDetail />
           </Route>
           <Route exact path="/">
             <Redirect to="/home" />
+          </Route>
+          <Route exact path="/nearest-cache">
+            <NearestCache />
           </Route>
         </IonRouterOutlet>
         {/* <IonFooter>

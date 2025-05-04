@@ -1,0 +1,155 @@
+﻿[
+  {
+    "id": 125,
+    "name": "Cache na kopci",
+    "description": "Ukrytá pod hromadou kamenů na vrcholu kopce.",
+    "lat": 49.22222,
+    "lng": 17.67890,
+    "date": "2024-05-04T08:00:00Z",
+    "owner": "Hledač99",
+    "difficulty": 4,
+    "size": "regular",
+    "foundCount": 3,
+    "hint": "Na vrcholu pod kameny",
+    "logs": [
+      {
+        "user": "Anna",
+        "date": "2024-05-05T09:30:00Z",
+        "text": "Náročný výšlap, ale stálo to za to!"
+      }
+    ]
+  },
+  {
+    "id": 126,
+    "name": "Cache za mostem",
+    "description": "Ukrytá pod starým mostem u potoka.",
+    "lat": 49.33333,
+    "lng": 17.98765,
+    "date": "2024-05-02T11:15:00Z",
+    "owner": "MostMaster",
+    "difficulty": 2.5,
+    "size": "small",
+    "foundCount": 7,
+    "hint": "Pod pravou stranou mostu",
+    "logs": [
+      {
+        "user": "Tomáš",
+        "date": "2024-05-03T14:20:00Z",
+        "text": "Skvěle ukryto, chvíli mi to trvalo!"
+      }
+    ]
+  },
+  {
+    "id": 127,
+    "name": "Cache u staré studny",
+    "description": "Schovaná v kamenné zídce vedle studny.",
+    "lat": 49.11111,
+    "lng": 17.11111,
+    "date": "2024-04-30T13:00:00Z",
+    "owner": "GeoKatka",
+    "difficulty": 3.5,
+    "size": "micro",
+    "foundCount": 2,
+    "hint": "V mezeře mezi kameny",
+    "logs": []
+  },
+  {
+    "id": 128,
+    "name": "Cache u kapličky",
+    "description": "Malá cache za kapličkou v lese.",
+    "lat": 49.77777,
+    "lng": 17.33333,
+    "date": "2024-05-01T10:45:00Z",
+    "owner": "KapleFinder",
+    "difficulty": 1.5,
+    "size": "micro",
+    "foundCount": 12,
+    "hint": "Za kapličkou vlevo",
+    "logs": [
+      {
+        "user": "Mirek",
+        "date": "2024-05-02T12:10:00Z",
+        "text": "Našel jsem ji hned, pěkné místo!"
+      },
+      {
+        "user": "Lenka",
+        "date": "2024-05-03T09:05:00Z",
+        "text": "Skvělé místo na výlet."
+      }
+    ]
+  },
+  {
+    "id": 129,
+    "name": "Cache u rozcestníku",
+    "description": "Keška je schovaná pod dřevěným rozcestníkem na křižovatce cest.",
+    "lat": 49.45678,
+    "lng": 17.65432,
+    "date": "2024-05-01T09:00:00Z",
+    "owner": "TrailSeeker",
+    "difficulty": 2,
+    "size": "small",
+    "foundCount": 4,
+    "hint": "Pod spodní deskou rozcestníku",
+    "logs": [
+      {
+        "user": "Eva",
+        "date": "2024-05-02T10:00:00Z",
+        "text": "Pěkně schovaná, díky za keš!"
+      }
+    ]
+  },
+  {
+    "id": 130,
+    "name": "Cache na pasece",
+    "description": "Ukrytá mezi pařezy na bývalé pasece.",
+    "lat": 49.65432,
+    "lng": 17.23456,
+    "date": "2024-05-03T14:30:00Z",
+    "owner": "LesníDuch",
+    "difficulty": 3,
+    "size": "regular",
+    "foundCount": 1,
+    "hint": "Mezi dvěma velkými pařezy",
+    "logs": []
+  },
+  {
+    "id": 131,
+    "name": "Cache u starého mlýna",
+    "description": "Schovaná za zdí starého opuštěného mlýna.",
+    "lat": 49.32100,
+    "lng": 17.88888,
+    "date": "2024-05-04T07:45:00Z",
+    "owner": "Mlynář007",
+    "difficulty": 2.5,
+    "size": "medium",
+    "foundCount": 5,
+    "hint": "Za zdí v mezeře",
+    "logs": [
+      {
+        "user": "Ondra",
+        "date": "2024-05-04T15:00:00Z",
+        "text": "Nádherné místo a zajímavý úkryt!"
+      }
+    ]
+  },
+  {
+    "id": 132,
+    "name": "Cache u železniční trati",
+    "description": "Keška je umístěna poblíž železniční trati pod betonovým panelem.",
+    "lat": 49.88888,
+    "lng": 17.55555,
+    "date": "2024-05-02T16:20:00Z",
+    "owner": "RailHunter",
+    "difficulty": 3.5,
+    "size": "small",
+    "foundCount": 6,
+    "hint": "Pod panelem na kraji náspu",
+    "logs": [
+      {
+        "user": "Zuzka",
+        "date": "2024-05-03T17:45:00Z",
+        "text": "Napínavé hledání, ale našla jsem ji!"
+      }
+    ]
+  }
+]

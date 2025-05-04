@@ -1,0 +1,6 @@
+@CachingServer_HostAddress = http://localhost:5181
+
+GET {{CachingServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

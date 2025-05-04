@@ -23,9 +23,9 @@ const Home: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Current Position</IonTitle>
+      <IonHeader translucent={true}>
+        <IonToolbar color="primary">
+          <IonTitle>GPS Navigator</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
