@@ -23,7 +23,7 @@ public class DapperRepository
     }
 
     // Vytvoření nového připojení
-    private IDbConnection CreateConnection()
+    public IDbConnection CreateConnection()
     {
         return new MySqlConnection(_connectionString);
     }

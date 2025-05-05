@@ -1,3 +1,9 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Security.Claims;
+
 namespace ParkingLotWEB
 {
     public class Program
@@ -6,12 +12,30 @@ namespace ParkingLotWEB
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // JWT konfigurace
+            var jwtKey = builder.Configuration["Jwt:Key"] ?? "tajny_klic";
+            var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "ParkingLotWEB";
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                        ValidateIssuerSigningKey = true,
+                        RoleClaimType = ClaimTypes.Role 
+                    };
+                });
+
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpClient();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
@@ -22,15 +46,22 @@ namespace ParkingLotWEB
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.MapControllers();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.MapControllers();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
+        }
+
+        public static void ConfigureHttpClient(HttpClient client, string token)
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
     }
 }

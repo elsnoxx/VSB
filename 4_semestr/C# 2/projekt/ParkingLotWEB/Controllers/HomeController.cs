@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using ParkingLotWEB.Models;
 
 namespace ParkingLotWEB.Controllers;
@@ -18,7 +19,14 @@ public class HomeController : Controller
         return View();
     }
 
+    [Authorize(Roles = "user,admin")]
     public IActionResult Privacy()
+    {
+        return View();
+    }
+
+    [Authorize(Roles = "admin")]
+    public IActionResult ParkingLot()
     {
         return View();
     }
