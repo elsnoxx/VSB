@@ -13,20 +13,18 @@ using System.Net.Http.Headers;
 public class AuthApiController : ControllerBase
 {
     private readonly IConfiguration _config;
-    private readonly DapperRepository _repo;
+    private readonly UserRepository _userRepo;
 
     public AuthApiController(IConfiguration config)
     {
         _config = config;
-        _repo = new DapperRepository(config);
+        _userRepo = new UserRepository(config);
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
-        var sql = "SELECT * FROM Users WHERE Username = @Username AND Password = @Password";
-        using var conn = _repo.CreateConnection();
-        var user = (await conn.QueryFirstOrDefaultAsync<User>(sql, new { model.Username, model.Password }));
+        var user = await _userRepo.AuthenticateAsync(model.Username, model.Password);
 
         if (user == null)
             return Unauthorized();

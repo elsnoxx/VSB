@@ -1,0 +1,90 @@
+@model ParkingLotWEB.Models.ParkingLot
+
+<h2>Nové parkoviště</h2>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Latitude" class="form-label"></label>
+        <input asp-for="Latitude" class="form-control" id="Latitude" />
+        <span asp-validation-for="Latitude" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Longitude" class="form-label"></label>
+        <input asp-for="Longitude" class="form-control" id="Longitude" />
+        <span asp-validation-for="Longitude" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label for="citySearch" class="form-label">Vyhledat město:</label>
+        <div class="input-group">
+            <input type="text" id="citySearch" class="form-control" placeholder="Zadejte město (např. Ostrava)" />
+            <button type="button" class="btn btn-outline-secondary" onclick="searchCity()">Najít</button>
+        </div>
+    </div>
+
+    <div id="map" style="height: 300px; margin-bottom: 15px;"></div>
+
+    <button type="submit" class="btn btn-primary">Vytvořit</button>
+    <a asp-action="Index" class="btn btn-secondary">Zpět</a>
+</form>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    // Inicializace mapy bez výchozího markeru a s globálním pohledem
+    var map = L.map('map').setView([20, 0], 2); // Světový pohled
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    var marker;
+
+    function setMarker(lat, lng) {
+        if (marker) {
+            marker.setLatLng([lat, lng]);
+        } else {
+            marker = L.marker([lat, lng]).addTo(map);
+        }
+        document.getElementById('Latitude').value = lat.toFixed(6);
+        document.getElementById('Longitude').value = lng.toFixed(6);
+    }
+
+    map.on('click', function(e) {
+        setMarker(e.latlng.lat, e.latlng.lng);
+    });
+
+    // Pokud jsou v modelech už hodnoty, zobraz marker
+    window.onload = function() {
+        var lat = parseFloat(document.getElementById('Latitude').value);
+        var lng = parseFloat(document.getElementById('Longitude').value);
+        if (!isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0) {
+            setMarker(lat, lng);
+            map.setView([lat, lng], 13);
+        }
+    };
+
+    async function searchCity() {
+        var city = document.getElementById('citySearch').value;
+        if (!city) return;
+        var url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data && data.length > 0) {
+            var lat = parseFloat(data[0].lat);
+            var lon = parseFloat(data[0].lon);
+            map.setView([lat, lon], 13);
+            setMarker(lat, lon);
+        } else {
+            alert("Město nenalezeno.");
+        }
+    }
+</script>

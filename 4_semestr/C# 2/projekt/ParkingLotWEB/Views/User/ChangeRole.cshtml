@@ -1,0 +1,17 @@
+@model ParkingLotWEB.Models.User
+@{
+    ViewData["Title"] = "Změna role";
+}
+<h2>Změna role uživatele</h2>
+<form asp-action="ChangeRole" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3">
+        <label asp-for="Role" class="form-label"></label>
+        <select asp-for="Role" class="form-select">
+            <option value="admin">admin</option>
+            <option value="user">user</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Změnit roli</button>
+    <a asp-action="Index" class="btn btn-secondary">Zpět</a>
+</form>

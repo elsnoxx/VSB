@@ -32,18 +32,9 @@ public class UserApiController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] User model)
     {
-        using var conn = _repo.CreateConnection();
-        string sql;
-        if (!string.IsNullOrEmpty(model.Password))
-        {
-            sql = "UPDATE Users SET Username = @Username, Password = @Password, Role = @Role WHERE Id = @Id";
-            await conn.ExecuteAsync(sql, new { model.Username, model.Password, model.Role, Id = id });
-        }
-        else
-        {
-            sql = "UPDATE Users SET Username = @Username, Role = @Role WHERE Id = @Id";
-            await conn.ExecuteAsync(sql, new { model.Username, model.Role, Id = id });
-        }
+        var affected = await _repo.UpdateAsync(id, model);
+        if (affected == 0)
+            return NotFound();
         return NoContent();
     }
 
@@ -64,6 +55,24 @@ public class UserApiController : ControllerBase
     {
         var affected = await _repo.DeleteAsync(id);
         if (affected == 0) return NotFound();
+        return NoContent();
+    }
+
+    [HttpPut("{id}/role")]
+    public async Task<IActionResult> ChangeRole(int id, [FromBody] User model)
+    {
+        var affected = await _repo.ChangeRoleAsync(id, model.Role);
+        if (affected == 0)
+            return NotFound();
+        return NoContent();
+    }
+
+    [HttpPut("{id}/password")]
+    public async Task<IActionResult> ResetPassword(int id, [FromBody] User model)
+    {
+        var affected = await _repo.ResetPasswordAsync(id, model.Password);
+        if (affected == 0)
+            return NotFound();
         return NoContent();
     }
 }

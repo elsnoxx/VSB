@@ -1,0 +1,30 @@
+@model IEnumerable<ParkingLotWEB.Models.ParkingLot>
+
+<h2>Seznam parkovišť</h2>
+<a asp-action="Create" class="btn btn-primary mb-2">Nové parkoviště</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Název</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var lot in Model)
+    {
+        <tr>
+            <td>@lot.Name</td>
+            <td>@lot.Latitude</td>
+            <td>@lot.Longitude</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@lot.ParkingLotId" class="btn btn-info btn-sm">Detail</a>
+                <a asp-action="Edit" asp-route-id="@lot.ParkingLotId" class="btn btn-warning btn-sm">Upravit</a>
+                <a asp-action="Delete" asp-route-id="@lot.ParkingLotId" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Opravdu smazat?');">Smazat</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

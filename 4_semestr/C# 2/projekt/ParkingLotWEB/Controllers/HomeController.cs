@@ -19,14 +19,7 @@ public class HomeController : Controller
         return View();
     }
 
-    [Authorize(Roles = "user,admin")]
     public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    [Authorize(Roles = "admin")]
-    public IActionResult ParkingLot()
     {
         return View();
     }
