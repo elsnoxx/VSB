@@ -13,10 +13,10 @@ import { defaults as defaultControls } from 'ol/control';
 import './MapContainer.css';
 
 type Props = {
-  positions: { lat: number, lng: number, name?: string }[];
+  position: { lat: number, lng: number, name?: string } | null;
 };
 
-const MapContainer: React.FC<Props> = ({ positions }) => {
+const MapContainer: React.FC<Props> = ({ position }) => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapObj = useRef<Map | null>(null);
 
@@ -27,39 +27,35 @@ const MapContainer: React.FC<Props> = ({ positions }) => {
     if (!mapObj.current) {
       mapObj.current = new Map({
         target: mapRef.current,
-        controls: defaultControls({ attribution: false }), // vypne attribution control
+        controls: defaultControls({ attribution: false }),
         layers: [
           new TileLayer({
             source: new OSM(),
           }),
         ],
         view: new View({
-          center: fromLonLat([15, 50]), // výchozí střed Evropy
+          center: fromLonLat([15, 50]),
           zoom: 6,
         }),
       });
     }
 
-    // Pokud jsou pozice, přidej markery a posuň mapu
-    if (positions && mapObj.current) {
-      const markers = positions.map(({ lat, lng }) => {
-        const marker = new Feature({
-          geometry: new Point(fromLonLat([lng, lat])),
-        });
-        marker.setStyle(
-          new Style({
-            image: new Icon({
-              src: 'https://openlayers.org/en/latest/examples/data/icon.png',
-              anchor: [0.5, 1],
-              scale: 0.7,
-            }),
-          })
-        );
-        return marker;
+    // Zobraz pouze jeden bod (pokud je zadán)
+    if (position && mapObj.current) {
+      const marker = new Feature({
+        geometry: new Point(fromLonLat([position.lng, position.lat])),
       });
-
+      marker.setStyle(
+        new Style({
+          image: new Icon({
+            src: 'https://openlayers.org/en/latest/examples/data/icon.png',
+            anchor: [0.5, 1],
+            scale: 0.7,
+          }),
+        })
+      );
       const vectorSource = new VectorSource({
-        features: markers,
+        features: [marker],
       });
       const vectorLayer = new VectorLayer({
         source: vectorSource,
@@ -71,17 +67,20 @@ const MapContainer: React.FC<Props> = ({ positions }) => {
         .forEach(layer => mapObj.current?.removeLayer(layer));
 
       mapObj.current.addLayer(vectorLayer);
-      if (positions.length > 0) {
-        const { lat, lng } = positions[0];
-        mapObj.current.getView().setCenter(fromLonLat([lng, lat]));
-        mapObj.current.getView().setZoom(15);
-      }
+      mapObj.current.getView().setCenter(fromLonLat([position.lng, position.lat]));
+      mapObj.current.getView().setZoom(15);
     }
-  }, [positions]);
+    // Pokud není pozice, smaž všechny vektorové vrstvy
+    if (!position && mapObj.current) {
+      mapObj.current.getLayers().getArray()
+        .filter(layer => layer instanceof VectorLayer)
+        .forEach(layer => mapObj.current?.removeLayer(layer));
+    }
+  }, [position]);
 
   return (
     <>
-      <div ref={mapRef} style={{ width: '100%', height: 300, marginBottom: 16 }} />
+      <div ref={mapRef} style={{ width: '100%', height: 300, marginBottom: 16, pointerEvents: 'none' }} />
       <div style={{ fontSize: '0.8em', textAlign: 'right', color: '#888' }}>
         © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors
       </div>

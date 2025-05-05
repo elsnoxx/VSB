@@ -151,5 +151,275 @@
         "text": "Napínavé hledání, ale našla jsem ji!"
       }
     ]
+  },
+  {
+    "id": 133,
+    "name": "Cache u železné sochy",
+    "description": "Ukrytá za velkou železnou sochou u silnice.",
+    "lat": 49.23456,
+    "lng": 17.34567,
+    "date": "2024-05-05T10:00:00Z",
+    "owner": "Sochař",
+    "difficulty": 2,
+    "size": "small",
+    "foundCount": 8,
+    "hint": "Za pravou nohou sochy",
+    "logs": [
+      {
+        "user": "David",
+        "date": "2024-05-06T08:45:00Z",
+        "text": "Skvěle zamaskováno!"
+      }
+    ]
+  },
+  {
+    "id": 134,
+    "name": "Cache na okraji pole",
+    "description": "Cache je schovaná v remízku na okraji pole.",
+    "lat": 49.76543,
+    "lng": 17.43210,
+    "date": "2024-05-04T14:00:00Z",
+    "owner": "PolníMyš",
+    "difficulty": 1.5,
+    "size": "micro",
+    "foundCount": 11,
+    "hint": "Na spodní straně pařezu",
+    "logs": []
+  },
+  {
+    "id": 135,
+    "name": "Cache pod mostkem",
+    "description": "Keška schovaná pod malým dřevěným mostkem přes potok.",
+    "lat": 49.87654,
+    "lng": 17.12345,
+    "date": "2024-05-03T13:25:00Z",
+    "owner": "Vodník",
+    "difficulty": 3,
+    "size": "small",
+    "foundCount": 4,
+    "hint": "Uprostřed pod mostem",
+    "logs": [
+      {
+        "user": "Jirka",
+        "date": "2024-05-03T16:10:00Z",
+        "text": "Mokré boty, ale stálo to za to!"
+      }
+    ]
+  },
+  {
+    "id": 136,
+    "name": "Cache ve skalách",
+    "description": "Cache ukrytá ve skalní rozsedlině na turistické stezce.",
+    "lat": 49.33333,
+    "lng": 17.66666,
+    "date": "2024-05-06T09:15:00Z",
+    "owner": "Horolezec",
+    "difficulty": 4.5,
+    "size": "regular",
+    "foundCount": 1,
+    "hint": "V puklině mezi dvěma velkými kameny",
+    "logs": []
+  },
+  {
+    "id": 137,
+    "name": "Cache na hrázi",
+    "description": "Ukrytá na staré hrázi mezi kameny.",
+    "lat": 49.98765,
+    "lng": 17.87654,
+    "date": "2024-05-07T11:30:00Z",
+    "owner": "Vodníček",
+    "difficulty": 2.5,
+    "size": "small",
+    "foundCount": 6,
+    "hint": "Pod největším kamenem",
+    "logs": [
+      {
+        "user": "Klára",
+        "date": "2024-05-07T14:00:00Z",
+        "text": "Skvěle schované, krásné místo!"
+      }
+    ]
+  },
+  {
+    "id": 138,
+    "name": "Cache u rozhledny",
+    "description": "Schovaná poblíž základů rozhledny.",
+    "lat": 49.44444,
+    "lng": 17.99999,
+    "date": "2024-05-06T16:00:00Z",
+    "owner": "Výhledář",
+    "difficulty": 2,
+    "size": "medium",
+    "foundCount": 13,
+    "hint": "Za kamenem u základu",
+    "logs": [
+      {
+        "user": "Karel",
+        "date": "2024-05-06T17:30:00Z",
+        "text": "Díky za keš a krásný výhled!"
+      }
+    ]
+  },
+  {
+    "id": 139,
+    "name": "Cache v podzemí",
+    "description": "Cache je umístěna ve staré štole.",
+    "lat": 49.12321,
+    "lng": 17.65432,
+    "date": "2024-05-05T10:00:00Z",
+    "owner": "Jeskyňář",
+    "difficulty": 5,
+    "size": "regular",
+    "foundCount": 0,
+    "hint": "Vpravo za vchodem",
+    "logs": []
+  },
+  {
+    "id": 140,
+    "name": "Cache na louce",
+    "description": "Schovaná v keři uprostřed rozlehlé louky.",
+    "lat": 49.77777,
+    "lng": 17.22222,
+    "date": "2024-05-08T08:45:00Z",
+    "owner": "Loučňák",
+    "difficulty": 1.5,
+    "size": "micro",
+    "foundCount": 9,
+    "hint": "Uvnitř hustého keře",
+    "logs": [
+      {
+        "user": "Bára",
+        "date": "2024-05-08T10:15:00Z",
+        "text": "Snadné hledání a hezké místo."
+      }
+    ]
+  },
+  {
+    "id": 141,
+    "name": "Cache u Landeku",
+    "description": "Schovaná v blízkosti hornického muzea Landek Park.",
+    "lat": 49.86611,
+    "lng": 18.26222,
+    "date": "2024-05-09T09:00:00Z",
+    "owner": "Horník007",
+    "difficulty": 2,
+    "size": "small",
+    "foundCount": 15,
+    "hint": "U paty informační tabule",
+    "logs": [
+      {
+        "user": "Veronika",
+        "date": "2024-05-09T12:00:00Z",
+        "text": "Skvělé místo i keš!"
+      }
+    ]
+  },
+  {
+    "id": 142,
+    "name": "Cache u Dolní oblasti Vítkovice",
+    "description": "Průmyslová keš v areálu DOV, pozor na davy!",
+    "lat": 49.83033,
+    "lng": 18.29289,
+    "date": "2024-05-08T14:15:00Z",
+    "owner": "Technik",
+    "difficulty": 2.5,
+    "size": "micro",
+    "foundCount": 23,
+    "hint": "Za zábradlím u vysoké pece",
+    "logs": [
+      {
+        "user": "Luboš",
+        "date": "2024-05-08T16:30:00Z",
+        "text": "Skvělý industriální zážitek!"
+      }
+    ]
+  },
+  {
+    "id": 143,
+    "name": "Cache u Ostravice",
+    "description": "Umístěná pod mostem přes řeku Ostravici.",
+    "lat": 49.83500,
+    "lng": 18.29400,
+    "date": "2024-05-07T10:00:00Z",
+    "owner": "MostníČerv",
+    "difficulty": 3,
+    "size": "small",
+    "foundCount": 5,
+    "hint": "Pod pravou stranou mostní konstrukce",
+    "logs": []
+  },
+  {
+    "id": 144,
+    "name": "Cache u ZOO Ostrava",
+    "description": "Ukrytá v parčíku nedaleko vchodu do zoologické zahrady.",
+    "lat": 49.85750,
+    "lng": 18.32800,
+    "date": "2024-05-06T13:45:00Z",
+    "owner": "Zvířetník",
+    "difficulty": 1.5,
+    "size": "regular",
+    "foundCount": 17,
+    "hint": "Pod lavičkou za živým plotem",
+    "logs": [
+      {
+        "user": "Markéta",
+        "date": "2024-05-06T15:00:00Z",
+        "text": "Skvěle přístupná pro děti!"
+      }
+    ]
+  },
+  {
+    "id": 142,
+    "name": "Cache v Komenského sadech",
+    "description": "Malá cache schovaná v parku v centru Ostravy.",
+    "lat": 49.83891,
+    "lng": 18.28612,
+    "date": "2024-05-07T09:45:00Z",
+    "owner": "StromyCZ",
+    "difficulty": 1.5,
+    "size": "micro",
+    "foundCount": 20,
+    "hint": "V dutině starého stromu u chodníku",
+    "logs": [
+      {
+        "user": "Petra",
+        "date": "2024-05-07T11:00:00Z",
+        "text": "Našla jsem ji při procházce se psem :)"
+      }
+    ]
+  },
+  {
+    "id": 143,
+    "name": "Cache pod haldou Ema",
+    "description": "Schovaná na stezce vedoucí k vrcholu haldy Ema.",
+    "lat": 49.85041,
+    "lng": 18.30877,
+    "date": "2024-05-06T17:30:00Z",
+    "owner": "Haldovous",
+    "difficulty": 3,
+    "size": "small",
+    "foundCount": 6,
+    "hint": "Pod kamenem u odpočívadla",
+    "logs": []
+  },
+  {
+    "id": 144,
+    "name": "Cache u Slezskoostravského hradu",
+    "description": "Cache ukrytá za zídkou pod hradem.",
+    "lat": 49.83572,
+    "lng": 18.29821,
+    "date": "2024-05-08T10:30:00Z",
+    "owner": "Historik",
+    "difficulty": 2.5,
+    "size": "medium",
+    "foundCount": 10,
+    "hint": "Za rohem nízké zídky u potoka",
+    "logs": [
+      {
+        "user": "Radka",
+        "date": "2024-05-08T12:20:00Z",
+        "text": "Zajímavé místo, doporučuji!"
+      }
+    ]
   }
 ]

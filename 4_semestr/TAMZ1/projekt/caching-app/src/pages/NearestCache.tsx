@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonInput, IonItem, IonLabel, IonList } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonInput, IonItem, IonLabel, IonList, IonInfiniteScroll, IonInfiniteScrollContent, IonBadge } from '@ionic/react';
 import { Geolocation } from '@capacitor/geolocation';
 import { useHistory } from 'react-router-dom';
 
@@ -13,13 +13,22 @@ type Cache = {
   altitudeAccuracy?: number | null;
 };
 
+const PAGE_SIZE = 10;
+
 const NearestCache: React.FC = () => {
   const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
   const [radius, setRadius] = useState<number>(1);
-  const [caches, setCaches] = useState<Cache[]>([]);
+  const [allCaches, setAllCaches] = useState<Cache[]>([]);
+  const [displayedCaches, setDisplayedCaches] = useState<Cache[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const history = useHistory();
+
+  // Přidejte toto pro získání názvů nalezených keší
+  const foundCaches = JSON.parse(localStorage.getItem('foundCaches') || '[]') as { name: string }[];
+  const foundNames = foundCaches.map(fc => fc.name);
 
   useEffect(() => {
     const getCurrentPosition = async () => {
@@ -43,31 +52,51 @@ const NearestCache: React.FC = () => {
     }
     setLoading(true);
     setError(null);
+    setAllCaches([]); // smaž stará data
+    setDisplayedCaches([]);
+    setPage(1);
+    setHasMore(true);
     try {
       const url = `${process.env.REACT_APP_API_URL}/api/Caching/nearby?lat=${position.lat}&lng=${position.lng}&radius=${radius}`;
       const response = await fetch(url);
       if (!response.ok) {
         setError(`Chyba serveru: ${response.status} ${response.statusText}`);
-        setCaches([]);
+        setAllCaches([]);
+        setDisplayedCaches([]);
+        setHasMore(false);
       } else {
         const data = await response.json();
         if (!data || data.length === 0) {
           setError('Žádné cache v okolí.');
-          setCaches([]);
+          setAllCaches([]);
+          setDisplayedCaches([]);
+          setHasMore(false);
         } else {
-          setCaches(data);
+          setAllCaches(data);
+          setDisplayedCaches(data.slice(0, PAGE_SIZE));
+          setHasMore(data.length > PAGE_SIZE);
         }
       }
     } catch {
       setError('Chyba při načítání cachek.');
-      setCaches([]);
+      setAllCaches([]);
+      setDisplayedCaches([]);
+      setHasMore(false);
     }
     setLoading(false);
   };
 
-  // Pomocná funkce pro výpočet vzdálenosti mezi dvěma body (Haversine)
+  const loadMore = (ev: CustomEvent<void>) => {
+    const nextPage = page + 1;
+    const nextItems = allCaches.slice(0, nextPage * PAGE_SIZE);
+    setDisplayedCaches(nextItems);
+    setPage(nextPage);
+    setHasMore(nextItems.length < allCaches.length);
+    (ev.target as HTMLIonInfiniteScrollElement).complete();
+  };
+
   function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
-    const R = 6371; // Radius of the earth in km
+    const R = 6371;
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLon = ((lon2 - lon1) * Math.PI) / 180;
     const a =
@@ -81,7 +110,6 @@ const NearestCache: React.FC = () => {
   }
 
   const handleCacheClick = (cache: Cache) => {
-    // Uložení detailu do localStorage nebo jinam, případně přesměrování s parametrem
     localStorage.setItem('selectedCache', JSON.stringify(cache));
     history.push('/cache-detail');
   };
@@ -113,9 +141,9 @@ const NearestCache: React.FC = () => {
               {loading ? 'Načítání...' : 'Najít cache'}
             </IonButton>
             {error && <div style={{ color: 'red', marginTop: 8 }}>{error}</div>}
-            {caches.length > 0 && (
+            {displayedCaches.length > 0 && (
               <IonList>
-                {caches.map((cache, idx) => (
+                {displayedCaches.map((cache, idx) => (
                   <IonItem
                     key={idx}
                     button
@@ -143,8 +171,21 @@ const NearestCache: React.FC = () => {
                         {cache.date}
                       </div>
                     </IonLabel>
+                    {/* Zobraz badge pokud je cache nalezena */}
+                    {foundNames.includes(cache.name) && (
+                      <IonBadge color="success" slot="end">
+                        Nalezeno
+                      </IonBadge>
+                    )}
                   </IonItem>
                 ))}
+                <IonInfiniteScroll
+                  threshold="100px"
+                  disabled={!hasMore}
+                  onIonInfinite={loadMore}
+                >
+                  <IonInfiniteScrollContent loadingText="Načítání dalších cache..." />
+                </IonInfiniteScroll>
               </IonList>
             )}
           </IonCardContent>

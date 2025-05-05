@@ -36,11 +36,11 @@ public class CachingController : ControllerBase
         return Ok(Caches); // Vrací seznam kešek jako JSON
     }
 
-    // 2. Detail kešky
-    [HttpGet("{id}")]
-    public IActionResult GetCacheById(int id)
+    // 2. Detail kešky podle názvu
+    [HttpGet("detail/{name}")]
+    public IActionResult GetCacheByName(string name)
     {
-        var cache = Caches.Find(c => c.Id == id);
+        var cache = Caches.Find(c => c.Name?.Equals(name, StringComparison.OrdinalIgnoreCase) == true);
         if (cache == null)
         {
             return NotFound(new { message = "Keška nenalezena." });
@@ -48,6 +48,7 @@ public class CachingController : ControllerBase
 
         return Ok(cache); // Vrací detail kešky jako JSON
     }
+
 
     // 3. Kešky v okolí (GET /api/caching/nearby?lat=...&lng=...&radius=...)
     [HttpGet("nearby")]
@@ -80,6 +81,33 @@ public class CachingController : ControllerBase
         var jsonData = System.IO.File.ReadAllText(jsonFilePath);
         return Content(jsonData, "application/json"); // Vrací obsah souboru jako JSON
     }
+
+    // 5. Přidání záznamu do logu, že kešku někdo našel
+    [HttpPost("found")]
+    public IActionResult LogCacheFound([FromQuery] string cacheName, [FromQuery] string personName)
+    {
+        var cache = Caches.Find(c => c.Name?.Equals(cacheName, StringComparison.OrdinalIgnoreCase) == true);
+        if (cache == null)
+        {
+            return NotFound(new { message = "Keška nenalezena." });
+        }
+
+        if (cache.Logs == null)
+        {
+            cache.Logs = new List<Log>();
+        }
+
+        var logEntry = new Log
+        {
+            Date = DateTime.UtcNow,
+            Finder = personName
+        };
+
+        cache.Logs.Add(logEntry);
+
+        return Ok(new { message = "Log byl úspěšně přidán.", cache });
+    }
+
 
     // Pomocná metoda pro výpočet vzdálenosti mezi dvěma body (Haversine formula)
     private static double GetDistance(double lat1, double lng1, double lat2, double lng2)

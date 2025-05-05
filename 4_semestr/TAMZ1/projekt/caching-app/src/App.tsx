@@ -9,6 +9,9 @@ import Waypoints from './pages/Waypoints';
 import Navigate from './pages/Navigate';
 import NearestCache from './pages/NearestCache';
 import CacheDetail from './pages/CacheDetail';
+import AllCachesMap from './pages/AllCachesMap';
+import Found from './pages/Found';
+import OfflineIndicator from './components/OfflineIndicator';
 
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
@@ -26,6 +29,7 @@ setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
+    <OfflineIndicator />
     <IonReactRouter>
       {/* Menu */}
       <IonMenu contentId="main-content">
@@ -40,7 +44,10 @@ const App: React.FC = () => (
               <IonItem routerLink="/home" routerDirection="root">Domů</IonItem>
             </IonMenuToggle>
             <IonMenuToggle autoHide={false}>
-              <IonItem routerLink="/navigate" routerDirection="root">Navigovat</IonItem>
+              <IonItem routerLink="/found-caches" routerDirection="root">Nalezeno</IonItem>
+            </IonMenuToggle>
+            <IonMenuToggle autoHide={false}>
+              <IonItem routerLink="/nearest-cache" routerDirection="root">Najít nejbližší keš</IonItem>
             </IonMenuToggle>
             <IonMenuToggle autoHide={false}>
               <IonItem routerLink="/waypoints" routerDirection="root">Kešky</IonItem>
@@ -59,7 +66,7 @@ const App: React.FC = () => (
             <IonButtons slot="start">
               <IonMenuButton />
             </IonButtons>
-            <IonTitle>GPS Navigator</IonTitle>
+            <IonTitle>GeoCaching</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonRouterOutlet>
@@ -72,11 +79,17 @@ const App: React.FC = () => (
           <Route exact path="/waypoints">
             <Waypoints />
           </Route>
+          <Route exact path="/found-caches">
+            <Found />
+          </Route>
           <Route exact path="/about">
             <About />
           </Route>
           <Route exact path="/cache-detail">
             <CacheDetail />
+          </Route>
+          <Route exact path="/all-caches-map">
+            <AllCachesMap />
           </Route>
           <Route exact path="/">
             <Redirect to="/home" />

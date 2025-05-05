@@ -13,9 +13,14 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
-  IonButton
+  IonButton,
+  IonRow,
+  IonCol,
+  IonBadge,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent
 } from '@ionic/react';
-import { locationOutline } from 'ionicons/icons';
+import { locationOutline, checkmarkCircle } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
 import WaypointsList from '../components/WaypointsList';
 
@@ -29,11 +34,19 @@ type Cache = {
   altitudeAccuracy?: number | null;
 };
 
+const PAGE_SIZE = 10;
+
 const Caches: React.FC = () => {
   const history = useHistory();
   const [caches, setCaches] = useState<Cache[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [displayedCaches, setDisplayedCaches] = useState<Cache[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  const foundCaches = JSON.parse(localStorage.getItem('foundCaches') || '[]') as { name: string }[];
+  const foundNames = foundCaches.map(fc => fc.name);
 
   const fetchCaches = async () => {
     setLoading(true);
@@ -68,9 +81,24 @@ const Caches: React.FC = () => {
     fetchCaches();
   }, []);
 
+  useEffect(() => {
+    setDisplayedCaches(caches.slice(0, PAGE_SIZE));
+    setPage(1);
+    setHasMore(caches.length > PAGE_SIZE);
+  }, [caches]);
+
   const handleSelect = (cache: Cache) => {
     localStorage.setItem('selectedCache', JSON.stringify(cache));
     history.push('/cache-detail');
+  };
+
+  const loadMore = (ev: CustomEvent<void>) => {
+    const nextPage = page + 1;
+    const nextItems = caches.slice(0, nextPage * PAGE_SIZE);
+    setDisplayedCaches(nextItems);
+    setPage(nextPage);
+    setHasMore(nextItems.length < caches.length);
+    (ev.target as HTMLIonInfiniteScrollElement).complete();
   };
 
   return (
@@ -89,15 +117,47 @@ const Caches: React.FC = () => {
             </IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
-            <IonButton expand="block" onClick={fetchCaches} style={{ marginBottom: 8 }}>
-              Aktualizovat seznam
-            </IonButton>
+            <IonRow style={{ marginBottom: 8 }}>
+              <IonCol>
+                <IonButton expand="block" onClick={fetchCaches}>
+                  Aktualizovat seznam
+                </IonButton>
+              </IonCol>
+              <IonCol>
+                <IonButton expand="block" onClick={() => history.push('/all-caches-map')}>
+                  Mapa
+                </IonButton>
+              </IonCol>
+            </IonRow>
+            
             {loading ? (
               <div>Načítání...</div>
             ) : error ? (
               <div style={{ color: 'red' }}>{error}</div>
             ) : caches.length > 0 ? (
-              <WaypointsList waypoints={caches} onSelect={handleSelect} />
+              <IonList>
+                {displayedCaches.map((cache, idx) => (
+                  <IonItem key={idx} button onClick={() => handleSelect(cache)}>
+                    <IonLabel>
+                      <h2>{cache.name}</h2>
+                      <p>{cache.lat}, {cache.lng}</p>
+                    </IonLabel>
+                    {foundNames.includes(cache.name) && (
+                      <IonBadge color="success" slot="end">
+                        <IonIcon icon={checkmarkCircle} style={{ marginRight: 4 }} />
+                        Nalezeno
+                      </IonBadge>
+                    )}
+                  </IonItem>
+                ))}
+                <IonInfiniteScroll
+                  threshold="100px"
+                  disabled={!hasMore}
+                  onIonInfinite={loadMore}
+                >
+                  <IonInfiniteScrollContent loadingText="Načítání dalších cache..." />
+                </IonInfiniteScroll>
+              </IonList>
             ) : null}
           </IonCardContent>
         </IonCard>

@@ -1,14 +1,42 @@
 import React, { useEffect, useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardContent } from '@ionic/react';
+import { 
+  IonContent, 
+  IonHeader, 
+  IonPage, 
+  IonTitle, 
+  IonToolbar, 
+  IonButton, 
+  IonCard, 
+  IonCardHeader, 
+  IonCardTitle, 
+  IonCardContent,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonIcon,
+  IonItem,
+  IonList,
+  IonLabel,
+  IonChip,
+  IonAvatar,
+  IonText,
+  IonModal,
+  IonInput,
+  IonAlert
+} from '@ionic/react';
 import { Geolocation } from '@capacitor/geolocation';
+import { mapOutline, navigateCircleOutline, locationOutline, compass, person } from 'ionicons/icons';
 import CurrentDay from '../components/CurrentDay';
 import './Home.css';
 import { useHistory } from 'react-router-dom';
 
 const Home: React.FC = () => {
   const [position, setPosition] = useState<{lat: number, lng: number} | null>(null);
+  const [showNameModal, setShowNameModal] = useState(false);
+  const [personName, setPersonName] = useState('');
   const history = useHistory();
 
+  // Kontrola existence jména při načtení stránky
   useEffect(() => {
     const getCurrentPosition = async () => {
       const coordinates = await Geolocation.getCurrentPosition();
@@ -18,6 +46,15 @@ const Home: React.FC = () => {
       });
     };
     getCurrentPosition();
+
+    // Kontrola, zda existuje personName v localStorage
+    const savedName = localStorage.getItem('personName');
+    if (!savedName) {
+      // Pokud neexistuje, zobraz modál pro zadání jména
+      setShowNameModal(true);
+    } else {
+      setPersonName(savedName);
+    }
   }, []);
 
   const handleShowAllCaches = () => {
@@ -27,42 +64,160 @@ const Home: React.FC = () => {
   const handleShowNearestCache = () => {
     history.push('/nearest-cache');
   };
+  
+  const handleNavigate = () => {
+    history.push('/navigate');
+  };
+
+  // Uložení jména uživatele
+  const savePersonName = () => {
+    if (personName.trim()) {
+      localStorage.setItem('personName', personName.trim());
+      setShowNameModal(false);
+    }
+  };
 
   return (
     <IonPage>
-      <IonHeader translucent={true}>
+      <IonHeader translucent>
         <IonToolbar color="primary">
-          <IonTitle>GPS Navigator</IonTitle>
+          <IonTitle>GeoCaching</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Hlavní plocha</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <CurrentDay />
-        <IonCard>
+      <IonContent fullscreen className="ion-padding">
+        {/* Aktuální poloha */}
+        <IonCard className="ion-margin-bottom">
           <IonCardHeader>
-            <IonCardTitle>Vítejte v aplikaci pro hledání cachek!</IonCardTitle>
+            <IonCardTitle>Aktuální poloha</IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
-            <p>Zde můžete:</p>
-            <ul>
-              <li>Získat informace o své aktuální poloze</li>
-              <li>Zobrazit všechny dostupné cache</li>
-              <li>Najít nejbližší cache</li>
-            </ul>
-            <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 16 }}>
-              <IonButton onClick={handleShowAllCaches} color="secondary">
-                Zobrazit všechny cache
-              </IonButton>
-              <IonButton onClick={handleShowNearestCache} color="tertiary">
-                Najít nejbližší cache
-              </IonButton>
-            </div>
+            {position ? (
+              <IonRow>
+                <IonCol>
+                  <p>Šířka: {position.lat.toFixed(6)}</p>
+                </IonCol>
+                <IonCol>
+                  <p>Délka: {position.lng.toFixed(6)}</p>
+                </IonCol>
+              </IonRow>
+            ) : (
+              <IonText color="danger">
+                Nelze získat aktuální polohu.
+              </IonText>
+            )}
           </IonCardContent>
         </IonCard>
+
+        <CurrentDay />
+
+        {/* Uživatelská identifikace */}
+        {personName && (
+          <IonChip color="primary" className="ion-margin-bottom">
+            <IonAvatar>
+              <IonIcon icon={person} />
+            </IonAvatar>
+            <IonLabel>Přihlášen jako: {personName}</IonLabel>
+          </IonChip>
+        )}
+
+        {/* Úvodní karta */}
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Vítejte v aplikaci pro hledání keší!</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonText color="medium">
+              <p>Prozkoumávejte svět, hledejte poklady a bavte se s GPS Navigator</p>
+            </IonText>
+            <IonList lines="none">
+              <IonItem>
+                <IonIcon icon={locationOutline} slot="start" color="primary" />
+                <IonLabel>Získat informace o své aktuální poloze</IonLabel>
+              </IonItem>
+              <IonItem>
+                <IonIcon icon={mapOutline} slot="start" color="secondary" />
+                <IonLabel>Zobrazit všechny dostupné keše</IonLabel>
+              </IonItem>
+              <IonItem>
+                <IonIcon icon={navigateCircleOutline} slot="start" color="tertiary" />
+                <IonLabel>Najít nejbližší keš</IonLabel>
+              </IonItem>
+            </IonList>
+          </IonCardContent>
+        </IonCard>
+
+        {/* Akční tlačítka */}
+        <IonGrid>
+          <IonRow>
+            <IonCol>
+              <IonButton
+                expand="block"
+                color="secondary"
+                onClick={handleShowAllCaches}
+                className="ion-margin-bottom"
+              >
+                <IonIcon icon={mapOutline} slot="start" />
+                Všechny keše
+              </IonButton>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <IonButton
+                expand="block"
+                color="tertiary"
+                onClick={handleShowNearestCache}
+                className="ion-margin-bottom"
+              >
+                <IonIcon icon={navigateCircleOutline} slot="start" />
+                Nejbližší keš
+              </IonButton>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <IonButton
+                expand="block"
+                color="primary"
+                onClick={handleNavigate}
+              >
+                <IonIcon icon={compass} slot="start" />
+                Navigace
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+
+        {/* Modální okno pro zadání jména */}
+        <IonModal isOpen={showNameModal} backdropDismiss={false}>
+          <IonCard>
+            <IonCardHeader>
+              <IonCardTitle>Zadejte své jméno</IonCardTitle>
+            </IonCardHeader>
+            <IonCardContent>
+              <p>Pro plné využití aplikace je třeba zadat vaše jméno.</p>
+              <p>Toto jméno bude použito při označení kešky jako nalezené.</p>
+              <IonItem>
+                <IonLabel position="floating">Jméno hledače</IonLabel>
+                <IonInput
+                  value={personName}
+                  onIonChange={e => setPersonName(e.detail.value?.toString() || '')}
+                  placeholder="Např. Jan Novák"
+                />
+                <IonIcon icon={person} slot="start" />
+              </IonItem>
+              <IonButton
+                expand="block"
+                color="primary"
+                onClick={savePersonName}
+                disabled={!personName.trim()}
+                className="ion-margin-top"
+              >
+                Potvrdit
+              </IonButton>
+            </IonCardContent>
+          </IonCard>
+        </IonModal>
       </IonContent>
     </IonPage>
   );

@@ -52,7 +52,7 @@ const CacheDetail: React.FC = () => {
       .catch(() => setUserPos(null));
 
     if (localCache && localCache.name) {
-      fetch(`${process.env.REACT_APP_API_URL}/api/Caching/detail?name=${encodeURIComponent(localCache.name)}`)
+      fetch(`${process.env.REACT_APP_API_URL}/api/Caching/detail/${encodeURIComponent(localCache.name)}`)
         .then(res => res.ok ? res.json() : null)
         .then(data => {
           if (data) setServerCache(data);
@@ -134,7 +134,7 @@ const CacheDetail: React.FC = () => {
               )}
               {/* Další informace z API, např. owner, difficulty, size, hint, logs... */}
             </IonList>
-            <MapContainer positions={cacheData.lat && cacheData.lng ? [{ lat: cacheData.lat, lng: cacheData.lng, name: cacheData.name }] : []} />
+            <MapContainer position={cacheData.lat && cacheData.lng ? { lat: cacheData.lat, lng: cacheData.lng, name: cacheData.name } : null} />
             <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
               <IonButton color="medium" onClick={() => {
                 localStorage.setItem('navigateTo', JSON.stringify(cacheData));

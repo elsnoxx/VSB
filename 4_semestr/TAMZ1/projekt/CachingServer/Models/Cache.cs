@@ -44,7 +44,7 @@ namespace CachingServer.Models
     public class Log
     {
         [JsonPropertyName("user")]
-        public string? User { get; set; }
+        public string? Finder { get; set; }
 
         [JsonPropertyName("date")]
         public DateTime? Date { get; set; }
