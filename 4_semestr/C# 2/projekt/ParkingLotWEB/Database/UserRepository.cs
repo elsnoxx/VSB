@@ -1,6 +1,7 @@
 using Dapper;
 using ParkingLotWEB.Models;
 using System.Data;
+using Bcrypt.Net;
 
 namespace ParkingLotWEB.Database
 {
@@ -51,6 +52,7 @@ namespace ParkingLotWEB.Database
         public async Task<int> CreateAsync(User user)
         {
             using var conn = _dapper.CreateConnection();
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             var sql = "INSERT INTO `User` (Username, Password, Role) VALUES (@Username, @Password, @Role)";
             return await conn.ExecuteAsync(sql, new { user.Username, user.Password, user.Role });
         }
@@ -64,9 +66,18 @@ namespace ParkingLotWEB.Database
 
         public async Task<User?> AuthenticateAsync(string username, string password)
         {
-            using var conn = _dapper.CreateConnection();
-            var sql = "SELECT * FROM `User` WHERE Username = @Username AND Password = @Password";
-            return await conn.QueryFirstOrDefaultAsync<User>(sql, new { Username = username, Password = password });
+            var user = await GetByUsernameAsync(username);
+            if (user == null)
+                return null;
+            System.Console.WriteLine($"User found: {user.Username}");
+            System.Console.WriteLine($"Password: {password}");
+            System.Console.WriteLine($"Hashed Password: {user.Password}");
+            System.Console.WriteLine($"Hashed Password: {Bcrypt.Net.BCrypt.HashPassword(password)}");
+
+            if (BCrypt.Net.BCrypt.Verify(password, user.Password))
+                return user;
+
+            return null;
         }
 
         public async Task<int> ChangeRoleAsync(int id, string role)
@@ -79,8 +90,17 @@ namespace ParkingLotWEB.Database
         public async Task<int> ResetPasswordAsync(int id, string password)
         {
             using var conn = _dapper.CreateConnection();
+            password = BCrypt.Net.BCrypt.HashPassword(password);
             var sql = "UPDATE `User` SET Password = @Password WHERE Id = @Id";
             return await conn.ExecuteAsync(sql, new { Password = password, Id = id });
+        }
+
+        public async Task<User?> GetByUsernameAsync(string username)
+        {
+            using var conn = _dapper.CreateConnection();
+            return await conn.QueryFirstOrDefaultAsync<User>(
+                "SELECT * FROM `User` WHERE Username = @username",
+                new { username });
         }
     }
 }

@@ -1,4 +1,4 @@
-@model ParkingLotWEB.Models.ParkingLot
+@model ParkingLotWEB.Models.ParkingLotCreateViewModel
 
 <h2>Nové parkoviště</h2>
 
@@ -21,20 +21,24 @@
         <input asp-for="Longitude" class="form-control" id="Longitude" />
         <span asp-validation-for="Longitude" class="text-danger"></span>
     </div>
-
     <div class="mb-3">
-        <label for="citySearch" class="form-label">Vyhledat město:</label>
-        <div class="input-group">
-            <input type="text" id="citySearch" class="form-control" placeholder="Zadejte město (např. Ostrava)" />
-            <button type="button" class="btn btn-outline-secondary" onclick="searchCity()">Najít</button>
-        </div>
+        <label asp-for="Capacity" class="form-label">Počet parkovacích míst</label>
+        <input asp-for="Capacity" class="form-control" min="1" />
+        <span asp-validation-for="Capacity" class="text-danger"></span>
     </div>
-
-    <div id="map" style="height: 300px; margin-bottom: 15px;"></div>
-
     <button type="submit" class="btn btn-primary">Vytvořit</button>
     <a asp-action="Index" class="btn btn-secondary">Zpět</a>
 </form>
+
+<div class="mb-3">
+    <label for="citySearch" class="form-label">Vyhledat město:</label>
+    <div class="input-group">
+        <input type="text" id="citySearch" class="form-control" placeholder="Zadejte město (např. Ostrava)" />
+        <button type="button" class="btn btn-outline-secondary" onclick="searchCity()">Najít</button>
+    </div>
+</div>
+
+<div id="map" style="height: 300px; margin-bottom: 15px;"></div>
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

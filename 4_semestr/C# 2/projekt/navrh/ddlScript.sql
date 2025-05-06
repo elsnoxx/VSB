@@ -13,6 +13,7 @@ FLUSH PRIVILEGES;
 CREATE TABLE ParkingLot (
   parking_lot_id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255),
+  capacity INT NOT NULL DEFAULT 0;
   latitude DECIMAL(10, 6),
   longitude DECIMAL(10, 6)
 );

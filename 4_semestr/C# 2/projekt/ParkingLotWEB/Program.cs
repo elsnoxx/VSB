@@ -20,7 +20,7 @@ namespace ParkingLotWEB
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
             .AddCookie(options =>
             {
@@ -37,16 +37,20 @@ namespace ParkingLotWEB
                     ValidateLifetime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
                     ValidateIssuerSigningKey = true,
-                    RoleClaimType = ClaimTypes.Role 
+                    RoleClaimType = ClaimTypes.Role
                 };
             });
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<ParkingLotWEB.Database.UserRepository>();
+            builder.Services.AddScoped<ParkingLotWEB.Database.ParkingLotRepository>();
+            builder.Services.AddScoped<ParkingLotWEB.Database.ParkingSpaceRepository>();
 
             builder.Services.AddHttpClient<ApiClient>(client =>
             {
-                client.BaseAddress = new Uri("https://localhost:7292/");
+                // client.BaseAddress = new Uri("https://localhost:7292/");
+                client.BaseAddress = new Uri("http://localhost:5062/");
             });
             builder.Services.AddHttpClient();
 

@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using ParkingLotWEB.Models;
 using System.Text.Json;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
+
+[Authorize(Roles = "Admin")]
 public class ParkingLotController : Controller
 {
     private readonly ApiClient _apiClient;
@@ -37,13 +40,22 @@ public class ParkingLotController : Controller
     public IActionResult Create() => View();
 
     [HttpPost]
-    public async Task<IActionResult> Create(ParkingLot lot)
+    public async Task<IActionResult> Create(ParkingLotCreateViewModel model)
     {
-        if (!ModelState.IsValid) return View(lot);
+        if (!ModelState.IsValid) return View(model);
+
+        var lot = new ParkingLot
+        {
+            Name = model.Name,
+            Latitude = model.Latitude,
+            Longitude = model.Longitude,
+            Capacity = model.Capacity
+        };
+
         var response = await _apiClient.PostAsync("api/ParkingLotApi", lot);
         if (response.IsSuccessStatusCode)
             return RedirectToAction("Index");
-        return View(lot);
+        return View(model);
     }
 
     [HttpGet]

@@ -7,10 +7,13 @@ using ParkingLotWEB.Database;
 public class ParkingLotApiController : ControllerBase
 {
     private readonly ParkingLotRepository _repo;
+    private readonly ParkingSpaceRepository _spaceRepo;
+    
 
-    public ParkingLotApiController(ParkingLotRepository repo)
+    public ParkingLotApiController(ParkingLotRepository repo, ParkingSpaceRepository spaceRepo)
     {
         _repo = repo;
+        _spaceRepo = spaceRepo;
     }
 
     [HttpGet]
@@ -21,6 +24,10 @@ public class ParkingLotApiController : ControllerBase
     {
         var lot = await _repo.GetByIdAsync(id);
         if (lot == null) return NotFound();
+
+        // Načtení parkovacích míst pro dané parkoviště
+        lot.ParkingSpaces = (await _spaceRepo.GetByParkingLotIdAsync(id)).ToList();
+
         return Ok(lot);
     }
 

@@ -40,44 +40,57 @@ namespace ParkingLotWEB.Database
         // Aktualizace stavu parkovacího místa a záznam historie
         public async Task<bool> UpdateStatusAsync(int parkingSpaceId, string newStatus)
         {
-            using (var connection = new MySqlConnection(_repository._connectionString))
+            await _repository.ExecuteInTransactionAsync(async (conn, tran) =>
             {
-                await connection.OpenAsync();
+                string updateSql = @"
+                    UPDATE ParkingSpace 
+                    SET status = @Status 
+                    WHERE parking_space_id = @ParkingSpaceId";
+                await conn.ExecuteAsync(updateSql, new { Status = newStatus, ParkingSpaceId = parkingSpaceId }, tran);
 
-                // Použití transakce pro zajištění atomicity obou operací
-                using (var transaction = connection.BeginTransaction())
-                {
-                    try
-                    {
-                        // Aktualizace stavu parkovacího místa
-                        string updateSql = @"
-                        UPDATE ParkingSpace 
-                        SET status = @Status 
-                        WHERE parking_space_id = @ParkingSpaceId";
+                string historySql = @"
+                    INSERT INTO StatusHistory (parking_space_id, status, change_time)
+                    VALUES (@ParkingSpaceId, @Status, @ChangeTime)";
+                await conn.ExecuteAsync(historySql, new { ParkingSpaceId = parkingSpaceId, Status = newStatus, ChangeTime = DateTime.Now }, tran);
+            });
+            return true;
+        }
 
-                        await connection.ExecuteAsync(updateSql,
-                            new { Status = newStatus, ParkingSpaceId = parkingSpaceId },
-                            transaction);
+        // Získání historie stavu parkovacího místa
+        public async Task<IEnumerable<StatusHistory>> GetStatusHistoryAsync(int parkingSpaceId)
+        {
+            string sql = @"SELECT * FROM StatusHistory WHERE parking_space_id = @ParkingSpaceId ORDER BY change_time DESC";
+            return await _repository.QueryAsync<StatusHistory>(sql, new { ParkingSpaceId = parkingSpaceId });
+        }
 
-                        // Záznam do historie
-                        string historySql = @"
-                        INSERT INTO StatusHistory (parking_space_id, status, change_time)
-                        VALUES (@ParkingSpaceId, @Status, @ChangeTime)";
+        // Vložení obsazenosti parkovacího místa
+        public async Task InsertOccupancyAsync(int parkingSpaceId, string licensePlate)
+        {
+            string sql = @"INSERT INTO Occupancy (parking_space_id, license_plate, start_time) VALUES (@ParkingSpaceId, @LicensePlate, @StartTime)";
+            await _repository.ExecuteAsync(sql, new { ParkingSpaceId = parkingSpaceId, LicensePlate = licensePlate, StartTime = DateTime.Now });
+        }
 
-                        await connection.ExecuteAsync(historySql,
-                            new { ParkingSpaceId = parkingSpaceId, Status = newStatus, ChangeTime = DateTime.Now },
-                            transaction);
+        // Uvolnění obsazenosti parkovacího místa
+        public async Task ReleaseOccupancyAsync(int parkingSpaceId)
+        {
+            // Najde poslední otevřenou obsazenost a ukončí ji
+            string sql = @"
+                UPDATE Occupancy
+                SET end_time = @EndTime,
+                    duration = TIMESTAMPDIFF(MINUTE, start_time, @EndTime),
+                    price = TIMESTAMPDIFF(MINUTE, start_time, @EndTime) * 1.0 -- cena za minutu, upravte dle potřeby
+                WHERE parking_space_id = @ParkingSpaceId AND end_time IS NULL
+                ORDER BY start_time DESC
+                LIMIT 1";
+            await _repository.ExecuteAsync(sql, new { ParkingSpaceId = parkingSpaceId, EndTime = DateTime.Now });
+        }
 
-                        transaction.Commit();
-                        return true;
-                    }
-                    catch
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
-                }
-            }
+        // Získání aktuální obsazenosti parkovacího místa
+        public async Task<Occupancy?> GetCurrentOccupancyAsync(int parkingSpaceId)
+        {
+            string sql = @"SELECT * FROM Occupancy WHERE parking_space_id = @ParkingSpaceId AND end_time IS NULL ORDER BY start_time DESC LIMIT 1";
+            var result = await _repository.QueryAsync<Occupancy>(sql, new { ParkingSpaceId = parkingSpaceId });
+            return result.FirstOrDefault();
         }
     }
 }

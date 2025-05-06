@@ -7,8 +7,17 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ParkingLotWEB.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-sA+e2tu6pJg3lgsLhM8V+gQKjvCwCkT0p1g8H1F0C/g="
+          crossorigin=""/>
 </head>
 <body>
+    @using Microsoft.AspNetCore.Identity
+    @{
+        var isAuthenticated = User.Identity.IsAuthenticated;
+        var isAdmin = User.IsInRole("Admin");
+        var isUser = User.IsInRole("User");
+    }
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -25,18 +34,33 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item" id="adminMenu" style="display:none;">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="ParkingLot">Lots</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Auth" asp-action="Login" id="loginLink">Přihlášení</a>
-                        </li>
-                        <li class="nav-item" id="logoutMenu" style="display:none;">
-                            <a class="nav-link text-danger" href="#" onclick="logout();return false;">Odhlásit se</a>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link text-primary" id="userNameSpan" style="display:none;"></span>
-                        </li>
+                        @if (!isAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Login">Přihlášení</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Registration" asp-action="Register">Registrace</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" asp-controller="Auth" asp-action="Logout">Odhlásit se</a>
+                            </li>
+                            <li class="nav-item">
+                                <span class="nav-link text-primary">@User.Identity.Name</span>
+                            </li>
+                            @if (isAdmin)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="ParkingLot" asp-action="Index">Lots</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="User" asp-action="Index">Uživatelé</a>
+                                </li>
+                            }
+                        }
                     </ul>
                 </div>
             </div>
@@ -56,62 +80,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script>
-        fetch('/api/protected', {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('jwt')
-            }
-        });
-    </script>
-    <script>
-        function parseJwt(token) {
-            if (!token) return null;
-            const base64Url = token.split('.')[1];
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-            return JSON.parse(jsonPayload);
-        }
-
-        function logout() {
-            localStorage.removeItem('jwt');
-            document.cookie = "jwt=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-            window.location.href = '/Auth/Login';
-        }
-
-        function updateMenuByRole() {
-            const token = localStorage.getItem('jwt');
-            const payload = parseJwt(token);
-            // Skryj/přidej položky podle role
-            if (payload && (payload.role === "admin" || (Array.isArray(payload.role) && payload.role.includes("admin")))) {
-                document.getElementById('adminMenu').style.display = '';
-                document.getElementById('userAdminMenu').style.display = '';
-            } else {
-                document.getElementById('adminMenu').style.display = 'none';
-                document.getElementById('userAdminMenu').style.display = 'none';
-            }
-            // Zobraz jméno uživatele
-            if (payload && payload.unique_name) {
-                document.getElementById('userNameSpan').innerText = payload.unique_name;
-                document.getElementById('userNameSpan').style.display = '';
-            } else if (payload && payload.name) {
-                document.getElementById('userNameSpan').innerText = payload.name;
-                document.getElementById('userNameSpan').style.display = '';
-            } else {
-                document.getElementById('userNameSpan').style.display = 'none';
-            }
-            // Skryj/přidej odkaz na přihlášení
-            if (payload) {
-                document.getElementById('loginLink').style.display = 'none';
-                document.getElementById('logoutMenu').style.display = '';
-            } else {
-                document.getElementById('loginLink').style.display = '';
-                document.getElementById('logoutMenu').style.display = 'none';
-            }
-        }
-        document.addEventListener('DOMContentLoaded', updateMenuByRole);
-    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

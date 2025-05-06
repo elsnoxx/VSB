@@ -1,16 +1,48 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<ParkingLotWEB.Models.ParkingLot>
+@{
+    ViewData["Title"] = "Mapa parkovišť";
 }
+<style>
+    #map {
+        height: 80vh;
+        width: 80vw;
+        margin: 0 auto; /* zarovnání na střed */
+        padding: 0;
+        display: block;
+    }
+</style>
+<h1 class="text-center">Welcome in ParkingLots</h1>
+<div id="map"></div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <a asp-controller="User" asp-action="Index" class="btn btn-primary mt-3">Správa uživatelů</a>
-</div>
+@section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var lots = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model));
+        var map = L.map('map').setView([49.8, 18.2], 12);
 
-<li class="nav-item" id="userAdminMenu" style="display:none;">
-    
-</li>
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
 
-<a class="nav-link text-dark" asp-controller="User" asp-action="Index">Uživatelé</a>
-<a class="nav-link text-dark" asp-controller="ParkingLot" asp-action="Index" class="btn btn-success mt-3">Správa parkovišť</a>
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var userLat = position.coords.latitude;
+                var userLng = position.coords.longitude;
+                var userMarker = L.marker([userLat, userLng], {icon: L.icon({iconUrl: 'https://cdn-icons-png.flaticon.com/512/64/64113.png', iconSize: [32, 32]})})
+                    .addTo(map)
+                    .bindPopup("Vaše poloha")
+                    .openPopup();
+                map.setView([userLat, userLng], 14);
+            });
+        }
+
+        lots.forEach(function (lot) {
+            var marker = L.marker([lot.Latitude, lot.Longitude]).addTo(map)
+                .bindPopup(`<b>${lot.Name}</b><br><button onclick="window.location.href='/ParkingLot/Details/${lot.ParkingLotId}'" class='btn btn-sm btn-primary mt-2'>Detail & volná místa</button>`);
+            marker.on('click', function () {
+                marker.openPopup();
+            });
+        });
+    </script>
+}

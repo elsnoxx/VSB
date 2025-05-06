@@ -29,8 +29,20 @@ namespace ParkingLotWEB.Database
         public async Task<int> CreateAsync(ParkingLot lot)
         {
             using var conn = _dapper.CreateConnection();
-            var sql = "INSERT INTO ParkingLot (name, latitude, longitude) VALUES (@Name, @Latitude, @Longitude)";
-            return await conn.ExecuteAsync(sql, lot);
+            // Vložení parkoviště a získání ID
+            var sql = "INSERT INTO ParkingLot (name, latitude, longitude, capacity) VALUES (@Name, @Latitude, @Longitude, @Capacity); SELECT LAST_INSERT_ID();";
+            var parkingLotId = await conn.ExecuteScalarAsync<int>(sql, lot);
+
+            // Vytvoření parkovacích míst
+            var spaces = new List<object>();
+            for (int i = 1; i <= lot.Capacity; i++)
+            {
+                spaces.Add(new { parking_lot_id = parkingLotId, space_number = i, status = "available" });
+            }
+            var spaceSql = "INSERT INTO ParkingSpace (parking_lot_id, space_number, status) VALUES (@parking_lot_id, @space_number, @status)";
+            await conn.ExecuteAsync(spaceSql, spaces);
+
+            return parkingLotId;
         }
 
         public async Task<int> UpdateAsync(ParkingLot lot)

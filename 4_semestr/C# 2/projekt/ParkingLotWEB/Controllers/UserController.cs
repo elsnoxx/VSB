@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 
-// [Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin")]
 public class UserController : Controller
 {
     private readonly ApiClient _apiClient;
@@ -54,9 +54,10 @@ public class UserController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(User user)
     {
-        var json = JsonSerializer.Serialize(user);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-        var response = await _apiClient.PostAsync("api/UserApi", content);
+        if (!ModelState.IsValid)
+            return View(user);
+
+        var response = await _apiClient.PostAsync("api/UserApi", user);
         if (response.IsSuccessStatusCode)
             return RedirectToAction("Index");
         return View(user);
@@ -78,16 +79,37 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> ChangeRole(int id, string role)
+    public async Task<IActionResult> ChangeRole(int id, RoleChange model)
     {
-        var content = new StringContent(JsonSerializer.Serialize(new { Role = role }), Encoding.UTF8, "application/json");
+        if (string.IsNullOrEmpty(model.Role))
+            return BadRequest();
+
+        // Create JSON payload with Role property
+        var jsonPayload = JsonSerializer.Serialize(new { Role = model.Role });
+        Console.WriteLine($"Sending JSON: {jsonPayload}");
+        
+        var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+        // Use PutAsync to match the API's PUT endpoint
         var response = await _apiClient.PutAsync($"api/UserApi/{id}/role", content);
+        
+        if (response.IsSuccessStatusCode)
+            return RedirectToAction("Index");
+        
         if (!response.IsSuccessStatusCode)
         {
-            ModelState.AddModelError("", "Změna role se nezdařila – nemáte oprávnění nebo došlo k chybě.");
-            var user = new User { Id = id, Role = role };
+            var errorContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error response: {errorContent}, Status: {response.StatusCode}");
+        }
+        
+        // To show the view again, we need user data
+        var userResponse = await _apiClient.GetAsync($"api/UserApi/{id}");
+        if (userResponse.IsSuccessStatusCode)
+        {
+            var json = await userResponse.Content.ReadAsStringAsync();
+            var user = JsonSerializer.Deserialize<User>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             return View(user);
         }
+        
         return RedirectToAction("Index");
     }
 

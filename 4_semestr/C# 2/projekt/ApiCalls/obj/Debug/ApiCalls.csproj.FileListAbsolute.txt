@@ -1,0 +1,6 @@
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ApiCalls\bin\Debug\ApiCalls.dll
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ApiCalls\bin\Debug\ApiCalls.pdb
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ApiCalls\obj\Debug\ApiCalls.csproj.AssemblyReference.cache
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ApiCalls\obj\Debug\ApiCalls.csproj.CoreCompileInputs.cache
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ApiCalls\obj\Debug\ApiCalls.dll
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ApiCalls\obj\Debug\ApiCalls.pdb

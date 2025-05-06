@@ -59,4 +59,26 @@ public class DapperRepository
         }
     }
 
+    public async Task ExecuteInTransactionAsync(Func<IDbConnection, IDbTransaction, Task> action)
+    {
+        using (var connection = CreateConnection())
+        {
+            if (connection is MySqlConnection mySqlConnection)
+                await mySqlConnection.OpenAsync();
+
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    await action(connection, transaction);
+                    transaction.Commit();
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+    }
 }

@@ -2,20 +2,40 @@
 @{
     ViewData["Title"] = "Přidat uživatele";
 }
-<h2>Přidat uživatele</h2>
-<form asp-action="Create">
-    <div class="mb-3">
-        <label asp-for="Username" class="form-label"></label>
-        <input asp-for="Username" class="form-control" />
+<h2 class="mb-4">Přidat uživatele</h2>
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form asp-action="Create" autocomplete="off">
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label"></label>
+                        <input asp-for="Username" class="form-control" placeholder="Zadejte uživatelské jméno" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-control" type="password" placeholder="Zadejte heslo" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Role" class="form-label"></label>
+                        <select asp-for="Role" class="form-select">
+                            <option value="">-- Vyberte roli --</option>
+                            <option value="Admin">Admin</option>
+                            <option value="User">User</option>
+                        </select>
+                        <span asp-validation-for="Role" class="text-danger"></span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-success px-4">Vytvořit</button>
+                        <a asp-action="Index" class="btn btn-secondary">Zpět</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label asp-for="Password" class="form-label"></label>
-        <input asp-for="Password" class="form-control" type="password" />
-    </div>
-    <div class="mb-3">
-        <label asp-for="Role" class="form-label"></label>
-        <input asp-for="Role" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-success">Vytvořit</button>
-    <a asp-action="Index" class="btn btn-secondary">Zpět</a>
-</form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

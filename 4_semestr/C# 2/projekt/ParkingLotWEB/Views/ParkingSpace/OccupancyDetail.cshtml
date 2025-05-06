@@ -1,0 +1,11 @@
+@model ParkingLotWEB.Models.Occupancy
+
+<h2>Detail obsazení parkovacího místa</h2>
+<table class="table">
+    <tr><th>SPZ</th><td>@Model.LicensePlate</td></tr>
+    <tr><th>Začátek</th><td>@Model.StartTime?.ToString("g")</td></tr>
+    <tr><th>Konec</th><td>@(Model.EndTime?.ToString("g") ?? "-")</td></tr>
+    <tr><th>Délka</th><td>@(Model.Duration != null ? Model.Duration + " min" : "-")</td></tr>
+    <tr><th>Cena</th><td>@(Model.Price != null ? Model.Price + " Kč" : "-")</td></tr>
+</table>
+<a asp-action="ParkingLot" asp-controller="Details" asp-route-id="@Model.ParkingLotId" class="btn btn-secondary">Zpět</a>
