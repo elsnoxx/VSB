@@ -46,6 +46,7 @@ namespace ParkingLotWEB
             builder.Services.AddScoped<ParkingLotWEB.Database.UserRepository>();
             builder.Services.AddScoped<ParkingLotWEB.Database.ParkingLotRepository>();
             builder.Services.AddScoped<ParkingLotWEB.Database.ParkingSpaceRepository>();
+            builder.Services.AddScoped<ParkingLotWEB.Database.CarRepository>();
 
             builder.Services.AddHttpClient<ApiClient>(client =>
             {

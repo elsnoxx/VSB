@@ -97,4 +97,26 @@ public class UserApiController : ControllerBase
             return NotFound();
         return NoContent();
     }
+
+    [HttpGet("{id}/profile")]
+    public async Task<IActionResult> GetProfile(int id)
+    {
+        var user = await _repo.GetByIdAsync(id);
+        if (user == null) return NotFound();
+
+        // Zde načti i auta uživatele (příklad)
+        var cars = await _repo.GetCarsByUserIdAsync(id);
+
+        var profile = new UserProfileViewModel
+        {
+            Id = user.Id,
+            Username = user.Username,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Cars = cars
+        };
+
+        return Ok(profile);
+    }
 }

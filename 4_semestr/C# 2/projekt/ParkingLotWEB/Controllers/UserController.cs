@@ -129,4 +129,14 @@ public class UserController : Controller
         var response = await _apiClient.PutAsync($"api/UserApi/{id}/password", content);
         return RedirectToAction("Index");
     }
+
+    [Authorize(Roles = "Admin, User")]
+    public async Task<IActionResult> Profil(int id)
+    {
+        var response = await _apiClient.GetAsync($"api/UserApi/{id}/profile");
+        if (!response.IsSuccessStatusCode) return NotFound();
+        var json = await response.Content.ReadAsStringAsync();
+        var user = JsonSerializer.Deserialize<UserProfileViewModel>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        return View(user);
+    }
 }

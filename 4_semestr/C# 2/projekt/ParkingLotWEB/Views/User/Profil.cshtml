@@ -1,0 +1,60 @@
+@model ParkingLotWEB.Models.UserProfileViewModel
+
+@{
+    ViewData["Title"] = "Profil uživatele";
+}
+
+<div class="container mt-4">
+    <h2>Profil uživatele</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Uživatelské jméno</dt>
+                <dd class="col-sm-9">@Model.Username</dd>
+                <dt class="col-sm-3">Jméno</dt>
+                <dd class="col-sm-9">@Model.FirstName</dd>
+                <dt class="col-sm-3">Příjmení</dt>
+                <dd class="col-sm-9">@Model.LastName</dd>
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">@Model.Email</dd>
+                @* Přidej další údaje dle potřeby *@
+            </dl>
+        </div>
+    </div>
+
+    <h4>Moje auta</h4>
+    <table class="table table-bordered w-auto">
+        <thead>
+            <tr>
+                <th>SPZ</th>
+                <th>Značka a model</th>
+                <th>Barva</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @if (Model.Cars != null && Model.Cars.Any())
+        {
+            foreach (var car in Model.Cars)
+            {
+                <tr>
+                    <td>@car.LicensePlate</td>
+                    <td>@car.BrandModel</td>
+                    <td>@car.Color</td>
+                    <td>
+                        <a asp-controller="Car" asp-action="Edit" asp-route-id="@car.CarId" class="btn btn-sm btn-warning">Upravit</a>
+                        <a asp-controller="Car" asp-action="Delete" asp-route-id="@car.CarId" class="btn btn-sm btn-danger">Smazat</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">Nemáte žádné auto.</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <a asp-controller="Car" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-primary">Přidat auto</a>
+</div>

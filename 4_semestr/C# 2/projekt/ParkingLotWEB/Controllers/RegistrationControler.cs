@@ -24,16 +24,17 @@ public class RegistrationController : Controller
         if (!ModelState.IsValid)
             return View(model);
 
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
-
         var user = new User
         {
             Username = model.Username,
-            Password = hashedPassword,
-            Role = model.Role
+            Password = model.Password, // zde nehashuj!
+            Role = "User",
+            FirstName = model.FirstName,
+            LastName = model.LastName,
+            Email = model.Email
         };
 
-        await _userRepo.CreateAsync(user);
+        await _userRepo.CreateAsync(user); // hashování proběhne až v repository
         return RedirectToAction("Login", "Auth");
     }
 }

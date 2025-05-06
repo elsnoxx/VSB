@@ -13,10 +13,12 @@
 </head>
 <body>
     @using Microsoft.AspNetCore.Identity
+    @using System.Security.Claims
     @{
         var isAuthenticated = User.Identity.IsAuthenticated;
         var isAdmin = User.IsInRole("Admin");
         var isUser = User.IsInRole("User");
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     }
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -49,7 +51,7 @@
                                 <a class="nav-link text-danger" asp-controller="Auth" asp-action="Logout">Odhlásit se</a>
                             </li>
                             <li class="nav-item">
-                                <span class="nav-link text-primary">@User.Identity.Name</span>
+                                <a class="nav-link text-primary" asp-controller="User" asp-action="Profil" asp-route-id="@userId">@User.Identity.Name</a>
                             </li>
                             @if (isAdmin)
                             {

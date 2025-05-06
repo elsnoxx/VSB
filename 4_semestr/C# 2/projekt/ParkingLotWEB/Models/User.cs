@@ -16,5 +16,18 @@ namespace ParkingLotWEB.Models
 
         [Required]
         public string Role { get; set; } = default!;
+
+        [Required]
+        [StringLength(50)]
+        public string FirstName { get; set; } = default!;
+
+        [Required]
+        [StringLength(50)]
+        public string LastName { get; set; } = default!;
+
+        [Required]
+        [EmailAddress]
+        [StringLength(100)]
+        public string Email { get; set; } = default!;
     }
 }

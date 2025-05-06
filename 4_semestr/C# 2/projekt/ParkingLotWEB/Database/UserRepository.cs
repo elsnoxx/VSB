@@ -1,7 +1,7 @@
 using Dapper;
 using ParkingLotWEB.Models;
 using System.Data;
-using Bcrypt.Net;
+using BCrypt.Net;
 
 namespace ParkingLotWEB.Database
 {
@@ -53,8 +53,8 @@ namespace ParkingLotWEB.Database
         {
             using var conn = _dapper.CreateConnection();
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            var sql = "INSERT INTO `User` (Username, Password, Role) VALUES (@Username, @Password, @Role)";
-            return await conn.ExecuteAsync(sql, new { user.Username, user.Password, user.Role });
+            var sql = "INSERT INTO `User` (Username, Password, Role, First_Name, Last_Name, Email) VALUES (@Username, @Password, @Role, @FirstName, @LastName, @Email)";
+            return await conn.ExecuteAsync(sql, new { user.Username, user.Password, user.Role, user.FirstName, user.LastName, user.Email });
         }
 
         public async Task<int> DeleteAsync(int id)
@@ -72,7 +72,7 @@ namespace ParkingLotWEB.Database
             System.Console.WriteLine($"User found: {user.Username}");
             System.Console.WriteLine($"Password: {password}");
             System.Console.WriteLine($"Hashed Password: {user.Password}");
-            System.Console.WriteLine($"Hashed Password: {Bcrypt.Net.BCrypt.HashPassword(password)}");
+            System.Console.WriteLine($"Hashed Password: {BCrypt.Net.BCrypt.HashPassword(password)}");
 
             if (BCrypt.Net.BCrypt.Verify(password, user.Password))
                 return user;
@@ -101,6 +101,13 @@ namespace ParkingLotWEB.Database
             return await conn.QueryFirstOrDefaultAsync<User>(
                 "SELECT * FROM `User` WHERE Username = @username",
                 new { username });
+        }
+        public async Task<List<Car>> GetCarsByUserIdAsync(int userId)
+        {
+            using var conn = _dapper.CreateConnection();
+            var sql = "SELECT * FROM Car WHERE user_id = @userId";
+            var cars = await conn.QueryAsync<Car>(sql, new { userId });
+            return cars.ToList();
         }
     }
 }

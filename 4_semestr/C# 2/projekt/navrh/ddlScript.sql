@@ -60,6 +60,15 @@ CREATE TABLE User (
   email VARCHAR(100) NOT NULL UNIQUE
 );
 
+CREATE TABLE Car (
+    car_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    license_plate VARCHAR(20) NOT NULL,
+    brand_model VARCHAR(50),
+    color VARCHAR(30),
+    FOREIGN KEY (user_id) REFERENCES User(id)
+);
+
 ALTER TABLE ParkingSpace ADD FOREIGN KEY (parking_lot_id) REFERENCES ParkingLot (parking_lot_id);
 
 ALTER TABLE Occupancy ADD FOREIGN KEY (parking_space_id) REFERENCES ParkingSpace (parking_space_id);
