@@ -23,6 +23,7 @@
                 <a asp-action="Edit" asp-route-id="@lot.ParkingLotId" class="btn btn-warning btn-sm">Upravit</a>
                 <a asp-action="Delete" asp-route-id="@lot.ParkingLotId" class="btn btn-danger btn-sm"
                    onclick="return confirm('Opravdu smazat?');">Smazat</a>
+                <a asp-action="Admin" asp-route-id="@lot.ParkingLotId" class="btn btn-warning btn-sm">Administrace</a>
             </td>
         </tr>
     }

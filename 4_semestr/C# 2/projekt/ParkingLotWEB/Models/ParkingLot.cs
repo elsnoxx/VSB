@@ -7,6 +7,7 @@ namespace ParkingLotWEB.Models
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
         public int Capacity { get; set; }
+        public int FreeSpaces { get; set; }
         public List<ParkingSpace>? ParkingSpaces { get; set; }
 
     }

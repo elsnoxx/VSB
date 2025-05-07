@@ -1,0 +1,37 @@
+@model ParkingLotWEB.Models.ViewModels.ParkingLotViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard - " + Model.Name;
+}
+
+<h1>@Model.Name</h1>
+<p>Celková kapacita: @Model.Capacity</p>
+<p>Volných míst: @Model.FreeSpaces</p>
+<p>Obsazených míst: @Model.ParkingSpaces.Count(s => s.Status == "occupied")</p>
+<p>Nedostupných míst: @Model.ParkingSpaces.Count(s => s.Status == "unavailable")</p>
+<!-- Přidejte SpaceNumber do ParkingSpaceViewModel, pokud je potřeba -->
+<p>Čísla parkovacích míst: od 1 do @Model.Capacity</p>
+
+<div class="row">
+    @foreach (var space in Model.ParkingSpaces)
+    {
+        <div class="col-md-3 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Přidejte SpaceNumber do ParkingSpaceViewModel, pokud je potřeba -->
+                    <h5 class="card-title">Místo @space.SpaceNumber</h5>
+                    <p class="card-text">ID: @space.ParkingSpaceId</p>
+                    <p class="card-text">Status: @space.Status</p>
+                    @if (space.Status == "available")
+                    {
+                        <button class="btn btn-danger" data-id="@space.ParkingSpaceId">Označit jako nedostupné</button>
+                    }
+                    @if (space.Status == "unavailable")
+                    {
+                        <button class="btn btn-success" data-id="@space.ParkingSpaceId">Označit jako dostupné</button>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -6,6 +6,7 @@ using System.Text;
 using Dapper;
 using ParkingLotWEB.Database;
 using ParkingLotWEB.Models;
+using ParkingLotWEB.Models.ViewModels;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

@@ -1,6 +1,7 @@
 using Dapper;
 using ParkingLotWEB.Models;
 using System.Data;
+using ParkingLotWEB.Models.Entities;
 
 namespace ParkingLotWEB.Database
 {
@@ -19,10 +20,10 @@ namespace ParkingLotWEB.Database
             return await conn.QueryAsync<ParkingLot>("SELECT parking_lot_id AS ParkingLotId, name, latitude, longitude FROM ParkingLot");
         }
 
-        public async Task<ParkingLot?> GetByIdAsync(int id)
+        public async Task<ParkingLotDto?> GetByIdAsync(int id)
         {
             using var conn = _dapper.CreateConnection();
-            return await conn.QueryFirstOrDefaultAsync<ParkingLot>(
+            return await conn.QueryFirstOrDefaultAsync<ParkingLotDto>(
                 "SELECT parking_lot_id AS ParkingLotId, name, latitude, longitude FROM ParkingLot WHERE parking_lot_id = @id", new { id });
         }
 
@@ -57,6 +58,23 @@ namespace ParkingLotWEB.Database
             using var conn = _dapper.CreateConnection();
             var sql = "DELETE FROM ParkingLot WHERE parking_lot_id = @id";
             return await conn.ExecuteAsync(sql, new { id });
+        }
+
+        public async Task<IEnumerable<ParkingLot>> GetAllWithFreeSpacesAsync()
+        {
+            using var conn = _dapper.CreateConnection();
+            var sql = @"
+                SELECT 
+                    pl.parking_lot_id AS ParkingLotId,
+                    pl.name AS Name,
+                    pl.latitude AS Latitude,
+                    pl.longitude AS Longitude,
+                    pl.capacity AS Capacity,
+                    (pl.capacity - COUNT(ps.parking_space_id)) AS FreeSpaces
+                FROM ParkingLot pl
+                LEFT JOIN ParkingSpace ps ON pl.parking_lot_id = ps.parking_lot_id AND ps.status = 'occupied'
+                GROUP BY pl.parking_lot_id";
+            return await conn.QueryAsync<ParkingLot>(sql);
         }
     }
 }

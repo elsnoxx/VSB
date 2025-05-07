@@ -19,20 +19,46 @@ public class CarController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(Car car)
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-        car.UserId = userId;
+        int userId;
+        if (car.UserId != 0)
+            userId = car.UserId;
+        else
+            userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-        var json = JsonSerializer.Serialize(car);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-        var response = await _apiClient.PostAsync("api/CarApi/new", content);
+        if (!ModelState.IsValid)
+            return View(car);
+
+        var carDto = new CarCreateDto
+        {
+            UserId = userId,
+            LicensePlate = car.LicensePlate,
+            BrandModel = car.BrandModel!,
+            Color = car.Color!
+        };
+
+        // Použití PostAsJsonAsync místo ruční serializace
+        var response = await _apiClient.PostAsync("api/CarApi/new", carDto);
 
         if (response.IsSuccessStatusCode)
             return RedirectToAction("Profil", "User", new { id = userId });
 
-        // Výpis chybové odpovědi z API
         var error = await response.Content.ReadAsStringAsync();
-        Console.WriteLine(error); // Přidej tento řádek pro výpis do konzole
+        Console.WriteLine(error);
         ModelState.AddModelError("", error);
         return View(car);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var response = await _apiClient.DeleteAsync($"api/CarApi/{id}");
+
+        if (response.IsSuccessStatusCode)
+            return RedirectToAction("Profil", "User");
+
+        var error = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(error);
+        ModelState.AddModelError("", "Chyba při mazání auta.");
+        return RedirectToAction("Profil", "User");
     }
 }

@@ -20,10 +20,12 @@ namespace ParkingLotWEB.Database
             return await conn.QueryAsync<User>("SELECT Id, Username, Role FROM `User`");
         }
 
-        public async Task<User?> GetByIdAsync(int id)
+        public async Task<UserDto?> GetByIdAsync(int id)
         {
             using var conn = _dapper.CreateConnection();
-            return await conn.QueryFirstOrDefaultAsync<User>("SELECT Id, Username, Role FROM `User` WHERE Id = @id", new { id });
+            return await conn.QueryFirstOrDefaultAsync<UserDto>(
+                "SELECT Id, Username, Role, First_Name AS FirstName, Last_Name AS LastName, Email FROM `User` WHERE Id = @id",
+                new { id });
         }
 
         public async Task<int> UpdateAsync(User user)
@@ -105,9 +107,61 @@ namespace ParkingLotWEB.Database
         public async Task<List<Car>> GetCarsByUserIdAsync(int userId)
         {
             using var conn = _dapper.CreateConnection();
-            var sql = "SELECT * FROM Car WHERE user_id = @userId";
-            var cars = await conn.QueryAsync<Car>(sql, new { userId });
-            return cars.ToList();
+            var sql = @"SELECT 
+                    car_id AS CarId,
+                    user_id AS UserId,
+                    license_plate AS LicensePlate,
+                    brand_model AS BrandModel,
+                    color AS Color
+                FROM Car
+                WHERE user_id = @userId";
+            return (await conn.QueryAsync<Car>(sql, new { userId })).ToList();
+        }
+
+        public async Task<List<ParkingHistory>> GetParkingHistoryByUserIdAsync(int userId)
+        {
+            using var conn = _dapper.CreateConnection();
+            var sql = @"SELECT 
+                    c.license_plate AS LicensePlate,
+                    p.name AS ParkingLotName,
+                    h.arrival_time AS ArrivalTime,
+                    h.departure_time AS DepartureTime
+                FROM ParkingHistory h
+                JOIN Car c ON h.car_id = c.car_id
+                JOIN ParkingLot p ON h.parking_lot_id = p.parking_lot_id
+                WHERE c.user_id = @userId";
+            return (await conn.QueryAsync<ParkingHistory>(sql, new { userId })).ToList();
+        }
+
+        public async Task<List<CurrentParking>> GetCurrentParkingByUserIdAsync(int userId)
+        {
+            using var conn = _dapper.CreateConnection();
+            var sql = @"SELECT 
+                    c.license_plate AS LicensePlate,
+                    p.name AS ParkingLotName,
+                    o.start_time AS ArrivalTime,
+                    ps.parking_space_id AS ParkingSpaceId
+                FROM Occupancy o
+                JOIN ParkingSpace ps ON o.parking_space_id = ps.parking_space_id
+                JOIN ParkingLot p ON ps.parking_lot_id = p.parking_lot_id
+                JOIN Car c ON c.license_plate = o.license_plate
+                WHERE c.user_id = @userId AND o.end_time IS NULL";
+            return (await conn.QueryAsync<CurrentParking>(sql, new { userId })).ToList();
+        }
+
+        public async Task<List<ParkingSpace>> GetParkingSpacesWithOwnerAsync(int parkingLotId)
+        {
+            using var conn = _dapper.CreateConnection();
+            var sql = @"SELECT 
+                            ps.parking_space_id AS ParkingSpaceId,
+                            ps.space_number AS SpaceNumber,
+                            ps.status AS Status,
+                            c.user_id AS OwnerId
+                        FROM ParkingSpace ps
+                        LEFT JOIN Occupancy o ON ps.parking_space_id = o.parking_space_id AND o.end_time IS NULL
+                        LEFT JOIN Car c ON o.license_plate = c.license_plate
+                        WHERE ps.parking_lot_id = @parkingLotId";
+            return (await conn.QueryAsync<ParkingSpace>(sql, new { parkingLotId })).ToList();
         }
     }
 }

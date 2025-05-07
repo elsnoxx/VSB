@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using ParkingLotWEB.Database;
 using ParkingLotWEB.Models;
+using ParkingLotWEB.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
 using BCrypt.Net;
+using System.Security.Claims;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -104,8 +106,35 @@ public class UserApiController : ControllerBase
         var user = await _repo.GetByIdAsync(id);
         if (user == null) return NotFound();
 
-        // Zde načti i auta uživatele (příklad)
+        // Získej auta a převed je na CarDto
         var cars = await _repo.GetCarsByUserIdAsync(id);
+        var carDtos = cars.Select(car => new CarDto
+        {
+            CarId = car.CarId,
+            UserId = car.UserId,
+            LicensePlate = car.LicensePlate,
+            BrandModel = car.BrandModel,
+            Color = car.Color
+        }).ToList();
+
+        // Získej historii parkování
+        var parkingHistory = await _repo.GetParkingHistoryByUserIdAsync(id);
+        var parkingHistoryDtos = parkingHistory.Select(history => new ParkingHistoryDto
+        {
+            LicensePlate = history.LicensePlate,
+            ParkingLotName = history.ParkingLotName,
+            ArrivalTime = history.ArrivalTime,
+            DepartureTime = history.DepartureTime
+        }).ToList();
+
+        // Získej aktuálně zaparkovaná auta
+        var currentParking = await _repo.GetCurrentParkingByUserIdAsync(id);
+        var currentParkingDtos = currentParking.Select(parking => new CurrentParkingDto
+        {
+            LicensePlate = parking.LicensePlate,
+            ParkingLotName = parking.ParkingLotName,
+            ArrivalTime = parking.ArrivalTime
+        }).ToList();
 
         var profile = new UserProfileViewModel
         {
@@ -114,9 +143,30 @@ public class UserApiController : ControllerBase
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,
-            Cars = cars
+            Cars = carDtos,
+            ParkingHistory = parkingHistoryDtos,
+            CurrentParking = currentParkingDtos
         };
 
         return Ok(profile);
     }
+
+    [HttpGet("GetUserCars")]
+    public async Task<IActionResult> GetUserCars()
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+        if (userId == 0)
+            return Unauthorized();
+
+        var cars = await _repo.GetCarsByUserIdAsync(userId);
+        var carDtos = cars.Select(car => new
+        {
+            car.LicensePlate,
+            car.BrandModel
+        });
+
+        return Ok(carDtos);
+    }
+
+    
 }

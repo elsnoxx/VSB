@@ -1,16 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using ParkingLotWEB.Database;
 using ParkingLotWEB.Models;
+using ParkingLotWEB.Models.ViewModels;
 
 [ApiController]
 [Route("api/[controller]")]
 public class ParkingSpaceApiController : ControllerBase
 {
     private readonly ParkingSpaceRepository _repo;
+    private readonly ParkingLotRepository _parkingLotRepo;
 
-    public ParkingSpaceApiController(ParkingSpaceRepository repo)
+    public ParkingSpaceApiController(ParkingSpaceRepository repo, ParkingLotRepository parkingLotRepo)
     {
         _repo = repo;
+        _parkingLotRepo = parkingLotRepo;
     }
 
     [HttpGet("history/{parkingSpaceId}")]
@@ -57,6 +60,50 @@ public class ParkingSpaceApiController : ControllerBase
         var occ = await _repo.GetCurrentOccupancyAsync(parkingSpaceId);
         if (occ == null) return NotFound();
         return Ok(occ);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(int id)
+    {
+        var space = await _repo.GetByIdAsync(id);
+        if (space == null) return NotFound();
+
+        // Pokud potřebujete další informace o tomto parkovacím místě
+        var details = await _repo.GetParkingSpaceDetailsAsync(id);
+        
+        // Vytvořte nový objekt s kompletními informacemi
+        var result = new
+        {
+            ParkingSpaceId = space.ParkingSpaceId,
+            ParkingLotId = space.ParkingLotId,
+            Status = space.Status,
+            // Další vlastnosti, které potřebujete...
+            Details = details
+        };
+
+        return Ok(result);
+    }
+
+    [HttpGet("lot/{parkingLotId}")]
+    public async Task<IActionResult> GetByLotId(int parkingLotId)
+    {
+        var spaces = await _repo.GetSpacesWithOwnerAsync(parkingLotId);
+        if (spaces == null || !spaces.Any()) return NotFound();
+        
+        // Získejte informace o parkovišti
+        var parkingLot = await _parkingLotRepo.GetByIdAsync(parkingLotId);
+        if (parkingLot == null) return NotFound();
+
+        // Vytvořte kombinovaný DTO objekt
+        var result = new
+        {
+            ParkingLotId = parkingLot.ParkingLotId,
+            Name = parkingLot.Name,
+            // Další vlastnosti parkoviště...
+            ParkingSpaces = spaces.ToList()
+        };
+
+        return Ok(result);
     }
 }
 

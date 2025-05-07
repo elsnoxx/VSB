@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 
-[Authorize(Roles = "Admin")]
+[Authorize]
 public class UserController : Controller
 {
     private readonly ApiClient _apiClient;
@@ -14,6 +14,7 @@ public class UserController : Controller
         _apiClient = apiClient;
     }
 
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Index()
     {
         var response = await _apiClient.GetAsync("api/UserApi");
@@ -26,6 +27,7 @@ public class UserController : Controller
         return View(users);
     }
 
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(int id)
     {
         var response = await _apiClient.GetAsync($"api/UserApi/{id}");
@@ -36,6 +38,7 @@ public class UserController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(User user)
     {
         var json = JsonSerializer.Serialize(user);
@@ -46,12 +49,14 @@ public class UserController : Controller
         return View(user);
     }
 
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create()
     {
         return View(new User());
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create(User user)
     {
         if (!ModelState.IsValid)
@@ -63,12 +68,14 @@ public class UserController : Controller
         return View(user);
     }
 
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         var response = await _apiClient.DeleteAsync($"api/UserApi/{id}");
         return RedirectToAction("Index");
     }
 
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ChangeRole(int id)
     {
         var response = await _apiClient.GetAsync($"api/UserApi/{id}");
@@ -79,6 +86,7 @@ public class UserController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ChangeRole(int id, RoleChange model)
     {
         if (string.IsNullOrEmpty(model.Role))
@@ -113,6 +121,7 @@ public class UserController : Controller
         return RedirectToAction("Index");
     }
 
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ResetPassword(int id)
     {
         var response = await _apiClient.GetAsync($"api/UserApi/{id}");
@@ -123,6 +132,7 @@ public class UserController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ResetPassword(int id, string password)
     {
         var content = new StringContent(JsonSerializer.Serialize(new { Password = password }), Encoding.UTF8, "application/json");
@@ -137,6 +147,7 @@ public class UserController : Controller
         if (!response.IsSuccessStatusCode) return NotFound();
         var json = await response.Content.ReadAsStringAsync();
         var user = JsonSerializer.Deserialize<UserProfileViewModel>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        System.Console.WriteLine($"User: {user.FirstName} {user.LastName}, Email: {user.Email} {user.Email}");
         return View(user);
     }
 }

@@ -1,4 +1,4 @@
-@model ParkingLotWEB.Models.ParkingLot
+@model ParkingLotWEB.Models.ViewModels.ParkingLotDetailsViewModel
 
 @{
     ViewData["Title"] = "Detail parkoviště";
@@ -9,114 +9,62 @@
 <h2 class="mb-4">Detail parkoviště</h2>
 <div class="row justify-content-center">
     <div class="col-lg-10">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        <dl class="row mb-0">
-                            <dt class="col-sm-4">Název</dt>
-                            <dd class="col-sm-8">@Model.Name</dd>
-                            <dt class="col-sm-4">Latitude</dt>
-                            <dd class="col-sm-8">@Model.Latitude</dd>
-                            <dt class="col-sm-4">Longitude</dt>
-                            <dd class="col-sm-8">@Model.Longitude</dd>
-                            <dt class="col-sm-4">Počet parkovacích míst</dt>
-                            <dd class="col-sm-8">@Model.Capacity</dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 d-flex align-items-stretch">
-                <div id="map" style="height: 350px; width: 100%;" class="mb-4 rounded shadow"></div>
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Název</dt>
+                    <dd class="col-sm-8">@Model.Name</dd>
+                    <dt class="col-sm-4">Latitude</dt>
+                    <dd class="col-sm-8">@Model.Latitude</dd>
+                    <dt class="col-sm-4">Longitude</dt>
+                    <dd class="col-sm-8">@Model.Longitude</dd>
+                    <dt class="col-sm-4">Počet parkovacích míst</dt>
+                    <dd class="col-sm-8">@Model.Capacity</dd>
+                </dl>
             </div>
         </div>
 
-        <div class="mb-3">
-            <input type="number" id="searchSpace" class="form-control" placeholder="Hledat místo podle čísla..." min="1" style="max-width:200px; display:inline-block;" />
-            <button class="btn btn-outline-primary" onclick="searchSpace()">Hledat</button>
+        <h4 class="mt-4">Vaše zaparkovaná auta</h4>
+        <div class="d-flex flex-wrap gap-2" id="userFunctions">
+            @foreach (var space in Model.ParkingSpaces.Where(s => s.Status == "occupied" && s.OwnerId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value))
+            {
+                <div class="space-item" data-space="@space.SpaceNumber" style="display:inline-block;text-align:center;">
+                    <svg width="32" height="32">
+                        <circle cx="16" cy="16" r="12" fill="red" stroke="black" stroke-width="2"/>
+                    </svg>
+                    <div>@space.SpaceNumber</div>
+                    <button class="btn btn-sm btn-danger mt-1" onclick="releaseCar(@space.ParkingSpaceId)">Odjet</button>
+                </div>
+            }
         </div>
 
-        @if (Model.ParkingSpaces != null && Model.ParkingSpaces.Any())
-        {
-            <h4>Parkovací místa</h4>
-            <div class="d-flex flex-wrap gap-2" id="spacesList">
-                @foreach (var space in Model.ParkingSpaces)
-                {
-                    var color = space.status == "available" ? "green" : (space.status == "occupied" ? "red" : "gray");
-                    var title = space.status == "available" ? "Volné" : (space.status == "occupied" ? "Obsazené" : "Mimo provoz");
-                    <div class="space-item" data-space="@space.space_number" style="display:inline-block;text-align:center;">
-                        <svg width="32" height="32">
-                            <circle cx="16" cy="16" r="12" fill="@color" stroke="black" stroke-width="2"/>
-                        </svg>
-                        <div>@space.space_number</div>
-                        <button class="btn btn-sm btn-outline-info mt-1" onclick="showHistory(@space.parking_space_id)">History</button>
-                        @if (space.status == "available")
-                        {
-                            <button class="btn btn-sm btn-success mt-1" onclick="parkCar(@space.parking_space_id)">Zaparkovat</button>
-                            @if (space.status != "under_maintenance")
+        <h4 class="mt-4">Zaparkovat auto</h4>
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <form id="parkForm">
+                    <div class="mb-3">
+                        <label for="parkingSpaceSelect" class="form-label">Vyberte volné parkovací místo</label>
+                        <select id="parkingSpaceSelect" class="form-select" required>
+                            <option value="" disabled selected>Vyberte místo...</option>
+                            @foreach (var space in Model.ParkingSpaces.Where(s => s.Status == "available"))
                             {
-                                <button class="btn btn-sm btn-dark mt-1" onclick="setStatus(@space.parking_space_id, 'under_maintenance')">Údržba</button>
+                                <option value="@space.ParkingSpaceId">Místo @space.SpaceNumber</option>
                             }
-                            @if (space.status == "under_maintenance")
-                            {
-                                <button class="btn btn-sm btn-secondary mt-1" onclick="setStatus(@space.parking_space_id, 'available')">Zpět do provozu</button>
-                            }
-                        }
-                        @if (space.status == "occupied")
-                        {
-                            <button class="btn btn-sm btn-warning mt-1" onclick="releaseCar(@space.parking_space_id)">Uvolnit</button>
-                            <a class="btn btn-sm btn-primary mt-1"
-                               asp-controller="ParkingSpace"
-                               asp-action="OccupancyDetail"
-                               asp-route-id="@space.parking_space_id">
-                               Detail obsazení
-                            </a>
-                        }
-                        
+                        </select>
                     </div>
-                }
+                    <div class="mb-3">
+                        <label for="userCarSelect" class="form-label">Vyberte auto</label>
+                        <select id="userCarSelect" class="form-select" required>
+                            <option value="" disabled selected>Vyberte auto...</option>
+                            @foreach (var car in Model.UserCars)
+                            {
+                                <option value="@car.LicensePlate">@car.LicensePlate - @car.BrandModel</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-success" onclick="parkCar()">Zaparkovat</button>
+                </form>
             </div>
-        }
-        <!-- Modal pro graf -->
-        <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="historyModalLabel">Historie změn stavu</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zavřít"></button>
-              </div>
-              <div class="modal-body">
-                <canvas id="historyChart"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Modal pro zaparkování auta -->
-        <div class="modal fade" id="parkModal" tabindex="-1" aria-labelledby="parkModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <form id="parkForm" class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="parkModalLabel">Zaparkovat auto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zavřít"></button>
-              </div>
-              <div class="modal-body">
-                <input type="hidden" id="modalParkingSpaceId" name="parkingSpaceId" />
-                <div class="mb-3">
-                  <label for="licensePlate" class="form-label">SPZ</label>
-                  <input type="text" class="form-control" id="licensePlate" name="licensePlate" required maxlength="20" />
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Zaparkovat</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <!-- Modal pro detail obsazení -->
-        <div class="d-flex justify-content-between mt-4">
-            <a asp-action="Index" class="btn btn-secondary">Zpět</a>
-            <a asp-action="Edit" asp-route-id="@Model.ParkingLotId" class="btn btn-warning">Upravit</a>
         </div>
     </div>
 </div>
@@ -145,67 +93,6 @@
             }
         };
 
-        // Hledání místa podle čísla
-        function searchSpace() {
-            var val = document.getElementById('searchSpace').value;
-            document.querySelectorAll('.space-item').forEach(function(el) {
-                if (!val || el.getAttribute('data-space') == val) {
-                    el.style.display = 'inline-block';
-                } else {
-                    el.style.display = 'none';
-                }
-            });
-        }
-
-        // Zaparkování auta (změna stavu na obsazeno)
-        function parkCar(parkingSpaceId) {
-            document.getElementById('modalParkingSpaceId').value = parkingSpaceId;
-            document.getElementById('licensePlate').value = '';
-            var modal = new bootstrap.Modal(document.getElementById('parkModal'));
-            modal.show();
-        }
-
-        document.getElementById('parkForm').onsubmit = async function (e) {
-            e.preventDefault();
-            const parkingSpaceId = document.getElementById('modalParkingSpaceId').value;
-            const licensePlate = document.getElementById('licensePlate').value;
-            const response = await fetch(`/api/ParkingSpaceApi/occupy/${parkingSpaceId}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ licensePlate })
-            });
-            if (response.ok) {
-                location.reload();
-            } else {
-                alert("Nepodařilo se obsadit místo.");
-            }
-        };
-
-        async function showOccupancy(parkingSpaceId) {
-            // Získání detailu obsazenosti z API
-            const response = await fetch(`/api/ParkingSpaceApi/occupancy/${parkingSpaceId}`);
-            if (!response.ok) {
-                alert("Nepodařilo se načíst detail obsazení.");
-                return;
-            }
-            const occ = await response.json();
-            let html = "";
-            if (occ) {
-                html = `
-                    <b>SPZ:</b> ${occ.licensePlate ?? "-"}<br/>
-                    <b>Začátek:</b> ${occ.startTime ? new Date(occ.startTime).toLocaleString() : "-"}<br/>
-                    <b>Konec:</b> ${occ.endTime ? new Date(occ.endTime).toLocaleString() : "-"}<br/>
-                    <b>Délka:</b> ${occ.duration != null ? occ.duration + " min" : "-"}<br/>
-                    <b>Cena:</b> ${occ.price != null ? occ.price + " Kč" : "-"}
-                `;
-            } else {
-                html = "Žádná aktuální obsazenost.";
-            }
-            document.getElementById('occupancyModalBody').innerHTML = html;
-            var modal = new bootstrap.Modal(document.getElementById('occupancyModal'));
-            modal.show();
-        }
-
         async function releaseCar(parkingSpaceId) {
             if (!confirm("Opravdu chcete toto místo uvolnit?")) return;
             const response = await fetch(`/api/ParkingSpaceApi/release/${parkingSpaceId}`, { method: "POST" });
@@ -216,63 +103,26 @@
             }
         }
 
-        async function setStatus(parkingSpaceId, status) {
-            if (!confirm("Opravdu chcete změnit stav?")) return;
-            const response = await fetch(`/api/ParkingSpaceApi/status/${parkingSpaceId}`, {
+        async function parkCar() {
+            const parkingSpaceId = document.getElementById('parkingSpaceSelect').value;
+            const licensePlate = document.getElementById('userCarSelect').value;
+
+            if (!parkingSpaceId || !licensePlate) {
+                alert("Vyberte parkovací místo a auto.");
+                return;
+            }
+
+            const response = await fetch(`/api/ParkingSpaceApi/occupy/${parkingSpaceId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status })
+                body: JSON.stringify({ licensePlate })
             });
+
             if (response.ok) {
                 location.reload();
             } else {
-                alert("Nepodařilo se změnit stav.");
+                alert("Nepodařilo se zaparkovat auto.");
             }
-        }
-
-        let historyChart;
-        async function showHistory(parkingSpaceId) {
-            const response = await fetch(`/api/ParkingSpaceApi/history/${parkingSpaceId}`);
-            const data = await response.json();
-
-            const statusMap = { "available": 0, "occupied": 1, "under_maintenance": 2 };
-            const statusLabels = ["Dostupné", "Obsazené", "V údržbě"];
-            const chartData = {
-                labels: data.map(x => new Date(x.changeTime).toLocaleString()),
-                datasets: [{
-                    label: "Stav",
-                    data: data.map(x => statusMap[x.status]),
-                    fill: false,
-                    borderColor: 'blue',
-                    tension: 0.1,
-                    pointBackgroundColor: data.map(x => x.status === "available" ? "green" : (x.status === "occupied" ? "red" : "gray"))
-                }]
-            };
-
-            if (historyChart) historyChart.destroy();
-
-            const ctx = document.getElementById('historyChart').getContext('2d');
-            historyChart = new Chart(ctx, {
-                type: 'line',
-                data: chartData,
-                options: {
-                    scales: {
-                        y: {
-                            ticks: {
-                                callback: function(value) {
-                                    return statusLabels[value];
-                                },
-                                stepSize: 1,
-                                min: 0,
-                                max: 2
-                            }
-                        }
-                    }
-                }
-            });
-
-            var modal = new bootstrap.Modal(document.getElementById('historyModal'));
-            modal.show();
         }
     </script>
 }

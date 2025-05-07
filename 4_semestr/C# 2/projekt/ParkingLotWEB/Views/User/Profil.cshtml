@@ -5,56 +5,153 @@
 }
 
 <div class="container mt-4">
-    <h2>Profil uživatele</h2>
-    <div class="card mb-4">
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-3">Uživatelské jméno</dt>
-                <dd class="col-sm-9">@Model.Username</dd>
-                <dt class="col-sm-3">Jméno</dt>
-                <dd class="col-sm-9">@Model.FirstName</dd>
-                <dt class="col-sm-3">Příjmení</dt>
-                <dd class="col-sm-9">@Model.LastName</dd>
-                <dt class="col-sm-3">Email</dt>
-                <dd class="col-sm-9">@Model.Email</dd>
-                @* Přidej další údaje dle potřeby *@
-            </dl>
+    <div class="row">
+        <!-- Profil uživatele -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Profil uživatele</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-5">Uživatelské jméno</dt>
+                        <dd class="col-sm-7">@Model.Username</dd>
+                        <dt class="col-sm-5">Jméno</dt>
+                        <dd class="col-sm-7">@Model.FirstName</dd>
+                        <dt class="col-sm-5">Příjmení</dt>
+                        <dd class="col-sm-7">@Model.LastName</dd>
+                        <dt class="col-sm-5">Email</dt>
+                        <dd class="col-sm-7">@Model.Email</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <!-- Moje auta -->
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Moje auta</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SPZ</th>
+                                <th>Značka a model</th>
+                                <th>Barva</th>
+                                <th>Možnosti</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @if (Model.Cars != null && Model.Cars.Any())
+                        {
+                            foreach (var car in Model.Cars)
+                            {
+                                <tr>
+                                    <td>@car.LicensePlate</td>
+                                    <td>@car.BrandModel</td>
+                                    <td>@car.Color</td>
+                                    <td>
+                                        <form asp-controller="Car" asp-action="Delete" method="post" onsubmit="return confirm('Opravdu chcete smazat toto auto?');">
+                                            <input type="hidden" name="id" value="@car.CarId" />
+                                            <button type="submit" class="btn btn-sm btn-danger">Smazat</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center">Nemáte žádné auto.</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                    <a asp-controller="Car" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-primary">Přidat auto</a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <h4>Moje auta</h4>
-    <table class="table table-bordered w-auto">
-        <thead>
-            <tr>
-                <th>SPZ</th>
-                <th>Značka a model</th>
-                <th>Barva</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        @if (Model.Cars != null && Model.Cars.Any())
-        {
-            foreach (var car in Model.Cars)
-            {
-                <tr>
-                    <td>@car.LicensePlate</td>
-                    <td>@car.BrandModel</td>
-                    <td>@car.Color</td>
-                    <td>
-                        <a asp-controller="Car" asp-action="Edit" asp-route-id="@car.CarId" class="btn btn-sm btn-warning">Upravit</a>
-                        <a asp-controller="Car" asp-action="Delete" asp-route-id="@car.CarId" class="btn btn-sm btn-danger">Smazat</a>
-                    </td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="4" class="text-center">Nemáte žádné auto.</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-    <a asp-controller="Car" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-primary">Přidat auto</a>
+    <!-- Historie zaparkovaných aut -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Historie zaparkovaných aut</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>SPZ</th>
+                        <th>Parkoviště</th>
+                        <th>Čas příjezdu</th>
+                        <th>Čas odjezdu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @if (Model.ParkingHistory != null && Model.ParkingHistory.Any())
+                {
+                    foreach (var history in Model.ParkingHistory)
+                    {
+                        <tr>
+                            <td>@history.LicensePlate</td>
+                            <td>@history.ParkingLotName</td>
+                            <td>@history.ArrivalTime.ToString("g")</td>
+                            <td>@history.DepartureTime?.ToString("g") ?? "Stále zaparkováno"</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center">Žádná historie zaparkovaných aut.</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Aktuálně zaparkovaná auta -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-warning text-white">
+            <h5 class="mb-0">Aktuálně zaparkovaná auta</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>SPZ</th>
+                        <th>Parkoviště</th>
+                        <th>Čas příjezdu</th>
+                        <th>Možnosti</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @if (Model.CurrentParking != null && Model.CurrentParking.Any())
+                {
+                    foreach (var parking in Model.CurrentParking)
+                    {
+                        <tr>
+                            <td>@parking.LicensePlate</td>
+                            <td>@parking.ParkingLotName</td>
+                            <td>@parking.ArrivalTime.ToString("g")</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick="releaseCar(@parking.ParkingSpaceId)">Odjet</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center">Žádná aktuálně zaparkovaná auta.</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

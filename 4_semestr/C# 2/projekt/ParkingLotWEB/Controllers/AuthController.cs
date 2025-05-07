@@ -19,4 +19,11 @@ public class AuthController : Controller
         Response.Cookies.Delete("jwt");
         return RedirectToAction("Login");
     }
+
+    [HttpGet]
+    public IActionResult AccessDenied(string returnUrl)
+    {
+        ViewData["ReturnUrl"] = returnUrl;
+        return View();
+    }
 }

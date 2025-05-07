@@ -41,7 +41,16 @@ namespace ParkingLotWEB
                 };
             });
 
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = "/Auth/AccessDenied";
+            });
+
             builder.Services.AddControllersWithViews();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+            });
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<ParkingLotWEB.Database.UserRepository>();
             builder.Services.AddScoped<ParkingLotWEB.Database.ParkingLotRepository>();

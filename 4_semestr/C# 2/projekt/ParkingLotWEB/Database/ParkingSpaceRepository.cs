@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using MySql.Data.MySqlClient;
 using ParkingLotWEB.Models;
+using ParkingLotWEB.Models.Entities;
 
 
 namespace ParkingLotWEB.Database
@@ -91,6 +92,68 @@ namespace ParkingLotWEB.Database
             string sql = @"SELECT * FROM Occupancy WHERE parking_space_id = @ParkingSpaceId AND end_time IS NULL ORDER BY start_time DESC LIMIT 1";
             var result = await _repository.QueryAsync<Occupancy>(sql, new { ParkingSpaceId = parkingSpaceId });
             return result.FirstOrDefault();
+        }
+
+        public async Task<IEnumerable<ParkingSpace>> GetSpacesAsync(int parkingLotId)
+        {
+            using var conn = _repository.CreateConnection();
+            var sql = @"SELECT * FROM ParkingSpace WHERE parking_lot_id = @ParkingLotId";
+            return await conn.QueryAsync<ParkingSpace>(sql, new { ParkingLotId = parkingLotId });
+        }
+        
+        public async Task<IEnumerable<ParkingSpaceWithOwner>> GetSpacesWithOwnerAsync(int parkingLotId)
+        {
+            using var conn = _repository.CreateConnection();
+            var sql = @"SELECT 
+                            ps.parking_space_id AS ParkingSpaceId,
+                            ps.parking_lot_id AS ParkingLotId,
+                            ps.space_number AS SpaceNumber,
+                            ps.status AS Status,
+                            c.user_id AS OwnerId
+                        FROM ParkingSpace ps
+                        LEFT JOIN Occupancy o ON ps.parking_space_id = o.parking_space_id AND o.end_time IS NULL
+                        LEFT JOIN Car c ON o.license_plate = c.license_plate
+                        WHERE ps.parking_lot_id = @parkingLotId";
+            return await conn.QueryAsync<ParkingSpaceWithOwner>(sql, new { parkingLotId });
+        }
+
+        public async Task<IEnumerable<ParkingSpaceWithOwner>> GetSpacesWithDetailsAsync(int parkingLotId)
+        {
+            using var conn = _repository.CreateConnection();
+            var sql = @"SELECT 
+                            ps.parking_space_id AS ParkingSpaceId,
+                            ps.parking_lot_id AS ParkingLotId,
+                            ps.space_number AS SpaceNumber,
+                            ps.status AS Status,
+                            o.user_id AS OwnerId
+                        FROM ParkingSpace ps
+                        LEFT JOIN Occupancy o ON ps.parking_space_id = o.parking_space_id AND o.end_time IS NULL
+                        WHERE ps.parking_lot_id = @parkingLotId";
+            return await conn.QueryAsync<ParkingSpaceWithOwner>(sql, new { parkingLotId });
+        }
+
+        public async Task<ParkingSpace?> GetByIdAsync(int parkingSpaceId)
+        {
+            using var conn = _repository.CreateConnection();
+            var sql = @"SELECT * FROM ParkingSpace WHERE parking_space_id = @ParkingSpaceId";
+            return await conn.QueryFirstOrDefaultAsync<ParkingSpace>(sql, new { ParkingSpaceId = parkingSpaceId });
+        }
+
+        public async Task<ParkingSpaceDetails?> GetParkingSpaceDetailsAsync(int parkingSpaceId)
+        {
+            using var conn = _repository.CreateConnection();
+            var sql = @"SELECT 
+                            ps.parking_space_id AS ParkingSpaceId,
+                            ps.parking_lot_id AS ParkingLotId,
+                            ps.space_number AS SpaceNumber,
+                            ps.status AS Status,
+                            o.license_plate AS LicensePlate,
+                            o.start_time AS StartTime,
+                            o.end_time AS EndTime
+                        FROM ParkingSpace ps
+                        LEFT JOIN Occupancy o ON ps.parking_space_id = o.parking_space_id AND o.end_time IS NULL
+                        WHERE ps.parking_space_id = @ParkingSpaceId";
+            return await conn.QueryFirstOrDefaultAsync<ParkingSpaceDetails>(sql, new { ParkingSpaceId = parkingSpaceId });
         }
     }
 }

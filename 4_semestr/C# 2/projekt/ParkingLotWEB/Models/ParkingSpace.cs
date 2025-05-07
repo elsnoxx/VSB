@@ -2,9 +2,9 @@
 {
     public class ParkingSpace
     {
-        public int parking_space_id { get; set; }
-        public int parking_lot_id { get; set; }
-        public int space_number { get; set; }
-        public string status { get; set; }
+        public int ParkingSpaceId { get; set; }
+        public int ParkingLotId { get; set; }
+        public int SpaceNumber { get; set; }
+        public string Status { get; set; } = string.Empty;
     }
 }

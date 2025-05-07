@@ -26,5 +26,12 @@ namespace ParkingLotWEB.Database
             var cars = await conn.QueryAsync<Car>(sql, new { userId });
             return cars.ToList();
         }
+
+        public async Task<int> DeleteAsync(int id)
+        {
+            using var conn = _dapper.CreateConnection();
+            var sql = "DELETE FROM Car WHERE car_id = @id";
+            return await conn.ExecuteAsync(sql, new { id });
+        }
     }
 }

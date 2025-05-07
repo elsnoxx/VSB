@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using ParkingLotWEB.Models;
+using ParkingLotWEB.Models.ViewModels;
 using ParkingLotWEB.Database;
+using ParkingLotWEB.Models.Entities;
+
+
 
 [ApiController]
 [Route("api/[controller]")]
@@ -16,19 +20,38 @@ public class ParkingLotApiController : ControllerBase
         _spaceRepo = spaceRepo;
     }
 
-    [HttpGet]
+    [HttpGet("all")]
     public async Task<IActionResult> GetAll() => Ok(await _repo.GetAllAsync());
+
+    [HttpGet("withFreespaces")]
+    public async Task<IActionResult> GetAllWithFreeSpaces()
+    {
+        var lots = await _repo.GetAllWithFreeSpacesAsync();
+        return Ok(lots);
+    }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
         var lot = await _repo.GetByIdAsync(id);
-        if (lot == null) return NotFound();
+        var spaces = await _spaceRepo.GetSpacesAsync(id);
 
-        // Načtení parkovacích míst pro dané parkoviště
-        lot.ParkingSpaces = (await _spaceRepo.GetByParkingLotIdAsync(id)).ToList();
+        var dto = new ParkingLotDto
+        {
+            ParkingLotId = lot.ParkingLotId,
+            Name = lot.Name,
+            Latitude = lot.Latitude,
+            Longitude = lot.Longitude,
+            Capacity = lot.Capacity,
+            FreeSpaces = lot.FreeSpaces,
+            ParkingSpaces = spaces.Select(s => new ParkingSpaceDto
+            {
+                ParkingSpaceId = s.ParkingSpaceId,
+                Status = s.Status
+            }).ToList()
+        };
 
-        return Ok(lot);
+        return Ok(dto);
     }
 
     [HttpPost]

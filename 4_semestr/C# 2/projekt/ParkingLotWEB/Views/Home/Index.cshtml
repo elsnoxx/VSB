@@ -39,7 +39,11 @@
 
         lots.forEach(function (lot) {
             var marker = L.marker([lot.Latitude, lot.Longitude]).addTo(map)
-                .bindPopup(`<b>${lot.Name}</b><br><button onclick="window.location.href='/ParkingLot/Details/${lot.ParkingLotId}'" class='btn btn-sm btn-primary mt-2'>Detail & volná místa</button>`);
+                .bindPopup(`
+                    <b>${lot.Name}</b><br>
+                    Volná místa: ${lot.FreeSpaces} / ${lot.Capacity}<br>
+                    <button onclick="window.location.href='/ParkingLot/Details/${lot.ParkingLotId}'" class='btn btn-sm btn-primary mt-2'>Detail & volná místa</button>
+                `);
             marker.on('click', function () {
                 marker.openPopup();
             });

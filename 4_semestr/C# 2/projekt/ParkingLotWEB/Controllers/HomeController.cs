@@ -3,6 +3,7 @@ using ParkingLotWEB.Models;
 using System.Text.Json;
 using System.Text;
 using System.Diagnostics;
+using ParkingLotWEB.Models.ViewModels;
 
 namespace ParkingLotWEB.Controllers;
 
@@ -20,14 +21,14 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         // Získání všech parkovišť z API
-        var response = await _apiClient.GetAsync("api/ParkingLotApi");
-        var lots = new List<ParkingLot>();
+        var response = await _apiClient.GetAsync("api/ParkingLotApi/withFreespaces");
         if (response.IsSuccessStatusCode)
         {
             var json = await response.Content.ReadAsStringAsync();
-            lots = JsonSerializer.Deserialize<List<ParkingLot>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<ParkingLot>();
+            var parkingLots = JsonSerializer.Deserialize<List<ParkingLot>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<ParkingLot>();
+            return View(parkingLots);
         }
-        return View(lots);
+        return View(new List<ParkingLot>());
     }
 
     public IActionResult Privacy()

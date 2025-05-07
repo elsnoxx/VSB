@@ -69,6 +69,16 @@ CREATE TABLE Car (
     FOREIGN KEY (user_id) REFERENCES User(id)
 );
 
+CREATE TABLE ParkingHistory (
+    history_id INT AUTO_INCREMENT PRIMARY KEY,
+    car_id INT NOT NULL,
+    parking_lot_id INT NOT NULL,
+    arrival_time DATETIME NOT NULL,
+    departure_time DATETIME NULL,
+    FOREIGN KEY (car_id) REFERENCES Car(car_id),
+    FOREIGN KEY (parking_lot_id) REFERENCES ParkingLot(parking_lot_id)
+);
+
 ALTER TABLE ParkingSpace ADD FOREIGN KEY (parking_lot_id) REFERENCES ParkingLot (parking_lot_id);
 
 ALTER TABLE Occupancy ADD FOREIGN KEY (parking_space_id) REFERENCES ParkingSpace (parking_space_id);

@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Přístup odepřen";
+    var returnUrl = Context.Request.Query["ReturnUrl"];
+}
+
+<div class="container text-center mt-5">
+    <h1 class="text-danger">Přístup odepřen</h1>
+    <p class="mt-3">Nemáte oprávnění k přístupu na tuto stránku.</p>
+    @if (!string.IsNullOrEmpty(returnUrl))
+    {
+        <a href="@returnUrl" class="btn btn-secondary mt-3">Zpět</a>
+    }
+    <a href="/" class="btn btn-primary mt-3">Zpět na hlavní stránku</a>
+</div>
