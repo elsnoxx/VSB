@@ -6,21 +6,43 @@
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
+<style>
+    #map {
+        width: 100%;
+        height: 350px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 1rem;
+    }
+    .info-card {
+        background: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+</style>
+
 <h2 class="mb-4">Detail parkoviště</h2>
 <div class="row justify-content-center">
     <div class="col-lg-10">
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <dl class="row mb-0">
-                    <dt class="col-sm-4">Název</dt>
-                    <dd class="col-sm-8">@Model.Name</dd>
-                    <dt class="col-sm-4">Latitude</dt>
-                    <dd class="col-sm-8">@Model.Latitude</dd>
-                    <dt class="col-sm-4">Longitude</dt>
-                    <dd class="col-sm-8">@Model.Longitude</dd>
-                    <dt class="col-sm-4">Počet parkovacích míst</dt>
-                    <dd class="col-sm-8">@Model.Capacity</dd>
-                </dl>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="info-card">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5">Název</dt>
+                        <dd class="col-sm-7">@Model.Name</dd>
+                        <dt class="col-sm-5">Latitude</dt>
+                        <dd class="col-sm-7">@Model.Latitude</dd>
+                        <dt class="col-sm-5">Longitude</dt>
+                        <dd class="col-sm-7">@Model.Longitude</dd>
+                        <dt class="col-sm-5">Počet parkovacích míst</dt>
+                        <dd class="col-sm-7">@Model.Capacity</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="map"></div>
             </div>
         </div>
 
@@ -46,7 +68,7 @@
                         <label for="parkingSpaceSelect" class="form-label">Vyberte volné parkovací místo</label>
                         <select id="parkingSpaceSelect" class="form-select" required>
                             <option value="" disabled selected>Vyberte místo...</option>
-                            @foreach (var space in Model.ParkingSpaces.Where(s => s.Status == "available"))
+                            @foreach (var space in Model.ParkingSpacesWithDetails.Where(s => s.Status == "available"))
                             {
                                 <option value="@space.ParkingSpaceId">Místo @space.SpaceNumber</option>
                             }
@@ -71,13 +93,11 @@
 
 @section Scripts {
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        window.onload = function() {
+        document.addEventListener("DOMContentLoaded", function() {
             try {
-                var lat = @Model.Latitude;
-                var lng = @Model.Longitude;
+                var lat = parseFloat('@Model.Latitude'.replace(',', '.'));
+                var lng = parseFloat('@Model.Longitude'.replace(',', '.'));
                 var map = L.map('map').setView([lat, lng], 16);
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -91,7 +111,7 @@
             } catch (e) {
                 console.error("Chyba při inicializaci mapy:", e);
             }
-        };
+        });
 
         async function releaseCar(parkingSpaceId) {
             if (!confirm("Opravdu chcete toto místo uvolnit?")) return;

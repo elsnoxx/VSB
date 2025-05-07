@@ -35,17 +35,18 @@ public class ParkingSpaceApiController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("release/{parkingSpaceId}")]
-    public async Task<IActionResult> Release(int parkingSpaceId)
+    [HttpPost("release")]
+    public async Task<IActionResult> Release([FromBody] ReleaseRequest req)
     {
         // 1. Změna stavu místa na "available" + zápis do historie
-        await _repo.UpdateStatusAsync(parkingSpaceId, "available");
+        await _repo.UpdateStatusAsync(req.ParkingSpaceId, "available");
 
         // 2. Ukončení poslední obsazenosti (nastaví end_time, duration, price)
-        await _repo.ReleaseOccupancyAsync(parkingSpaceId);
+        await _repo.ReleaseOccupancyAsync(req.ParkingSpaceId, req.ParkingLotId);
 
         return Ok();
     }
+
 
     [HttpPost("status/{parkingSpaceId}")]
     public async Task<IActionResult> SetStatus(int parkingSpaceId, [FromBody] SetStatusRequest req)

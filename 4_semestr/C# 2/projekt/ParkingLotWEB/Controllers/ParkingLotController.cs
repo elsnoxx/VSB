@@ -32,29 +32,15 @@ public class ParkingLotController : Controller
     [Authorize(Roles = "Admin, User")]
     public async Task<IActionResult> Details(int id)
     {
-        var response = await _apiClient.GetAsync($"api/ParkingLotApi/{id}");
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var response = await _apiClient.GetAsync($"api/ParkingLotApi/details/{id}/user/{userId}");
+
         if (!response.IsSuccessStatusCode) return NotFound();
 
         var json = await response.Content.ReadAsStringAsync();
         var lot = JsonSerializer.Deserialize<ParkingLotDetailsViewModel>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         if (lot == null) return NotFound();
-
-        // Načtení aut uživatele
-        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        var carsResponse = await _apiClient.GetAsync($"api/UserApi/GetUserCars/{userId}");
-        if (carsResponse.IsSuccessStatusCode)
-        {
-            var carsJson = await carsResponse.Content.ReadAsStringAsync();
-            var userCars = JsonSerializer.Deserialize<List<UserCar>>(carsJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-            // Mapování UserCar na CarDto
-            lot.UserCars = userCars.Select(car => new CarDto
-            {
-                LicensePlate = car.LicensePlate,
-                BrandModel = car.BrandModel
-            }).ToList();
-        }
 
         return View(lot);
     }
@@ -123,7 +109,7 @@ public class ParkingLotController : Controller
 
         var json = await response.Content.ReadAsStringAsync();
         var parkingLot = JsonSerializer.Deserialize<ParkingLotDto>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
+        
         if (parkingLot == null)
         {
             return NotFound();

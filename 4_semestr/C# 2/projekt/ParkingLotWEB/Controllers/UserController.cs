@@ -150,4 +150,15 @@ public class UserController : Controller
         System.Console.WriteLine($"User: {user.FirstName} {user.LastName}, Email: {user.Email} {user.Email}");
         return View(user);
     }
+
+    [Authorize(Roles = "Admin, User")]
+    [HttpGet("GetUserCars/{id}")]
+    public async Task<IActionResult> GetUserCars(int id)
+    {
+        var response = await _apiClient.GetAsync($"api/UserApi/{id}/cars");
+        if (!response.IsSuccessStatusCode) return NotFound();
+        var json = await response.Content.ReadAsStringAsync();
+        var cars = JsonSerializer.Deserialize<List<Car>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<Car>();
+        return PartialView("_UserCars", cars);
+    }
 }

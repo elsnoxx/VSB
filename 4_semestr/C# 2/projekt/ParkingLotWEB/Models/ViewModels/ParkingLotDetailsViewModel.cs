@@ -9,8 +9,10 @@ namespace ParkingLotWEB.Models.ViewModels
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
         public int Capacity { get; set; }
+        public int FreeSpaces { get; set; } = new();
         public List<ParkingSpaceWithOwner> ParkingSpaces { get; set; } = new();
         public List<CarDto> UserCars { get; set; } = new();
+        public List<ParkingSpaceWithDetails> ParkingSpacesWithDetails { get; set; } = new();
     }
 
     public class UserCar

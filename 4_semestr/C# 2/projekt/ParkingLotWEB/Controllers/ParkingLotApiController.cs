@@ -12,12 +12,14 @@ public class ParkingLotApiController : ControllerBase
 {
     private readonly ParkingLotRepository _repo;
     private readonly ParkingSpaceRepository _spaceRepo;
+    private readonly UserRepository _userRepo;
     
 
-    public ParkingLotApiController(ParkingLotRepository repo, ParkingSpaceRepository spaceRepo)
+    public ParkingLotApiController(ParkingLotRepository repo, ParkingSpaceRepository spaceRepo, UserRepository userRepo)
     {
         _repo = repo;
         _spaceRepo = spaceRepo;
+        _userRepo = userRepo;
     }
 
     [HttpGet("all")]
@@ -74,5 +76,42 @@ public class ParkingLotApiController : ControllerBase
     {
         await _repo.DeleteAsync(id);
         return NoContent();
+    }
+
+    [HttpGet("details/{lotId}/user/{userId}")]
+    public async Task<IActionResult> GetParkingLotDetailsWithUserCars(int lotId, int userId)
+    {
+        var lot = await _repo.GetByIdAsync(lotId);
+
+        // Získej parkovací místa včetně vlastníků
+        var spacesWithOwner = await _spaceRepo.GetSpacesWithOwnerAsync(lotId);
+
+        // Získání aut uživatele
+        var userCars = await _userRepo.GetCarsByUserIdAsync(userId); 
+
+        var details = new ParkingLotDetailsViewModel
+        {
+            ParkingLotId = lot.ParkingLotId,
+            Name = lot.Name,
+            Latitude = lot.Latitude,
+            Longitude = lot.Longitude,
+            Capacity = lot.Capacity,
+            FreeSpaces = lot.FreeSpaces,
+            ParkingSpaces = spacesWithOwner.ToList(),
+            UserCars = userCars?.Select(car => new CarDto
+            {
+                LicensePlate = car.LicensePlate,
+                BrandModel = car.BrandModel
+            }).ToList(),
+            ParkingSpacesWithDetails = spacesWithOwner.Select(s => new ParkingSpaceWithDetails
+            {
+                ParkingSpaceId = s.ParkingSpaceId,
+                SpaceNumber = s.SpaceNumber,
+                Status = s.Status,
+                OwnerId = s.OwnerId
+            }).ToList()
+        };
+
+        return Ok(details);
     }
 }

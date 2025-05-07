@@ -24,7 +24,7 @@ namespace ParkingLotWEB.Database
         {
             using var conn = _dapper.CreateConnection();
             return await conn.QueryFirstOrDefaultAsync<ParkingLotDto>(
-                "SELECT parking_lot_id AS ParkingLotId, name, latitude, longitude FROM ParkingLot WHERE parking_lot_id = @id", new { id });
+                "SELECT * FROM ParkingLot WHERE parking_lot_id = @id", new { id });
         }
 
         public async Task<int> CreateAsync(ParkingLot lot)

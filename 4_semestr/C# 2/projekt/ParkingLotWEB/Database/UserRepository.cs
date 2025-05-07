@@ -137,6 +137,7 @@ namespace ParkingLotWEB.Database
         {
             using var conn = _dapper.CreateConnection();
             var sql = @"SELECT 
+                    p.parking_lot_id AS ParkingLotId,
                     c.license_plate AS LicensePlate,
                     p.name AS ParkingLotName,
                     o.start_time AS ArrivalTime,

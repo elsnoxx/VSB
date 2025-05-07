@@ -132,6 +132,8 @@ public class UserApiController : ControllerBase
         var currentParkingDtos = currentParking.Select(parking => new CurrentParkingDto
         {
             LicensePlate = parking.LicensePlate,
+            ParkingLotId = parking.ParkingLotId,
+            ParkingSpaceId = parking.ParkingSpaceId,
             ParkingLotName = parking.ParkingLotName,
             ArrivalTime = parking.ArrivalTime
         }).ToList();

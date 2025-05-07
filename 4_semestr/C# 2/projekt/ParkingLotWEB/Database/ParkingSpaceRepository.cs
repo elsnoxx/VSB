@@ -41,19 +41,16 @@ namespace ParkingLotWEB.Database
         // Aktualizace stavu parkovacího místa a záznam historie
         public async Task<bool> UpdateStatusAsync(int parkingSpaceId, string newStatus)
         {
-            await _repository.ExecuteInTransactionAsync(async (conn, tran) =>
-            {
-                string updateSql = @"
-                    UPDATE ParkingSpace 
-                    SET status = @Status 
-                    WHERE parking_space_id = @ParkingSpaceId";
-                await conn.ExecuteAsync(updateSql, new { Status = newStatus, ParkingSpaceId = parkingSpaceId }, tran);
+            using var conn = _repository.CreateConnection();
+            var exists = await conn.ExecuteScalarAsync<int>(
+                "SELECT COUNT(*) FROM ParkingSpace WHERE parking_space_id = @Id", new { Id = parkingSpaceId });
+            if (exists == 0)
+                throw new Exception($"ParkingSpace s ID {parkingSpaceId} neexistuje!");
 
-                string historySql = @"
-                    INSERT INTO StatusHistory (parking_space_id, status, change_time)
-                    VALUES (@ParkingSpaceId, @Status, @ChangeTime)";
-                await conn.ExecuteAsync(historySql, new { ParkingSpaceId = parkingSpaceId, Status = newStatus, ChangeTime = DateTime.Now }, tran);
-            });
+            await conn.ExecuteAsync(
+                "INSERT INTO StatusHistory (parking_space_id, status, change_time) VALUES (@ParkingSpaceId, @Status, @ChangeTime)",
+                new { ParkingSpaceId = parkingSpaceId, Status = newStatus, ChangeTime = DateTime.Now });
+            
             return true;
         }
 
@@ -72,18 +69,47 @@ namespace ParkingLotWEB.Database
         }
 
         // Uvolnění obsazenosti parkovacího místa
-        public async Task ReleaseOccupancyAsync(int parkingSpaceId)
+        public async Task ReleaseOccupancyAsync(int parkingSpaceId, int parkingLotId)
         {
-            // Najde poslední otevřenou obsazenost a ukončí ji
-            string sql = @"
-                UPDATE Occupancy
-                SET end_time = @EndTime,
-                    duration = TIMESTAMPDIFF(MINUTE, start_time, @EndTime),
-                    price = TIMESTAMPDIFF(MINUTE, start_time, @EndTime) * 1.0 -- cena za minutu, upravte dle potřeby
-                WHERE parking_space_id = @ParkingSpaceId AND end_time IS NULL
-                ORDER BY start_time DESC
-                LIMIT 1";
-            await _repository.ExecuteAsync(sql, new { ParkingSpaceId = parkingSpaceId, EndTime = DateTime.Now });
+             await _repository.ExecuteInTransactionAsync(async (conn, tran) =>
+            {
+                // 1. Najdi otevřenou obsazenost
+                var occupancy = await conn.QueryFirstOrDefaultAsync<dynamic>(
+                    @"SELECT o.occupancy_id, o.license_plate, o.start_time, ps.parking_lot_id, c.car_id
+                      FROM Occupancy o
+                      JOIN ParkingSpace ps ON o.parking_space_id = ps.parking_space_id
+                      JOIN Car c ON o.license_plate = c.license_plate
+                      WHERE o.parking_space_id = @ParkingSpaceId AND o.end_time IS NULL
+                      ORDER BY o.start_time DESC
+                      LIMIT 1",
+                    new { ParkingSpaceId = parkingSpaceId }, tran);
+
+                if (occupancy == null)
+                    return;
+
+                var endTime = DateTime.Now;
+
+                // 2. Aktualizuj Occupancy
+                await conn.ExecuteAsync(
+                    @"UPDATE Occupancy
+                      SET end_time = @EndTime,
+                          duration = TIMESTAMPDIFF(MINUTE, start_time, @EndTime),
+                          price = TIMESTAMPDIFF(MINUTE, start_time, @EndTime) * 1.0
+                      WHERE occupancy_id = @OccupancyId",
+                    new { EndTime = endTime, OccupancyId = occupancy.occupancy_id }, tran);
+
+                // 3. Vlož do ParkingHistory
+                await conn.ExecuteAsync(
+                    @"INSERT INTO ParkingHistory (car_id, parking_lot_id, arrival_time, departure_time)
+                      VALUES (@CarId, @ParkingLotId, @ArrivalTime, @DepartureTime)",
+                    new
+                    {
+                        CarId = occupancy.car_id,
+                        ParkingLotId = occupancy.parking_lot_id,
+                        ArrivalTime = occupancy.start_time,
+                        DepartureTime = endTime
+                    }, tran);
+            });
         }
 
         // Získání aktuální obsazenosti parkovacího místa

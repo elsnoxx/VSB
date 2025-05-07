@@ -137,9 +137,11 @@
                         <tr>
                             <td>@parking.LicensePlate</td>
                             <td>@parking.ParkingLotName</td>
+                            <td>@parking.ParkingSpaceId</td>
+                            <td>@parking.ParkingLotId</td>
                             <td>@parking.ArrivalTime.ToString("g")</td>
                             <td>
-                                <button class="btn btn-sm btn-danger" onclick="releaseCar(@parking.ParkingSpaceId)">Odjet</button>
+                                <button class="btn btn-sm btn-danger" onclick="releaseCar(@parking.ParkingSpaceId, @parking.ParkingLotId)">Odjet</button>
                             </td>
                         </tr>
                     }
@@ -155,3 +157,24 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        async function releaseCar(parkingSpaceId, parkingLotId) {
+            if (!confirm("Opravdu chcete toto místo uvolnit?")) return;
+            const response = await fetch('/api/ParkingSpaceApi/release', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    parkingSpaceId: parkingSpaceId,
+                    parkingLotId: parkingLotId
+                })
+            });
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert("Nepodařilo se uvolnit místo.");
+            }
+        }
+    </script>
+}
