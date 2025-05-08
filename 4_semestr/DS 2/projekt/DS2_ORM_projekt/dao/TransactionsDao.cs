@@ -74,8 +74,8 @@ namespace DS2_ORM_projekt.dao
                 db.BeginTransaction();
                 var cmd = db.CreateCommand("change_room");
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@p_reservation_id", reservationId);
-                cmd.Parameters.AddWithValue("@p_new_room_id", newRoomId);
+                cmd.Parameters.AddWithValue("@reservation_id", reservationId);
+                cmd.Parameters.AddWithValue("@new_room_id", newRoomId);
                 db.ExecuteNonQuery(cmd);
                 db.EndTransaction();
                 return true;

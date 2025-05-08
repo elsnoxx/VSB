@@ -10,7 +10,9 @@ namespace DS2_ORM_projekt.dao
     {
         public static Reservation GetReservationById(Database db, int reservationId)
         {
-            var cmd = db.CreateCommand("SELECT reservation_id, room_id, accommodation_price FROM Reservation WHERE reservation_id = @id");
+            var cmd = db.CreateCommand(
+                @"SELECT reservation_id, room_id, guest_id, employee_id, check_in_date, check_out_date, status, accommodation_price, payment_id
+                  FROM Reservation WHERE reservation_id = @id");
             cmd.Parameters.AddWithValue("@id", reservationId);
             using (var reader = db.Select(cmd))
             {
@@ -20,7 +22,13 @@ namespace DS2_ORM_projekt.dao
                     {
                         ReservationId = reader.GetInt32(0),
                         RoomId = reader.GetInt32(1),
-                        AccommodationPrice = reader.GetDecimal(2)
+                        GuestId = reader.GetInt32(2),
+                        EmployeeId = reader.GetInt32(3),
+                        CheckInDate = reader.GetDateTime(4),
+                        CheckOutDate = reader.GetDateTime(5),
+                        Status = reader.GetString(6),
+                        AccommodationPrice = reader.GetDecimal(7),
+                        PaymentId = reader.GetInt32(8)
                     };
                 }
             }
