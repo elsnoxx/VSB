@@ -41,6 +41,7 @@ const Caches: React.FC = () => {
   const [caches, setCaches] = useState<Cache[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [errorDetail, setErrorDetail] = useState<string | null>(null);
   const [displayedCaches, setDisplayedCaches] = useState<Cache[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -51,10 +52,12 @@ const Caches: React.FC = () => {
   const fetchCaches = async () => {
     setLoading(true);
     setError(null);
+    setErrorDetail(null);
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/Caching`);
+      const response = await fetch(`http://192.168.100.3:5000/api/Caching`);
       if (!response.ok) {
         setError(`Chyba serveru: ${response.status} ${response.statusText}`);
+        setErrorDetail(await response.text());
         setCaches([]);
         localStorage.removeItem('waypoints');
       } else {
@@ -65,12 +68,16 @@ const Caches: React.FC = () => {
           localStorage.removeItem('waypoints');
         } else {
           setCaches(data);
-          // Ulož do localStorage pro další použití v aplikaci
           localStorage.setItem('waypoints', JSON.stringify(data));
         }
       }
-    } catch (error) {
-      setError('Chyba při načítání cachek.');
+    } catch (error: any) {
+      if (error instanceof TypeError) {
+        setError('Chyba komunikace se serverem (zkontrolujte připojení k internetu).');
+      } else {
+        setError('Neznámá chyba při načítání cachek.');
+      }
+      setErrorDetail(error?.message || JSON.stringify(error));
       setCaches([]);
       localStorage.removeItem('waypoints');
     }

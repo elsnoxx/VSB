@@ -102,27 +102,33 @@ const CompassComponent: React.FC<CompassComponentProps> = ({ target, currentPosi
       <IonCardHeader>
         <IonCardTitle>Kompas</IonCardTitle>
       </IonCardHeader>
-      <IonCardContent style={{ textAlign: 'center' }}>
+      <IonCardContent>
         {!compassAvailable ? (
           <IonText color="danger">
             Kompas není na tomto zařízení dostupný nebo není podporován.
           </IonText>
         ) : heading !== null ? (
-          <>
-            <IonText color="medium">
-              <div>Azimut zařízení: {heading.toFixed(0)}°</div>
-              <div>Pochodový úhel (k cíli): {bearing.toFixed(0)}°</div>
-              <div>Otoč se o: {turn !== null ? turn.toFixed(0) : '...'}°</div>
-              <div>Vzdálenost k cíli: {distance.toFixed(1)} m</div>
-            </IonText>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24 }}>
+            <div style={{ minWidth: 140 }}>
+              <IonText color="medium">
+                <div>Azimut: {heading.toFixed(0)}°</div>
+                <div>Cíl: {bearing.toFixed(0)}°</div>
+                <div>Otoč se o: {turn !== null ? turn.toFixed(0) : '...'}°</div>
+                <div>Vzdálenost: {distance.toFixed(1)} m</div>
+              </IonText>
+              <div style={{ fontSize: 12, marginTop: 8, color: '#888' }}>
+                <span style={{ color: 'red' }}>Červená</span>: směr zařízení<br />
+                <span style={{ color: 'green' }}>Zelená</span>: směr ke keši
+              </div>
+            </div>
             <div
               style={{
-                margin: '24px auto',
                 width: 100,
                 height: 100,
                 border: '2px solid #333',
                 borderRadius: '50%',
                 position: 'relative',
+                marginLeft: 8,
               }}
             >
               {/* Červená ručička - aktuální směr zařízení */}
@@ -139,7 +145,7 @@ const CompassComponent: React.FC<CompassComponentProps> = ({ target, currentPosi
                   zIndex: 2,
                 }}
               />
-              {/* Zelená ručička - směr k cíli (absolutní bearing) */}
+              {/* Zelená ručička - směr k cíli */}
               <div
                 style={{
                   position: 'absolute',
@@ -154,7 +160,7 @@ const CompassComponent: React.FC<CompassComponentProps> = ({ target, currentPosi
                 }}
               />
             </div>
-          </>
+          </div>
         ) : (
           <IonText>Načítám směr...</IonText>
         )}

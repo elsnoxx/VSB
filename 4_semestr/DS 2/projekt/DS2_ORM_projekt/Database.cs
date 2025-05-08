@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 
-namespace StoreIS.orm
+namespace DS2_ORM_projekt
 {
     /// <summary>
     /// Represents a MS SQL Database

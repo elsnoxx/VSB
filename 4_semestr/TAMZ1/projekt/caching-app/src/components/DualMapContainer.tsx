@@ -89,17 +89,16 @@ const DualMapContainer: React.FC<Props> = ({ current, target }) => {
       const vectorLayer = new VectorLayer({ source: vectorSource });
       mapObj.current.addLayer(vectorLayer);
 
-      // Nastav pohled na oba body
-      if (features.length === 2) {
-        const extent = vectorSource.getExtent();
-        mapObj.current.getView().fit(extent, { padding: [50, 50, 50, 50], maxZoom: 15 });
-      } else {
-        // Pokud je jen jeden bod, centrovat na něj
-        const coord = (features[0].getGeometry() as Point)?.getCoordinates();
-        if (coord) {
-          mapObj.current.getView().setCenter(coord);
-          mapObj.current.getView().setZoom(15);
-        }
+      // Pokud je aktuální pozice, centrovat na ni a přiblížit
+      if (current) {
+        const coord = fromLonLat([current.lng, current.lat]);
+        mapObj.current.getView().setCenter(coord);
+        mapObj.current.getView().setZoom(15);
+      } else if (target) {
+        // Pokud je jen target
+        const coord = fromLonLat([target.lng, target.lat]);
+        mapObj.current.getView().setCenter(coord);
+        mapObj.current.getView().setZoom(15);
       }
     }
   }, [current, target]);

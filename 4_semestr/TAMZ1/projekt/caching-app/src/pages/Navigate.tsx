@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonSelect, IonSelectOption, IonList, IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonToast, IonIcon, IonBadge, IonModal, IonInput } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonSelect, IonSelectOption, IonList, IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonToast, IonIcon, IonBadge, IonModal, IonInput, IonGrid, IonRow, IonCol } from '@ionic/react';
 import CompassComponent from '../components/CompassComponent';
 import CurrentPosition from '../components/CurrentPosition';
 import DualMapContainer from '../components/DualMapContainer';
@@ -190,64 +190,67 @@ const Navigate: React.FC = () => {
             </IonCard>
           </>
         ) : (
-          <IonCard>
-            <IonCardHeader color="primary">
-              <IonCardTitle>
-                {selected.name} 
-                {selected.found && 
-                  <IonBadge color="success" style={{ marginLeft: 10 }}>
+          <IonCard style={{ margin: 8, padding: 8 }}>
+            <IonCardHeader color="primary" style={{ padding: 8 }}>
+              <IonCardTitle style={{ fontSize: '1.1rem' }}>
+                {selected.name}
+                {selected.found && (
+                  <IonBadge color="success" style={{ marginLeft: 8, fontSize: '0.9rem' }}>
                     <IonIcon icon={checkmarkCircle} /> Nalezeno
                   </IonBadge>
-                }
+                )}
               </IonCardTitle>
             </IonCardHeader>
-            <IonCardContent>
-              <IonList lines="full">
-                <IonItem>
-                  <IonLabel>
-                    <h2>Souřadnice</h2>
-                    <p>{selected.lat.toFixed(6)}, {selected.lng.toFixed(6)}</p>
-                  </IonLabel>
-                </IonItem>
-                
-                <IonItem>
-                  <DualMapContainer current={currentPos} target={selected} />
-                </IonItem>
-                
-                <IonItem>
-                  <CurrentPosition onPosition={setCurrentPos} />
-                </IonItem>
-                
-                <IonItem>
-                  {currentPos ? (
-                    <CompassComponent target={selected} currentPosition={currentPos} />
-                  ) : (
-                    <IonLabel color="danger">Čekám na určení aktuální polohy…</IonLabel>
-                  )}
-                </IonItem>
-                
-                {currentPos && !selected.found && (
-                  <IonButton 
-                    expand="block" 
-                    color="success" 
-                    onClick={handleOpenNameModal}
-                    disabled={isSubmitting}
-                    className="ion-margin-top"
-                  >
-                    <IonIcon icon={checkmarkCircle} slot="start" />
-                    Označit jako nalezenou
-                  </IonButton>
-                )}
-                
-                <IonButton 
-                  expand="block" 
-                  color="medium" 
-                  onClick={() => history.push('/waypoints')}
-                  className="ion-margin-top"
-                >
-                  Změnit referenční bod
-                </IonButton>
-              </IonList>
+            <IonCardContent style={{ padding: 8 }}>
+              <IonGrid>
+                <IonRow>
+                  <IonCol size="12" size-md="6">
+                    <IonList lines="none">
+                      <IonItem style={{ '--padding-start': '0', '--inner-padding-end': '0' }}>
+                        <CurrentPosition onPosition={setCurrentPos} />
+                      </IonItem>
+                      <IonItem style={{ '--padding-start': '0', '--inner-padding-end': '0' }}>
+                        {currentPos ? (
+                          <CompassComponent target={selected} currentPosition={currentPos} />
+                        ) : (
+                          <IonLabel color="danger" style={{ fontSize: '0.95rem' }}>Čekám na určení aktuální polohy…</IonLabel>
+                        )}
+                      </IonItem>
+                    </IonList>
+                    <IonRow>
+                      {currentPos && !selected.found && (
+                        <IonCol>
+                          <IonButton
+                            expand="block"
+                            color="success"
+                            onClick={handleOpenNameModal}
+                            disabled={isSubmitting}
+                            style={{ marginTop: 8, fontSize: '0.95rem', padding: 8 }}
+                          >
+                            <IonIcon icon={checkmarkCircle} slot="start" />
+                            Nalezeno
+                          </IonButton>
+                        </IonCol>
+                      )}
+                      <IonCol>
+                        <IonButton
+                          expand="block"
+                          color="medium"
+                          onClick={() => history.push('/waypoints')}
+                          style={{ marginTop: 8, fontSize: '0.95rem', padding: 8 }}
+                        >
+                          Změnit
+                        </IonButton>
+                      </IonCol>
+                    </IonRow>
+                  </IonCol>
+                  <IonCol size="12" size-md="6">
+                    <div style={{ minHeight: 180, maxHeight: 220 }}>
+                      <DualMapContainer current={currentPos} target={selected} />
+                    </div>
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
             </IonCardContent>
           </IonCard>
         )}

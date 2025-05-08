@@ -1,4 +1,5 @@
-﻿namespace DS2_ORM_projekt.dto
+﻿using System;
+namespace DS2_ORM_projekt.dto
 {
     public class Room
     {

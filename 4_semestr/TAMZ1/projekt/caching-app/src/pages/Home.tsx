@@ -85,40 +85,23 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen className="ion-padding">
-        {/* Aktuální poloha */}
-        <IonCard className="ion-margin-bottom">
-          <IonCardHeader>
-            <IonCardTitle>Aktuální poloha</IonCardTitle>
-          </IonCardHeader>
-          <IonCardContent>
-            {position ? (
-              <IonRow>
-                <IonCol>
-                  <p>Šířka: {position.lat.toFixed(6)}</p>
-                </IonCol>
-                <IonCol>
-                  <p>Délka: {position.lng.toFixed(6)}</p>
-                </IonCol>
-              </IonRow>
-            ) : (
-              <IonText color="danger">
-                Nelze získat aktuální polohu.
-              </IonText>
-            )}
-          </IonCardContent>
-        </IonCard>
-
-        <CurrentDay />
-
         {/* Uživatelská identifikace */}
         {personName && (
-          <IonChip color="primary" className="ion-margin-bottom">
-            <IonAvatar>
-              <IonIcon icon={person} />
-            </IonAvatar>
-            <IonLabel>Přihlášen jako: {personName}</IonLabel>
-          </IonChip>
+          <IonGrid className="user-chip-bar">
+            <IonRow>
+              <IonCol size="12">
+                <IonChip color="primary" className="user-chip" style={{ width: '100%' }}>
+                  <IonAvatar>
+                    <IonIcon icon={person} />
+                  </IonAvatar>
+                  <IonLabel>Přihlášen jako: {personName}</IonLabel>
+                </IonChip>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
         )}
+
+        <CurrentDay />        
 
         {/* Úvodní karta */}
         <IonCard>
@@ -160,8 +143,6 @@ const Home: React.FC = () => {
                 Všechny keše
               </IonButton>
             </IonCol>
-          </IonRow>
-          <IonRow>
             <IonCol>
               <IonButton
                 expand="block"
@@ -173,8 +154,6 @@ const Home: React.FC = () => {
                 Nejbližší keš
               </IonButton>
             </IonCol>
-          </IonRow>
-          <IonRow>
             <IonCol>
               <IonButton
                 expand="block"

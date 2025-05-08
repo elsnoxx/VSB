@@ -1,12 +1,18 @@
-public decimal GetPricePerNight(int roomTypeId, DateTime checkIn)
+using System;
+using System.Data;
+
+namespace DS2_ORM_projekt.dao
 {
-    using (var conn = new OracleConnection(_connectionString))
-    using (var cmd = new OracleCommand(@"SELECT price_per_night FROM RoomTypePriceHistory
-        WHERE room_type_id = :rtid AND :checkIn BETWEEN valid_from AND NVL(valid_to, :checkIn)", conn))
+    public static class RoomTypePriceHistoryDao
     {
-        cmd.Parameters.Add("rtid", OracleType.Number).Value = roomTypeId;
-        cmd.Parameters.Add("checkIn", OracleType.DateTime).Value = checkIn;
-        conn.Open();
-        return Convert.ToDecimal(cmd.ExecuteScalar());
+        public static decimal GetPricePerNight(Database db, int roomTypeId, DateTime checkIn)
+        {
+            var cmd = db.CreateCommand(@"
+                SELECT price_per_night FROM RoomTypePriceHistory
+                WHERE room_type_id = @rtid AND @checkIn BETWEEN valid_from AND ISNULL(valid_to, @checkIn)");
+            cmd.Parameters.AddWithValue("@rtid", roomTypeId);
+            cmd.Parameters.AddWithValue("@checkIn", checkIn);
+            return Convert.ToDecimal(cmd.ExecuteScalar());
+        }
     }
 }

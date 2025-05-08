@@ -1,0 +1,12 @@
+.user-chip-bar {
+  margin-top: 0;
+  margin-bottom: 8px;
+  width: 100%;
+  padding: 0;
+}
+
+.user-chip {
+  justify-content: flex-start;
+  width: 100%;
+  font-size: 1rem;
+}
