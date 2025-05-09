@@ -49,11 +49,28 @@ namespace DS2_ORM_projekt.dao
             return null;
         }
 
-        public static void UpdateRoomAndPrice(Database db, int reservationId, int newRoomId, decimal newPrice)
+        public static void UpdateRoomAndPrice(Database db, int reservationId, int newRoomId)
         {
-            var cmd = db.CreateCommand("UPDATE Reservation SET room_id = @roomId, accommodation_price = @price WHERE reservation_id = @resId");
+            var cmd = db.CreateCommand(@"
+                UPDATE r
+                SET 
+                    room_id = @roomId,
+                    accommodation_price = 
+                        CASE 
+                            WHEN DATEDIFF(DAY, r.check_in_date, r.check_out_date) < 1 THEN NULL
+                            ELSE DATEDIFF(DAY, r.check_in_date, r.check_out_date) * 
+                                (
+                                    SELECT TOP 1 price_per_night
+                                    FROM RoomTypePriceHistory h
+                                    JOIN Room rm ON rm.room_type_id = h.room_type_id
+                                    WHERE rm.room_id = @roomId
+                                      AND r.check_in_date BETWEEN h.valid_from AND ISNULL(h.valid_to, r.check_in_date)
+                                )
+                        END
+                FROM Reservation r
+                WHERE r.reservation_id = @resId
+            ");
             cmd.Parameters.AddWithValue("@roomId", newRoomId);
-            cmd.Parameters.AddWithValue("@price", newPrice);
             cmd.Parameters.AddWithValue("@resId", reservationId);
             db.ExecuteNonQuery(cmd);
         }

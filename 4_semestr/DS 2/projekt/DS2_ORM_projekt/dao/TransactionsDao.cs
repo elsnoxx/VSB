@@ -24,6 +24,14 @@ namespace DS2_ORM_projekt.dao
                 DateTime checkIn = dates.Value.checkIn;
                 DateTime checkOut = dates.Value.checkOut;
 
+                // Přidej kontrolu platnosti počtu dní
+                if ((checkOut - checkIn).Days < 1)
+                {
+                    Console.WriteLine("Neplatný počet dní (check-in musí být před check-out)");
+                    db.Rollback();
+                    return false;
+                }
+
                 if (!RoomDao.IsRoomAvailable(db, newRoomId, checkIn, checkOut))
                 {
                     Console.WriteLine("Pokoj není v daném termínu volný.");
@@ -36,7 +44,7 @@ namespace DS2_ORM_projekt.dao
                 int nights = (checkOut - checkIn).Days;
                 decimal newPrice = nights * pricePerNight;
 
-                ReservationDao.UpdateRoomAndPrice(db, reservationId, newRoomId, newPrice);
+                ReservationDao.UpdateRoomAndPrice(db, reservationId, newRoomId);
 
                 db.EndTransaction();
                 return true;

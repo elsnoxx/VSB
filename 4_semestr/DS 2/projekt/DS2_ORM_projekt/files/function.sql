@@ -6,12 +6,20 @@ BEGIN
     SET XACT_ABORT ON;
     BEGIN TRANSACTION;
 
-    DECLARE @check_in DATE, @check_out DATE, @room_type_id INT, @price_per_night DECIMAL(10,2), @nights INT, @new_price DECIMAL(10,2);
+    DECLARE @check_in DATE, @check_out DATE;
 
     -- 1. Načti termíny rezervace
     SELECT @check_in = check_in_date, @check_out = check_out_date
     FROM Reservation
     WHERE reservation_id = @reservation_id;
+
+    -- 1a. Ověř, že počet dní je platný
+    IF DATEDIFF(DAY, @check_in, @check_out) < 1
+    BEGIN
+        ROLLBACK;
+        THROW 50002, 'Neplatný počet dní (check-in musí být před check-out)', 1;
+        RETURN;
+    END
 
     -- 2. Ověř dostupnost nového pokoje
     IF EXISTS (
@@ -30,38 +38,38 @@ BEGIN
         RETURN;
     END
 
-    -- 3. Zjisti typ pokoje a cenu za noc
-    SELECT @room_type_id = room_type_id FROM Room WHERE room_id = @new_room_id;
+    -- 3. Aktualizuj rezervaci včetně výpočtu ceny v jednom dotazu
+    UPDATE r
+    SET 
+        room_id = @new_room_id,
+        accommodation_price = 
+            CASE 
+                WHEN DATEDIFF(DAY, r.check_in_date, r.check_out_date) < 1 THEN
+                    NULL
+                ELSE
+                    DATEDIFF(DAY, r.check_in_date, r.check_out_date) * 
+                    (
+                        SELECT TOP 1 price_per_night
+                        FROM RoomTypePriceHistory h
+                        JOIN Room rm ON rm.room_type_id = h.room_type_id
+                        WHERE rm.room_id = @new_room_id
+                          AND r.check_in_date BETWEEN h.valid_from AND ISNULL(h.valid_to, r.check_in_date)
+                    )
+            END
+    FROM Reservation r
+    WHERE r.reservation_id = @reservation_id;
 
-    SELECT TOP 1 @price_per_night = price_per_night
-    FROM RoomTypePriceHistory
-    WHERE room_type_id = @room_type_id
-      AND @check_in BETWEEN valid_from AND ISNULL(valid_to, @check_in);
-
-    IF @price_per_night IS NULL
+    -- 4. Ověř, že byla cena nastavena (tj. existuje platná cena a počet nocí je OK)
+    IF EXISTS (
+        SELECT 1 FROM Reservation
+        WHERE reservation_id = @reservation_id
+          AND (accommodation_price IS NULL OR accommodation_price <= 0)
+    )
     BEGIN
         ROLLBACK;
-        THROW 50005, 'Nebyla nalezena cena za noc pro daný typ pokoje a datum', 1;
+        THROW 50005, 'Chyba při výpočtu ceny nebo neplatný počet nocí', 1;
         RETURN;
     END
-
-    -- 4. Spočítej novou cenu
-    SET @nights = DATEDIFF(DAY, @check_in, @check_out);
-
-    IF @nights < 1
-    BEGIN
-        ROLLBACK;
-        THROW 50002, 'Neplatný počet nocí v rezervaci', 1;
-        RETURN;
-    END
-
-    SET @new_price = @nights * @price_per_night;
-
-    -- 5. Aktualizuj rezervaci
-    UPDATE Reservation
-    SET room_id = @new_room_id,
-        accommodation_price = @new_price
-    WHERE reservation_id = @reservation_id;
 
     COMMIT;
 END
