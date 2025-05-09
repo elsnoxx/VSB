@@ -34,5 +34,28 @@ namespace DS2_ORM_projekt.dao
             }
             return null;
         }
+
+        public static (DateTime checkIn, DateTime checkOut)? GetReservationDates(Database db, int reservationId)
+        {
+            var cmd = db.CreateCommand("SELECT check_in_date, check_out_date FROM Reservation WHERE reservation_id = @id");
+            cmd.Parameters.AddWithValue("@id", reservationId);
+            using (var reader = db.Select(cmd))
+            {
+                if (reader.Read())
+                {
+                    return (reader.GetDateTime(0), reader.GetDateTime(1));
+                }
+            }
+            return null;
+        }
+
+        public static void UpdateRoomAndPrice(Database db, int reservationId, int newRoomId, decimal newPrice)
+        {
+            var cmd = db.CreateCommand("UPDATE Reservation SET room_id = @roomId, accommodation_price = @price WHERE reservation_id = @resId");
+            cmd.Parameters.AddWithValue("@roomId", newRoomId);
+            cmd.Parameters.AddWithValue("@price", newPrice);
+            cmd.Parameters.AddWithValue("@resId", reservationId);
+            db.ExecuteNonQuery(cmd);
+        }
     }
 }

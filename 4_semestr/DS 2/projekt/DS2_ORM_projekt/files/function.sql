@@ -32,13 +32,29 @@ BEGIN
 
     -- 3. Zjisti typ pokoje a cenu za noc
     SELECT @room_type_id = room_type_id FROM Room WHERE room_id = @new_room_id;
+
     SELECT TOP 1 @price_per_night = price_per_night
     FROM RoomTypePriceHistory
     WHERE room_type_id = @room_type_id
       AND @check_in BETWEEN valid_from AND ISNULL(valid_to, @check_in);
 
+    IF @price_per_night IS NULL
+    BEGIN
+        ROLLBACK;
+        THROW 50005, 'Nebyla nalezena cena za noc pro daný typ pokoje a datum', 1;
+        RETURN;
+    END
+
     -- 4. Spočítej novou cenu
     SET @nights = DATEDIFF(DAY, @check_in, @check_out);
+
+    IF @nights < 1
+    BEGIN
+        ROLLBACK;
+        THROW 50002, 'Neplatný počet nocí v rezervaci', 1;
+        RETURN;
+    END
+
     SET @new_price = @nights * @price_per_night;
 
     -- 5. Aktualizuj rezervaci
