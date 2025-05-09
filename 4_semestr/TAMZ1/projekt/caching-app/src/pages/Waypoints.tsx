@@ -36,6 +36,20 @@ type Cache = {
 
 const PAGE_SIZE = 10;
 
+const getStatusText = (status: number): string => {
+  const statusTexts: Record<number, string> = {
+    400: 'Špatný požadavek',
+    401: 'Neautorizováno',
+    403: 'Přístup odepřen',
+    404: 'Nenalezeno',
+    500: 'Interní chyba serveru',
+    502: 'Špatná brána',
+    503: 'Služba nedostupná',
+    504: 'Časový limit brány vypršel'
+  };
+  return statusTexts[status] || 'Neznámá chyba';
+};
+
 const Caches: React.FC = () => {
   const history = useHistory();
   const [caches, setCaches] = useState<Cache[]>([]);
@@ -53,33 +67,60 @@ const Caches: React.FC = () => {
     setLoading(true);
     setError(null);
     setErrorDetail(null);
+
+    // Možnost dynamické změny URL (např. z localStorage)
+    const apiUrl =
+      localStorage.getItem('apiUrl') ||
+      process.env.REACT_APP_API_URL ||
+      '';
+
+    if (!apiUrl) {
+      setError('API adresa není nastavena.');
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await fetch(`http://192.168.100.3:5000/api/Caching`);
+      // Použij standardní fetch místo Capacitor HTTP
+      const response = await fetch(`${apiUrl}/api/Caching`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      // Kontrola úspěšné odpovědi (status 200)
       if (!response.ok) {
-        setError(`Chyba serveru: ${response.status} ${response.statusText}`);
-        setErrorDetail(await response.text());
+        setError(`Chyba serveru: ${response.status} - ${getStatusText(response.status)}`);
+        let errorText = '';
+        try {
+          errorText = await response.text();
+        } catch (e) {
+          errorText = 'Nepodařilo se načíst detaily chyby';
+        }
+        setErrorDetail(errorText);
         setCaches([]);
         localStorage.removeItem('waypoints');
+        console.error('Chyba serveru:', response.status, errorText);
       } else {
+        // Data musíš zparsovat - fetch neparse data automaticky
         const data = await response.json();
-        if (!data || data.length === 0) {
+        
+        if (!data || (Array.isArray(data) && data.length === 0)) {
           setError('Ze serveru nebylo vráceno nic.');
           setCaches([]);
           localStorage.removeItem('waypoints');
         } else {
-          setCaches(data);
+          setCaches(Array.isArray(data) ? data : [data]);
           localStorage.setItem('waypoints', JSON.stringify(data));
         }
       }
     } catch (error: any) {
-      if (error instanceof TypeError) {
-        setError('Chyba komunikace se serverem (zkontrolujte připojení k internetu).');
-      } else {
-        setError('Neznámá chyba při načítání cachek.');
-      }
-      setErrorDetail(error?.message || JSON.stringify(error));
+      setError('Chyba komunikace se serverem: ' + (error?.message || 'Neznámá chyba'));
+      setErrorDetail(JSON.stringify(error));
       setCaches([]);
       localStorage.removeItem('waypoints');
+      console.error('HTTP chyba:', error);
     }
     setLoading(false);
   };

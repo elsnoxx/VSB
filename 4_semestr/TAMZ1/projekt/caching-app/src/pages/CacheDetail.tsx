@@ -52,13 +52,25 @@ const CacheDetail: React.FC = () => {
       .catch(() => setUserPos(null));
 
     if (localCache && localCache.name) {
-      fetch(`${process.env.REACT_APP_API_URL}/api/Caching/detail/${encodeURIComponent(localCache.name)}`)
-        .then(res => res.ok ? res.json() : null)
-        .then(data => {
-          if (data) setServerCache(data);
+      fetch(`${process.env.REACT_APP_API_URL}/api/Caching/detail/${encodeURIComponent(localCache.name)}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            console.error('Chyba při načítání detailu cache z API: Status', response.status);
+            throw new Error('Neúspěšný požadavek na server');
+          }
         })
-        .catch(() => {
-          console.error('Chyba při načítání detailu cache z API');
+        .then(data => {
+          setServerCache(data);
+        })
+        .catch((error) => {
+          console.error('Chyba při načítání detailu cache z API:', error);
         });
     }
   }, []);

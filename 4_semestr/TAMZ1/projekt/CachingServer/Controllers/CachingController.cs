@@ -84,9 +84,9 @@ public class CachingController : ControllerBase
 
     // 5. Přidání záznamu do logu, že kešku někdo našel
     [HttpPost("found")]
-    public IActionResult LogCacheFound([FromQuery] string cacheName, [FromQuery] string personName)
+    public IActionResult LogCacheFound([FromBody] FoundCacheModel model)
     {
-        var cache = Caches.Find(c => c.Name?.Equals(cacheName, StringComparison.OrdinalIgnoreCase) == true);
+        var cache = Caches.Find(c => c.Name?.Equals(model.CacheName, StringComparison.OrdinalIgnoreCase) == true);
         if (cache == null)
         {
             return NotFound(new { message = "Keška nenalezena." });
@@ -100,12 +100,23 @@ public class CachingController : ControllerBase
         var logEntry = new Log
         {
             Date = DateTime.UtcNow,
-            Finder = personName
+            Finder = model.PersonName
         };
 
         cache.Logs.Add(logEntry);
 
         return Ok(new { message = "Log byl úspěšně přidán.", cache });
+    }
+
+    // 6. Health check endpoint
+    [HttpGet("/api/health")]
+    public IActionResult HealthCheck()
+    {
+        return Ok(new
+        {
+            status = "Healthy",
+            timestamp = DateTime.UtcNow
+        });
     }
 
 
@@ -125,4 +136,12 @@ public class CachingController : ControllerBase
 
         return R * c / 1000; // Vzdálenost v kilometrech
     }
+}
+
+public class FoundCacheModel
+{
+    public string CacheName { get; set; }
+    public string PersonName { get; set; }
+    public DateTime FoundAt { get; set; }
+    public string Distance { get; set; }
 }

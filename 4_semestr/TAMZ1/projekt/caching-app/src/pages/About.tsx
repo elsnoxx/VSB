@@ -30,12 +30,12 @@ const About: React.FC = () => {
               <IonItem>
                 <IonIcon icon={calendar} slot="start" />
                 <IonLabel>Datum</IonLabel>
-                <IonLabel slot="end">2023-10-01</IonLabel>
+                <IonLabel slot="end">2025-05-05</IonLabel>
               </IonItem>
               <IonItem>
                 <IonIcon icon={mapOutline} slot="start" />
                 <IonLabel>Verze</IonLabel>
-                <IonLabel slot="end">1.0</IonLabel>
+                <IonLabel slot="end">1.9</IonLabel>
               </IonItem>
               <IonItem href="mailto:richard.ficek.st@vsb.cz" target="_blank">
                 <IonIcon icon={mailOutline} slot="start" />

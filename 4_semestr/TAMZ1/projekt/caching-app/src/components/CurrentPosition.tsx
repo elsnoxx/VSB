@@ -1,6 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Geolocation } from '@capacitor/geolocation';
-import { IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonText, IonSpinner } from '@ionic/react';
+import { 
+  IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonText, 
+  IonSpinner, IonButton, IonIcon, IonModal, IonHeader, 
+  IonToolbar, IonTitle, IonContent, IonBadge, IonChip
+} from '@ionic/react';
+import { locationOutline, informationCircleOutline, closeCircle } from 'ionicons/icons';
 
 type PositionData = {
   lat: number;
@@ -46,6 +51,7 @@ const CurrentPosition: React.FC<CurrentPositionProps> = ({ onPosition }) => {
   const [error, setError] = useState<string | null>(null);
   const [speed, setSpeed] = useState<number | null>(null); // m/s
   const [bearing, setBearing] = useState<number | null>(null); // deg
+  const [showDetails, setShowDetails] = useState(false);
 
   // Uložíme předchozí pozici a čas
   const prevPos = useRef<PositionData | null>(null);
@@ -100,59 +106,135 @@ const CurrentPosition: React.FC<CurrentPositionProps> = ({ onPosition }) => {
   }, [onPosition]);
 
   return (
-    <IonCard>
-      <IonCardContent style={{ textAlign: 'center' }}>
-        {error && <IonText color="danger">{error}</IonText>}
-        {position ? (
-          <IonGrid>
-            <IonRow>
-              <IonCol>
-                <IonText color="medium">Lat:</IonText>
-                <div>{position.lat.toFixed(5)}</div>
-              </IonCol>
-              <IonCol>
-                <IonText color="medium">Lng:</IonText>
-                <div>{position.lng.toFixed(5)}</div>
-              </IonCol>
-              <IonCol>
-                <IonText color="medium">Acc:</IonText>
-                <div>{position.accuracy ?? 'N/A'} m</div>
-              </IonCol>
-              <IonCol>
-                <IonText color="medium">Alt:</IonText>
+    <>
+      <IonCard style={{ margin: '8px 0' }}>
+        <IonCardContent style={{ padding: '8px' }}>
+          {error && (
+            <IonText color="danger" style={{ fontSize: '0.9rem' }}>{error}</IonText>
+          )}
+          
+          {!position && !error && (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '10px' }}>
+              <IonSpinner name="dots" />
+              <IonText color="medium" style={{ marginLeft: '10px' }}>
+                Získávám polohu...
+              </IonText>
+            </div>
+          )}
+          
+          {position && (
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
-                  {position.altitude !== undefined && position.altitude !== null
-                    ? position.altitude.toFixed(2)
-                    : 'N/A'} m
+                  <IonChip color="primary" outline>
+                    <IonIcon icon={locationOutline} />
+                    <IonText>
+                      {position.lat.toFixed(5)}, {position.lng.toFixed(5)}
+                    </IonText>
+                  </IonChip>
+                  
+                  <IonChip color="success">
+                    <IonText>Přesnost: {position.accuracy?.toFixed(0) || 'N/A'} m</IonText>
+                  </IonChip>
                 </div>
-              </IonCol>
-              <IonCol>
-                <IonText color="medium">Alt acc:</IonText>
-                <div>
-                  {position.altitudeAccuracy !== undefined && position.altitudeAccuracy !== null
-                    ? position.altitudeAccuracy.toFixed(2)
-                    : 'N/A'} m
-                </div>
-              </IonCol>
-              <IonCol>
-                <IonText color="medium">Rychlost:</IonText>
-                <div>
-                  {speed !== null ? speed.toFixed(2) + ' m/s' : 'N/A'}
-                </div>
-              </IonCol>
-              <IonCol>
-                <IonText color="medium">Směr:</IonText>
-                <div>
-                  {bearing !== null ? bearing.toFixed(0) + '°' : 'N/A'}
-                </div>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-        ) : (
-          <IonSpinner name="dots" />
-        )}
-      </IonCardContent>
-    </IonCard>
+                
+                <IonButton 
+                  fill="clear"
+                  size="small"
+                  onClick={() => setShowDetails(true)}
+                >
+                  <IonIcon slot="icon-only" icon={informationCircleOutline} />
+                </IonButton>
+              </div>
+            </div>
+          )}
+        </IonCardContent>
+      </IonCard>
+      
+      {/* Detailní popup */}
+      <IonModal isOpen={showDetails} onDidDismiss={() => setShowDetails(false)}>
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Detaily polohy</IonTitle>
+            <IonButton 
+              slot="end" 
+              fill="clear"
+              onClick={() => setShowDetails(false)}
+            >
+              <IonIcon slot="icon-only" icon={closeCircle} />
+            </IonButton>
+          </IonToolbar>
+        </IonHeader>
+        
+        <IonContent>
+          <IonCard>
+            <IonCardContent>
+              {position && (
+                <IonGrid>
+                  <IonRow>
+                    <IonCol size="6">
+                      <IonText color="medium">Zeměpisná šířka:</IonText>
+                      <div>{position.lat.toFixed(6)}</div>
+                    </IonCol>
+                    <IonCol size="6">
+                      <IonText color="medium">Zeměpisná délka:</IonText>
+                      <div>{position.lng.toFixed(6)}</div>
+                    </IonCol>
+                  </IonRow>
+                  
+                  <IonRow>
+                    <IonCol size="6">
+                      <IonText color="medium">Přesnost:</IonText>
+                      <div>{position.accuracy ?? 'N/A'} m</div>
+                    </IonCol>
+                    <IonCol size="6">
+                      <IonText color="medium">Nadmořská výška:</IonText>
+                      <div>
+                        {position.altitude !== undefined && position.altitude !== null
+                          ? position.altitude.toFixed(2)
+                          : 'N/A'} m
+                      </div>
+                    </IonCol>
+                  </IonRow>
+                  
+                  <IonRow>
+                    <IonCol size="6">
+                      <IonText color="medium">Přesnost nadm. výšky:</IonText>
+                      <div>
+                        {position.altitudeAccuracy !== undefined && position.altitudeAccuracy !== null
+                          ? position.altitudeAccuracy.toFixed(2)
+                          : 'N/A'} m
+                      </div>
+                    </IonCol>
+                    <IonCol size="6">
+                      <IonText color="medium">Rychlost:</IonText>
+                      <div>
+                        {speed !== null ? speed.toFixed(2) + ' m/s' : 'N/A'}
+                      </div>
+                    </IonCol>
+                  </IonRow>
+                  
+                  <IonRow>
+                    <IonCol size="6">
+                      <IonText color="medium">Směr:</IonText>
+                      <div>
+                        {bearing !== null ? bearing.toFixed(0) + '°' : 'N/A'}
+                      </div>
+                    </IonCol>
+                    <IonCol size="6">
+                      <IonText color="medium">Čas aktualizace:</IonText>
+                      <div>
+                        {position.timestamp ? new Date(position.timestamp).toLocaleTimeString() : 'N/A'}
+                      </div>
+                    </IonCol>
+                  </IonRow>
+                </IonGrid>
+              )}
+            </IonCardContent>
+          </IonCard>
+        </IonContent>
+      </IonModal>
+    </>
   );
 };
 

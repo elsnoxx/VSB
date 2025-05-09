@@ -77,15 +77,27 @@ const AllCachesMap: React.FC = () => {
       });
       setShowModal(true);
       
-      // Pak se pokuste načíst více detailů
+      // Pak se pokuste načíst více detailů pomocí standardního fetch API
       try {
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/Caching/detail/${encodeURIComponent(cache.name)}`);
-        if (res.ok) {
-          const data = await res.json();
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/Caching/detail/${encodeURIComponent(cache.name)}`,
+          {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json'
+            }
+          }
+        );
+        
+        if (response.ok) {
+          // Musíme rozparsovat JSON odpověď
+          const data = await response.json();
           setSelectedDetail({
             ...data,
             found: cache.found || foundCacheNames.includes(cache.name)
           });
+        } else {
+          console.error('Chyba při získávání detailu kešky:', response.status);
         }
       } catch (e) {
         console.error('Chyba načtení detailu kešky', e);

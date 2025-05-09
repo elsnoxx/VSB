@@ -56,33 +56,52 @@ const NearestCache: React.FC = () => {
     setDisplayedCaches([]);
     setPage(1);
     setHasMore(true);
+    
     try {
-      const url = `${process.env.REACT_APP_API_URL}/api/Caching/nearby?lat=${position.lat}&lng=${position.lng}&radius=${radius}`;
-      const response = await fetch(url);
+      // Použijeme standardní fetch místo Capacitor HTTP
+      // Vytvoření URL s query parametry
+      const url = new URL(`${process.env.REACT_APP_API_URL}/api/Caching/nearby`);
+      url.searchParams.append('lat', position.lat.toString());
+      url.searchParams.append('lng', position.lng.toString());
+      url.searchParams.append('radius', radius.toString());
+      
+      const response = await fetch(url.toString(), {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      // Kontrola úspěšné odpovědi
       if (!response.ok) {
-        setError(`Chyba serveru: ${response.status} ${response.statusText}`);
+        setError(`Chyba serveru: ${response.status}`);
         setAllCaches([]);
         setDisplayedCaches([]);
         setHasMore(false);
       } else {
+        // Zpracování dat - musíme explicitně parsovat JSON
         const data = await response.json();
-        if (!data || data.length === 0) {
+        
+        if (!data || (Array.isArray(data) && data.length === 0)) {
           setError('Žádné cache v okolí.');
           setAllCaches([]);
           setDisplayedCaches([]);
           setHasMore(false);
         } else {
-          setAllCaches(data);
-          setDisplayedCaches(data.slice(0, PAGE_SIZE));
-          setHasMore(data.length > PAGE_SIZE);
+          const caches = Array.isArray(data) ? data : [data];
+          setAllCaches(caches);
+          setDisplayedCaches(caches.slice(0, PAGE_SIZE));
+          setHasMore(caches.length > PAGE_SIZE);
         }
       }
-    } catch {
-      setError('Chyba při načítání cachek.');
+    } catch (error: any) {
+      setError('Chyba při načítání cachek: ' + (error?.message || 'Neznámá chyba'));
+      console.error('HTTP chyba:', error);
       setAllCaches([]);
       setDisplayedCaches([]);
       setHasMore(false);
     }
+    
     setLoading(false);
   };
 

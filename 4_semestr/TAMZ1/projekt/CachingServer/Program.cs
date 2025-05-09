@@ -7,21 +7,22 @@ namespace CachingServer
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
 
-            // Configure CORS policy
+            // Configure CORS
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll", builder =>
+                options.AddPolicy("AllowAll", policy =>
                 {
-                    builder.AllowAnyOrigin()
-                           .AllowAnyMethod()
-                           .AllowAnyHeader();
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
                 });
             });
+
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
@@ -32,9 +33,10 @@ namespace CachingServer
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            // Remove or comment out this line to disable HTTPS redirection
+            // app.UseHttpsRedirection();
 
-            // Správnì použij CORS pøed MapControllers a pouze jednou!
+            // Use CORS middleware
             app.UseCors("AllowAll");
 
             app.UseAuthorization();
@@ -45,4 +47,3 @@ namespace CachingServer
         }
     }
 }
-

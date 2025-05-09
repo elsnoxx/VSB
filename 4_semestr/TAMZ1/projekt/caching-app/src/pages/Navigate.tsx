@@ -84,8 +84,13 @@ const Navigate: React.FC = () => {
       const foundDate = new Date();
       const foundDateISO = foundDate.toISOString();
       
-      // Odeslání informace na server
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/Caching/found?cacheName=${encodeURIComponent(selected.name)}&personName=${encodeURIComponent(personName)}`, {
+      // Připravení URL s query parametry
+      const url = new URL(`${process.env.REACT_APP_API_URL}/api/Caching/found`);
+      url.searchParams.append('cacheName', selected.name);
+      url.searchParams.append('personName', personName);
+      
+      // Odeslání informace na server pomocí standardního fetch
+      const response = await fetch(url.toString(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +114,7 @@ const Navigate: React.FC = () => {
         // Aktualizace vybraného waypointu
         setSelected({ ...selected, found: true });
 
-        // NOVÉ: Uložení záznamu o nalezení do localStorage
+        // Uložení záznamu o nalezení do localStorage
         const foundCachesStr = localStorage.getItem('foundCaches') || '[]';
         const foundCaches = JSON.parse(foundCachesStr);
         
@@ -128,11 +133,12 @@ const Navigate: React.FC = () => {
         setToastMessage(`Keška "${selected.name}" byla označena jako nalezená uživatelem ${personName}!`);
         setIsSuccess(true);
       } else {
-        setToastMessage('Nastala chyba při označování kešky.');
+        setToastMessage(`Nastala chyba při označování kešky. (${response.status})`);
         setIsSuccess(false);
       }
-    } catch (error) {
-      setToastMessage('Chyba připojení k serveru.');
+    } catch (error: any) {
+      console.error('Chyba odeslání:', error);
+      setToastMessage('Chyba připojení k serveru: ' + (error?.message || 'Neznámá chyba'));
       setIsSuccess(false);
     } finally {
       setIsSubmitting(false);
