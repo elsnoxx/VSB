@@ -11,39 +11,6 @@ DROP TABLE IF EXISTS RoomType;
 DROP TABLE IF EXISTS Employee;
 DROP TABLE IF EXISTS Guest;
 
--- Reset identity pro Guest
-DBCC CHECKIDENT ('Guest', RESEED, 0);
-
--- Reset identity pro Employee
-DBCC CHECKIDENT ('Employee', RESEED, 0);
-
--- Reset identity pro RoomType
-DBCC CHECKIDENT ('RoomType', RESEED, 0);
-
--- Reset identity pro Room
-DBCC CHECKIDENT ('Room', RESEED, 0);
-
--- Reset identity pro Payment
-DBCC CHECKIDENT ('Payment', RESEED, 0);
-
--- Reset identity pro Reservation
-DBCC CHECKIDENT ('Reservation', RESEED, 0);
-
--- Reset identity pro Service
-DBCC CHECKIDENT ('Service', RESEED, 0);
-
--- Reset identity pro ServiceUsage
-DBCC CHECKIDENT ('ServiceUsage', RESEED, 0);
-
--- Reset identity pro Feedback
-DBCC CHECKIDENT ('Feedback', RESEED, 0);
-
--- Reset identity pro ServicePriceHistory
-DBCC CHECKIDENT ('ServicePriceHistory', RESEED, 0);
-
--- Reset identity pro RoomTypePriceHistory
-DBCC CHECKIDENT ('RoomTypePriceHistory', RESEED, 0);
-
 -- Guest table
 CREATE TABLE Guest (
   guest_id INT IDENTITY(1,1) PRIMARY KEY,
