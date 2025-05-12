@@ -1,0 +1,328 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[left=20mm,right=30mm,top=30mm,bottom=35mm]{geometry} 
+
+\usepackage[english]{babel}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{float}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Project DS II - Hotel},
+    pdfpagemode=FullScreen,
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\rhead{Project DS II - Hotel}
+\lfoot{Richard Ficek, FIC0024}
+\rfoot{\thepage}
+
+\title{Project DS II - Hotel}
+\author{Richard Ficek, FIC0024}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+
+
+\section{DD S01 L02}
+
+\texttt{Task: } Explain the difference between the concept of data and information - an example in your project written in English
+
+\bigskip
+
+\textbf{Data} are raw, unprocessed facts without context or meaning. \textbf{Information} is data that has been processed, organized, or interpreted to provide meaning or value.
+
+\medskip
+
+\textbf{Example from the project:}
+
+\begin{itemize}
+    \item \textbf{Data:} In the \texttt{Guest} table, a single record such as:
+    \begin{quote}
+        firstname: ``John'', lastname: ``Smith'', email: ``john.smith@email.com'', birth\_date: ``1985-06-15''
+    \end{quote}
+    is just a set of data points about a guest.
+
+    Similarly, in the \texttt{Reservation} table, several records might look like:
+    \begin{quote}
+        \begin{verbatim}
+reservation_id: 1, guest_id: 5, room_id: 101, employee_id: 3, creation_date: 2024-04-01, check_in_date: 2024-04-10, check_out_date: 2024-04-15, payment_id: 7, status: "confirmed", accommodation_price: 500.00
+
+reservation_id: 2, guest_id: 8, room_id: 102, employee_id: 2, creation_date: 2024-04-02, check_in_date: 2024-04-12, check_out_date: 2024-04-14, payment_id: 8, status: "cancelled", accommodation_price: 0.00
+
+reservation_id: 3, guest_id: 12, room_id: 103, employee_id: 4, creation_date: 2024-04-03, check_in_date: 2024-04-15, check_out_date: 2024-04-18, payment_id: 9, status: "confirmed", accommodation_price: 450.00
+        \end{verbatim}
+    \end{quote}
+    These are just raw data entries about guests and reservations.
+
+    \item \textbf{Information:} If we process the data, we can find that ``Most guests who stayed in the hotel in 2024 were born after 1990,'' or, after analyzing the reservations, we can obtain information such as: \\
+    \textit{“In April 2024, the average length of stay for confirmed reservations was 3.5 nights, and the average accommodation price was 475.00. Most reservations were made for mid-April.”} \\
+    This information provides insight and helps in decision-making, such as targeting marketing campaigns to a younger audience or optimizing pricing and staffing for busy periods.
+\end{itemize}
+
+
+\newpage
+
+\section{DD S02 L02}
+
+\texttt{Task: } Entities, instances, attributes and identifiers - describe in examples on your project
+
+\bigskip
+
+\begin{itemize}
+    \item \textbf{Entity:} An entity is an object or concept about which data is stored. In the hotel project, examples of entities are \texttt{Guest}, \texttt{Reservation}, \texttt{Room}, and \texttt{Employee}.
+    
+    \item \textbf{Instance:} An instance is a specific occurrence of an entity. For example, a single guest record: \\
+    \texttt{guest\_id: 1, firstname: "John", lastname: "Smith", email: "john.smith@email.com", birth\_date: "1985-06-15"} \\
+    is an instance of the \texttt{Guest} entity.
+
+    \item \textbf{Attribute:} An attribute is a property or characteristic of an entity. For the \texttt{Reservation} entity, attributes include \texttt{reservation\_id}, \texttt{guest\_id}, \texttt{room\_id}, \texttt{check\_in\_date}, \texttt{status}, and \texttt{accommodation\_price}.
+
+    \item \textbf{Identifier:} An identifier uniquely distinguishes each instance of an entity. For example, \texttt{guest\_id} is the identifier for the \texttt{Guest} entity, and \texttt{reservation\_id} is the identifier for the \texttt{Reservation} entity.
+\end{itemize}
+
+\medskip
+
+\textbf{Example:}
+
+\begin{quote}
+\texttt{
+reservation\_id: 5, guest\_id: 2, room\_id: 201, employee\_id: 1, creation\_date: 2024-05-01, check\_in\_date: 2024-05-10, check\_out\_date: 2024-05-15, payment\_id: 4, status: "confirmed", accommodation\_price: 600.00
+}
+\end{quote}
+
+In this example:
+\begin{itemize}
+    \item \texttt{Reservation} is the entity.
+    \item The quoted record is an instance of the \texttt{Reservation} entity.
+    \item Each field (e.g., \texttt{check\_in\_date}, \texttt{status}) is an attribute.
+    \item \texttt{reservation\_id} is the identifier.
+\end{itemize}
+
+\newpage
+
+\section{DD S03 L01}
+
+\texttt{Task: } Describe all relations in your database in English, including cardinality and membership obligation - each relation in two sentences (page 10)
+
+\bigskip
+
+\begin{itemize}
+    \item \textbf{Guest -- Reservation:} Each guest can have zero or more reservations (1:N). Every reservation must be linked to exactly one guest (mandatory).
+    
+    \item \textbf{Room -- Reservation:} Each room can be associated with zero or more reservations over time (1:N). Every reservation must be assigned to exactly one room (mandatory).
+    
+    \item \textbf{Employee -- Reservation:} Each employee can create or manage zero or more reservations (1:N). Every reservation must be linked to exactly one employee (mandatory).
+    
+    \item \textbf{Payment -- Reservation:} Each payment can be linked to one or more reservations (1:N). Every reservation must have exactly one payment (mandatory).
+    
+    \item \textbf{RoomType -- Room:} Each room type can be assigned to zero or more rooms (1:N). Every room must have exactly one room type (mandatory).
+    
+    \item \textbf{Service -- ServiceUsage:} Each service can be used in zero or more service usages (1:N). Every service usage must refer to exactly one service (mandatory).
+    
+    \item \textbf{Reservation -- ServiceUsage:} Each reservation can have zero or more service usages (1:N). Every service usage must be linked to exactly one reservation (mandatory).
+    
+    \item \textbf{Guest -- Feedback:} Each guest can provide zero or more feedback entries (1:N). Every feedback must be linked to exactly one guest (mandatory).
+    
+    \item \textbf{Reservation -- Feedback:} Each reservation can have zero or more feedback entries (1:N). Every feedback must be linked to exactly one reservation (mandatory).
+    
+    \item \textbf{Service -- ServicePriceHistory:} Each service can have zero or more price history records (1:N). Every price history record must be linked to exactly one service (mandatory).
+    
+    \item \textbf{RoomType -- RoomTypePriceHistory:} Each room type can have zero or more price history records (1:N). Every price history record must be linked to exactly one room type (mandatory).
+\end{itemize}
+
+\bigskip
+
+\newpage
+
+\section{DD S03 L02}
+
+\texttt{Task: } Draw an ER diagram according to conventions
+
+\bigskip
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{ER_diagram.png}
+    \caption{ER Diagram for Hotel Database}
+    \label{fig:er_diagram}
+\end{figure>
+
+
+\newpage
+
+\section{DD S30 L04}
+
+\texttt{Task: } Matrix diagram with relationships, draw for your solution 
+
+\bigskip
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{matrix_diagram.png}
+    \caption{Matrix Diagram for Hotel Database Relationships}
+    \label{fig:matrix_diagram}
+\end{figure}
+
+\newpage
+
+\section{DD S04 L01}
+
+\texttt{Task: } Supertypes and subtypes – define at least one instance of a supertype and a subtype in your project
+
+\bigskip
+
+In the hotel project, an example of a supertype and subtype can be found in the \texttt{Guest} entity. The \texttt{Guest} table has an attribute \texttt{guest\_type}, which can distinguish between different subtypes such as "Regular" and "VIP".
+
+\medskip
+
+\textbf{Supertype:} \texttt{Guest} (stores general information about all guests, regardless of type).
+
+\textbf{Subtypes:}
+\begin{itemize}
+    \item \texttt{Regular Guest} (a standard guest, e.g., \texttt{guest\_type = "Regular"})
+    \item \texttt{VIP Guest} (a guest with VIP status, e.g., \texttt{guest\_type = "VIP"})
+\end{itemize}
+
+\textbf{Example instance:}
+\begin{quote}
+\texttt{guest\_id: 10, firstname: "Alice", lastname: "Brown", email: "alice.brown@email.com", guest\_type: "VIP"}
+\end{quote}
+This record is an instance of the supertype \texttt{Guest} and the subtype \texttt{VIP Guest}.
+
+\newpage
+
+\section{DD S04 L02}
+
+\texttt{Task: } Description of business rules for your project
+
+\bigskip
+
+\begin{itemize}
+    \item Each guest must provide a unique email address and basic personal information to register.
+    \item A reservation can only be created if the selected room is available for the entire requested period.
+    \item Every reservation must be linked to exactly one guest, one room, one employee, and one payment.
+    \item Each payment must cover the total accommodation and any additional expenses, and can be marked as paid or unpaid.
+    \item Services can be used only by guests with an active reservation, and each service usage must be linked to a reservation.
+    \item Feedback can only be submitted by guests who have completed a reservation.
+    \item Room prices and service prices can change over time, but each price change must be recorded in the corresponding price history table.
+    \item Each room must belong to exactly one room type, and each room type can have multiple rooms.
+    \item Only one guest type (Individual or Company) can be assigned to each guest.
+    \item Employees are responsible for managing reservations and must be assigned to each reservation.
+\end{itemize}
+
+\newpage
+
+\section{DD S05 L01}
+
+\texttt{Task: } Include at least one portable and one non-portable binding in your project
+
+\bigskip
+
+\begin{itemize}
+    \item \textbf{Portable binding:} The use of foreign key constraints in the SQL schema (e.g., \texttt{CONSTRAINT fk_reservation_guest FOREIGN KEY (guest\_id) REFERENCES Guest(guest\_id)}) is a portable binding, as it is supported by most relational database systems and ensures referential integrity regardless of the specific database platform.
+    
+    \item \textbf{Non-portable binding:} The use of the \texttt{IDENTITY(1,1)} property for auto-incrementing primary keys in SQL Server (e.g., \texttt{guest\_id INT IDENTITY(1,1) PRIMARY KEY}) is a non-portable binding, as this syntax is specific to Microsoft SQL Server and may not work in other database systems like MySQL or PostgreSQL.
+\end{itemize}
+
+\newpage
+
+\section{DD S05 L03}
+
+\texttt{Task: } Have at least one M:N relationship without information and one M:N relationship with information in your project
+
+\bigskip
+
+\begin{itemize}
+    \item \textbf{M:N relationship without information:} The relationship between \texttt{Guest} and \texttt{Room} could be modeled as M:N if we only wanted to track which guests have ever stayed in which rooms, without any additional details. In this case, a join table (e.g., \texttt{GuestRoom}) would contain only the foreign keys \texttt{guest\_id} and \texttt{room\_id}.
+    
+    \item \textbf{M:N relationship with information:} The relationship between \texttt{Reservation} and \texttt{Service} is M:N with information, implemented by the \texttt{ServiceUsage} table. This table not only links reservations and services but also stores additional information such as \texttt{quantity} and \texttt{total\_price}.
+\end{itemize}
+
+\newpage
+
+\section{DD S06 L01}
+
+\texttt{Task: } Incorporate at least one 1:N identifying relationship into your project, with the fact that the transferred foreign key will also be the key in the new table
+
+\bigskip
+
+An example of a 1:N identifying relationship in the project is the relationship between \texttt{RoomType} and \texttt{RoomTypePriceHistory}. Each price history record (\texttt{RoomTypePriceHistory}) is uniquely identified by its own primary key, but it also contains the foreign key \texttt{room\_type\_id}, which is mandatory and links it to the parent \texttt{RoomType}. In an alternative design, the primary key of \texttt{RoomTypePriceHistory} could be a composite key consisting of \texttt{room\_type\_id} and \texttt{valid\_from}, making the foreign key also part of the primary key, which is typical for identifying relationships.
+
+\newpage
+
+\section{DD S06 L02-04}
+
+\texttt{Task: } Demonstrate that your schema is in first, second, and third normal form
+
+\bigskip
+
+\begin{itemize}
+    \item \textbf{First Normal Form (1NF):} All tables in the schema have atomic (indivisible) values. There are no repeating groups or arrays; each field contains only a single value. For example, the \texttt{Guest} table stores only one email, one name, etc., per row.
+    
+    \item \textbf{Second Normal Form (2NF):} The schema is in 2NF because all non-key attributes are fully functionally dependent on the whole primary key. There are no partial dependencies, as all tables with composite keys (e.g., possible in history tables) have all non-key attributes dependent on the entire key.
+    
+    \item \textbf{Third Normal Form (3NF):} The schema is in 3NF because there are no transitive dependencies between non-key attributes. All non-key attributes depend only on the primary key and not on other non-key attributes. For example, in the \texttt{Guest} table, attributes like \texttt{email}, \texttt{firstname}, and \texttt{country} depend only on \texttt{guest\_id}.
+\end{itemize}
+
+\medskip
+
+This ensures that the database design avoids redundancy and update anomalies, and supports data integrity.
+
+\newpage
+
+\section{DD S07 L01}
+
+\texttt{Task: } Try to define ARC in your project (can be defined in ORACLE SQL Developer Data Modeler)
+
+\bigskip
+
+An example of an ARC (Alternative Relationship Constraint) in the hotel project could be in the \texttt{Payment} entity. For instance, a payment could be associated either with a reservation or with a service usage, but not both at the same time. This can be modeled by having two nullable foreign keys in the \texttt{Payment} table (\texttt{reservation\_id} and \texttt{usage\_id}) and enforcing that exactly one of them is not null for each payment.
+
+\medskip
+
+\section{DD S07 L02}
+
+\texttt{Task: } Try to define hierarchical and recursive relations in your project
+
+\bigskip
+
+A hierarchical or recursive relationship can be represented in the \texttt{Employee} table, where an employee can be a manager of other employees. This is modeled by adding a nullable foreign key \texttt{manager\_id} referencing \texttt{employee\_id} in the same table, allowing you to build an organizational hierarchy.
+
+\medskip
+
+\section{DD S07 L03}
+
+\texttt{Task: } Describe how you record historical data in your system
+
+\bigskip
+
+Historical data in the system is recorded using dedicated history tables, such as \texttt{RoomTypePriceHistory} and \texttt{ServicePriceHistory}. These tables store records of price changes over time, including the start and end dates for each price, allowing the system to track and retrieve historical pricing information for rooms and services.
+
+\newpage
+
+\section{DD S09 L02}
+
+\texttt{Task: } Try journaling in your project, i.e. saving past historical data (for example salary changes, workplace changes, etc.)
+
+\bigskip
+
+Journaling in the hotel project is implemented by using dedicated history tables that store changes over time. For example, the \texttt{RoomTypePriceHistory} and \texttt{ServicePriceHistory} tables record every change in room type prices and service prices, including the period of validity for each price. This allows the system to keep a complete record of all past prices and retrieve historical data as needed.
+
+A similar approach could be used for tracking changes in employee positions or salaries by creating an \texttt{EmployeePositionHistory} table, where each record would store the employee ID, position, salary, start date, and end date, thus maintaining a journal of all changes for each employee.
+
+\end{document}
