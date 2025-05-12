@@ -37,12 +37,7 @@ namespace DS2_ORM_projekt.dao
                     Console.WriteLine("Pokoj není v daném termínu volný.");
                     db.Rollback();
                     return false;
-                }
-
-                int roomTypeId = RoomDao.GetRoomTypeId(db, newRoomId);
-                decimal pricePerNight = RoomTypePriceHistoryDao.GetPricePerNight(db, roomTypeId, checkIn);
-                int nights = (checkOut - checkIn).Days;
-                decimal newPrice = nights * pricePerNight;
+                }             
 
                 ReservationDao.UpdateRoomAndPrice(db, reservationId, newRoomId);
 
