@@ -4,12 +4,11 @@ namespace CachingServer.Controllers;
 
 [ApiExplorerSettings(IgnoreApi = true)]
 [Route("/")]
-public class HomeController : ControllerBase
+public class HomeController : Controller
 {
     [HttpGet]
-    public ContentResult Index()
+    public IActionResult Index()
     {
-        
-        return Index();
+        return View("Index");
     }
 }

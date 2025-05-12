@@ -9,7 +9,7 @@ namespace CachingServer
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllers();
+            builder.Services.AddControllersWithViews(); // místo AddControllers()
 
             // Configure CORS
             builder.Services.AddCors(options =>
@@ -54,8 +54,6 @@ namespace CachingServer
             app.UseAuthorization();
 
             app.MapControllers(); // API
-
-            // Pokud chceš MVC stránky (např. HomeController s View)
             app.MapDefaultControllerRoute(); // MVC (např. HomeController)
 
             app.Run();

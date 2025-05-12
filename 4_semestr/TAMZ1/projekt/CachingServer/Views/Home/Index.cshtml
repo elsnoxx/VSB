@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="utf-8">
+    <title>API Dokumentace – CachingServer</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 2em; background: #f9f9fb; color: #222; }
+        header { margin-bottom: 2em; }
+        h1 { color: #007bff; }
+        h2 { color: #0056b3; margin-top: 2em; }
+        ul { margin-bottom: 1.5em; }
+        code, pre { background: #f4f4f4; border-radius: 4px; }
+        code { padding: 2px 6px; font-size: 1.05em; }
+        pre { padding: 1em; overflow-x: auto; }
+        .button { display: inline-block; padding: 0.6em 1.2em; background: #007bff; color: #fff; border-radius: 4px; text-decoration: none; font-weight: bold; margin-top: 1em; }
+        .button:hover { background: #0056b3; }
+        .endpoint-list { list-style: none; padding: 0; }
+        .endpoint-list li { margin-bottom: 0.7em; }
+        .endpoint-method { font-weight: bold; color: #fff; background: #28a745; border-radius: 3px; padding: 2px 8px; margin-right: 6px; font-size: 0.95em; }
+        .endpoint-method.post { background: #ffc107; color: #222; }
+        .endpoint-method.download { background: #17a2b8; }
+        .note { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 4px; padding: 0.7em 1em; margin: 1em 0; }
+        footer { margin-top: 3em; font-size: 0.95em; color: #888; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>API Dokumentace</h1>
+        <p>
+            <b>CachingServer</b> je aplikace pro správu a sdílení geocachingových kešek.<br>
+            Níže najdete přehled všech dostupných API endpointů a příklady jejich použití.
+        </p>
+    </header>
+
+    <h2>Seznam endpointů</h2>
+    <ul class="endpoint-list">
+        <li><span class="endpoint-method">GET</span> <code>/api/Caching</code> – Seznam všech kešek</li>
+        <li><span class="endpoint-method">GET</span> <code>/api/Caching/detail/{name}</code> – Detail kešky podle názvu</li>
+        <li><span class="endpoint-method">GET</span> <code>/api/Caching/nearby?lat=...&lng=...&radius=...</code> – Kešky v okolí</li>
+        <li><span class="endpoint-method post">POST</span> <code>/api/Caching/found</code> – Přidání záznamu o nálezu kešky</li>
+        <li><span class="endpoint-method">GET</span> <code>/api/Caching/file</code> – Vrátí obsah kešek jako JSON</li>
+        <li><span class="endpoint-method download">GET</span> <code>/api/Caching/download</code> – <b>Stáhnout soubor caches.json</b></li>
+        <li><span class="endpoint-method">GET</span> <code>/api/health</code> – Health check</li>
+    </ul>
+
+    <h2>Příklady použití</h2>
+    <div>
+        <b>Získání všech kešek:</b>
+        <pre><code>GET /api/Caching</code></pre>
+    </div>
+    <div>
+        <b>Detail kešky podle názvu:</b>
+        <pre><code>GET /api/Caching/detail/CacheNaKopci</code></pre>
+    </div>
+    <div>
+        <b>Kešky v okolí:</b>
+        <pre><code>GET /api/Caching/nearby?lat=49.123&lng=17.456&radius=2.0</code></pre>
+    </div>
+    <div>
+        <b>Přidání záznamu o nálezu (JSON v těle):</b>
+        <pre>
+POST /api/Caching/found
+Content-Type: application/json
+
+{
+  "CacheName": "Cache na kopci",
+  "PersonName": "Pepa",
+  "FoundAt": "2024-05-10T10:00:00Z",
+  "Distance": "0.5"
+}
+        </pre>
+    </div>
+
+    <div class="note">
+        <b>Poznámka:</b> Některé endpointy mohou vyžadovat autentizaci nebo API klíč.<br>
+        Pro stahování souboru použijte <code>/api/Caching/download</code>.
+    </div>
+
+    <h2>Stáhnout data</h2>
+    <a class="button" href="/api/Caching/download">Stáhnout caches.json</a>
+
+    <footer>
+        &copy; 2025 CachingServer &ndash; Kontakt: <a href="mailto:richard.ficek.st@vsb.cz">richard.ficek.st@vsb.cz
+</a>
+    </footer>
+</body>
+</html>
