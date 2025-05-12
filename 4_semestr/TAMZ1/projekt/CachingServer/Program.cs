@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication;
+
 namespace CachingServer
 {
     public class Program
@@ -14,9 +16,14 @@ namespace CachingServer
             {
                 options.AddPolicy("AllowAll", policy =>
                 {
-                    policy.AllowAnyOrigin()
-                          .AllowAnyHeader()
-                          .AllowAnyMethod();
+                    policy.WithOrigins(
+                        "http://localhost:8100",
+                        "https://localhost",
+                        "capacitor://localhost",
+                        "http://192.168.208.148:7084"
+                    )
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
                 });
             });
 
@@ -33,15 +40,23 @@ namespace CachingServer
                 app.UseSwaggerUI();
             }
 
-            // Remove or comment out this line to disable HTTPS redirection
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
-            // Use CORS middleware
+            // Povolit statické soubory (např. wwwroot/index.html)
+            app.UseStaticFiles(); // Statické soubory z wwwroot
+
+            // Use CORS middleware (musí být před ostatními!)
             app.UseCors("AllowAll");
+
+            // Add Authentication Middleware
+            app.UseMiddleware<AuthenticationMiddleware>();
 
             app.UseAuthorization();
 
-            app.MapControllers();
+            app.MapControllers(); // API
+
+            // Pokud chceš MVC stránky (např. HomeController s View)
+            app.MapDefaultControllerRoute(); // MVC (např. HomeController)
 
             app.Run();
         }

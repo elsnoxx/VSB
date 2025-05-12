@@ -23,6 +23,7 @@ import {
 import { locationOutline, checkmarkCircle } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
 import WaypointsList from '../components/WaypointsList';
+import { Http } from '@capacitor-community/http';
 
 type Cache = {
   name: string;
@@ -81,39 +82,17 @@ const Caches: React.FC = () => {
     }
 
     try {
-      // Použij standardní fetch místo Capacitor HTTP
-      const response = await fetch(`${apiUrl}/api/Caching`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
-
-      // Kontrola úspěšné odpovědi (status 200)
-      if (!response.ok) {
-        setError(`Chyba serveru: ${response.status} - ${getStatusText(response.status)}`);
-        let errorText = '';
-        try {
-          errorText = await response.text();
-        } catch (e) {
-          errorText = 'Nepodařilo se načíst detaily chyby';
-        }
-        setErrorDetail(errorText);
+      // Použij Capacitor HTTP místo standardního fetch
+      const response = await Http.get({ url: `${apiUrl}/api/Caching` });
+      const data = response.data;
+        
+      if (!data || (Array.isArray(data) && data.length === 0)) {
+        setError('Ze serveru nebylo vráceno nic.');
         setCaches([]);
         localStorage.removeItem('waypoints');
-        console.error('Chyba serveru:', response.status, errorText);
       } else {
-        // Data musíš zparsovat - fetch neparse data automaticky
-        const data = await response.json();
-        
-        if (!data || (Array.isArray(data) && data.length === 0)) {
-          setError('Ze serveru nebylo vráceno nic.');
-          setCaches([]);
-          localStorage.removeItem('waypoints');
-        } else {
-          setCaches(Array.isArray(data) ? data : [data]);
-          localStorage.setItem('waypoints', JSON.stringify(data));
-        }
+        setCaches(Array.isArray(data) ? data : [data]);
+        localStorage.setItem('waypoints', JSON.stringify(data));
       }
     } catch (error: any) {
       setError('Chyba komunikace se serverem: ' + (error?.message || 'Neznámá chyba'));

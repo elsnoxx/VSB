@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang='cs'>
+<head>
+    <meta charset='utf-8'>
+    <title>API Dokumentace - CachingServer</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        code { background: #f4f4f4; padding: 2px 4px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 1em; border-radius: 3px; }
+        a.button { display: inline-block; padding: 0.5em 1em; background: #007bff; color: #fff; border-radius: 4px; text-decoration: none; }
+        a.button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>API Dokumentace</h1>
+    <p>Tato aplikace slouží pro správu a sdílení geocachingových kešek.</p>
+    <h2>Dostupné API endpointy</h2>
+    <ul>
+        <li><code>GET /api/Caching</code> – Seznam všech kešek</li>
+        <li><code>GET /api/Caching/detail/{name}</code> – Detail kešky podle názvu</li>
+        <li><code>GET /api/Caching/nearby?lat=...&lng=...&radius=...</code> – Kešky v okolí</li>
+        <li><code>POST /api/Caching/found</code> – Přidání záznamu o nálezu kešky</li>
+        <li><code>GET /api/Caching/file</code> – Vrátí obsah kešek jako JSON</li>
+        <li><code>GET /api/Caching/download</code> – <b>Stáhnout soubor caches.json</b></li>
+        <li><code>GET /api/health</code> – Health check</li>
+    </ul>
+    <h2>Jak používat API</h2>
+    <ul>
+        <li>Pro získání všech kešek použijte <code>GET /api/Caching</code>.</li>
+        <li>Pro detail kešky podle názvu použijte <code>GET /api/Caching/detail/{name}</code>.</li>
+        <li>Pro získání kešek v okolí použijte <code>GET /api/Caching/nearby?lat=...&lng=...&radius=...</code>.</li>
+        <li>Pro přidání záznamu o nálezu pošlete <code>POST</code> na <code>/api/Caching/found</code> s JSON tělem:</li>
+    </ul>
+    <pre>
+{
+  ""CacheName"": ""Cache na kopci"",
+  ""PersonName"": ""Pepa"",
+  ""FoundAt"": ""2024-05-10T10:00:00Z"",
+  ""Distance"": ""0.5""
+}
+    </pre>
+    <h2>Stáhnout data</h2>
+    <a class='button' href='/api/Caching/download'>Stáhnout caches.json</a>
+</body>
+</html>

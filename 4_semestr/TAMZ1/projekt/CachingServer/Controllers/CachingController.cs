@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using Microsoft.AspNetCore.Cors;
 
 namespace CachingServer.Controllers;
 
 [ApiController]
+// [DisableCors]
 [Route("api/[controller]")]
 public class CachingController : ControllerBase
 {
@@ -30,6 +32,7 @@ public class CachingController : ControllerBase
     }
 
     // 1. Seznam všech kešek
+    
     [HttpGet]
     public IActionResult GetAllCaches()
     {
@@ -37,6 +40,7 @@ public class CachingController : ControllerBase
     }
 
     // 2. Detail kešky podle názvu
+    
     [HttpGet("detail/{name}")]
     public IActionResult GetCacheByName(string name)
     {
@@ -51,6 +55,7 @@ public class CachingController : ControllerBase
 
 
     // 3. Kešky v okolí (GET /api/caching/nearby?lat=...&lng=...&radius=...)
+    
     [HttpGet("nearby")]
     public IActionResult GetNearbyCaches(double lat, double lng, double radius = 1.0)
     {
@@ -69,6 +74,7 @@ public class CachingController : ControllerBase
     }
 
     // 4. Vrácení obsahu JSON souboru
+    
     [HttpGet("file")]
     public IActionResult GetJsonFile()
     {
@@ -83,6 +89,7 @@ public class CachingController : ControllerBase
     }
 
     // 5. Přidání záznamu do logu, že kešku někdo našel
+    
     [HttpPost("found")]
     public IActionResult LogCacheFound([FromBody] FoundCacheModel model)
     {
@@ -107,8 +114,25 @@ public class CachingController : ControllerBase
 
         return Ok(new { message = "Log byl úspěšně přidán.", cache });
     }
+    // 5.1. Stáhnout JSON soubor
+    
+    [HttpGet("download")]
+    public IActionResult DownloadJsonFile()
+    {
+        var jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "caches.json");
+        if (!System.IO.File.Exists(jsonFilePath))
+        {
+            return NotFound(new { message = "Soubor nenalezen." });
+        }
+
+        var fileBytes = System.IO.File.ReadAllBytes(jsonFilePath);
+        var fileName = "caches.json";
+        return File(fileBytes, "application/json", fileName); // Vrací soubor jako přílohu
+    }
+
 
     // 6. Health check endpoint
+    
     [HttpGet("/api/health")]
     public IActionResult HealthCheck()
     {

@@ -13,6 +13,7 @@ import CacheDetail from './pages/CacheDetail';
 import AllCachesMap from './pages/AllCachesMap';
 import Found from './pages/Found';
 import OfflineIndicator from './components/OfflineIndicator';
+import ImportExport from './pages/ImportExport';
 
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
@@ -60,6 +61,9 @@ const App: React.FC = () => (
               <IonMenuToggle autoHide={false}>
                 <IonItem routerLink="/about" routerDirection="root">O aplikaci</IonItem>
               </IonMenuToggle>
+              <IonMenuToggle autoHide={false}>
+                <IonItem routerLink="/importexport" routerDirection="root">Import / Export</IonItem>
+              </IonMenuToggle>
               {/* Další odkazy */}
             </IonList>
           </IonContent>
@@ -101,6 +105,9 @@ const App: React.FC = () => (
             </Route>
             <Route exact path="/nearest-cache">
               <NearestCache />
+            </Route>
+            <Route exact path="/importexport">
+              <ImportExport />
             </Route>
           </IonRouterOutlet>
           {/* <IonFooter>
