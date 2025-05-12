@@ -44,20 +44,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database.cs" />
-    <Compile Include="dao\ReservationDao.cs" />
-    <Compile Include="dao\RoomDao.cs" />
-    <Compile Include="dao\RoomTypePriceHistoryDao.cs" />
-    <Compile Include="dao\TransactionsDao.cs" />
-    <Compile Include="dto\Guest.cs" />
-    <Compile Include="dto\Payment.cs" />
-    <Compile Include="dto\Reservation.cs" />
-    <Compile Include="dto\Room.cs" />
-    <Compile Include="dto\RoomType.cs" />
-    <Compile Include="dto\RoomTypePriceHistory.cs" />
-    <Compile Include="dto\Service.cs" />
-    <Compile Include="dto\ServicePriceHistory.cs" />
-    <Compile Include="dto\ServiceUsage.cs" />
+    <Compile Include="orm\Database.cs" />
+    <Compile Include="orm\dao\ReservationDao.cs" />
+    <Compile Include="orm\dao\RoomDao.cs" />
+    <Compile Include="orm\dao\RoomTypePriceHistoryDao.cs" />
+    <Compile Include="orm\dao\TransactionsDao.cs" />
+    <Compile Include="orm\dto\Guest.cs" />
+    <Compile Include="orm\dto\Payment.cs" />
+    <Compile Include="orm\dto\Reservation.cs" />
+    <Compile Include="orm\dto\Room.cs" />
+    <Compile Include="orm\dto\RoomType.cs" />
+    <Compile Include="orm\dto\RoomTypePriceHistory.cs" />
+    <Compile Include="orm\dto\Service.cs" />
+    <Compile Include="orm\dto\ServicePriceHistory.cs" />
+    <Compile Include="orm\dto\ServiceUsage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
