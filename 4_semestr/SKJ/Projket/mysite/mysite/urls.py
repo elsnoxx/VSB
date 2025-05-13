@@ -1,11 +1,12 @@
-from django.urls import path
 from django.contrib import admin
+from django.urls import path, include
 from blog import views
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),
     path('guests/', views.guest_list, name='guest_list'),
+    path('profile/', views.profile_view, name='profile'),
     path('guests/<int:guest_id>/', views.guest_detail, name='guest_detail'),
     path('guests/new/', views.guest_create, name='guest_create'),
     path('guests/<int:guest_id>/edit/', views.guest_update, name='guest_update'),
@@ -27,4 +28,7 @@ urlpatterns = [
     path('payment_management/', views.payment_management, name='payment_management'),
     path('payment/<int:employee_id>/mark-as-paid/', views.mark_payment_as_paid, name='mark_payment_as_paid'),
     path('payment/<int:reservation_id>/mark-as-paid-from-reservation/', views.mark_payment_as_paid_from_reservation, name='mark_payment_as_paid_from_reservation'),
+    path('accounts/login/', views.login_view, name='login'),
+    path('accounts/logout/', views.logout_view, name='logout'),
+    path('accounts/register/', views.register_view, name='register'),
 ]

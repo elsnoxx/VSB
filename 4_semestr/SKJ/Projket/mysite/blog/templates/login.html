@@ -1,0 +1,15 @@
+<!-- filepath: c:\Users\ficek\Documents\GitHub\VSB\4_semestr\SKJ\Projket\mysite\blog\templates\login.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5" style="max-width: 400px;">
+    <h2 class="mb-4">Přihlášení</h2>
+    <form method="post" class="card card-body shadow-sm">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary w-100">Přihlásit</button>
+    </form>
+    <div class="mt-3 text-center">
+        <a href="{% url 'register' %}">Nemáte účet? Registrujte se</a>
+    </div>
+</div>
+{% endblock %}

@@ -8,3 +8,7 @@ start container -> docker run -d -p 8000:8000 --name djangoprojekt_container dja
 
 stop container -> docker stop djangoprojekt_container
 remove container -> docker rm djangoprojekt_container
+
+
+elsnoxx
+Benjamin1*

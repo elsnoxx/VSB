@@ -1,0 +1,20 @@
+
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5" style="max-width: 500px;">
+    <h2>Profil uživatele</h2>
+    <ul class="list-group">
+        <li class="list-group-item"><strong>Uživatelské jméno:</strong> {{ user.username }}</li>
+        <li class="list-group-item"><strong>Email:</strong> {{ guest.email }}</li>
+        <li class="list-group-item"><strong>Jméno:</strong> {{ guest.firstname }}</li>
+        <li class="list-group-item"><strong>Příjmení:</strong> {{ guest.lastname }}</li>
+        <li class="list-group-item"><strong>Telefon:</strong> {{ guest.phone }}</li>
+        <li class="list-group-item"><strong>Datum narození:</strong> {{ guest.birth_date }}</li>
+        <li class="list-group-item"><strong>Ulice:</strong> {{ guest.street }}</li>
+        <li class="list-group-item"><strong>Město:</strong> {{ guest.city }}</li>
+        <li class="list-group-item"><strong>PSČ:</strong> {{ guest.postal_code }}</li>
+        <li class="list-group-item"><strong>Země:</strong> {{ guest.country }}</li>
+        <li class="list-group-item"><strong>Poznámky:</strong> {{ guest.notes }}</li>
+    </ul>
+</div>
+{% endblock %}

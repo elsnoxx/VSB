@@ -1,10 +1,7 @@
 from django import forms
-from .models import Guest, Reservation, Payment, Employee, Room, RoomType, Address
-
-class AddressForm(forms.ModelForm):
-    class Meta:
-        model = Address
-        fields = ['street', 'city', 'postal_code', 'country']
+from .models import Guest, Reservation, Payment, Employee, Room, RoomType, Address, RoomTypePriceHistory
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 class GuestForm(forms.ModelForm):
     class Meta:
@@ -17,12 +14,10 @@ class GuestForm(forms.ModelForm):
 class ReservationForm(forms.ModelForm):
     class Meta:
         model = Reservation
-        fields = ['guest', 'room', 'check_in_date', 'check_out_date', 'status']
+        exclude = ['guest', 'room', 'accommodation_price', 'status', 'employee', 'payment']
         widgets = {
-            'guest': forms.Select(attrs={'class': 'form-control'}),
-            'room': forms.Select(attrs={'class': 'form-control'}),
-            'check_in_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'check_out_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'check_in_date': forms.DateInput(attrs={'type': 'date'}),
+            'check_out_date': forms.DateInput(attrs={'type': 'date'}),
         }
 
 class PaymentForm(forms.ModelForm):
@@ -33,7 +28,7 @@ class PaymentForm(forms.ModelForm):
 class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
-        fields = ['firstname', 'lastname', 'position', 'address']
+        fields = ['firstname', 'lastname', 'position', 'street', 'city', 'postal_code', 'country']
 
 class RoomForm(forms.ModelForm):
     class Meta:
@@ -43,7 +38,7 @@ class RoomForm(forms.ModelForm):
 class RoomTypeForm(forms.ModelForm):
     class Meta:
         model = RoomType
-        fields = ['name', 'bed_count', 'price_per_night']
+        fields = ['name', 'bed_count']
 
 class RoomForm(forms.ModelForm):
     room_type_details = forms.CharField(
@@ -72,3 +67,33 @@ class RoomForm(forms.ModelForm):
             )
         else:
             self.fields['room_type_details'].initial = "Žádný typ pokoje není přiřazen."
+
+class RoomTypePriceHistoryForm(forms.ModelForm):
+    class Meta:
+        model = RoomTypePriceHistory
+        fields = ['room_type', 'price_per_night', 'valid_from', 'valid_to']
+
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    first_name = forms.CharField(label="Jméno", max_length=30, required=False)
+    last_name = forms.CharField(label="Příjmení", max_length=30, required=False)
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "first_name", "last_name", "password1", "password2")
+
+class GuestRegisterForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    firstname = forms.CharField(max_length=100)
+    lastname = forms.CharField(max_length=100)
+    phone = forms.CharField(max_length=30, required=False)
+    birth_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    street = forms.CharField(max_length=255)
+    city = forms.CharField(max_length=100)
+    postal_code = forms.CharField(max_length=10)
+    country = forms.CharField(max_length=100)
+    notes = forms.CharField(widget=forms.Textarea, required=False)
+
+    class Meta:
+        model = User
+        fields = ("username", "password1", "password2", "email", "firstname", "lastname", "phone", "birth_date", "street", "city", "postal_code", "country", "notes")
