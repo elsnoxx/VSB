@@ -1,12 +1,51 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>nice</h1>
-
-<form method="POST" action="{% url 'create_reservation' room_id=room.room_id %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Create Reservation</button>
-</form>
-
+<div class="container mt-5" style="max-width: 600px;">
+    <h2 class="mb-4 text-center">Rezervace pokoje</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <p><strong>Jméno:</strong> {{ guest.firstname }} {{ guest.lastname }}</p>
+            <p><strong>Email:</strong> {{ guest.email }}</p>
+            <p><strong>Telefon:</strong> {{ guest.phone }}</p>
+            <p><strong>Pokoj:</strong> {{ room.room_number }} ({{ room.room_type.name }})</p>
+            <p><strong>Cena za noc:</strong> {{ price }} Kč</p>
+        </div>
+    </div>
+    <form method="POST" action="{% url 'create_reservation' room_id=room.room_id %}" class="card card-body shadow-sm">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.check_in_date.label_tag }}{{ form.check_in_date }}
+        </div>
+        <div class="mb-3">
+            {{ form.check_out_date.label_tag }}{{ form.check_out_date }}
+        </div>
+        <div class="mb-3">
+            <strong>Celková cena:</strong>
+            <span id="total_price">{{ price }}</span> Kč
+        </div>
+        <button type="submit" class="btn btn-success w-100">Potvrdit rezervaci</button>
+    </form>
+</div>
+<script>
+    // Přepočet ceny podle počtu nocí
+    const checkIn = document.getElementById("id_check_in_date");
+    const checkOut = document.getElementById("id_check_out_date");
+    const totalPrice = document.getElementById("total_price");
+    const pricePerNight = {{ price|floatformat:2 }};
+    function updatePrice() {
+        if (checkIn.value && checkOut.value) {
+            const inDate = new Date(checkIn.value);
+            const outDate = new Date(checkOut.value);
+            const nights = (outDate - inDate) / (1000 * 60 * 60 * 24);
+            if (nights > 0) {
+                totalPrice.textContent = (nights * pricePerNight).toFixed(2);
+            } else {
+                totalPrice.textContent = pricePerNight.toFixed(2);
+            }
+        }
+    }
+    checkIn && checkIn.addEventListener('change', updatePrice);
+    checkOut && checkOut.addEventListener('change', updatePrice);
+</script>
 {% endblock %}
