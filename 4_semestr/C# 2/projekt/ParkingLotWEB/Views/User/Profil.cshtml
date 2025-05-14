@@ -23,6 +23,7 @@
                         <dt class="col-sm-5">Email</dt>
                         <dd class="col-sm-7">@Model.Email</dd>
                     </dl>
+                    <a asp-action="ResetPassword" asp-route-id="@Model.Id" class="btn btn-warning mt-2">Resetovat heslo</a>
                 </div>
             </div>
         </div>
@@ -80,8 +81,8 @@
         <div class="card-header bg-info text-white">
             <h5 class="mb-0">Historie zaparkovaných aut</h5>
         </div>
-        <div class="card-body">
-            <table class="table table-bordered">
+        <div class="card-body" style="padding:0;">
+            <table class="table table-bordered mb-0">
                 <thead>
                     <tr>
                         <th>SPZ</th>
@@ -90,27 +91,31 @@
                         <th>Čas odjezdu</th>
                     </tr>
                 </thead>
-                <tbody>
-                @if (Model.ParkingHistory != null && Model.ParkingHistory.Any())
-                {
-                    foreach (var history in Model.ParkingHistory)
+            </table>
+            <div style="max-height:210px; overflow-y:auto;">
+                <table class="table table-bordered mb-0">
+                    <tbody>
+                    @if (Model.ParkingHistory != null && Model.ParkingHistory.Any())
+                    {
+                        foreach (var history in Model.ParkingHistory)
+                        {
+                            <tr>
+                                <td>@history.LicensePlate</td>
+                                <td>@history.ParkingLotName</td>
+                                <td>@history.ArrivalTime.ToString("g")</td>
+                                <td>@history.DepartureTime?.ToString("g") ?? "Stále zaparkováno"</td>
+                            </tr>
+                        }
+                    }
+                    else
                     {
                         <tr>
-                            <td>@history.LicensePlate</td>
-                            <td>@history.ParkingLotName</td>
-                            <td>@history.ArrivalTime.ToString("g")</td>
-                            <td>@history.DepartureTime?.ToString("g") ?? "Stále zaparkováno"</td>
+                            <td colspan="4" class="text-center">Žádná historie zaparkovaných aut.</td>
                         </tr>
                     }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="4" class="text-center">Žádná historie zaparkovaných aut.</td>
-                    </tr>
-                }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -137,11 +142,13 @@
                         <tr>
                             <td>@parking.LicensePlate</td>
                             <td>@parking.ParkingLotName</td>
-                            <td>@parking.ParkingSpaceId</td>
-                            <td>@parking.ParkingLotId</td>
                             <td>@parking.ArrivalTime.ToString("g")</td>
                             <td>
-                                <button class="btn btn-sm btn-danger" onclick="releaseCar(@parking.ParkingSpaceId, @parking.ParkingLotId)">Odjet</button>
+                                <form asp-action="ReleaseCar" asp-controller="ParkingLot" method="post" style="display:inline;">
+                                    <input type="hidden" name="ParkingSpaceId" value="@parking.ParkingSpaceId" />
+                                    <input type="hidden" name="ParkingLotId" value="@parking.ParkingLotId" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Odjet</button>
+                                </form>
                             </td>
                         </tr>
                     }
@@ -157,24 +164,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        async function releaseCar(parkingSpaceId, parkingLotId) {
-            if (!confirm("Opravdu chcete toto místo uvolnit?")) return;
-            const response = await fetch('/api/ParkingSpaceApi/release', {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    parkingSpaceId: parkingSpaceId,
-                    parkingLotId: parkingLotId
-                })
-            });
-            if (response.ok) {
-                location.reload();
-            } else {
-                alert("Nepodařilo se uvolnit místo.");
-            }
-        }
-    </script>
-}

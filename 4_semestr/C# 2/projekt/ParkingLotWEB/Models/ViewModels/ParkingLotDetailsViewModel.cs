@@ -12,6 +12,7 @@ namespace ParkingLotWEB.Models.ViewModels
         public int FreeSpaces { get; set; } = new();
         public List<ParkingSpaceWithOwner> ParkingSpaces { get; set; } = new();
         public List<CarDto> UserCars { get; set; } = new();
+        public List<string> OccupiedLicensePlates { get; set; }
         public List<ParkingSpaceWithDetails> ParkingSpacesWithDetails { get; set; } = new();
     }
 

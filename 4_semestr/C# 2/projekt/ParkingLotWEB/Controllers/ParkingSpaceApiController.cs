@@ -9,6 +9,8 @@ public class ParkingSpaceApiController : ControllerBase
 {
     private readonly ParkingSpaceRepository _repo;
     private readonly ParkingLotRepository _parkingLotRepo;
+    private Random _random = new Random();
+    private const int MIN_PARKING_SPACE_ID = 1;
 
     public ParkingSpaceApiController(ParkingSpaceRepository repo, ParkingLotRepository parkingLotRepo)
     {
@@ -23,16 +25,21 @@ public class ParkingSpaceApiController : ControllerBase
         return Ok(history);
     }
 
-    [HttpPost("occupy/{parkingSpaceId}")]
-    public async Task<IActionResult> Occupy(int parkingSpaceId, [FromBody] OccupyRequest req)
+    [HttpPost("occupy/{parkingLotId}")]
+    public async Task<IActionResult> Occupy(int parkingLotId, [FromBody] OccupyRequest req)
     {
-        // 1. Změna stavu místa na "occupied" + zápis do StatusHistory
-        await _repo.UpdateStatusAsync(parkingSpaceId, "occupied");
+        var freeSpaces = (await _repo.GetAvailableSpacesAsync(parkingLotId)).ToList();
+        Console.WriteLine($"Free spaces count: {freeSpaces.Count}");
+        if (!freeSpaces.Any())
+            return BadRequest("No free spaces available.");
 
-        // 2. Zápis do tabulky Occupancy
-        await _repo.InsertOccupancyAsync(parkingSpaceId, req.LicensePlate);
+        var selected = freeSpaces[_random.Next(freeSpaces.Count)];
+        Console.WriteLine($"Selected space: {selected.ParkingSpaceId}");
 
-        return Ok();
+        await _repo.UpdateStatusAsync(selected.ParkingSpaceId, "occupied");
+        await _repo.InsertOccupancyAsync(selected.ParkingSpaceId, req.LicensePlate);
+
+        return Ok(new { ParkingSpaceId = selected.ParkingSpaceId, SpaceNumber = selected.SpaceNumber });
     }
 
     [HttpPost("release")]
@@ -46,7 +53,6 @@ public class ParkingSpaceApiController : ControllerBase
 
         return Ok();
     }
-
 
     [HttpPost("status/{parkingSpaceId}")]
     public async Task<IActionResult> SetStatus(int parkingSpaceId, [FromBody] SetStatusRequest req)

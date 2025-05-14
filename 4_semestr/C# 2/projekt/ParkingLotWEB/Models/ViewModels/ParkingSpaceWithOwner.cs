@@ -7,5 +7,6 @@ namespace ParkingLotWEB.Models
         public int SpaceNumber { get; set; }
         public string Status { get; set; }
         public string? OwnerId { get; set; }
+        public int? CarId { get; set; }
     }
 }

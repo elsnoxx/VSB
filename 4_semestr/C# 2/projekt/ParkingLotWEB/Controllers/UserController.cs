@@ -41,10 +41,24 @@ public class UserController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(User user)
     {
-        var json = JsonSerializer.Serialize(user);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-        var response = await _apiClient.PutAsync($"api/UserApi/{user.Id}", content);
-        if (response.IsSuccessStatusCode)
+        // Pokud je Password null, nastav na prázdný string (aby prošla validace v API)
+        if (user.Password == null)
+            user.Password = "";
+
+        if (string.IsNullOrEmpty(user.Password))
+        {
+            var response = await _apiClient.GetAsync($"api/UserApi/{user.Id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var original = JsonSerializer.Deserialize<User>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                if (original != null)
+                    user.Password = original.Password;
+            }
+        }
+        Console.WriteLine(JsonSerializer.Serialize(user));
+        var responsePut = await _apiClient.PutAsync($"api/UserApi/{user.Id}", user);
+        if (responsePut.IsSuccessStatusCode)
             return RedirectToAction("Index");
         return View(user);
     }
@@ -92,23 +106,18 @@ public class UserController : Controller
         if (string.IsNullOrEmpty(model.Role))
             return BadRequest();
 
-        // Create JSON payload with Role property
-        var jsonPayload = JsonSerializer.Serialize(new { Role = model.Role });
-        Console.WriteLine($"Sending JSON: {jsonPayload}");
-        
-        var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-        // Use PutAsync to match the API's PUT endpoint
-        var response = await _apiClient.PutAsync($"api/UserApi/{id}/role", content);
-        
+        // Předávej pouze objekt, ne serializovaný JSON!
+        var response = await _apiClient.PutAsync($"api/UserApi/{id}/role", new { Role = model.Role });
+
         if (response.IsSuccessStatusCode)
             return RedirectToAction("Index");
-        
+
         if (!response.IsSuccessStatusCode)
         {
             var errorContent = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"Error response: {errorContent}, Status: {response.StatusCode}");
         }
-        
+
         // To show the view again, we need user data
         var userResponse = await _apiClient.GetAsync($"api/UserApi/{id}");
         if (userResponse.IsSuccessStatusCode)
@@ -117,27 +126,56 @@ public class UserController : Controller
             var user = JsonSerializer.Deserialize<User>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             return View(user);
         }
-        
+
         return RedirectToAction("Index");
     }
 
-    [Authorize(Roles = "Admin")]
+    // GET
+    [Authorize(Roles = "Admin,User")]
     public async Task<IActionResult> ResetPassword(int id)
     {
         var response = await _apiClient.GetAsync($"api/UserApi/{id}");
         if (!response.IsSuccessStatusCode) return NotFound();
         var json = await response.Content.ReadAsStringAsync();
         var user = JsonSerializer.Deserialize<User>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        return View(user);
+
+        var model = new ResetPassword { Id = id };
+        ViewBag.User = user;
+        return View(model);
     }
 
+    // POST
     [HttpPost]
-    [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> ResetPassword(int id, string password)
+    [Authorize(Roles = "Admin,User")]
+    public async Task<IActionResult> ResetPassword(ResetPassword model)
     {
-        var content = new StringContent(JsonSerializer.Serialize(new { Password = password }), Encoding.UTF8, "application/json");
-        var response = await _apiClient.PutAsync($"api/UserApi/{id}/password", content);
-        return RedirectToAction("Index");
+        if (!ModelState.IsValid)
+        {
+            // Znovu načti uživatele pro ViewBag
+            var response = await _apiClient.GetAsync($"api/UserApi/{model.Id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var user = JsonSerializer.Deserialize<User>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                ViewBag.User = user;
+            }
+            return View(model);
+        }
+
+        // Pošli nové heslo na API
+        var responsePut = await _apiClient.PutAsync($"api/UserApi/{model.Id}/password", new { Password = model.Password });
+        if (responsePut.IsSuccessStatusCode)
+            return RedirectToAction("Index");
+
+        // Chyba – znovu načti uživatele
+        var resp = await _apiClient.GetAsync($"api/UserApi/{model.Id}");
+        if (resp.IsSuccessStatusCode)
+        {
+            var json = await resp.Content.ReadAsStringAsync();
+            var user = JsonSerializer.Deserialize<User>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            ViewBag.User = user;
+        }
+        return View(model);
     }
 
     [Authorize(Roles = "Admin, User")]

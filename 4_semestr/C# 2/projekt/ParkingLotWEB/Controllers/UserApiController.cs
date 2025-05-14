@@ -22,6 +22,8 @@ public class UserApiController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var users = await _repo.GetAllAsync();
+        if (users == null || !users.Any())
+            return NotFound();
         return Ok(users);
     }
 
@@ -36,7 +38,19 @@ public class UserApiController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] User model)
     {
-        var affected = await _repo.UpdateAsync(id, model);
+        if (string.IsNullOrEmpty(model.Password))
+        {
+            var original = await _repo.GetByIdAsync(id);
+            if (original == null)
+                return NotFound();
+            model.Password = original.Password;
+        }
+        else
+        {
+            model.Password = BCrypt.Net.BCrypt.HashPassword(model.Password);
+        }
+
+        var affected = await _repo.UpdateAsync(model);
         if (affected == 0)
             return NotFound();
         return NoContent();
@@ -89,12 +103,16 @@ public class UserApiController : ControllerBase
     }
 
     [HttpPut("{id}/password")]
-    public async Task<IActionResult> ResetPassword(int id, [FromBody] User model)
+    public async Task<IActionResult> ResetPassword(int id, [FromBody] JsonElement body)
     {
-        // Hashování nového hesla před uložením
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
+        if (!body.TryGetProperty("Password", out var passwordElement) || passwordElement.ValueKind != JsonValueKind.String)
+            return BadRequest(new { error = "Password is required" });
 
-        var affected = await _repo.ResetPasswordAsync(id, hashedPassword);
+        var password = passwordElement.GetString();
+        if (string.IsNullOrEmpty(password))
+            return BadRequest(new { error = "Password cannot be empty" });
+
+        var affected = await _repo.ResetPasswordAsync(id, password);
         if (affected == 0)
             return NotFound();
         return NoContent();

@@ -14,41 +14,42 @@ namespace ParkingLotWEB.Database
             _dapper = new DapperRepository(config);
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
             using var conn = _dapper.CreateConnection();
-            return await conn.QueryAsync<User>("SELECT Id, Username, Role FROM `User`");
+            return await conn.QueryAsync<UserDto>("SELECT id, username, password, role, first_name AS FirstName, last_name AS LastName, email FROM `User`");
         }
 
         public async Task<UserDto?> GetByIdAsync(int id)
         {
             using var conn = _dapper.CreateConnection();
             return await conn.QueryFirstOrDefaultAsync<UserDto>(
-                "SELECT Id, Username, Role, First_Name AS FirstName, Last_Name AS LastName, Email FROM `User` WHERE Id = @id",
+                "SELECT Id, Username, Role, password, First_Name AS FirstName, Last_Name AS LastName, Email FROM `User` WHERE Id = @id",
                 new { id });
         }
 
         public async Task<int> UpdateAsync(User user)
         {
             using var conn = _dapper.CreateConnection();
-            var sql = "UPDATE `User` SET Username = @Username, Role = @Role WHERE Id = @Id";
-            return await conn.ExecuteAsync(sql, new { user.Username, user.Role, user.Id });
-        }
-
-        public async Task<int> UpdateAsync(int id, User user)
-        {
-            using var conn = _dapper.CreateConnection();
-            string sql;
-            if (!string.IsNullOrEmpty(user.Password))
-            {
-                sql = "UPDATE `User` SET Username = @Username, Password = @Password, Role = @Role WHERE Id = @Id";
-                return await conn.ExecuteAsync(sql, new { user.Username, user.Password, user.Role, Id = id });
-            }
-            else
-            {
-                sql = "UPDATE `User` SET Username = @Username, Role = @Role WHERE Id = @Id";
-                return await conn.ExecuteAsync(sql, new { user.Username, user.Role, Id = id });
-            }
+            var sql = @"UPDATE `User` 
+                        SET 
+                            Username = @Username, 
+                            Password = @Password,
+                            Role = @Role, 
+                            First_Name = @FirstName, 
+                            Last_Name = @LastName, 
+                            Email = @Email
+                        WHERE Id = @Id";
+            return await conn.ExecuteAsync(sql, new 
+            { 
+                user.Username, 
+                user.Password, 
+                user.Role, 
+                user.FirstName, 
+                user.LastName, 
+                user.Email, 
+                user.Id 
+            });
         }
 
         public async Task<int> CreateAsync(User user)
@@ -71,10 +72,6 @@ namespace ParkingLotWEB.Database
             var user = await GetByUsernameAsync(username);
             if (user == null)
                 return null;
-            System.Console.WriteLine($"User found: {user.Username}");
-            System.Console.WriteLine($"Password: {password}");
-            System.Console.WriteLine($"Hashed Password: {user.Password}");
-            System.Console.WriteLine($"Hashed Password: {BCrypt.Net.BCrypt.HashPassword(password)}");
 
             if (BCrypt.Net.BCrypt.Verify(password, user.Password))
                 return user;

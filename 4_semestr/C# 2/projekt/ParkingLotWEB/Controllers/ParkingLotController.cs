@@ -127,10 +127,37 @@ public class ParkingLotController : Controller
             {
                 ParkingSpaceId = ps.ParkingSpaceId,
                 Status = ps.Status,
-                SpaceNumber = ps.SpaceNumber // Předpokládám, že tato vlastnost existuje v ParkingSpaceDto
+                SpaceNumber = ps.SpaceNumber
             }).ToList()
         };
 
         return View(parkingLotViewModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ParkCar(int ParkingLotId, string LicensePlate)
+    {
+        Console.WriteLine($"ParkingLotId: {ParkingLotId}, LicensePlate: {LicensePlate}");
+        var response = await _apiClient.PostAsync($"api/ParkingSpaceApi/occupy/{ParkingLotId}", new { licensePlate = LicensePlate });
+        if (response.IsSuccessStatusCode)
+            TempData["Success"] = "Auto bylo úspěšně zaparkováno.";
+        else
+            TempData["Error"] = "Nepodařilo se zaparkovat auto.";
+
+        return RedirectToAction("Details", new { id = ParkingLotId });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ReleaseCar(int ParkingSpaceId, int ParkingLotId)
+    {
+        Console.WriteLine($"ParkingSpaceId: {ParkingSpaceId}, ParkingLotId: {ParkingLotId}");
+        var req = new { ParkingSpaceId = ParkingSpaceId, ParkingLotId = ParkingLotId };
+        var response = await _apiClient.PostAsync("api/ParkingSpaceApi/release", req);
+        if (response.IsSuccessStatusCode)
+            TempData["Success"] = "Místo bylo uvolněno.";
+        else
+            TempData["Error"] = "Nepodařilo se uvolnit místo.";
+
+        return RedirectToAction("Details", new { id = ParkingLotId });
     }
 }

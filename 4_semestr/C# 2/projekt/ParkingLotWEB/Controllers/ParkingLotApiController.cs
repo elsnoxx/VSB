@@ -89,6 +89,8 @@ public class ParkingLotApiController : ControllerBase
         // Získání aut uživatele
         var userCars = await _userRepo.GetCarsByUserIdAsync(userId); 
 
+        var occupiedPlates = await _spaceRepo.GetAllOccupiedLicensePlatesAsync();
+
         var details = new ParkingLotDetailsViewModel
         {
             ParkingLotId = lot.ParkingLotId,
@@ -109,7 +111,8 @@ public class ParkingLotApiController : ControllerBase
                 SpaceNumber = s.SpaceNumber,
                 Status = s.Status,
                 OwnerId = s.OwnerId
-            }).ToList()
+            }).ToList(),
+            OccupiedLicensePlates = occupiedPlates.ToList()
         };
 
         return Ok(details);

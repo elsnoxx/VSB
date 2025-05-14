@@ -65,8 +65,14 @@ namespace ApiCalls
         {
             var content = new StringContent(data, Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync(endpoint, content);
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                // Vypište detail chyby do konzole
+                Console.WriteLine($"API ERROR: {response.StatusCode} - {responseBody}");
+                throw new HttpRequestException($"API ERROR: {response.StatusCode} - {responseBody}");
+            }
+            return responseBody;
         }
     }
 }

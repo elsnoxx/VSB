@@ -4,6 +4,7 @@ namespace ParkingLotWEB.Models
     {
         public string LicensePlate { get; set; }
         public string ParkingLotName { get; set; }
+        public int ParkingSpaceId { get; set; }
         public DateTime ArrivalTime { get; set; }
         public int ParkingLotId { get; set; }
     }

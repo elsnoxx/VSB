@@ -1,0 +1,56 @@
+@model IEnumerable<ApiEndpointViewModel>
+
+@{
+    ViewData["Title"] = "API Endpoints";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+
+<div class="container mt-4" style="margin-bottom: 80px;">
+    <h1 class="mb-4">API Endpoints</h1>
+    @foreach (var group in Model.GroupBy(e => e.Controller))
+    {
+        <div class="card mb-4 shadow">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h5 mb-0">@group.Key</h2>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-striped mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>HTTP</th>
+                            <th>Route</th>
+                            <th>Action</th>
+                            <th>Parameters</th>
+                            <th>Return</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var ep in group)
+                    {
+                        <tr>
+                            <td><span class="badge bg-secondary">@ep.HttpMethod</span></td>
+                            <td><code>@ep.Route</code></td>
+                            <td>@ep.Action</td>
+                            <td>
+                                @if (ep.Parameters != null && ep.Parameters.Any())
+                                {
+                                    @foreach (var p in ep.Parameters)
+                                    {
+                                        <span class="badge bg-info text-dark me-1">@p.Name: <span class="fw-bold">@p.Type</span></span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted">žádné</span>
+                                }
+                            </td>
+                            <td><span class="fw-bold">@ep.ReturnType</span></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

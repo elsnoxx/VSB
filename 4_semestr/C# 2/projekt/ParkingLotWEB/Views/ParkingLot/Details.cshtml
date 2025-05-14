@@ -55,7 +55,11 @@
                         <circle cx="16" cy="16" r="12" fill="red" stroke="black" stroke-width="2"/>
                     </svg>
                     <div>@space.SpaceNumber</div>
-                    <button class="btn btn-sm btn-danger mt-1" onclick="releaseCar(@space.ParkingSpaceId)">Odjet</button>
+                    <form asp-action="ReleaseCar" asp-controller="ParkingLot" method="post" style="display:inline;">
+                        <input type="hidden" name="ParkingSpaceId" value="@space.ParkingSpaceId" />
+                        <input type="hidden" name="ParkingLotId" value="@Model.ParkingLotId" />
+                        <button type="submit" class="btn btn-sm btn-danger mt-1">Odjet</button>
+                    </form>
                 </div>
             }
         </div>
@@ -63,29 +67,16 @@
         <h4 class="mt-4">Zaparkovat auto</h4>
         <div class="card shadow-sm mb-4">
             <div class="card-body">
-                <form id="parkForm">
-                    <div class="mb-3">
-                        <label for="parkingSpaceSelect" class="form-label">Vyberte volné parkovací místo</label>
-                        <select id="parkingSpaceSelect" class="form-select" required>
-                            <option value="" disabled selected>Vyberte místo...</option>
-                            @foreach (var space in Model.ParkingSpacesWithDetails.Where(s => s.Status == "available"))
-                            {
-                                <option value="@space.ParkingSpaceId">Místo @space.SpaceNumber</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="userCarSelect" class="form-label">Vyberte auto</label>
-                        <select id="userCarSelect" class="form-select" required>
-                            <option value="" disabled selected>Vyberte auto...</option>
-                            @foreach (var car in Model.UserCars)
-                            {
-                                <option value="@car.LicensePlate">@car.LicensePlate - @car.BrandModel</option>
-                            }
-                        </select>
-                    </div>
-                    <button type="button" class="btn btn-success" onclick="parkCar()">Zaparkovat</button>
-                </form>
+                @foreach (var car in Model.UserCars.Where(car => !Model.OccupiedLicensePlates.Contains(car.LicensePlate)))
+                {
+                    <form asp-action="ParkCar" asp-controller="ParkingLot" method="post" style="display:inline;">
+                        <input type="hidden" name="ParkingLotId" value="@Model.ParkingLotId" />
+                        <input type="hidden" name="LicensePlate" value="@car.LicensePlate" />
+                        <button type="submit" class="btn btn-success mb-2">
+                            Zaparkovat @car.LicensePlate - @car.BrandModel
+                        </button>
+                    </form>
+                }
             </div>
         </div>
     </div>
@@ -113,36 +104,5 @@
             }
         });
 
-        async function releaseCar(parkingSpaceId) {
-            if (!confirm("Opravdu chcete toto místo uvolnit?")) return;
-            const response = await fetch(`/api/ParkingSpaceApi/release/${parkingSpaceId}`, { method: "POST" });
-            if (response.ok) {
-                location.reload();
-            } else {
-                alert("Nepodařilo se uvolnit místo.");
-            }
-        }
-
-        async function parkCar() {
-            const parkingSpaceId = document.getElementById('parkingSpaceSelect').value;
-            const licensePlate = document.getElementById('userCarSelect').value;
-
-            if (!parkingSpaceId || !licensePlate) {
-                alert("Vyberte parkovací místo a auto.");
-                return;
-            }
-
-            const response = await fetch(`/api/ParkingSpaceApi/occupy/${parkingSpaceId}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ licensePlate })
-            });
-
-            if (response.ok) {
-                location.reload();
-            } else {
-                alert("Nepodařilo se zaparkovat auto.");
-            }
-        }
     </script>
 }

@@ -30,11 +30,14 @@ namespace ParkingLotWEB.Database
         public async Task<IEnumerable<ParkingSpace>> GetAvailableSpacesAsync(int parkingLotId)
         {
             string sql = @"
-            SELECT * 
-            FROM ParkingSpace 
-            WHERE parking_lot_id = @ParkingLotId 
-            AND status = 'available'";
-
+                SELECT 
+                    parking_space_id AS ParkingSpaceId,
+                    parking_lot_id AS ParkingLotId,
+                    space_number AS SpaceNumber,
+                    status AS Status
+                FROM ParkingSpace
+                WHERE parking_lot_id = @ParkingLotId 
+                AND status = 'available'";
             return await _repository.QueryAsync<ParkingSpace>(sql, new { ParkingLotId = parkingLotId });
         }
 
@@ -66,6 +69,10 @@ namespace ParkingLotWEB.Database
         {
             string sql = @"INSERT INTO Occupancy (parking_space_id, license_plate, start_time) VALUES (@ParkingSpaceId, @LicensePlate, @StartTime)";
             await _repository.ExecuteAsync(sql, new { ParkingSpaceId = parkingSpaceId, LicensePlate = licensePlate, StartTime = DateTime.Now });
+
+            // Změň status na 'occupied'
+            string updateStatusSql = @"UPDATE ParkingSpace SET status = 'occupied' WHERE parking_space_id = @ParkingSpaceId";
+            await _repository.ExecuteAsync(updateStatusSql, new { ParkingSpaceId = parkingSpaceId });
         }
 
         // Uvolnění obsazenosti parkovacího místa
@@ -109,6 +116,11 @@ namespace ParkingLotWEB.Database
                         ArrivalTime = occupancy.start_time,
                         DepartureTime = endTime
                     }, tran);
+
+                // 4. Změň status na 'available'
+                await conn.ExecuteAsync(
+                    @"UPDATE ParkingSpace SET status = 'available' WHERE parking_space_id = @ParkingSpaceId",
+                    new { ParkingSpaceId = parkingSpaceId }, tran);
             });
         }
 
@@ -135,7 +147,8 @@ namespace ParkingLotWEB.Database
                             ps.parking_lot_id AS ParkingLotId,
                             ps.space_number AS SpaceNumber,
                             ps.status AS Status,
-                            c.user_id AS OwnerId
+                            c.user_id AS OwnerId,
+                            c.car_id AS CarId
                         FROM ParkingSpace ps
                         LEFT JOIN Occupancy o ON ps.parking_space_id = o.parking_space_id AND o.end_time IS NULL
                         LEFT JOIN Car c ON o.license_plate = c.license_plate
@@ -180,6 +193,17 @@ namespace ParkingLotWEB.Database
                         LEFT JOIN Occupancy o ON ps.parking_space_id = o.parking_space_id AND o.end_time IS NULL
                         WHERE ps.parking_space_id = @ParkingSpaceId";
             return await conn.QueryFirstOrDefaultAsync<ParkingSpaceDetails>(sql, new { ParkingSpaceId = parkingSpaceId });
+        }
+
+        public async Task<IEnumerable<string>> GetAllOccupiedLicensePlatesAsync()
+        {
+            using var conn = _repository.CreateConnection();
+            var sql = @"
+                SELECT o.license_plate
+                FROM ParkingSpace ps
+                JOIN Occupancy o ON ps.parking_space_id = o.parking_space_id
+                WHERE o.end_time IS NULL";
+            return await conn.QueryAsync<string>(sql);
         }
     }
 }

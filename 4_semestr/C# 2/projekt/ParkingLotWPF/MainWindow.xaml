@@ -1,12 +1,14 @@
 ﻿<Window x:Class="ParkingLotWPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParkingLotWPF"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        xmlns:views="clr-namespace:ParkingLotWPF.Views"
+        Title="Parking Lot Manager" Height="450" Width="800">
+    <DockPanel>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Background="#EEE" Margin="0,0,0,5">
+            <Button Content="Uživatelé" Margin="5" Padding="10,5" Command="{Binding ShowUsersCommand}"/>
+            <Button Content="Parkoviště" Margin="5" Padding="10,5" Command="{Binding ShowParkingLotsCommand}"/>
+        </StackPanel>
+        <ContentControl Content="{Binding CurrentPage}" />
+    </DockPanel>
 </Window>

@@ -4,12 +4,12 @@ docker run --detach --name parkinglot --env MARIADB_ROOT_PASSWORD=myparkinglot -
 user----> webapi
 pass----> wabapplogin
 
+popis api na -> /ApiDescription
+
+
 1. Zobrazení parkovišť na mapě včetně aktuálních počtů volných míst
-Chybí: Implementace mapy, která zobrazuje parkoviště s aktuálními počty volných míst.
-Řešení:
-Použijte knihovnu jako Leaflet.js pro zobrazení mapy.
-Přidejte endpoint v API, který vrátí seznam parkovišť s počty volných míst.
-Aktualizujte view Index.cshtml nebo jiné relevantní view, aby zobrazovalo mapu.
+[x]     - done na uvodni strance
+[]      - problem s aktualnim poctem mist
 
 
 2. Obsazení parkovacího místa (náhodné přiřazení volného místa)
