@@ -105,7 +105,6 @@ def create_reservation(request, room_id):
             "guest_type": "normal"
         }
     )
-    # Výchozí datumy (např. dnes a zítra)
     from datetime import date, timedelta
     default_check_in = date.today()
     default_check_out = date.today() + timedelta(days=1)
@@ -119,8 +118,17 @@ def create_reservation(request, room_id):
             reservation.room = room
             reservation.accommodation_price = price
             reservation.status = "Nová"
-            # případně nastav další pole (employee, payment, ...)
+            # Vytvoř nový payment a přiřaď ho k rezervaci
+            from .models import Payment
+            payment = Payment.objects.create(
+                total_accommodation=price,
+                total_expenses=0
+            )
+            reservation.payment = payment
             reservation.save()
+            # Nastav pokoj jako obsazený
+            room.is_occupied = True
+            room.save()
             return redirect('reservation_list')
     else:
         form = ReservationForm(initial={

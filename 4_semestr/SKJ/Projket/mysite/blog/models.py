@@ -74,7 +74,6 @@ class Reservation(models.Model):
     reservation_id = models.AutoField(primary_key=True)
     guest = models.ForeignKey(Guest, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     creation_date = models.DateField(auto_now_add=True)
     check_in_date = models.DateField()
     check_out_date = models.DateField()
