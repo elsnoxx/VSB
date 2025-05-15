@@ -9,6 +9,9 @@ namespace ParkingLotWEB.Models
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public required string Email { get; set; }
+
+        public string Role { get; set; }
+        public string Password { get; set; }
         
 
         public List<CarDto> Cars { get; set; } = new();

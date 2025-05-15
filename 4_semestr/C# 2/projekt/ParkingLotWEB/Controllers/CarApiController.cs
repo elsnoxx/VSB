@@ -21,12 +21,10 @@ public class CarApiController : ControllerBase
     [HttpPost("new")]
     public async Task<IActionResult> Create([FromBody] CarCreateDto carDto)
     {
-        // Debug: Získání surového JSONu z těla požadavku
         using var reader = new StreamReader(Request.Body);
         var rawJson = await reader.ReadToEndAsync();
         Console.WriteLine($"Raw JSON received: {rawJson}");
 
-        // Debug: Zobrazení deserializovaného objektu
         Console.WriteLine($"Deserialized JSON: {JsonSerializer.Serialize(carDto)}");
 
         if (string.IsNullOrWhiteSpace(carDto.LicensePlate) ||

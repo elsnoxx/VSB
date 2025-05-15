@@ -57,8 +57,20 @@
     </ApplicationDefinition>
     <Compile Include="Converters\PasswordMaskConverter.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
+    <Compile Include="Popup\CarRegistrationDialog.xaml.cs">
+      <DependentUpon>CarRegistrationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\PasswordResetDialog.xaml.cs">
+      <DependentUpon>PasswordResetDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\UserDataEditing.xaml.cs">
+      <DependentUpon>UserDataEditing.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Popup\UserEditDialog.xaml.cs">
       <DependentUpon>UserEditDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\UserRegistrationDialog.xaml.cs">
+      <DependentUpon>UserRegistrationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\UsersPageViewModel.cs" />
@@ -80,7 +92,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Popup\CarRegistrationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Popup\PasswordResetDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Popup\UserDataEditing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Popup\UserEditDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Popup\UserRegistrationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,14 +1,31 @@
 ﻿<UserControl x:Class="ParkingLotWPF.Views.UsersPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ParkingLotWPF.Converters">
     <UserControl.Resources>
-        <!-- Converter pro maskování hesla -->
         <local:PasswordMaskConverter x:Key="PasswordMaskConverter"/>
     </UserControl.Resources>
     <Grid>
-        <DataGrid ItemsSource="{Binding Users}" AutoGenerateColumns="False" MouseDoubleClick="DataGrid_MouseDoubleClick">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Tlačítko -->
+            <RowDefinition Height="*"/>
+            <!-- DataGrid -->
+        </Grid.RowDefinitions>
+        <Button Content="Přidat uživatele"
+                Width="150"
+                Margin="10"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="AddUser_Click"
+                Grid.Row="0"/>
+        <DataGrid ItemsSource="{Binding Users}"
+                  AutoGenerateColumns="False"
+                  MouseDoubleClick="DataGrid_MouseDoubleClick"
+                  IsReadOnly="True"
+                  Grid.Row="1">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" />
                 <DataGridTextColumn Header="Jméno" Binding="{Binding FirstName}" />
                 <DataGridTextColumn Header="Příjmení" Binding="{Binding LastName}" />
                 <DataGridTextColumn Header="Uživatelské jméno" Binding="{Binding Username}" />

@@ -13,7 +13,7 @@ public class UsersPageViewModel : INotifyPropertyChanged
         LoadUsersAsync();
     }
 
-    private async void LoadUsersAsync()
+    public async Task LoadUsersAsync()
     {
         await ReloadUsersAsync();
     }
