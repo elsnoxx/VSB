@@ -9,9 +9,11 @@
                 <i class="fas fa-calendar-check me-2"></i>Rezervace #{{ reservation.reservation_id }}
             </h3>
             <div>
+                {% if user.is_superuser %}
                 <a href="" class="btn btn-warning">
                     <i class="fas fa-edit me-1"></i>Editovat
                 </a>
+                {% endif %}
             </div>
         </div>
         
@@ -37,9 +39,11 @@
                                 <i class="fas fa-envelope me-2"></i>{{ guest.email }}<br>
                                 <i class="fas fa-phone me-2"></i>{{ guest.phone }}
                             </p>
+                            {% if user.is_superuser %}
                             <a href="{% url 'guest_detail' guest.guest_id %}" class="btn btn-outline-primary btn-sm">
                                 <i class="fas fa-info-circle me-1"></i>Detail hosta
                             </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -133,7 +137,36 @@
                             <h5 class="mb-0"><i class="fas fa-concierge-bell me-2"></i>Služby</h5>
                         </div>
                         <div class="card-body">
-                            {% if used_services %}
+                            
+
+                            {% if user.is_superuser and not payment.is_paid %}
+                            <!-- Formulář pro přidání služby -->
+                            <form method="post" action="{% url 'add_service_to_reservation' reservation.reservation_id %}" class="row g-2 align-items-end mt-3">
+                                {% csrf_token %}
+                                <div class="col-md-6">
+                                    <label for="service" class="form-label">Služba</label>
+                                    <select name="service_id" id="service" class="form-select" required>
+                                        <option value="">Vyberte službu</option>
+                                        {% for service in all_services %}
+                                            <option value="{{ service.service_id }}">{{ service.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="quantity" class="form-label">Množství</label>
+                                    <input type="number" name="quantity" id="quantity" class="form-control" min="1" value="1" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-success w-100"><i class="fas fa-plus"></i> Přidat službu</button>
+                                </div>
+                            </form>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer text-end">
+                            <strong>Celkem za služby: {{ total_services_price }} Kč</strong>
+                        </div>
+
+                        {% if used_services %}
                             <table class="table table-sm">
                                 <thead>
                                     <tr>
@@ -166,33 +199,6 @@
                             {% else %}
                                 <p class="text-muted">Žádné služby nejsou přiřazeny.</p>
                             {% endif %}
-
-                            {% if user.is_superuser and not payment.is_paid %}
-                            <!-- Formulář pro přidání služby -->
-                            <form method="post" action="{% url 'add_service_to_reservation' reservation.reservation_id %}" class="row g-2 align-items-end mt-3">
-                                {% csrf_token %}
-                                <div class="col-md-6">
-                                    <label for="service" class="form-label">Služba</label>
-                                    <select name="service_id" id="service" class="form-select" required>
-                                        <option value="">Vyberte službu</option>
-                                        {% for service in all_services %}
-                                            <option value="{{ service.service_id }}">{{ service.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="quantity" class="form-label">Množství</label>
-                                    <input type="number" name="quantity" id="quantity" class="form-control" min="1" value="1" required>
-                                </div>
-                                <div class="col-md-3">
-                                    <button type="submit" class="btn btn-success w-100"><i class="fas fa-plus"></i> Přidat službu</button>
-                                </div>
-                            </form>
-                            {% endif %}
-                        </div>
-                        <div class="card-footer text-end">
-                            <strong>Celkem za služby: {{ total_services_price }} Kč</strong>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -223,6 +229,59 @@
     </div>
 </div>
 
+{% if reservation.status == 'Closed' or reservation.status == 'Ukončena' %}
+    {% if not feedback_exists and not user.is_superuser %}
+        <button class="btn btn-info mt-3" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+            <i class="fas fa-comment-dots"></i> Přidat hodnocení
+        </button>
+    {% endif %}
+{% endif %}
+
+<!-- Modal pro feedback -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="feedbackForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="feedbackModalLabel">Přidat hodnocení</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zavřít"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="rating" class="form-label">Hodnocení (1-5)</label>
+            <input type="number" min="1" max="5" class="form-control" id="rating" name="rating" required>
+          </div>
+          <div class="mb-3">
+            <label for="comment" class="form-label">Komentář</label>
+            <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+          </div>
+          <div id="feedback-error" class="text-danger small"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zavřít</button>
+          <button type="submit" class="btn btn-primary">Odeslat</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% if user.is_superuser and feedback_list %}
+    <div class="alert alert-info mt-4">
+        <h5><i class="fas fa-comments"></i> Hodnocení hostů k této rezervaci</h5>
+        <ul class="list-group">
+            {% for fb in feedback_list %}
+                <li class="list-group-item">
+                    <strong>{{ fb.guest.firstname }} {{ fb.guest.lastname }}</strong>
+                    <span class="badge bg-primary ms-2">{{ fb.rating }}/5</span><br>
+                    <span class="text-muted">{{ fb.feedback_date }}</span><br>
+                    {{ fb.comment|default:"(bez komentáře)" }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
 <script>
     const paymentModal = document.getElementById('paymentModal');
     paymentModal.addEventListener('show.bs.modal', function (event) {
@@ -233,5 +292,46 @@
         const paymentForm = document.getElementById('paymentForm');
         paymentForm.action = `/payment/${paymentId}/mark-as-paid-from-reservation/`;
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const feedbackForm = document.getElementById('feedbackForm');
+    if (feedbackForm) {
+        feedbackForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const rating = document.getElementById('rating').value;
+            const comment = document.getElementById('comment').value;
+            const errorDiv = document.getElementById('feedback-error');
+            errorDiv.textContent = '';
+            fetch("{% url 'api_add_feedback' reservation.reservation_id %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `rating=${encodeURIComponent(rating)}&comment=${encodeURIComponent(comment)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Skryj modal
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('feedbackModal'));
+                    modal.hide();
+                    // Zobraz feedback na stránce (např. pod tlačítkem)
+                    const feedbackSection = document.createElement('div');
+                    feedbackSection.className = "alert alert-success mt-3";
+                    feedbackSection.innerHTML = `<strong>Vaše hodnocení:</strong> <br> Hodnocení: ${data.rating}/5 <br> Komentář: ${data.comment ? data.comment : '(bez komentáře)'} <br> Datum: ${data.date}`;
+                    feedbackForm.parentNode.parentNode.parentNode.insertBefore(feedbackSection, feedbackForm.parentNode.parentNode.nextSibling);
+                    // Skryj tlačítko pro přidání feedbacku
+                    document.querySelector('[data-bs-target="#feedbackModal"]').style.display = 'none';
+                } else {
+                    errorDiv.textContent = data.error || "Chyba při odesílání.";
+                }
+            })
+            .catch(() => {
+                errorDiv.textContent = "Chyba při komunikaci se serverem.";
+            });
+        });
+    }
+});
 </script>
 {% endblock %}

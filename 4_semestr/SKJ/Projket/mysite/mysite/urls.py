@@ -35,4 +35,6 @@ urlpatterns = [
     path('reservation/<int:reservation_id>/remove-service/<int:usage_id>/', views.remove_service_from_reservation, name='remove_service_from_reservation'),
     path('my-reservations/', views.my_reservations, name='my_reservations'),
     path('service/management/', views.service_management, name='service_management'),
+    path('ajax/guest-autocomplete/', views.guest_autocomplete, name='guest_autocomplete'),
+    path('api/reservation/<int:reservation_id>/feedback/', views.api_add_feedback, name='api_add_feedback'),
 ]

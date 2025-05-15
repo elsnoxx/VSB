@@ -1,13 +1,20 @@
 from django import forms
-from .models import Guest, Reservation, Payment, Employee, Room, RoomType, Address, Service
+from .models import Guest, Reservation, Payment, Employee, Room, RoomType, Service, Feedback
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 class GuestForm(forms.ModelForm):
     class Meta:
         model = Guest
-        fields = ['firstname', 'lastname', 'email', 'phone', 'birth_date', 'notes']
-    
+        fields = '__all__'
+        widgets = {
+            'firstname': forms.TextInput(attrs={'class': 'form-control'}),
+            'lastname': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'birth_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        }
+
     # Ujisti se, že guest_type má výchozí hodnotu 'normal'
     guest_type = forms.CharField(widget=forms.HiddenInput(), initial='normal')
 
@@ -98,3 +105,12 @@ class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
         fields = ['name', 'description', 'price']
+        
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
+        fields = ['rating', 'comment']
+        widgets = {
+            'rating': forms.NumberInput(attrs={'min': 1, 'max': 5, 'class': 'form-control'}),
+            'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }

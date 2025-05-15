@@ -8,6 +8,9 @@ from .forms import GuestForm, ReservationForm, RoomForm, EmployeeForm, CustomUse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
+from .models import Reservation, Feedback, Guest
+from .forms import FeedbackForm
 from django.views.decorators.http import require_POST
 from django.contrib.admin.views.decorators import staff_member_required
 import json
@@ -203,7 +206,7 @@ def guest_update(request, guest_id):
         form = GuestForm(request.POST, instance=guest)
         if form.is_valid():
             form.save()
-            return redirect('guest_list')
+            return redirect('guest_detail', guest_id=guest.pk)
     else:
         form = GuestForm(instance=guest)
     return render(request, 'management/guest/guest_form.html', {'form': form})
@@ -223,6 +226,15 @@ def guest_delete(request, guest_id):
 # Seznam rezervací
 def reservation_list(request):
     reservations = Reservation.objects.all()
+    if request.user.is_superuser:
+        guest = request.GET.get('guest')
+        check_in = request.GET.get('check_in')
+        if guest:
+            reservations = reservations.filter(guest__firstname__icontains=guest) | reservations.filter(guest__lastname__icontains=guest)
+        if check_in:
+            reservations = reservations.filter(check_in_date=check_in)
+    else:
+        reservations = reservations.filter(guest__user=request.user)
     return render(request, 'management/reservation/reservation_list.html', {'reservations': reservations})
 
 
@@ -242,7 +254,10 @@ def reservation_detail(request, reservation_id):
 
     # Výpočet celkové ceny služeb
     total_services_price = sum([us.total_price for us in used_services])
-
+    
+    feedback_exists = Feedback.objects.filter(reservation=reservation, guest=guest).exists()
+    feedback_list = Feedback.objects.filter(reservation=reservation)
+    
     context = {
         'reservation': reservation,
         'guest': guest,
@@ -252,6 +267,8 @@ def reservation_detail(request, reservation_id):
         'all_services': all_services,
         'used_services': used_services,
         'total_services_price': total_services_price,
+        'feedback_exists': feedback_exists,
+        'feedback_list': feedback_list,
     }
     return render(request, 'management/reservation/reservation_detail.html', context)
 
@@ -302,6 +319,8 @@ def mark_payment_as_paid_from_reservation(request, reservation_id):
             room = reservation.room
             room.is_occupied = False
             room.save()
+            reservation.status = 'Closed'
+            reservation.save()
         return redirect('reservation_detail', reservation_id=reservation_id)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
@@ -451,4 +470,37 @@ def service_management(request):
     else:
         form = ServiceForm()
     return render(request, 'management/service/service_management.html', {'services': services, 'form': form})
+
+def guest_autocomplete(request):
+    q = request.GET.get('q', '')
+    guests = Guest.objects.filter(
+        firstname__icontains=q
+    ) | Guest.objects.filter(
+        lastname__icontains=q
+    )
+    results = [f"{g.firstname} {g.lastname}" for g in guests.distinct()[:10]]
+    return JsonResponse(results, safe=False)
+
+@login_required
+@require_POST
+def api_add_feedback(request, reservation_id):
+    reservation = get_object_or_404(Reservation, pk=reservation_id)
+    guest = get_object_or_404(Guest, user=request.user)
+    if reservation.status not in ['Closed', 'Ukončena'] or reservation.guest != guest:
+        return JsonResponse({'error': 'Not allowed'}, status=403)
+    if Feedback.objects.filter(reservation=reservation, guest=guest).exists():
+        return JsonResponse({'error': 'Feedback already exists'}, status=400)
+    form = FeedbackForm(request.POST)
+    if form.is_valid():
+        feedback = form.save(commit=False)
+        feedback.guest = guest
+        feedback.reservation = reservation
+        feedback.save()
+        return JsonResponse({
+            'success': True,
+            'rating': feedback.rating,
+            'comment': feedback.comment,
+            'date': feedback.feedback_date.strftime('%d.%m.%Y')
+        })
+    return JsonResponse({'error': 'Invalid data'}, status=400)
 

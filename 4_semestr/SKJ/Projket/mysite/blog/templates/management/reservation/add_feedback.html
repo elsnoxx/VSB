@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card mx-auto" style="max-width: 500px;">
+        <div class="card-body">
+            <h4 class="mb-3">Přidat hodnocení rezervace #{{ reservation.reservation_id }}</h4>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Hodnocení (1-5)</label>
+                    {{ form.rating }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Komentář</label>
+                    {{ form.comment }}
+                </div>
+                <button type="submit" class="btn btn-primary">Odeslat hodnocení</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
