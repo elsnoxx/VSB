@@ -110,7 +110,7 @@
                                     <strong class="text-primary">{{ payment.total_accommodation|add:payment.total_expenses }} Kč</strong>
                                 </li>
                             </ul>
-                            {% if not payment.is_paid %}
+                            {% if user.is_superuser and not payment.is_paid %}
                             <button class="btn btn-success btn-block w-100 mt-3" 
                                 data-bs-toggle="modal" 
                                 data-bs-target="#paymentModal" 
@@ -122,6 +122,76 @@
                         <div class="card-footer text-muted">
                             <i class="fas fa-calendar-check me-1"></i>Datum platby: 
                             {{ payment.payment_date|default:"Nezaplaceno" }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Služby rezervace -->
+                <div class="col-12 mb-4">
+                    <div class="card h-100 border-info">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="fas fa-concierge-bell me-2"></i>Služby</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if used_services %}
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Název služby</th>
+                                        <th>Množství</th>
+                                        <th>Cena celkem</th>
+                                        {% if user.is_superuser and not payment.is_paid %}
+                                        <th></th>
+                                        {% endif %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for us in used_services %}
+                                    <tr>
+                                        <td>{{ us.service.name }}</td>
+                                        <td>{{ us.quantity }}</td>
+                                        <td>{{ us.total_price }} Kč</td>
+                                        {% if user.is_superuser and not payment.is_paid %}
+                                        <td>
+                                            <form method="post" action="{% url 'remove_service_from_reservation' reservation.reservation_id us.usage_id %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                            </form>
+                                        </td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                                <p class="text-muted">Žádné služby nejsou přiřazeny.</p>
+                            {% endif %}
+
+                            {% if user.is_superuser and not payment.is_paid %}
+                            <!-- Formulář pro přidání služby -->
+                            <form method="post" action="{% url 'add_service_to_reservation' reservation.reservation_id %}" class="row g-2 align-items-end mt-3">
+                                {% csrf_token %}
+                                <div class="col-md-6">
+                                    <label for="service" class="form-label">Služba</label>
+                                    <select name="service_id" id="service" class="form-select" required>
+                                        <option value="">Vyberte službu</option>
+                                        {% for service in all_services %}
+                                            <option value="{{ service.service_id }}">{{ service.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="quantity" class="form-label">Množství</label>
+                                    <input type="number" name="quantity" id="quantity" class="form-control" min="1" value="1" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-success w-100"><i class="fas fa-plus"></i> Přidat službu</button>
+                                </div>
+                            </form>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer text-end">
+                            <strong>Celkem za služby: {{ total_services_price }} Kč</strong>
                         </div>
                     </div>
                 </div>

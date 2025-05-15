@@ -9,43 +9,23 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         html {
-            position: relative;
             min-height: 100%;
         }
 
         body {
-            /* Přidání spodního paddingu, který je stejně velký jako výška footeru */
-            margin-bottom: 80px;
-            min-height: 90vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
+            margin: 0;
         }
 
         .content-wrapper {
             flex: 1 0 auto;
-            /* padding-bottom: 20px; */
         }
 
         .footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 80px;
-            /* Nastavte fixní výšku footeru */
             background-color: #343a40;
             color: white;
-        }
-
-        /* Pro mobilní zařízení, kde může být footer vyšší */
-        @media (max-width: 767px) {
-            body {
-                margin-bottom: 120px;
-            }
-
-            .footer {
-                height: auto;
-                min-height: 120px;
-            }
         }
     </style>
 </head>

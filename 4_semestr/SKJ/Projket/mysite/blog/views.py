@@ -3,11 +3,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.contrib import messages
-from .models import Guest, Reservation, Room, Employee, Payment
+from .models import Guest, Reservation, Room, Employee, Payment, ServiceUsage
 from .forms import GuestForm, ReservationForm, RoomForm, EmployeeForm, CustomUserCreationForm, GuestRegisterForm
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.contrib.admin.views.decorators import staff_member_required
 import json
 
 
@@ -71,6 +73,11 @@ def profile_edit(request):
         form = UserChangeForm(instance=request.user)
     return render(request, 'profile_edit.html', {'form': form})
 
+@login_required
+def my_reservations(request):
+    reservations = Reservation.objects.filter(guest__user=request.user)
+    return render(request, 'management/reservation/reservation_list.html', {'reservations': reservations, 'my_only': True})
+
 # Hlavní stránka
 def index(request):
     rooms = Room.objects.all()
@@ -129,7 +136,7 @@ def create_reservation(request, room_id):
             # Nastav pokoj jako obsazený
             room.is_occupied = True
             room.save()
-            return redirect('reservation_list')
+            return redirect('reservation_detail', reservation_id=reservation.pk)
     else:
         form = ReservationForm(initial={
             'check_in_date': default_check_in,
@@ -226,13 +233,61 @@ def reservation_detail(request, reservation_id):
     guest = reservation.guest
     room = reservation.room
     payment = reservation.payment
+    is_admin = request.user.is_staff or request.user.is_superuser
+
+    # Všechny služby
+    from .models import Service, ServiceUsage
+    all_services = Service.objects.all()
+    used_services = ServiceUsage.objects.filter(reservation=reservation).select_related('service')
+
+    # Výpočet celkové ceny služeb
+    total_services_price = sum([us.total_price for us in used_services])
+
     context = {
         'reservation': reservation,
         'guest': guest,
         'room': room,
         'payment': payment,
+        'is_admin': is_admin,
+        'all_services': all_services,
+        'used_services': used_services,
+        'total_services_price': total_services_price,
     }
     return render(request, 'management/reservation/reservation_detail.html', context)
+
+
+@login_required
+@require_POST
+def add_service_to_reservation(request, reservation_id):
+    from .models import Service, ServiceUsage
+    reservation = get_object_or_404(Reservation, pk=reservation_id)
+    service_id = request.POST.get('service_id')
+    quantity = int(request.POST.get('quantity', 1))
+    service = get_object_or_404(Service, pk=service_id)
+    price = service.price
+    total_price = price * quantity
+
+    ServiceUsage.objects.create(
+        reservation=reservation,
+        service=service,
+        quantity=quantity,
+        total_price=total_price
+    )
+    payment = reservation.payment
+    payment.total_expenses += total_price
+    payment.save()
+    return redirect('reservation_detail', reservation_id=reservation_id)
+
+@login_required
+@require_POST
+def remove_service_from_reservation(request, reservation_id, usage_id):
+    usage = get_object_or_404(ServiceUsage, pk=usage_id, reservation_id=reservation_id)
+    # Odečíst cenu služby z platby
+    payment = usage.reservation.payment
+    payment.total_expenses -= usage.total_price
+    payment.save()
+    usage.delete()
+    return redirect('reservation_detail', reservation_id=reservation_id)
 
 
 @login_required
@@ -244,6 +299,9 @@ def mark_payment_as_paid_from_reservation(request, reservation_id):
             payment.is_paid = True
             payment.payment_date = date.today()
             payment.save()
+            room = reservation.room
+            room.is_occupied = False
+            room.save()
         return redirect('reservation_detail', reservation_id=reservation_id)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
@@ -371,15 +429,26 @@ def mark_payment_as_paid(request, employee_id):
         payment.is_paid = True
         payment.payment_date = date.today()
         payment.save()
+        # Uvolnění pokoje pro všechny rezervace s tímto payment
+        reservations = Reservation.objects.filter(payment=payment)
+        for reservation in reservations:
+            room = reservation.room
+            room.is_occupied = False
+            room.save()
         return redirect('payment_management')
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-@login_required
-def mark_payment_as_paid(request, employee_id):
+@staff_member_required
+def service_management(request):
+    from .models import Service
+    from .forms import ServiceForm
+    services = Service.objects.all()
     if request.method == "POST":
-        payment = get_object_or_404(Payment, pk=employee_id)
-        payment.is_paid = True
-        payment.save()
-        return redirect('payment_management')
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+        form = ServiceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('service_management')
+    else:
+        form = ServiceForm()
+    return render(request, 'management/service/service_management.html', {'services': services, 'form': form})
 

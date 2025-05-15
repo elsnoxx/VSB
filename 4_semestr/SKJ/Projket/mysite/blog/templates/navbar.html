@@ -19,12 +19,18 @@
                                 <li><a class="dropdown-item" href="{% url 'guest_list' %}">Manage Guests</a></li>
                                 <li><a class="dropdown-item" href="{% url 'payment_management' %}">Manage Payment</a></li>
                                 <li><a class="dropdown-item" href="{% url 'reservation_list' %}">Manage Reservations</a></li>
+                                <li><a class="dropdown-item" href="{% url 'service_management' %}">Service </a></li>
                             </ul>
                         </li>
                     </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'admin:index' %}">Admin Panel</a>
+                </li>
+                {% endif %}
+                {% if user.is_authenticated and not user.is_superuser %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'my_reservations' %}">Moje rezervace</a>
                 </li>
                 {% endif %}
             </ul>

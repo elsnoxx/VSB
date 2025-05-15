@@ -16,7 +16,7 @@
     </thead>
     <tbody>
         {% for reservation in reservations %}
-            <tr class="text-center">
+            <tr class="text-center {% if reservation.payment.is_paid %}table-success{% endif %}">
                 <td>{{ reservation.reservation_id }}</td>
                 <td>{{ reservation.guest }}</td>
                 <td>{{ reservation.room }}</td>
@@ -26,11 +26,21 @@
                 <td>{{ reservation.payment.is_paid|yesno:"Zaplaceno,Nezaplaceno" }}</td>
                 <td>{{ reservation.status }}</td>
                 <td>
-                    <a href="{% url 'reservation_detail' reservation_id=reservation.reservation_id %}" class="btn btn-info btn-sm">Detail</a> |
-                    <a href="" class="btn btn-warning btn-sm">Editovat</a> |
-                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-reservation-id="{{ reservation.reservation_id }}">
-                        Smazat
-                    </button>
+                    {% if user.is_superuser %}
+                        <a href="{% url 'reservation_detail' reservation_id=reservation.reservation_id %}" class="btn btn-info btn-sm">Detail</a>
+                        |
+                        <a href="{% url 'reservation_update' reservation_id=reservation.reservation_id %}" class="btn btn-warning btn-sm">Editovat</a>
+                        |
+                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-reservation-id="{{ reservation.reservation_id }}">
+                            Smazat
+                        </button>
+                    {% else %}
+                        {% if reservation.payment.is_paid %}
+                            <span class="badge bg-success">Uzavřeno a zaplaceno</span>
+                        {% else %}
+                            <a href="{% url 'reservation_detail' reservation_id=reservation.reservation_id %}" class="btn btn-info btn-sm">Detail</a>
+                        {% endif %}
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

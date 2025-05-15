@@ -1,5 +1,5 @@
 from django import forms
-from .models import Guest, Reservation, Payment, Employee, Room, RoomType, Address, RoomTypePriceHistory
+from .models import Guest, Reservation, Payment, Employee, Room, RoomType, Address, Service
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -68,10 +68,6 @@ class RoomForm(forms.ModelForm):
         else:
             self.fields['room_type_details'].initial = "Žádný typ pokoje není přiřazen."
 
-class RoomTypePriceHistoryForm(forms.ModelForm):
-    class Meta:
-        model = RoomTypePriceHistory
-        fields = ['room_type', 'price_per_night', 'valid_from', 'valid_to']
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -97,3 +93,8 @@ class GuestRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("username", "password1", "password2", "email", "firstname", "lastname", "phone", "birth_date", "street", "city", "postal_code", "country", "notes")
+
+class ServiceForm(forms.ModelForm):
+    class Meta:
+        model = Service
+        fields = ['name', 'description', 'price']
