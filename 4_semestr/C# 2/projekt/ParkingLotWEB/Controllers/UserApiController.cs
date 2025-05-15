@@ -65,10 +65,17 @@ public class UserApiController : ControllerBase
         // Hashování hesla před uložením
         user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
-        var affected = await _repo.CreateAsync(user);
-        if (affected == 0)
-            return BadRequest();
-        return Ok();
+        try
+        {
+            var affected = await _repo.CreateAsync(user);
+            if (affected == 0)
+                return BadRequest();
+            return Ok();
+        }
+        catch (MySql.Data.MySqlClient.MySqlException ex) when (ex.Message.Contains("Duplicate entry") && ex.Message.Contains("Username"))
+        {
+            return Conflict(new { error = "Uživatel s tímto uživatelským jménem již existuje." });
+        }
     }
 
     [HttpDelete("{id}")]
@@ -163,6 +170,8 @@ public class UserApiController : ControllerBase
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,
+            Role = user.Role,
+            Password = user.Password,
             Cars = carDtos,
             ParkingHistory = parkingHistoryDtos,
             CurrentParking = currentParkingDtos

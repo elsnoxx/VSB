@@ -22,25 +22,48 @@ namespace ParkingLotWPF.Views
     /// </summary>
     public partial class UsersPage : UserControl
     {
+        private readonly UsersPageViewModel _viewModel;
         public UsersPage()
         {
             InitializeComponent();
             DataContext = new UsersPageViewModel();
         }
 
+        private async void AddUser_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new ParkingLotWPF.Popup.UserRegistrationDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                var user = dialog.NewUser;
+                var userManagement = new ApiCalls.UserManagement();
+                bool success = await userManagement.CreateUserAsync(user);
+                if (success)
+                {
+                    MessageBox.Show("Uživatel byl úspěšně zaregistrován.", "Hotovo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await _viewModel.LoadUsersAsync();
+                }
+                else
+                {
+                    MessageBox.Show("Registrace selhala.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
         private async void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (sender is DataGrid dg && dg.SelectedItem is User selectedUser)
             {
-                var dialog = new UserEditDialog(selectedUser);
+                var userManagement = new ApiCalls.UserManagement();
+                var profile = await userManagement.GetUserProfileAsync(selectedUser.Id);
+
+                // Otevření dialogu s kompletním profilem
+                var dialog = new UserEditDialog(profile);
                 if (dialog.ShowDialog() == true)
                 {
-                    var userService = new UserManagement();
-                    await userService.UpdateUserAsync(dialog.ToApiUser());
-                    // Aktualizujte data v tabulce
-                    await (DataContext as UsersPageViewModel)?.ReloadUsersAsync();
+                    // případné uložení změn
                 }
             }
         }
+
     }
 }
