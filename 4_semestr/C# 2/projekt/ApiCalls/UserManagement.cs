@@ -59,7 +59,8 @@ namespace ApiCalls
 
         public async Task<bool> DeleteCarAsync(int carId)
         {
-
+            var response = await _httpClientWrapper.DeleteAsync($"api/CarApi/{carId}");
+            return string.IsNullOrEmpty(response);
         }
 
     }

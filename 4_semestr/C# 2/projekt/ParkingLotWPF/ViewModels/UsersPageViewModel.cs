@@ -4,26 +4,26 @@ using ApiCalls;
 using System.Threading.Tasks;
 using System.ComponentModel;
 
-public class UsersPageViewModel : INotifyPropertyChanged
+public class ParkinglotPageViewModel : INotifyPropertyChanged
 {
-    public ObservableCollection<User> Users { get; set; } = new ObservableCollection<User>();
+    public ObservableCollection<Parkinglot> ParkingLots { get; set; } = new ObservableCollection<Parkinglot>();
 
-    public UsersPageViewModel()
+    public ParkinglotPageViewModel()
     {
-        LoadUsersAsync();
+        LoadParkinglotsAsync();
     }
 
-    public async Task LoadUsersAsync()
+    public async Task LoadParkinglotsAsync()
     {
-        await ReloadUsersAsync();
+        await ReloadParkinglotsAsync();
     }
 
-    public async Task ReloadUsersAsync()
+    public async Task ReloadParkinglotsAsync()
     {
-        var userService = new UserManagement();
-        var users = await userService.GetAllUsersAsync();
-        Users = new ObservableCollection<User>(users);
-        OnPropertyChanged(nameof(Users));
+        var parkinglotService = new ParkinglotManagement();
+        var lots = await parkinglotService.GetAllParkinglotsAsync();
+        ParkingLots = new ObservableCollection<Parkinglot>(lots);
+        OnPropertyChanged(nameof(ParkingLots));
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

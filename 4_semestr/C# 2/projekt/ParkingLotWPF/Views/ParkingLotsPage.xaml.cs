@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ApiCalls.Model;
+
 
 namespace ParkingLotWPF.Views
 {
@@ -20,9 +22,30 @@ namespace ParkingLotWPF.Views
     /// </summary>
     public partial class ParkingLotsPage : UserControl
     {
+        private readonly ParkinglotPageViewModel _viewModel;
+
         public ParkingLotsPage()
         {
             InitializeComponent();
+            _viewModel = new ParkinglotPageViewModel();
+            DataContext = _viewModel;
+        }
+
+        private async void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is DataGrid dg && dg.SelectedItem is User selectedUser)
+            {
+                var userManagement = new ApiCalls.UserManagement();
+                var profile = await userManagement.GetUserProfileAsync(selectedUser.Id);
+
+                // Otevření dialogu s kompletním profilem
+                var dialog = new ParkinglotEditDialog(profile);
+                if (dialog.ShowDialog() == true)
+                {
+                    // případné uložení změn
+                }
+            }
         }
     }
+
 }

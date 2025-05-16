@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using ApiCalls.Model;
 using ParkingLotWPF.Popup;
 
@@ -55,6 +56,30 @@ namespace ParkingLotWPF.Views
                 DataContext = Profile;
             }
         }
+
+        private async void DeleteCar_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is int carId)
+            {
+                if (MessageBox.Show("Opravdu chcete smazat toto auto?", "Potvrzení", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    var userManagement = new ApiCalls.UserManagement();
+                    bool success = await userManagement.DeleteCarAsync(carId);
+                    if (success)
+                    {
+                        MessageBox.Show("Auto bylo smazáno.", "Hotovo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        var refreshedProfile = await userManagement.GetUserProfileAsync(Profile.id);
+                        Profile = refreshedProfile;
+                        DataContext = Profile;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Smazání auta selhalo.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        }
+
 
 
         public User ToApiUser()

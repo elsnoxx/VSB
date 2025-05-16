@@ -41,7 +41,21 @@
             </TabItem>
             <TabItem Header="Auta">
                 <StackPanel>
-                    <DataGrid ItemsSource="{Binding cars}" AutoGenerateColumns="True" IsReadOnly="True"/>
+                    <DataGrid ItemsSource="{Binding cars}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="SPZ" Binding="{Binding licensePlate}" />
+                            <DataGridTextColumn Header="Model" Binding="{Binding brandModel}" />
+                            <DataGridTextColumn Header="Barva" Binding="{Binding color}" />
+                            <DataGridTemplateColumn Header="Akce">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Smazat" Click="DeleteCar_Click" Tag="{Binding carId}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
                     <Button Content="Přidat auto" Click="Add_Car" Margin="0,10,0,0" Width="120" HorizontalAlignment="Left"/>
                 </StackPanel>
             </TabItem>
