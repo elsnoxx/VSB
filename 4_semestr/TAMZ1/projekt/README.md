@@ -10,7 +10,7 @@ Aplikace obsahuje tyto klíčové funkce a moduly:
 
 - **Import a export dat:**  
   Možnost importovat/exportovat seznam kešek a nálezů ve formátu JSON nebo CSV.  
-  (viz `src/components/CsvImportExport.tsx`)
+  [`src/components/CsvImportExport.tsx`](caching-app/src/components/CsvImportExport.tsx)
 
 - **Práce s mapou:**  
   Zobrazení kešek na mapě, navigace k vybrané kešce, zobrazení detailů kešky.  
@@ -32,7 +32,7 @@ Aplikace obsahuje tyto klíčové funkce a moduly:
   Automatická kontrola, zda je backend server dostupný, případně upozornění uživatele na offline režim.
 
 - **Správa uživatelského účtu:**  
-  Přihlášení se pod uživatelským jménem.
+  Přihlášení se pod uživatelským jménem a uložení do localStorage.
 
 
 ---
@@ -56,6 +56,4 @@ API server slouží jako **centrální bod pro správu a sdílení dat** mezi u�
 ## Shrnutí
 
 - **Mobilní aplikace** umožňuje uživateli pohodlně vyhledávat, zakládat a nacházet kešky, pracovat s mapou, kompasem, importovat/exportovat data a používat aplikaci i offline.
-- **API server** poskytuje bezpečné a centralizované rozhraní pro správu dat, synchronizaci a komunikaci mezi uživateli a aplikací.
-
-Celý systém je navržen tak, aby byl snadno rozšiřitelný a použitelný jak pro jednotlivce, tak pro komunitní geocachingové projekty.
+- **API server** poskytuje rozhraní pro správu dat, synchronizaci a komunikaci mezi uživateli a aplikací.
