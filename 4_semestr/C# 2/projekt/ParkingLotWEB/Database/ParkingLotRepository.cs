@@ -63,6 +63,9 @@ namespace ParkingLotWEB.Database
         public async Task<int> DeleteAsync(int id)
         {
             using var conn = _dapper.CreateConnection();
+            var deleteSpacesSql = "DELETE FROM ParkingSpace WHERE parking_lot_id = @id";
+            await conn.ExecuteAsync(deleteSpacesSql, new { id });
+
             var sql = "DELETE FROM ParkingLot WHERE parking_lot_id = @id";
             return await conn.ExecuteAsync(sql, new { id });
         }

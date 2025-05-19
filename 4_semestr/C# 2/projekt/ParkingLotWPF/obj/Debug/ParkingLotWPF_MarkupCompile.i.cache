@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\
+C:\Users\ficek\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\
 ParkingLotWPF
 none
 false
 DEBUG;TRACE
-C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\App.xaml
-9911447833
+C:\Users\ficek\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\App.xaml
+12-1709493889
 
-19-714831342
-14-1105800161
-MainWindow.xaml;Popup\CarRegistrationDialog.xaml;Popup\ParkinglotEditDialog.xaml;Popup\PasswordResetDialog.xaml;Popup\UserDataEditing.xaml;Popup\UserEditDialog.xaml;Popup\UserRegistrationDialog.xaml;Views\ParkingLotsPage.xaml;Views\UsersPage.xaml;
+22-2085582780
+142071063226
+MainWindow.xaml;Popup\AddParkingLotDialog.xaml;Popup\CarRegistrationDialog.xaml;Popup\ParkingEditDialog.xaml;Popup\ParkinglotEditDialog.xaml;Popup\ParkingSpaceEditDialog.xaml;Popup\PasswordResetDialog.xaml;Popup\UserDataEditing.xaml;Popup\UserEditDialog.xaml;Popup\UserRegistrationDialog.xaml;Views\ParkingLotsPage.xaml;Views\UsersPage.xaml;
 
 True
 

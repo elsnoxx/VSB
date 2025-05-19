@@ -22,5 +22,31 @@ namespace ApiCalls
             var response = await _httpClientWrapper.GetAsync("api/ParkinglotApi/withFreespaces");
             return JsonSerializer.Deserialize<List<Parkinglot>>(response);
         }
+
+        public async Task<ParkingLotProfileViewModel> GetParkinglotByIdAsync(int id)
+        {
+            var response = await _httpClientWrapper.GetAsync($"api/ParkinglotApi/{id}");
+            return JsonSerializer.Deserialize<ParkingLotProfileViewModel>(response);
+        }
+
+        public async Task<bool> CreateParkinglotAsync(Parkinglot lot)
+        {
+            var json = JsonSerializer.Serialize(lot);
+            var response = await _httpClientWrapper.PostAsync("api/ParkinglotApi", json);
+            return !string.IsNullOrEmpty(response);
+        }
+
+        public async Task<bool> UpdateParkinglotAsync(Parkinglot lot)
+        {
+            var json = JsonSerializer.Serialize(lot);
+            var response = await _httpClientWrapper.PutAsync($"api/ParkinglotApi/{lot.parkingLotId}", json);
+            return string.IsNullOrEmpty(response);
+        }
+
+        public async Task<bool> DeleteParkinglotAsync(int id)
+        {
+            var response = await _httpClientWrapper.DeleteAsync($"api/ParkinglotApi/{id}");
+            return string.IsNullOrEmpty(response);
+        }
     }
 }

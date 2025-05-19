@@ -135,7 +135,14 @@ namespace ParkingLotWEB.Database
         public async Task<IEnumerable<ParkingSpace>> GetSpacesAsync(int parkingLotId)
         {
             using var conn = _repository.CreateConnection();
-            var sql = @"SELECT * FROM ParkingSpace WHERE parking_lot_id = @ParkingLotId";
+            var sql = @"
+                SELECT 
+                    parking_space_id AS ParkingSpaceId,
+                    parking_lot_id AS ParkingLotId,
+                    space_number AS SpaceNumber,
+                    status AS Status
+                FROM ParkingSpace
+                WHERE parking_lot_id = @ParkingLotId";
             return await conn.QueryAsync<ParkingSpace>(sql, new { ParkingLotId = parkingLotId });
         }
         

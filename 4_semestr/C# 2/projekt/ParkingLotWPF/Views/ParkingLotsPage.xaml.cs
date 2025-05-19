@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ApiCalls;
 using ApiCalls.Model;
 using ParkingLotWPF.Popup;
 
@@ -34,19 +35,63 @@ namespace ParkingLotWPF.Views
 
         private async void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (sender is DataGrid dg && dg.SelectedItem is User selectedUser)
+            if (sender is DataGrid dg && dg.SelectedItem is Parkinglot selectedParkinglot)
             {
                 var userManagement = new ApiCalls.ParkinglotManagement();
-                var profile = await userManagement.GetAllParkinglot(selectedUser.Id);
+                var profileParkinglot = await userManagement.GetParkinglotByIdAsync(selectedParkinglot.parkingLotId);
 
                 // Otevření dialogu s kompletním profilem
-                var dialog = new ParkinglotEditDialog(profile);
+                var dialog = new ParkinglotEditDialog(profileParkinglot);
                 if (dialog.ShowDialog() == true)
                 {
                     // případné uložení změn
                 }
             }
         }
+
+        private async void AddParkingLot_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new AddParkingLotDialog();
+            dialog.ShowDialog();
+            if (dialog.DialogResult == true)
+            {
+                var newParkinglot = dialog.NewParkingLot;
+                var parkinglotManagement = new ApiCalls.ParkinglotManagement();
+                bool success = await parkinglotManagement.CreateParkinglotAsync(newParkinglot);
+                if (success)
+                {
+                    MessageBox.Show("Parkoviště bylo úspěšně vytvořeno.", "Hotovo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await _viewModel.LoadParkinglotsAsync();
+                }
+                else
+                {
+                    MessageBox.Show("Vytvoření parkoviště selhalo.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+        }
+
+        private async void DeleteCar_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is int parkingLotId)
+            {
+                if (MessageBox.Show("Opravdu chcete smazat toto parkoviště?", "Potvrzení", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    var service = new ParkinglotManagement();
+                    bool success = await service.DeleteParkinglotAsync(parkingLotId);
+                    if (success)
+                    {
+                        MessageBox.Show("Parkoviště bylo smazáno.", "Hotovo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        await _viewModel.LoadParkinglotsAsync();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Smazání parkoviště selhalo.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        }
+
     }
 
 }

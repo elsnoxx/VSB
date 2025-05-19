@@ -79,9 +79,11 @@
     <Compile Include="Model\Parkinglot.cs" />
     <Compile Include="Model\ParkingLotProfileViewModel.cs" />
     <Compile Include="Model\ParkingSpace.cs" />
+    <Compile Include="Model\ParkingSpaceEditViewModel.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserProfileViewModel.cs" />
     <Compile Include="ParkinglotManagement.cs" />
+    <Compile Include="ParkingSpaceManagement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserManagement.cs" />
   </ItemGroup>

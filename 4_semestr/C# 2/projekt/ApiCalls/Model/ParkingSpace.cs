@@ -11,6 +11,9 @@ namespace ApiCalls.Model
         public int parkingSpaceId { get; set; }
         public int parkingLotId { get; set; }
         public int spaceNumber { get; set; }
+        public bool isOccupied { get; set; }
         public string status { get; set; } = string.Empty;
+
+        public bool CanEditStatus => status == "dostupné" || status == "v údržbě";
     }
 }

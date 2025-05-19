@@ -1,40 +1,61 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\",
+  "WorkspaceRootPath": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\views\\parkinglotspage.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "AbsoluteMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\parkinglotwpf\\popup\\parkingspaceeditdialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|solutionrelative:popup\\parkingspaceeditdialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\parkinglotwpf\\popup\\parkingeditdialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|solutionrelative:popup\\parkingeditdialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA5E28DC-6A49-432A-AE47-5EC03E9C8DED}|..\\ApiCalls\\ApiCalls.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\apicalls\\model\\parkingspace.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\parkinglotwpf\\popup\\parkingloteditdialog.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|solutionrelative:popup\\parkingloteditdialog.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\parkinglotwpf\\popup\\parkingloteditdialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|solutionrelative:popup\\parkingloteditdialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\parkinglotwpf\\popup\\parkingspaceeditdialog.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|solutionrelative:popup\\parkingspaceeditdialog.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA5E28DC-6A49-432A-AE47-5EC03E9C8DED}|..\\ApiCalls\\ApiCalls.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\apicalls\\model\\parkingspaceeditviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\parkinglotwpf\\popup\\parkingeditdialog.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|solutionrelative:popup\\parkingeditdialog.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA5E28DC-6A49-432A-AE47-5EC03E9C8DED}|..\\ApiCalls\\ApiCalls.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\apicalls\\model\\parkinglotprofileviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA5E28DC-6A49-432A-AE47-5EC03E9C8DED}|..\\ApiCalls\\ApiCalls.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\apicalls\\model\\parkinglot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA5E28DC-6A49-432A-AE47-5EC03E9C8DED}|..\\ApiCalls\\ApiCalls.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\apicalls\\parkingspacemanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\parkinglotwpf\\views\\parkinglotspage.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
       "RelativeMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|solutionrelative:views\\parkinglotspage.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|c:\\users\\admin\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\parkinglotwpf\\popup\\parkingloteditdialog.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
-      "RelativeMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|solutionrelative:popup\\parkingloteditdialog.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
+      "AbsoluteMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\parkinglotwpf\\popup\\usereditdialog.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|solutionrelative:popup\\usereditdialog.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AA5E28DC-6A49-432A-AE47-5EC03E9C8DED}|..\\ApiCalls\\ApiCalls.csproj|c:\\users\\admin\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\apicalls\\model\\parkinghistorydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\parkinglotwpf\\views\\parkinglotspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|solutionrelative:views\\parkinglotspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AA5E28DC-6A49-432A-AE47-5EC03E9C8DED}|..\\ApiCalls\\ApiCalls.csproj|c:\\users\\admin\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\apicalls\\model\\parkinglotprofileviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AA5E28DC-6A49-432A-AE47-5EC03E9C8DED}|..\\ApiCalls\\ApiCalls.csproj|c:\\users\\admin\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\apicalls\\model\\parkinglot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AA5E28DC-6A49-432A-AE47-5EC03E9C8DED}|..\\ApiCalls\\ApiCalls.csproj|c:\\users\\admin\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\apicalls\\parkinglotmanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AA5E28DC-6A49-432A-AE47-5EC03E9C8DED}|..\\ApiCalls\\ApiCalls.csproj|c:\\users\\admin\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\apicalls\\model\\parkingspace.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\views\\userspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|solutionrelative:views\\userspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AA5E28DC-6A49-432A-AE47-5EC03E9C8DED}|..\\ApiCalls\\ApiCalls.csproj|c:\\users\\admin\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\apicalls\\usermanagement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\viewmodels\\userspageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|solutionrelative:viewmodels\\userspageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|c:\\users\\ficek\\documents\\github\\vsb\\4_semestr\\c# 2\\projekt\\parkinglotwpf\\popup\\usereditdialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{421D6921-869C-4D95-9B44-694BD229E31E}|ParkingLotWPF.csproj|solutionrelative:popup\\usereditdialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -44,140 +65,197 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 6,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ParkingHistoryDto.cs",
-              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\ParkingHistoryDto.cs",
-              "RelativeDocumentMoniker": "..\\ApiCalls\\Model\\ParkingHistoryDto.cs",
-              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\ParkingHistoryDto.cs",
-              "RelativeToolTip": "..\\ApiCalls\\Model\\ParkingHistoryDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAwAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "ParkingEditDialog.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\ParkingEditDialog.xaml.cs",
+              "RelativeDocumentMoniker": "Popup\\ParkingEditDialog.xaml.cs",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\ParkingEditDialog.xaml.cs",
+              "RelativeToolTip": "Popup\\ParkingEditDialog.xaml.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAIAwwBYAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T12:16:39.416Z",
+              "WhenOpened": "2025-05-19T15:15:47.707Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ParkingLotProfileViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\ParkingLotProfileViewModel.cs",
-              "RelativeDocumentMoniker": "..\\ApiCalls\\Model\\ParkingLotProfileViewModel.cs",
-              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\ParkingLotProfileViewModel.cs",
-              "RelativeToolTip": "..\\ApiCalls\\Model\\ParkingLotProfileViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAA9AAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "ParkingSpaceEditViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\ParkingSpaceEditViewModel.cs",
+              "RelativeDocumentMoniker": "..\\ApiCalls\\Model\\ParkingSpaceEditViewModel.cs",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\ParkingSpaceEditViewModel.cs",
+              "RelativeToolTip": "..\\ApiCalls\\Model\\ParkingSpaceEditViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T12:16:15.562Z",
+              "WhenOpened": "2025-05-19T15:14:33.636Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ParkinglotEditDialog.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\ParkinglotEditDialog.xaml.cs",
-              "RelativeDocumentMoniker": "Popup\\ParkinglotEditDialog.xaml.cs",
-              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\ParkinglotEditDialog.xaml.cs",
-              "RelativeToolTip": "Popup\\ParkinglotEditDialog.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "ParkingSpaceEditDialog.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\ParkingSpaceEditDialog.xaml.cs",
+              "RelativeDocumentMoniker": "Popup\\ParkingSpaceEditDialog.xaml.cs",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\ParkingSpaceEditDialog.xaml.cs",
+              "RelativeToolTip": "Popup\\ParkingSpaceEditDialog.xaml.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAgwCcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T12:15:11.873Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ParkingLotsPage.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Views\\ParkingLotsPage.xaml.cs",
-              "RelativeDocumentMoniker": "Views\\ParkingLotsPage.xaml.cs",
-              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Views\\ParkingLotsPage.xaml.cs",
-              "RelativeToolTip": "Views\\ParkingLotsPage.xaml.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAWwCwAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-16T07:54:15.075Z",
+              "WhenOpened": "2025-05-19T15:13:47.116Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
-              "Title": "UsersPageViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\ViewModels\\UsersPageViewModel.cs",
-              "RelativeDocumentMoniker": "ViewModels\\UsersPageViewModel.cs",
-              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\ViewModels\\UsersPageViewModel.cs",
-              "RelativeToolTip": "ViewModels\\UsersPageViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-16T05:22:17.172Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ParkingSpace.cs",
-              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\ParkingSpace.cs",
-              "RelativeDocumentMoniker": "..\\ApiCalls\\Model\\ParkingSpace.cs",
-              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\ParkingSpace.cs",
-              "RelativeToolTip": "..\\ApiCalls\\Model\\ParkingSpace.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-16T05:21:57.664Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
               "Title": "Parkinglot.cs",
-              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\Parkinglot.cs",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\Parkinglot.cs",
               "RelativeDocumentMoniker": "..\\ApiCalls\\Model\\Parkinglot.cs",
-              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\Parkinglot.cs",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\Parkinglot.cs",
               "RelativeToolTip": "..\\ApiCalls\\Model\\Parkinglot.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-16T05:21:35.3Z",
+              "WhenOpened": "2025-05-19T15:04:38.902Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "UsersPage.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Views\\UsersPage.xaml.cs",
-              "RelativeDocumentMoniker": "Views\\UsersPage.xaml.cs",
-              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Views\\UsersPage.xaml.cs",
-              "RelativeToolTip": "Views\\UsersPage.xaml.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAowDMAAAAIAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "ParkingEditDialog.xaml",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\ParkingEditDialog.xaml",
+              "RelativeDocumentMoniker": "Popup\\ParkingEditDialog.xaml",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\ParkingEditDialog.xaml",
+              "RelativeToolTip": "Popup\\ParkingEditDialog.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-19T15:00:07.03Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ParkingSpaceManagement.cs",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\ParkingSpaceManagement.cs",
+              "RelativeDocumentMoniker": "..\\ApiCalls\\ParkingSpaceManagement.cs",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\ParkingSpaceManagement.cs",
+              "RelativeToolTip": "..\\ApiCalls\\ParkingSpaceManagement.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-16T10:30:06.681Z"
+              "WhenOpened": "2025-05-19T14:57:35.8Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ParkingSpaceEditDialog.xaml",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\ParkingSpaceEditDialog.xaml",
+              "RelativeDocumentMoniker": "Popup\\ParkingSpaceEditDialog.xaml",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\ParkingSpaceEditDialog.xaml",
+              "RelativeToolTip": "Popup\\ParkingSpaceEditDialog.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-19T14:50:35.417Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "UserEditDialog.xaml",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\UserEditDialog.xaml",
+              "RelativeDocumentMoniker": "Popup\\UserEditDialog.xaml",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\UserEditDialog.xaml",
+              "RelativeToolTip": "Popup\\UserEditDialog.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-19T14:48:59.05Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Popup\\ParkinglotEditDialog.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\ParkinglotEditDialog.xaml.cs",
+              "RelativeDocumentMoniker": "Popup\\ParkinglotEditDialog.xaml.cs",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\ParkinglotEditDialog.xaml.cs",
+              "RelativeToolTip": "Popup\\ParkinglotEditDialog.xaml.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAApwB4AAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T14:45:28.51Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ParkinglotEditDialog.xaml",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\ParkinglotEditDialog.xaml",
+              "RelativeDocumentMoniker": "Popup\\ParkinglotEditDialog.xaml",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\ParkinglotEditDialog.xaml",
+              "RelativeToolTip": "Popup\\ParkinglotEditDialog.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-19T14:39:30.066Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "UserManagement.cs",
-              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\UserManagement.cs",
-              "RelativeDocumentMoniker": "..\\ApiCalls\\UserManagement.cs",
-              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\UserManagement.cs",
-              "RelativeToolTip": "..\\ApiCalls\\UserManagement.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAowC4AAABPAAAAAAAAAA==",
+              "Title": "ParkingLotProfileViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\ParkingLotProfileViewModel.cs",
+              "RelativeDocumentMoniker": "..\\ApiCalls\\Model\\ParkingLotProfileViewModel.cs",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\ParkingLotProfileViewModel.cs",
+              "RelativeToolTip": "..\\ApiCalls\\Model\\ParkingLotProfileViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwBIAAABtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-16T05:18:37.32Z"
+              "WhenOpened": "2025-05-19T14:38:28.418Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ParkinglotManagement.cs",
-              "DocumentMoniker": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\ParkinglotManagement.cs",
-              "RelativeDocumentMoniker": "..\\ApiCalls\\ParkinglotManagement.cs",
-              "ToolTip": "C:\\Users\\admin\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\ParkinglotManagement.cs",
-              "RelativeToolTip": "..\\ApiCalls\\ParkinglotManagement.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAABeAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "ParkingSpace.cs",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\ParkingSpace.cs",
+              "RelativeDocumentMoniker": "..\\ApiCalls\\Model\\ParkingSpace.cs",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ApiCalls\\Model\\ParkingSpace.cs",
+              "RelativeToolTip": "..\\ApiCalls\\Model\\ParkingSpace.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-16T05:18:21.015Z"
+              "WhenOpened": "2025-05-19T14:38:23.52Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ParkingLotsPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Views\\ParkingLotsPage.xaml.cs",
+              "RelativeDocumentMoniker": "Views\\ParkingLotsPage.xaml.cs",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Views\\ParkingLotsPage.xaml.cs",
+              "RelativeToolTip": "Views\\ParkingLotsPage.xaml.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAACgAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T14:18:41.174Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "UserEditDialog.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\UserEditDialog.xaml.cs",
+              "RelativeDocumentMoniker": "Popup\\UserEditDialog.xaml.cs",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Popup\\UserEditDialog.xaml.cs",
+              "RelativeToolTip": "Popup\\UserEditDialog.xaml.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAIwD0AAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T14:18:29.912Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ParkingLotsPage.xaml",
+              "DocumentMoniker": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Views\\ParkingLotsPage.xaml",
+              "RelativeDocumentMoniker": "Views\\ParkingLotsPage.xaml",
+              "ToolTip": "C:\\Users\\ficek\\Documents\\GitHub\\VSB\\4_semestr\\C# 2\\projekt\\ParkingLotWPF\\Views\\ParkingLotsPage.xaml",
+              "RelativeToolTip": "Views\\ParkingLotsPage.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-05-19T14:18:12.389Z",
+              "EditorCaption": ""
             }
           ]
         }

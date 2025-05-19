@@ -1,0 +1,28 @@
+﻿<Window x:Class="ParkingLotWPF.Popup.ParkingEditDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Upravit parkoviště" Height="300" Width="400">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Název:" Grid.Row="0" VerticalAlignment="Center"/>
+        <TextBox x:Name="NameBox" Grid.Row="0" Margin="80,0,0,5" Width="250"/>
+
+        <TextBlock Text="Latitude:" Grid.Row="1" VerticalAlignment="Center"/>
+        <TextBox x:Name="LatitudeBox" Grid.Row="1" Margin="80,0,0,5" Width="250"/>
+
+        <TextBlock Text="Longitude:" Grid.Row="2" VerticalAlignment="Center"/>
+        <TextBox x:Name="LongitudeBox" Grid.Row="2" Margin="80,0,0,5" Width="250"/>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Left">
+            <Button Content="Uložit" Width="80" Margin="0,0,10,0" Click="Save_Click"/>
+            <Button Content="Zpět" Width="80" Click="Cancel_Click"/>
+        </StackPanel>
+        <TextBlock x:Name="ErrorText" Grid.Row="4" Foreground="Red" Margin="0,10,0,0"/>
+    </Grid>
+</Window>

@@ -2,7 +2,39 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
-        <!-- Zde bude správa parkovišť -->
-        <DataGrid ItemsSource="{Binding ParkingLots}" AutoGenerateColumns="True"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Tlačítko -->
+            <RowDefinition Height="*"/>
+            <!-- DataGrid -->
+        </Grid.RowDefinitions>
+        <Button Content="Přidat parkoviště"
+                Width="150"
+                Margin="10"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="AddParkingLot_Click"
+                Grid.Row="0"/>
+        <DataGrid ItemsSource="{Binding ParkingLots}"
+                  AutoGenerateColumns="False"
+                  MouseDoubleClick="DataGrid_MouseDoubleClick"
+                  IsReadOnly="True"
+                  Grid.Row="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding parkingLotId}" />
+                <DataGridTextColumn Header="Název" Binding="{Binding name}" />
+                <DataGridTextColumn Header="Šířka" Binding="{Binding latitude}" />
+                <DataGridTextColumn Header="Délka" Binding="{Binding longitude}" />
+                <DataGridTextColumn Header="Kapacita" Binding="{Binding capacity}" />
+                <DataGridTextColumn Header="Volná místa" Binding="{Binding freeSpaces}" />
+                <DataGridTemplateColumn Header="Akce">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Smazat" Click="DeleteCar_Click" Tag="{Binding parkingLotId}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>
