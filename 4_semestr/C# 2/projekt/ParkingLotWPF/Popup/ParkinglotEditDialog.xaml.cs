@@ -19,7 +19,7 @@ namespace ParkingLotWPF.Popup
     /// </summary>
     public partial class ParkinglotEditDialog : Window
     {
-        public ParkinglotEditDialog()
+        public ParkinglotEditDialog(ParkinglotPageViewModel parkinglot)
         {
             InitializeComponent();
         }

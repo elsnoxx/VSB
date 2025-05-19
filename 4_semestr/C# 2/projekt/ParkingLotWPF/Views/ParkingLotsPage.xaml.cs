@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ApiCalls.Model;
+using ParkingLotWPF.Popup;
 
 
 namespace ParkingLotWPF.Views
@@ -35,8 +36,8 @@ namespace ParkingLotWPF.Views
         {
             if (sender is DataGrid dg && dg.SelectedItem is User selectedUser)
             {
-                var userManagement = new ApiCalls.UserManagement();
-                var profile = await userManagement.GetUserProfileAsync(selectedUser.Id);
+                var userManagement = new ApiCalls.ParkinglotManagement();
+                var profile = await userManagement.GetAllParkinglot(selectedUser.Id);
 
                 // Otevření dialogu s kompletním profilem
                 var dialog = new ParkinglotEditDialog(profile);

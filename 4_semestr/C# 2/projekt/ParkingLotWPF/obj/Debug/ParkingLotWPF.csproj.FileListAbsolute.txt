@@ -52,3 +52,4 @@ C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Deb
 C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\UserDataEditing.baml
 C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\CarRegistrationDialog.g.cs
 C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\CarRegistrationDialog.baml
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\ParkinglotEditDialog.g.cs

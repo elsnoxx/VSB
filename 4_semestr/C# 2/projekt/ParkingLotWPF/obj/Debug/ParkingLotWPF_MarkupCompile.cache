@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\App.xaml
-8-158309010
+9911447833
 
-17-995749216
+181658357833
 14-1105800161
-MainWindow.xaml;Popup\CarRegistrationDialog.xaml;Popup\PasswordResetDialog.xaml;Popup\UserDataEditing.xaml;Popup\UserEditDialog.xaml;Popup\UserRegistrationDialog.xaml;Views\ParkingLotsPage.xaml;Views\UsersPage.xaml;
+MainWindow.xaml;Popup\CarRegistrationDialog.xaml;Popup\ParkinglotEditDialog.xaml;Popup\PasswordResetDialog.xaml;Popup\UserDataEditing.xaml;Popup\UserEditDialog.xaml;Popup\UserRegistrationDialog.xaml;Views\ParkingLotsPage.xaml;Views\UsersPage.xaml;
 
-False
+True
 
