@@ -8,7 +8,7 @@
 <p>Celková kapacita: @Model.Capacity</p>
 <p>Volných míst: @Model.FreeSpaces</p>
 <p>Obsazených míst: @Model.ParkingSpaces.Count(s => s.Status == "occupied")</p>
-<p>Nedostupných míst: @Model.ParkingSpaces.Count(s => s.Status == "unavailable")</p>
+<p>Nedostupných míst: @Model.ParkingSpaces.Count(s => s.Status == "under_maintenance")</p>
 <!-- Přidejte SpaceNumber do ParkingSpaceViewModel, pokud je potřeba -->
 <p>Čísla parkovacích míst: od 1 do @Model.Capacity</p>
 
@@ -18,17 +18,26 @@
         <div class="col-md-3 mb-3">
             <div class="card">
                 <div class="card-body">
-                    <!-- Přidejte SpaceNumber do ParkingSpaceViewModel, pokud je potřeba -->
                     <h5 class="card-title">Místo @space.SpaceNumber</h5>
                     <p class="card-text">ID: @space.ParkingSpaceId</p>
                     <p class="card-text">Status: @space.Status</p>
                     @if (space.Status == "available")
                     {
-                        <button class="btn btn-danger" data-id="@space.ParkingSpaceId">Označit jako nedostupné</button>
+                        <form asp-action="ChangeStatus" asp-controller="ParkingLot" method="post">
+                            <input type="hidden" name="parkingSpaceId" value="@space.ParkingSpaceId" />
+                            <input type="hidden" name="parkingLotId" value="@Model.ParkingLotId" />
+                            <input type="hidden" name="status" value="under_maintenance" />
+                            <button type="submit" class="btn btn-warning">Označit jako v údržbě</button>
+                        </form>
                     }
-                    @if (space.Status == "unavailable")
+                    else if (space.Status == "under_maintenance")
                     {
-                        <button class="btn btn-success" data-id="@space.ParkingSpaceId">Označit jako dostupné</button>
+                        <form asp-action="ChangeStatus" asp-controller="ParkingLot" method="post">
+                            <input type="hidden" name="parkingSpaceId" value="@space.ParkingSpaceId" />
+                            <input type="hidden" name="parkingLotId" value="@Model.ParkingLotId" />
+                            <input type="hidden" name="status" value="available" />
+                            <button type="submit" class="btn btn-success">Označit jako dostupné</button>
+                        </form>
                     }
                 </div>
             </div>

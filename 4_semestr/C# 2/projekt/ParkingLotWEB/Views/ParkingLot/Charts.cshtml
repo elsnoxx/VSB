@@ -1,0 +1,32 @@
+@model IEnumerable<OccupancyPointDto>
+@{
+    ViewData["Title"] = "Graf obsazenosti";
+    var labels = Model.Select(x => x.Time.ToString("yyyy-MM-dd HH:mm")).ToArray();
+    var data = Model.Select(x => x.OccupiedSpaces).ToArray();
+}
+<h2>Graf obsazenosti parkoviště @ViewBag.ParkingLotId</h2>
+<canvas id="occupancyChart" width="800" height="400"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('occupancyChart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(labels)),
+            datasets: [{
+                label: 'Obsazená místa',
+                data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(data)),
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                fill: true,
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                x: { title: { display: true, text: 'Čas' } },
+                y: { title: { display: true, text: 'Počet obsazených míst' }, beginAtZero: true }
+            }
+        }
+    });
+</script>

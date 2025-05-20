@@ -13,7 +13,7 @@ public class ParkingLotApiController : ControllerBase
     private readonly ParkingLotRepository _repo;
     private readonly ParkingSpaceRepository _spaceRepo;
     private readonly UserRepository _userRepo;
-    
+
 
     public ParkingLotApiController(ParkingLotRepository repo, ParkingSpaceRepository spaceRepo, UserRepository userRepo)
     {
@@ -49,6 +49,7 @@ public class ParkingLotApiController : ControllerBase
             ParkingSpaces = spaces.Select(s => new ParkingSpaceDto
             {
                 ParkingSpaceId = s.ParkingSpaceId,
+                SpaceNumber = s.SpaceNumber,
                 Status = s.Status
             }).ToList()
         };
@@ -87,7 +88,7 @@ public class ParkingLotApiController : ControllerBase
         var spacesWithOwner = await _spaceRepo.GetSpacesWithOwnerAsync(lotId);
 
         // Získání aut uživatele
-        var userCars = await _userRepo.GetCarsByUserIdAsync(userId); 
+        var userCars = await _userRepo.GetCarsByUserIdAsync(userId);
 
         var occupiedPlates = await _spaceRepo.GetAllOccupiedLicensePlatesAsync();
 
@@ -116,5 +117,27 @@ public class ParkingLotApiController : ControllerBase
         };
 
         return Ok(details);
+    }
+
+
+    [HttpGet("statistics/completed-last-month")]
+    public async Task<IActionResult> GetCompletedParkingsLastMonth()
+    {
+        var stats = await _repo.GetCompletedParkingsLastMonthAsync();
+        var lots = await _repo.GetAllAsync();
+        var result = lots.Select(lot => new
+        {
+            lot.ParkingLotId,
+            lot.Name,
+            CompletedParkings = stats.ContainsKey(lot.ParkingLotId) ? stats[lot.ParkingLotId] : 0
+        }).ToList();
+        return Ok(result);
+    }
+    
+    [HttpGet("occupancy-timeline/{id}")]
+    public async Task<IActionResult> GetOccupancyTimeline(int id)
+    {
+        var data = await _repo.GetOccupancyTimelineAsync(id);
+        return Ok(data);
     }
 }

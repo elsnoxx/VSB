@@ -1,0 +1,25 @@
+@model IEnumerable<ParkingLotStatisticsViewModel>
+<h2>Statistika ukončených parkování za poslední měsíc</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Název parkoviště</th>
+            <th>Počet ukončených parkování</th>
+            <th>Graf</th> <!-- nový sloupec -->
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var lot in Model)
+    {
+        <tr>
+            <td>@lot.Name</td>
+            <td>@lot.CompletedParkings</td>
+            <td>
+                <a asp-action="Charts" asp-route-id="@lot.ParkingLotId" class="btn btn-outline-primary btn-sm">
+                    Zobrazit graf
+                </a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

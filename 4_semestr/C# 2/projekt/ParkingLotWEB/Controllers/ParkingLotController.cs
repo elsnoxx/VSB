@@ -90,7 +90,7 @@ public class ParkingLotController : Controller
             return RedirectToAction("Index");
         return View(lot);
     }
-    
+
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -109,7 +109,7 @@ public class ParkingLotController : Controller
 
         var json = await response.Content.ReadAsStringAsync();
         var parkingLot = JsonSerializer.Deserialize<ParkingLotDto>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        
+
         if (parkingLot == null)
         {
             return NotFound();
@@ -159,5 +159,55 @@ public class ParkingLotController : Controller
             TempData["Error"] = "Nepodařilo se uvolnit místo.";
 
         return RedirectToAction("Details", new { id = ParkingLotId });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ChangeStatus(int parkingSpaceId, string status, int parkingLotId)
+    {
+        // Zjisti aktuální stav místa
+        var spaceResp = await _apiClient.GetAsync($"api/ParkingSpaceApi/{parkingSpaceId}");
+        if (!spaceResp.IsSuccessStatusCode)
+        {
+            TempData["Error"] = "Nepodařilo se načíst místo.";
+            return RedirectToAction("Admin", new { id = parkingLotId });
+        }
+        var json = await spaceResp.Content.ReadAsStringAsync();
+        var space = JsonSerializer.Deserialize<ParkingSpaceViewModel>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        if (space.Status == "occupied" && status == "unavailable")
+        {
+            TempData["Error"] = "Nelze označit obsazené místo jako nedostupné!";
+            return RedirectToAction("Admin", new { id = parkingLotId });
+        }
+
+        await _apiClient.PostAsync($"api/ParkingSpaceApi/status/{parkingSpaceId}", new { status });
+        TempData["Success"] = $"Stav místa {parkingSpaceId} byl změněn na {status}.";
+
+        return RedirectToAction("Admin", new { id = parkingLotId });
+    }
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Statistics()
+    {
+        var response = await _apiClient.GetAsync("api/ParkingLotApi/statistics/completed-last-month");
+        if (!response.IsSuccessStatusCode)
+            return NotFound();
+
+        var json = await response.Content.ReadAsStringAsync();
+        var viewModel = JsonSerializer.Deserialize<List<ParkingLotStatisticsViewModel>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        return View(viewModel);
+    }
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Charts(int id)
+    {
+        var response = await _apiClient.GetAsync($"api/ParkingLotApi/occupancy-timeline/{id}");
+        if (!response.IsSuccessStatusCode)
+            return NotFound();
+
+        var json = await response.Content.ReadAsStringAsync();
+        var data = JsonSerializer.Deserialize<List<OccupancyPointDto>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        ViewBag.ParkingLotId = id;
+        return View(data);
     }
 }

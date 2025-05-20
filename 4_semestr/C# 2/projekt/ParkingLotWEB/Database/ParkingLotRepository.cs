@@ -86,5 +86,33 @@ namespace ParkingLotWEB.Database
                 GROUP BY pl.parking_lot_id";
             return await conn.QueryAsync<ParkingLot>(sql);
         }
+
+        public async Task<Dictionary<int, int>> GetCompletedParkingsLastMonthAsync()
+        {
+            using var conn = _dapper.CreateConnection();
+            var sql = @"
+                SELECT parking_lot_id, COUNT(*) AS completed_parkings
+                FROM ParkingHistory
+                WHERE departure_time IS NOT NULL
+                AND departure_time >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
+                GROUP BY parking_lot_id";
+            var result = await conn.QueryAsync<(int parking_lot_id, int completed_parkings)>(sql);
+            return result.ToDictionary(x => x.parking_lot_id, x => x.completed_parkings);
+        }
+
+        public async Task<IEnumerable<OccupancyPointDto>> GetOccupancyTimelineAsync(int parkingLotId)
+        {
+            using var conn = _dapper.CreateConnection();
+            var sql = @"
+                SELECT 
+                    sh.change_time AS Time,
+                    SUM(CASE WHEN sh.status = 'occupied' THEN 1 ELSE 0 END) AS OccupiedSpaces
+                FROM StatusHistory sh
+                JOIN ParkingSpace ps ON sh.parking_space_id = ps.parking_space_id
+                WHERE ps.parking_lot_id = @parkingLotId
+                GROUP BY sh.change_time
+                ORDER BY sh.change_time";
+            return await conn.QueryAsync<OccupancyPointDto>(sql, new { parkingLotId });
+        }
     }
 }
