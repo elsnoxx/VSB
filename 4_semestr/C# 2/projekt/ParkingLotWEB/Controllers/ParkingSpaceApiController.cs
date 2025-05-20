@@ -57,6 +57,7 @@ public class ParkingSpaceApiController : ControllerBase
     [HttpPost("status/{parkingSpaceId}")]
     public async Task<IActionResult> SetStatus(int parkingSpaceId, [FromBody] SetStatusRequest req)
     {
+        Console.WriteLine($"Setting status for space {parkingSpaceId} to {req.Status}");
         await _repo.UpdateStatusAsync(parkingSpaceId, req.Status);
         return Ok();
     }

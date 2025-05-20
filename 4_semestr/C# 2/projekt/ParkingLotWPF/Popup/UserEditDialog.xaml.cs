@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using ApiCalls.Model;
+using System.Linq;
 using ParkingLotWPF.Popup;
 
 namespace ParkingLotWPF.Views
@@ -76,6 +77,66 @@ namespace ParkingLotWPF.Views
                     {
                         MessageBox.Show("Smazání auta selhalo.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
+                }
+            }
+        }
+
+        private async void ParkCar_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is CarDto car)
+            {
+                // 1. Vyber parkoviště (např. zobraz dialog s výběrem)
+                var parkingLotSelection = new SelectParkingLotDialog();
+                if (parkingLotSelection.ShowDialog() == true)
+                {
+                    int selectedParkingLotId = parkingLotSelection.SelectedParkingLotId;
+
+                    // 2. Zavolej API pro obsazení místa
+                    var manager = new ApiCalls.ParkingSpaceManagement();
+                    var occupyRequest = new OccupyRequest { licensePlate = car.licensePlate };
+                    var result = await manager.OccupySpaceAsync(selectedParkingLotId, occupyRequest);
+
+                    if (result != null)
+                    {
+                        MessageBox.Show($"Auto zaparkováno.", "Hotovo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        
+                        var userManagement = new ApiCalls.UserManagement();
+                        var refreshedProfile = await userManagement.GetUserProfileAsync(Profile.id);
+                        Profile = refreshedProfile;
+                        DataContext = Profile;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Zaparkování selhalo.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        }
+
+        private async void UnparkCar_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is CurrentParkingDto currentParking)
+            {
+                var manager = new ApiCalls.ParkingSpaceManagement();
+                var releaseRequest = new ReleaseRequest
+                {
+                    ParkingSpaceId = currentParking.parkingSpaceId,
+                    ParkingLotId = currentParking.parkingLotId
+                };
+                bool success = await manager.ReleaseSpaceAsync(releaseRequest);
+
+                if (success)
+                {
+                    MessageBox.Show("Auto bylo odparkováno.", "Hotovo", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    var userManagement = new ApiCalls.UserManagement();
+                    var refreshedProfile = await userManagement.GetUserProfileAsync(Profile.id);
+                    Profile = refreshedProfile;
+                    DataContext = Profile;
+                }
+                else
+                {
+                    MessageBox.Show("Odparkování selhalo.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

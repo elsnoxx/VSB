@@ -15,27 +15,25 @@ namespace ParkingLotWPF.Popup
             DataContext = _profile;
         }
 
+        private void EditParkingSpace_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is ParkingSpace space)
+            {
+                var dialog = new ParkingSpaceEditDialog(space);
+                if (dialog.ShowDialog() == true)
+                {
+                    // Refresh dat, pokud je potřeba
+                }
+            }
+        }
+
         public async void EditParkingLot_Click(object sender, RoutedEventArgs e)
         {
             var parkinglot = ToApParkinglot();
-            var editDialog = new ParkingEditDialog(parkinglot);
-            editDialog.ShowDialog();
-        }
-
-        private async void EditParkingSpace_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn && btn.Tag is ParkingSpace selectedSpace)
+            var editDialog = new ParkingLotDataEditing(parkinglot);
+            if (editDialog.ShowDialog() == true)
             {
-                var dialog = new ParkingSpaceEditDialog(selectedSpace);
-                if (dialog.ShowDialog() == true)
-                {
-                    var manager = new ApiCalls.ParkingSpaceManagement();
-                    bool success = await manager.UpdateSpaceAsync(selectedSpace);
-                    if (success)
-                        MessageBox.Show("Změny byly uloženy.", "Hotovo");
-                    else
-                        MessageBox.Show("Uložení selhalo.", "Chyba");
-                }
+                // případně refresh dat
             }
         }
 
@@ -49,6 +47,16 @@ namespace ParkingLotWPF.Popup
                 longitude = _profile.longitude,
                 capacity = _profile.capacity,
                 freeSpaces = _profile.freeSpaces
+            };
+        }
+
+        public ParkingSpace ToApiParkingSpace()
+        {
+            return new ParkingSpace
+            {
+                parkingSpaceId = _profile.parkingSpaces[0].parkingSpaceId,
+                status = _profile.parkingSpaces[0].status,
+                parkingLotId = _profile.parkingLotId
             };
         }
     }

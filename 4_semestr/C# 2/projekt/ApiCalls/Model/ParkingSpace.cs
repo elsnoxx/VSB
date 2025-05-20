@@ -13,7 +13,5 @@ namespace ApiCalls.Model
         public int spaceNumber { get; set; }
         public bool isOccupied { get; set; }
         public string status { get; set; } = string.Empty;
-
-        public bool CanEditStatus => status == "dostupné" || status == "v údržbě";
     }
 }

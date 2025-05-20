@@ -26,23 +26,27 @@ namespace ApiCalls
             return JsonSerializer.Deserialize<ParkingSpace>(response);
         }
 
-        public async Task<bool> UpdateSpaceAsync(ParkingSpace space)
+        public async Task<bool> UpdateSpaceStatusAsync(int parkingSpaceId, string status)
         {
-            var json = JsonSerializer.Serialize(space);
-            var response = await _httpClientWrapper.PutAsync($"api/ParkingSpaceApi/{space.parkingSpaceId}", json);
-            return string.IsNullOrEmpty(response);
+            var body = new { Status = status };
+            var json = JsonSerializer.Serialize(body);
+            var httpResponse = await _httpClientWrapper.PostAsync($"api/ParkingSpaceApi/status/{parkingSpaceId}", json);
+            return string.IsNullOrEmpty(httpResponse);
         }
 
-        public async Task<bool> CreateSpaceAsync(ParkingSpace space)
+        public async Task<Occupancy> OccupySpaceAsync(int parkingLotId, OccupyRequest request)
         {
-            var json = JsonSerializer.Serialize(space);
-            var response = await _httpClientWrapper.PostAsync("api/ParkingSpaceApi", json);
-            return !string.IsNullOrEmpty(response);
+            var json = JsonSerializer.Serialize(request);
+            var response = await _httpClientWrapper.PostAsync($"api/ParkingSpaceApi/occupy/{parkingLotId}", json);
+            if (!string.IsNullOrEmpty(response))
+                return JsonSerializer.Deserialize<Occupancy>(response);
+            return null;
         }
 
-        public async Task<bool> DeleteSpaceAsync(int id)
+        public async Task<bool> ReleaseSpaceAsync(ReleaseRequest request)
         {
-            var response = await _httpClientWrapper.DeleteAsync($"api/ParkingSpaceApi/{id}");
+            var json = JsonSerializer.Serialize(request);
+            var response = await _httpClientWrapper.PostAsync("api/ParkingSpaceApi/release", json);
             return string.IsNullOrEmpty(response);
         }
     }

@@ -19,7 +19,6 @@
         <TextBlock Text="Stav:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
         <ComboBox x:Name="StatusCombo"
                   SelectedItem="{Binding status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                  IsEnabled="{Binding CanEditStatus}"
                   Margin="5"
                   Grid.Row="1" Grid.Column="1"/>
 

@@ -45,16 +45,10 @@ namespace ParkingLotWEB.Database
         public async Task<bool> UpdateStatusAsync(int parkingSpaceId, string newStatus)
         {
             using var conn = _repository.CreateConnection();
-            var exists = await conn.ExecuteScalarAsync<int>(
-                "SELECT COUNT(*) FROM ParkingSpace WHERE parking_space_id = @Id", new { Id = parkingSpaceId });
-            if (exists == 0)
-                throw new Exception($"ParkingSpace s ID {parkingSpaceId} neexistuje!");
-
-            await conn.ExecuteAsync(
-                "INSERT INTO StatusHistory (parking_space_id, status, change_time) VALUES (@ParkingSpaceId, @Status, @ChangeTime)",
-                new { ParkingSpaceId = parkingSpaceId, Status = newStatus, ChangeTime = DateTime.Now });
-            
-            return true;
+            var sql = "UPDATE ParkingSpace SET status = @Status WHERE parking_space_id = @Id";
+            var affected = await conn.ExecuteAsync(sql, new { Status = newStatus, Id = parkingSpaceId });
+            Console.WriteLine($"UPDATE affected rows: {affected}");
+            return affected > 0;
         }
 
         // Získání historie stavu parkovacího místa

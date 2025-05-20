@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\CarParkedToEnabledConverter.cs" />
     <Compile Include="Converters\PasswordMaskConverter.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Popup\AddParkingLotDialog.xaml.cs">
@@ -63,8 +64,8 @@
     <Compile Include="Popup\CarRegistrationDialog.xaml.cs">
       <DependentUpon>CarRegistrationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Popup\ParkingEditDialog.xaml.cs">
-      <DependentUpon>ParkingEditDialog.xaml</DependentUpon>
+    <Compile Include="Popup\ParkingLotDataEditing.xaml.cs">
+      <DependentUpon>ParkingLotDataEditing.xaml</DependentUpon>
     </Compile>
     <Compile Include="Popup\ParkinglotEditDialog.xaml.cs">
       <DependentUpon>ParkinglotEditDialog.xaml</DependentUpon>
@@ -74,6 +75,9 @@
     </Compile>
     <Compile Include="Popup\PasswordResetDialog.xaml.cs">
       <DependentUpon>PasswordResetDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\SelectParkingLotDialog.xaml.cs">
+      <DependentUpon>SelectParkingLotDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Popup\UserDataEditing.xaml.cs">
       <DependentUpon>UserDataEditing.xaml</DependentUpon>
@@ -113,7 +117,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Popup\ParkingEditDialog.xaml">
+    <Page Include="Popup\ParkingLotDataEditing.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -126,6 +130,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Popup\PasswordResetDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Popup\SelectParkingLotDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,7 +1,11 @@
 ﻿<Window x:Class="ParkingLotWPF.Views.UserEditDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:ParkingLotWPF.Converters"
         Title="Editace uživatele" Height="600" Width="600" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <local:CarParkedToEnabledConverter x:Key="CarParkedToEnabledConverter"/>
+    </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -34,19 +38,50 @@
         <!-- Tabs for related data -->
         <TabControl Grid.Row="1">
             <TabItem Header="Aktuální parkování">
-                <DataGrid ItemsSource="{Binding currentParking}" AutoGenerateColumns="True" IsReadOnly="True"/>
+                <DataGrid ItemsSource="{Binding currentParking}" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="SPZ" Binding="{Binding licensePlate}" />
+                        <DataGridTextColumn Header="Parkoviště" Binding="{Binding parkingLotName}" />
+                        <DataGridTextColumn Header="Místo" Binding="{Binding parkingSpaceId}" />
+                        <DataGridTextColumn Header="Příjezd" Binding="{Binding arrivalTime}" />
+                        <!-- Pokud chceš akce, přidej DataGridTemplateColumn -->
+                        <DataGridTemplateColumn Header="Akce">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Odparkovat" Click="UnparkCar_Click" Tag="{Binding}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
             <TabItem Header="Historie parkování">
                 <DataGrid ItemsSource="{Binding parkingHistory}" AutoGenerateColumns="True" IsReadOnly="True"/>
             </TabItem>
             <TabItem Header="Auta">
                 <StackPanel>
-                    <DataGrid ItemsSource="{Binding cars}" AutoGenerateColumns="False">
+                    <DataGrid ItemsSource="{Binding cars}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="SPZ" Binding="{Binding licensePlate}" />
                             <DataGridTextColumn Header="Model" Binding="{Binding brandModel}" />
                             <DataGridTextColumn Header="Barva" Binding="{Binding color}" />
-                            <DataGridTemplateColumn Header="Akce">
+                            <DataGridTemplateColumn Header="Zaprkovat">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Zaparkovat"
+                                                Click="ParkCar_Click"
+                                                Tag="{Binding}">
+                                            <Button.IsEnabled>
+                                                <MultiBinding Converter="{StaticResource CarParkedToEnabledConverter}">
+                                                    <Binding /> <!-- CarDto -->
+                                                    <Binding Path="DataContext.currentParking" RelativeSource="{RelativeSource AncestorType=Window}" />
+                                                </MultiBinding>
+                                            </Button.IsEnabled>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Odebrani">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="Smazat" Click="DeleteCar_Click" Tag="{Binding carId}" />

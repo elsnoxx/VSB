@@ -27,10 +27,15 @@ namespace ParkingLotWPF.Popup
             InitializeComponent();
             _space = space;
             DataContext = _space;
-            StatusCombo.ItemsSource = new List<string> { "available", "maintenance", "occupied" };
+            StatusCombo.ItemsSource = new List<string> { "available", "under_maintenance", "occupied" };
+
+            if (_space.status == "occupied")
+            {
+                StatusCombo.IsEnabled = false;
+            }
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+        private async void Save_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(_space.status))
             {
@@ -38,10 +43,22 @@ namespace ParkingLotWPF.Popup
                 return;
             }
 
-            DialogResult = true;
-            Close();
+            var manager = new ApiCalls.ParkingSpaceManagement();
+            bool success = await manager.UpdateSpaceStatusAsync(_space.parkingSpaceId, _space.status);
+
+            if (success)
+            {
+                MessageBox.Show("Stav byl úspěšně uložen.", "Hotovo", MessageBoxButton.OK, MessageBoxImage.Information);
+                DialogResult = true;
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Uložení selhalo.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
     }
 
-    
+
 }

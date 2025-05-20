@@ -75,11 +75,14 @@
     <Compile Include="HttpClient.cs" />
     <Compile Include="Model\CarDto.cs" />
     <Compile Include="Model\CurrentParkingDto.cs" />
+    <Compile Include="Model\Occupancy.cs" />
+    <Compile Include="Model\OccupyRequest.cs" />
     <Compile Include="Model\ParkingHistoryDto.cs" />
     <Compile Include="Model\Parkinglot.cs" />
     <Compile Include="Model\ParkingLotProfileViewModel.cs" />
     <Compile Include="Model\ParkingSpace.cs" />
     <Compile Include="Model\ParkingSpaceEditViewModel.cs" />
+    <Compile Include="Model\ReleaseRequest.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserProfileViewModel.cs" />
     <Compile Include="ParkinglotManagement.cs" />

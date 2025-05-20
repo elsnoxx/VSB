@@ -16,7 +16,5 @@ namespace ApiCalls.Model
         public int freeSpaces { get; set; }
         public List<ParkingSpace> parkingSpaces { get; set; }
 
-        public List<string> StatusOptions { get; } = new List<string> { "dostupné", "v údržbě", "obsazené" };
-
     }
 }

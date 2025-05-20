@@ -115,3 +115,12 @@ C:\Users\ficek\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Deb
 C:\Users\ficek\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\ParkingSpaceEditDialog.baml
 C:\Users\ficek\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\ParkingEditDialog.g.cs
 C:\Users\ficek\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\ParkingSpaceEditDialog.g.cs
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\AddParkingLotDialog.baml
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\ParkinglotEditDialog.baml
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\ParkingSpaceEditDialog.baml
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\AddParkingLotDialog.g.cs
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\ParkingSpaceEditDialog.g.cs
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\ParkingLotDataEditing.baml
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\ParkingLotDataEditing.g.cs
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\SelectParkingLotDialog.baml
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ParkingLotWPF\obj\Debug\Popup\SelectParkingLotDialog.g.cs
