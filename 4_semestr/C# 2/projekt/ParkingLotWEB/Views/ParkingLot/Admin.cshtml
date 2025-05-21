@@ -9,7 +9,8 @@
 <p>Volných míst: @Model.FreeSpaces</p>
 <p>Obsazených míst: @Model.ParkingSpaces.Count(s => s.Status == "occupied")</p>
 <p>Nedostupných míst: @Model.ParkingSpaces.Count(s => s.Status == "under_maintenance")</p>
-<!-- Přidejte SpaceNumber do ParkingSpaceViewModel, pokud je potřeba -->
+<p>Celková kapacita: @Model.Capacity</p>
+<p>Cena za hodinu: @Model.PricePerHour Kč</p>
 <p>Čísla parkovacích míst: od 1 do @Model.Capacity</p>
 
 <div class="row">

@@ -29,7 +29,8 @@ namespace ParkingLotWEB.Database
                     name AS Name,
                     latitude AS Latitude,
                     longitude AS Longitude,
-                    capacity AS Capacity
+                    capacity AS Capacity,
+                    price_per_hour AS PricePerHour
                   FROM ParkingLot
                   WHERE parking_lot_id = @id", new { id });
         }
@@ -56,7 +57,7 @@ namespace ParkingLotWEB.Database
         public async Task<int> UpdateAsync(ParkingLot lot)
         {
             using var conn = _dapper.CreateConnection();
-            var sql = "UPDATE ParkingLot SET name = @Name, latitude = @Latitude, longitude = @Longitude WHERE parking_lot_id = @ParkingLotId";
+            var sql = "UPDATE ParkingLot SET name = @Name, latitude = @Latitude, longitude = @Longitude, price_per_hour = @PricePerHour WHERE parking_lot_id = @ParkingLotId";
             return await conn.ExecuteAsync(sql, lot);
         }
 
@@ -80,7 +81,8 @@ namespace ParkingLotWEB.Database
                     pl.latitude AS Latitude,
                     pl.longitude AS Longitude,
                     pl.capacity AS Capacity,
-                    (pl.capacity - COUNT(ps.parking_space_id)) AS FreeSpaces
+                    (pl.capacity - COUNT(ps.parking_space_id)) AS FreeSpaces,
+                    price_per_hour AS PricePerHour
                 FROM ParkingLot pl
                 LEFT JOIN ParkingSpace ps ON pl.parking_lot_id = ps.parking_lot_id AND ps.status = 'occupied'
                 GROUP BY pl.parking_lot_id";
@@ -114,5 +116,20 @@ namespace ParkingLotWEB.Database
                 ORDER BY sh.change_time";
             return await conn.QueryAsync<OccupancyPointDto>(sql, new { parkingLotId });
         }
+
+        public async Task<int> UpdatePricePerHourAsync(int parkingLotId, decimal pricePerHour)
+        {
+            using var conn = _dapper.CreateConnection();
+            var sql = "UPDATE ParkingLot SET price_per_hour = @pricePerHour WHERE parking_lot_id = @parkingLotId";
+            return await conn.ExecuteAsync(sql, new { pricePerHour, parkingLotId });
+        }
+
+        public decimal GetPricePerHourByParkingLotName(string parkingLotName)
+        {
+            using var conn = _dapper.CreateConnection();
+            var sql = "SELECT price_per_hour FROM ParkingLot WHERE name = @parkingLotName";
+            return conn.QuerySingleOrDefault<decimal>(sql, new { parkingLotName });
+        }
+        
     }
 }

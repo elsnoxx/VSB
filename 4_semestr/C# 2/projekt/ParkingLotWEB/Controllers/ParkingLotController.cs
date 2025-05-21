@@ -210,4 +210,15 @@ public class ParkingLotController : Controller
         ViewBag.ParkingLotId = id;
         return View(data);
     }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> EditPrice(int parkingLotId, decimal pricePerHour)
+    {
+        var response = await _apiClient.PutAsync($"api/ParkingLotApi/{parkingLotId}/price", new { pricePerHour });
+        if (response.IsSuccessStatusCode)
+            return RedirectToAction("Index");
+        // případně zobrazit chybu
+        return RedirectToAction("Index");
+    }
 }

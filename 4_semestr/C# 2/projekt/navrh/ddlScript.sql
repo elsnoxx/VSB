@@ -12,10 +12,11 @@ FLUSH PRIVILEGES;
 
 CREATE TABLE ParkingLot (
   parking_lot_id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255),
-  capacity INT NOT NULL DEFAULT 0;
+  name VARCHAR(100),
   latitude DECIMAL(10, 6),
-  longitude DECIMAL(10, 6)
+  longitude DECIMAL(10, 6),
+  capacity INT,
+  price_per_hour DECIMAL(10,2) NOT NULL DEFAULT 1.0
 );
 
 CREATE TABLE ParkingSpace (
@@ -75,6 +76,8 @@ CREATE TABLE ParkingHistory (
     parking_lot_id INT NOT NULL,
     arrival_time DATETIME NOT NULL,
     departure_time DATETIME NULL,
+    duration INT,
+    price DECIMAL(10,2),
     FOREIGN KEY (car_id) REFERENCES Car(car_id),
     FOREIGN KEY (parking_lot_id) REFERENCES ParkingLot(parking_lot_id)
 );

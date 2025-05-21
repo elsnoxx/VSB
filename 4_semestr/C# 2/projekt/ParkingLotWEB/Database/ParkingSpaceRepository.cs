@@ -99,16 +99,27 @@ namespace ParkingLotWEB.Database
                       WHERE occupancy_id = @OccupancyId",
                     new { EndTime = endTime, OccupancyId = occupancy.occupancy_id }, tran);
 
+                // Získej cenu za hodinu pro parkoviště
+                var pricePerHour = await conn.QuerySingleAsync<decimal>(
+                    "SELECT price_per_hour FROM ParkingLot WHERE parking_lot_id = @ParkingLotId",
+                    new { ParkingLotId = occupancy.parking_lot_id }, tran);
+
+                // Výpočet ceny
+                var durationMinutes = (int)(endTime - occupancy.start_time).TotalMinutes;
+                var price = (decimal)Math.Ceiling(durationMinutes / 60.0) * pricePerHour;
+
                 // 3. Vlož do ParkingHistory
                 await conn.ExecuteAsync(
-                    @"INSERT INTO ParkingHistory (car_id, parking_lot_id, arrival_time, departure_time)
-                      VALUES (@CarId, @ParkingLotId, @ArrivalTime, @DepartureTime)",
+                    @"INSERT INTO ParkingHistory (car_id, parking_lot_id, arrival_time, departure_time, duration, price)
+                        VALUES (@CarId, @ParkingLotId, @ArrivalTime, @DepartureTime, @Duration, @Price)",
                     new
                     {
                         CarId = occupancy.car_id,
                         ParkingLotId = occupancy.parking_lot_id,
                         ArrivalTime = occupancy.start_time,
-                        DepartureTime = endTime
+                        DepartureTime = endTime,
+                        Duration = (int)(endTime - occupancy.start_time).TotalMinutes,
+                        Price = price
                     }, tran);
 
                 // 4. Změň status na 'available'

@@ -46,10 +46,12 @@ public class ParkingLotApiController : ControllerBase
             Longitude = lot.Longitude,
             Capacity = lot.Capacity,
             FreeSpaces = lot.FreeSpaces,
+            PricePerHour = lot.PricePerHour, 
             ParkingSpaces = spaces.Select(s => new ParkingSpaceDto
             {
                 ParkingSpaceId = s.ParkingSpaceId,
                 SpaceNumber = s.SpaceNumber,
+                ParkingLotId = s.ParkingLotId,
                 Status = s.Status
             }).ToList()
         };
@@ -99,7 +101,8 @@ public class ParkingLotApiController : ControllerBase
             Latitude = lot.Latitude,
             Longitude = lot.Longitude,
             Capacity = lot.Capacity,
-            FreeSpaces = lot.FreeSpaces,
+            FreeSpaces = lot.Capacity - lot.FreeSpaces,
+            PricePerHour = lot.PricePerHour,
             ParkingSpaces = spacesWithOwner.ToList(),
             UserCars = userCars?.Select(car => new CarDto
             {
@@ -139,5 +142,17 @@ public class ParkingLotApiController : ControllerBase
     {
         var data = await _repo.GetOccupancyTimelineAsync(id);
         return Ok(data);
+    }
+
+    [HttpPut("{id}/price")]
+    public async Task<IActionResult> UpdatePrice(int id, [FromBody] System.Text.Json.JsonElement body)
+    {
+        if (!body.TryGetProperty("pricePerHour", out var priceProp) || !priceProp.TryGetDecimal(out var pricePerHour))
+            return BadRequest("Missing or invalid pricePerHour.");
+
+        var result = await _repo.UpdatePricePerHourAsync(id, pricePerHour);
+        if (result > 0)
+            return Ok();
+        return NotFound();
     }
 }

@@ -18,6 +18,11 @@
         <input asp-for="Longitude" class="form-control" />
         <span asp-validation-for="Longitude" class="text-danger"></span>
     </div>
+    <div class="mb-3">
+        <label asp-for="PricePerHour" class="form-label"></label>
+        <input asp-for="PricePerHour" class="form-control" />
+        <span asp-validation-for="PricePerHour" class="text-danger"></span>
+    </div>
     <button type="submit" class="btn btn-primary">Uložit</button>
     <a asp-action="Index" class="btn btn-secondary">Zpět</a>
 </form>

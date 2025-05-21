@@ -12,9 +12,11 @@ using System.Security.Claims;
 public class UserApiController : ControllerBase
 {
     private readonly UserRepository _repo;
+    private readonly ParkingLotRepository _parkingLotRepo;
 
-    public UserApiController(UserRepository repo)
+    public UserApiController(UserRepository repo, ParkingLotRepository parkingLotRepo)
     {
+        _parkingLotRepo = parkingLotRepo;
         _repo = repo;
     }
 
@@ -143,13 +145,33 @@ public class UserApiController : ControllerBase
         }).ToList();
 
         // Získej historii parkování
+        
         var parkingHistory = await _repo.GetParkingHistoryByUserIdAsync(id);
-        var parkingHistoryDtos = parkingHistory.Select(history => new ParkingHistoryDto
-        {
-            LicensePlate = history.LicensePlate,
-            ParkingLotName = history.ParkingLotName,
-            ArrivalTime = history.ArrivalTime,
-            DepartureTime = history.DepartureTime
+    
+        var parkingHistoryDtos = parkingHistory.Select(history => {
+            int durationMinutes = history.DepartureTime.HasValue
+                ? (int)(history.DepartureTime.Value - history.ArrivalTime).TotalMinutes
+                : 0;
+            int hours = durationMinutes > 0 ? (int)Math.Ceiling(durationMinutes / 60.0) : 0;
+
+            // Pokud je cena za hodinu v historii 0, získej ji z parkoviště
+            decimal pricePerHour = history.PricePerHour;
+            if (pricePerHour == 0)
+            {
+                pricePerHour = _parkingLotRepo.GetPricePerHourByParkingLotName(history.ParkingLotName);
+            }
+            decimal totalPrice = hours * pricePerHour;
+
+            return new ParkingHistoryDto
+            {
+                LicensePlate = history.LicensePlate,
+                ParkingLotName = history.ParkingLotName,
+                ArrivalTime = history.ArrivalTime,
+                DepartureTime = history.DepartureTime,
+                duration = durationMinutes,
+                PricePerHour = pricePerHour,
+                TotalPrice = totalPrice
+            };
         }).ToList();
 
         // Získej aktuálně zaparkovaná auta

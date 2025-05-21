@@ -6,6 +6,7 @@ namespace ParkingLotWEB.Models.Entities
         public string Name { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
+        public decimal PricePerHour { get; set; }
         public int Capacity { get; set; }
         public int FreeSpaces { get; set; }
 

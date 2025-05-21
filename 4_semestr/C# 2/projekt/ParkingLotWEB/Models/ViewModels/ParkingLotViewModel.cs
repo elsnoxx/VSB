@@ -8,6 +8,7 @@ namespace ParkingLotWEB.Models.ViewModels
         public double Longitude { get; set; }
         public int Capacity { get; set; }
         public int FreeSpaces { get; set; }
+        public decimal PricePerHour { get; set; }
         public List<ParkingSpaceViewModel>? ParkingSpaces { get; set; }
     }
 

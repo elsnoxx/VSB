@@ -82,18 +82,18 @@
             <h5 class="mb-0">Historie zaparkovaných aut</h5>
         </div>
         <div class="card-body" style="padding:0;">
-            <table class="table table-bordered mb-0">
-                <thead>
-                    <tr>
-                        <th>SPZ</th>
-                        <th>Parkoviště</th>
-                        <th>Čas příjezdu</th>
-                        <th>Čas odjezdu</th>
-                    </tr>
-                </thead>
-            </table>
             <div style="max-height:210px; overflow-y:auto;">
                 <table class="table table-bordered mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>SPZ</th>
+                            <th>Parkoviště</th>
+                            <th>Čas příjezdu</th>
+                            <th>Čas odjezdu</th>
+                            <th>Délka (min)</th>
+                            <th>Cena</th>
+                        </tr>
+                    </thead>
                     <tbody>
                     @if (Model.ParkingHistory != null && Model.ParkingHistory.Any())
                     {
@@ -103,14 +103,16 @@
                                 <td>@history.LicensePlate</td>
                                 <td>@history.ParkingLotName</td>
                                 <td>@history.ArrivalTime.ToString("g")</td>
-                                <td>@history.DepartureTime?.ToString("g") ?? "Stále zaparkováno"</td>
+                                <td>@(history.DepartureTime?.ToString("g") ?? "Stále zaparkováno")</td>
+                                <td>@history.duration</td>
+                                <td>@history.TotalPrice.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("cs-CZ"))</td>
                             </tr>
                         }
                     }
                     else
                     {
                         <tr>
-                            <td colspan="4" class="text-center">Žádná historie zaparkovaných aut.</td>
+                            <td colspan="6" class="text-center">Žádná historie zaparkovaných aut.</td>
                         </tr>
                     }
                     </tbody>

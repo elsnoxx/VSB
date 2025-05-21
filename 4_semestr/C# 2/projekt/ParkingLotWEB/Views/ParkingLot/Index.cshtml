@@ -9,6 +9,7 @@
             <th>Latitude</th>
             <th>Longitude</th>
             <th></th>
+            <th>Cena za hodinu</th>
         </tr>
     </thead>
     <tbody>
@@ -25,6 +26,15 @@
                    onclick="return confirm('Opravdu smazat?');">Smazat</a>
                 <a asp-action="Admin" asp-route-id="@lot.ParkingLotId" class="btn btn-warning btn-sm">Administrace</a>
                 
+            </td>
+            <td>
+                <form asp-action="EditPrice" asp-controller="ParkingLot" method="post" class="mb-3">
+                    <input type="hidden" name="parkingLotId" value="@lot.ParkingLotId" />
+                    <div class="input-group">
+                        <input type="number" step="0.01" min="0" name="pricePerHour" value="@lot.PricePerHour" class="form-control" />
+                        <button type="submit" class="btn btn-primary">Upravit cenu za hodinu</button>
+                    </div>
+                </form>
             </td>
         </tr>
     }

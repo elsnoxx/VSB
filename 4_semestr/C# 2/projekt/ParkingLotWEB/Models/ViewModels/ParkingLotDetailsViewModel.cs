@@ -10,6 +10,7 @@ namespace ParkingLotWEB.Models.ViewModels
         public decimal Longitude { get; set; }
         public int Capacity { get; set; }
         public int FreeSpaces { get; set; } = new();
+        public decimal PricePerHour { get; set; }
         public List<ParkingSpaceWithOwner> ParkingSpaces { get; set; } = new();
         public List<CarDto> UserCars { get; set; } = new();
         public List<string> OccupiedLicensePlates { get; set; }
