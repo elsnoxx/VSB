@@ -27,6 +27,14 @@
                 <DataGridTextColumn Header="Délka" Binding="{Binding longitude}" />
                 <DataGridTextColumn Header="Kapacita" Binding="{Binding capacity}" />
                 <DataGridTextColumn Header="Volná místa" Binding="{Binding freeSpaces}" />
+                <DataGridTextColumn Header="Cena za Hodinu" Binding="{Binding pricePerHour}" />
+                <DataGridTemplateColumn Header="Cena za hodinu">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Změnit" Click="ChangePrice_Click" DataContext="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Akce">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

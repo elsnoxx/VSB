@@ -14,6 +14,7 @@ namespace ApiCalls.Model
         public decimal longitude { get; set; }
         public int capacity { get; set; }
         public int freeSpaces { get; set; }
+        public decimal pricePerHour { get; set; }
         public List<ParkingSpace> parkingSpaces { get; set; }
     }
 }

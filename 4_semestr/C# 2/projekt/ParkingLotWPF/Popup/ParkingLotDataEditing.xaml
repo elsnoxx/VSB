@@ -1,7 +1,7 @@
 ﻿<Window x:Class="ParkingLotWPF.Popup.ParkingLotDataEditing"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Editace parkoviště" Height="350" Width="400">
+        Title="Editace parkoviště" Height="200" Width="400">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -9,7 +9,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Název:" Grid.Row="0"/>
         <TextBox Text="{Binding name}" Grid.Row="0" Margin="100,0,0,0" Width="200"/>
@@ -19,6 +19,8 @@
         <TextBox Text="{Binding longitude}" Grid.Row="2" Margin="100,0,0,0" Width="200"/>
         <TextBlock Text="Kapacita:" Grid.Row="3"/>
         <TextBox Text="{Binding capacity}" Grid.Row="3" Margin="100,0,0,0" Width="200"/>
+        <TextBlock Text="Cena za hodinu:" Grid.Row="4"/>
+        <TextBox Text="{Binding pricePerHour}" Grid.Row="4" Margin="100,0,0,0" Width="200"/>
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
             <Button Content="Uložit" Width="100" Margin="0,0,10,0" Click="Update_Click"/>
             <Button Content="Zrušit" Width="100" Click="Cancel_Click"/>

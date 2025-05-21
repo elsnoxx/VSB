@@ -64,6 +64,9 @@
     <Compile Include="Popup\CarRegistrationDialog.xaml.cs">
       <DependentUpon>CarRegistrationDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Popup\ChangePricePerHourDialog.xaml.cs">
+      <DependentUpon>ChangePricePerHourDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Popup\ParkingLotDataEditing.xaml.cs">
       <DependentUpon>ParkingLotDataEditing.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Popup\CarRegistrationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Popup\ChangePricePerHourDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

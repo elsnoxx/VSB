@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ApiCalls.Model;
 using System.Text.Json;
+using System.Net.Http;
 
 namespace ApiCalls
 {
@@ -48,5 +49,14 @@ namespace ApiCalls
             var response = await _httpClientWrapper.DeleteAsync($"api/ParkinglotApi/{id}");
             return string.IsNullOrEmpty(response);
         }
+
+        public async Task<bool> UpdatePricePerHourAsync(int parkingLotId, decimal pricePerHour)
+        {
+            var json = $"{{\"pricePerHour\":{pricePerHour.ToString(System.Globalization.CultureInfo.InvariantCulture)}}}";
+            var response = await _httpClientWrapper.PutAsync($"api/ParkinglotApi/{parkingLotId}/price", json);
+            return string.IsNullOrEmpty(response);
+        }
+
+
     }
 }

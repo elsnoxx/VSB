@@ -44,7 +44,7 @@ namespace ParkingLotWPF.Views
                 var dialog = new ParkinglotEditDialog(profileParkinglot);
                 if (dialog.ShowDialog() == true)
                 {
-                    // případné uložení změn
+                    await _viewModel.LoadParkinglotsAsync();
                 }
             }
         }
@@ -87,6 +87,29 @@ namespace ParkingLotWPF.Views
                     else
                     {
                         MessageBox.Show("Smazání parkoviště selhalo.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        }
+
+        private async void ChangePrice_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is Parkinglot lot)
+            {
+                var dialog = new ChangePricePerHourDialog(lot.pricePerHour);
+                if (dialog.ShowDialog() == true)
+                {
+                    var newPrice = dialog.Price;
+                    var service = new ApiCalls.ParkinglotManagement();
+                    bool success = await service.UpdatePricePerHourAsync(lot.parkingLotId, newPrice);
+                    if (success)
+                    {
+                        MessageBox.Show("Cena byla změněna.", "Hotovo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        await _viewModel.LoadParkinglotsAsync();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Změna ceny selhala.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }
