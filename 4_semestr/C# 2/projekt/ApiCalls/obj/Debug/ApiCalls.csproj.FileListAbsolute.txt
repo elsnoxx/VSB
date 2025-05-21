@@ -54,3 +54,5 @@ C:\Users\ficek\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ApiCalls\obj\Debug\Ap
 C:\Users\ficek\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ApiCalls\obj\Debug\ApiCalls.csproj.Up2Date
 C:\Users\ficek\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ApiCalls\obj\Debug\ApiCalls.dll
 C:\Users\ficek\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ApiCalls\obj\Debug\ApiCalls.pdb
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ApiCalls\bin\Debug\System.Configuration.ConfigurationManager.dll
+C:\Users\admin\Documents\GitHub\VSB\4_semestr\C# 2\projekt\ApiCalls\bin\Debug\System.Configuration.ConfigurationManager.xml

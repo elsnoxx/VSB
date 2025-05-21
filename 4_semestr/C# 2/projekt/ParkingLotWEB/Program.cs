@@ -80,6 +80,11 @@ namespace ParkingLotWEB
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuilder =>
+            {
+                appBuilder.UseMiddleware<ApiKeyMiddleware>();
+            });
+
             app.MapControllers();
 
             app.MapControllerRoute(
