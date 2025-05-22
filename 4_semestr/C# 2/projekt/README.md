@@ -7,62 +7,17 @@ pass----> wabapplogin
 popis api na -> /ApiDescription
 
 
-1. Zobrazení parkovišť na mapě včetně aktuálních počtů volných míst
-[x]     - done na uvodni strance
-[]      - problem s aktualnim poctem mist
+Odpovím za chabra dyk 
 
+Chtěl na začátku proste vidět co to umí ta cela apka,
 
-2. Obsazení parkovacího místa (náhodné přiřazení volného místa)
-Chybí: Funkce pro náhodné přiřazení volného parkovacího místa.
-Řešení:
-Přidejte metodu v ParkingSpaceRepository, která vrátí náhodné volné místo.
-Implementujte API endpoint v ParkingSpaceApiController pro obsazení místa.
-Aktualizujte UI (např. dialog nebo stránku) pro spuštění obsazení.
-Příklad metody pro náhodné volné místo:
+Pak chce vidět validaci u formulářů jak na webu tak i desktop,
 
-3. Ověření stavu při obsazení
-Chybí: Kontrola, zda je parkovací místo dostupné před obsazením.
-Řešení:
-Přidejte validaci v API endpointu pro obsazení místa.
-Pokud není žádné volné místo, vraťte chybu.
+pak dokumentace k jsonu(bacha na return type nemel bys tam mit jen Task1) ale treba object{name,id….} tady tohle skoro nikdo nemel a bral zbytecne body,
 
-4. Změna stavu parkovacího místa
-Chybí: Omezení změny stavu pouze na "dostupné" a "v údržbě".
-Řešení:
-Přidejte validaci v API endpointu pro změnu stavu.
-Povolené změny:
-"dostupné" → "obsazené"
-"dostupné" → "v údržbě"
-"v údržbě" → "dostupné"
+Pak chtěl vidět jak se volá api na desktop aplikaci (bacha na using u Httpclientu),
+chtěl taky vidět jestli máš nějaký speciál api klíč aby si to api nemohl volat každý(taky skoro nikdo neměl xd),
+A nakonec jak řešit autorizace admina,
+a ještě jak se dělala databáze co jste použili dapper treba nebo custom … nic jiného neřešil,
 
-5. Historie stavů parkovacích míst
-Chybí: Automatické zaznamenávání historie při změně stavu.
-Řešení:
-Aktualizujte metodu pro změnu stavu v ParkingSpaceRepository, aby zaznamenávala historii do tabulky StatusHistory.
-Příklad:
-
-6. Zákaz úprav ukončených obsazení
-Chybí: Kontrola, aby ukončené obsazení nebylo možné upravovat nebo mazat.
-Řešení:
-Přidejte validaci v API endpointu pro úpravu obsazení.
-Pokud je end_time vyplněno, vraťte chybu.
-
-7. Statistika ukončených parkování za poslední měsíc
-Chybí: Funkce pro zobrazení statistiky ukončených parkování.
-Řešení:
-Přidejte metodu v ParkingLotRepository, která vrátí počet ukončených parkování za poslední měsíc pro každé parkoviště.
-Implementujte API endpoint pro získání této statistiky.
-Aktualizujte UI (např. stránku nebo dashboard) pro zobrazení statistiky.
-Příklad metody:
-
-8. UI pro zobrazení historie stavů
-Chybí: Stránka nebo dialog pro zobrazení historie stavů parkovacích míst.
-Řešení:
-Přidejte view (např. History.cshtml) pro zobrazení historie.
-Implementujte API endpoint pro získání historie stavů.
-
-9. Testování a validace
-Chybí: Testování všech funkcí a validace vstupů.
-Řešení:
-Otestujte všechny API endpointy a UI.
-Přidejte validace na straně klienta i serveru.
+Hodnotí i celou apku jako takovou ale videl jsem ze to dal vsem full za tu část takze zbytek nehrotí

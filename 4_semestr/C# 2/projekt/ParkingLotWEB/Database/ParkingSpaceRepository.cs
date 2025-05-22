@@ -54,7 +54,16 @@ namespace ParkingLotWEB.Database
         // Získání historie stavu parkovacího místa
         public async Task<IEnumerable<StatusHistory>> GetStatusHistoryAsync(int parkingSpaceId)
         {
-            string sql = @"SELECT * FROM StatusHistory WHERE parking_space_id = @ParkingSpaceId ORDER BY change_time DESC";
+            string sql = @"SELECT sh.history_id AS Id,
+                            sh.parking_space_id AS ParkingSpaceId,
+                            ps.space_number AS SpaceNumber,
+                            sh.status AS Status,
+                            sh.change_time AS ChangeTime
+                        FROM StatusHistory sh
+                        join ParkingSpace ps on ps.parking_space_id = sh.parking_space_id
+                        WHERE sh.parking_space_id = @ParkingSpaceId
+                        ORDER BY change_time DESC;";
+                        
             return await _repository.QueryAsync<StatusHistory>(sql, new { ParkingSpaceId = parkingSpaceId });
         }
 

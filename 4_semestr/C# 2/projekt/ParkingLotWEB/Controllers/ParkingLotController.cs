@@ -207,6 +207,7 @@ public class ParkingLotController : Controller
 
         var json = await response.Content.ReadAsStringAsync();
         var data = JsonSerializer.Deserialize<List<OccupancyPointDto>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
         ViewBag.ParkingLotId = id;
         return View(data);
     }
@@ -220,5 +221,34 @@ public class ParkingLotController : Controller
             return RedirectToAction("Index");
         // případně zobrazit chybu
         return RedirectToAction("Index");
+    }
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> SpaceHistory(int parkingSpaceId)
+    {
+        // Získání historie pro parkovací místo
+        var historyResponse = await _apiClient.GetAsync($"api/ParkingSpaceApi/history/{parkingSpaceId}");
+        if (!historyResponse.IsSuccessStatusCode)
+            return NotFound();
+
+        var historyJson = await historyResponse.Content.ReadAsStringAsync();
+        var historyData = JsonSerializer.Deserialize<List<StatusHistory>>(historyJson, 
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        // Získání informací o parkovacím místě
+        var spaceResponse = await _apiClient.GetAsync($"api/ParkingSpaceApi/{parkingSpaceId}");
+        if (!spaceResponse.IsSuccessStatusCode)
+            return NotFound();
+
+        var spaceJson = await spaceResponse.Content.ReadAsStringAsync();
+        var spaceData = JsonSerializer.Deserialize<dynamic>(spaceJson, 
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        // Informace o parkovacím místě pro zobrazení
+        ViewBag.SpaceNumber = historyData?.FirstOrDefault()?.SpaceNumber ?? 0;
+        ViewBag.ParkingSpaceId = parkingSpaceId;
+        ViewBag.ParkingLotId = historyData?.FirstOrDefault()?.ParkingLotId ?? 0;
+
+        return View(historyData);
     }
 }

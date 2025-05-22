@@ -23,6 +23,7 @@ namespace ApiCalls
         public async Task<ParkingSpace> GetSpaceByIdAsync(int id)
         {
             var response = await _httpClientWrapper.GetAsync($"api/ParkingSpaceApi/{id}");
+            Console.WriteLine($"Response: {response}");
             return JsonSerializer.Deserialize<ParkingSpace>(response);
         }
 

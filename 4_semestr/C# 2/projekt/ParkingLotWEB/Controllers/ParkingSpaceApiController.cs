@@ -19,6 +19,7 @@ public class ParkingSpaceApiController : ControllerBase
     }
 
     [HttpGet("history/{parkingSpaceId}")]
+    [ProducesResponseType(typeof(IEnumerable<StatusHistory>), 200)]
     public async Task<IActionResult> GetHistory(int parkingSpaceId)
     {
         var history = await _repo.GetStatusHistoryAsync(parkingSpaceId);
@@ -26,6 +27,7 @@ public class ParkingSpaceApiController : ControllerBase
     }
 
     [HttpPost("occupy/{parkingLotId}")]
+    [ProducesResponseType(typeof(IEnumerable<Occupancy>), 200)]
     public async Task<IActionResult> Occupy(int parkingLotId, [FromBody] OccupyRequest req)
     {
         var freeSpaces = (await _repo.GetAvailableSpacesAsync(parkingLotId)).ToList();
@@ -43,18 +45,24 @@ public class ParkingSpaceApiController : ControllerBase
     }
 
     [HttpPost("release")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Release([FromBody] ReleaseRequest req)
     {
         // 1. Změna stavu místa na "available" + zápis do historie
         await _repo.UpdateStatusAsync(req.ParkingSpaceId, "available");
 
-        // 2. Ukončení poslední obsazenosti (nastaví end_time, duration, price)
+        // 2. Ukončení poslední obsazenosti
         await _repo.ReleaseOccupancyAsync(req.ParkingSpaceId, req.ParkingLotId);
 
         return Ok();
     }
 
     [HttpPost("status/{parkingSpaceId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SetStatus(int parkingSpaceId, [FromBody] SetStatusRequest req)
     {
         Console.WriteLine($"Setting status for space {parkingSpaceId} to {req.Status}");
@@ -63,6 +71,7 @@ public class ParkingSpaceApiController : ControllerBase
     }
 
     [HttpGet("occupancy/{parkingSpaceId}")]
+    [ProducesResponseType(typeof(Occupancy), 200)]
     public async Task<IActionResult> GetOccupancy(int parkingSpaceId)
     {
         var occ = await _repo.GetCurrentOccupancyAsync(parkingSpaceId);
@@ -71,21 +80,19 @@ public class ParkingSpaceApiController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(ParkingSpace), 200)]
     public async Task<IActionResult> Get(int id)
     {
         var space = await _repo.GetByIdAsync(id);
         if (space == null) return NotFound();
 
-        // Pokud potřebujete další informace o tomto parkovacím místě
         var details = await _repo.GetParkingSpaceDetailsAsync(id);
-        
-        // Vytvořte nový objekt s kompletními informacemi
+
         var result = new
         {
             ParkingSpaceId = space.ParkingSpaceId,
             ParkingLotId = space.ParkingLotId,
             Status = space.Status,
-            // Další vlastnosti, které potřebujete...
             Details = details
         };
 
@@ -93,21 +100,19 @@ public class ParkingSpaceApiController : ControllerBase
     }
 
     [HttpGet("lot/{parkingLotId}")]
+    [ProducesResponseType(typeof(IEnumerable<ParkingSpace>), 200)]
     public async Task<IActionResult> GetByLotId(int parkingLotId)
     {
         var spaces = await _repo.GetSpacesWithOwnerAsync(parkingLotId);
         if (spaces == null || !spaces.Any()) return NotFound();
-        
-        // Získejte informace o parkovišti
+
         var parkingLot = await _parkingLotRepo.GetByIdAsync(parkingLotId);
         if (parkingLot == null) return NotFound();
 
-        // Vytvořte kombinovaný DTO objekt
         var result = new
         {
             ParkingLotId = parkingLot.ParkingLotId,
             Name = parkingLot.Name,
-            // Další vlastnosti parkoviště...
             ParkingSpaces = spaces.ToList()
         };
 

@@ -25,6 +25,7 @@ public class AuthApiController : ControllerBase
     }
 
     [HttpPost("login")]
+    [ProducesResponseType(typeof(TokenResponse), 200)]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
         var user = await _userRepo.AuthenticateAsync(model.Username, model.Password);
@@ -43,7 +44,7 @@ public class AuthApiController : ControllerBase
 
         // Vygeneruj JWT token a vrať ho v odpovědi
         var token = GenerateJwtToken(user);
-        return Ok(new { token });
+        return Ok(new TokenResponse { Token = token });
     }
 
     private string GenerateJwtToken(User user)

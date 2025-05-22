@@ -1,0 +1,179 @@
+@model IEnumerable<StatusHistory>
+@using System.Text.Json
+@{
+    ViewData["Title"] = $"Historie parkovacího místa #{ViewBag.SpaceNumber}";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Historie parkovacího místa #@ViewBag.SpaceNumber</h2>
+        <a href="@Url.Action("Admin", new { id = ViewBag.ParkingLotId })" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Zpět na přehled parkoviště
+        </a>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">
+            Pro toto parkovací místo nejsou k dispozici žádná data historie.
+        </div>
+    }
+    else
+    {
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Graf změn statusu</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="statusHistoryChart" height="300"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Historie změn</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Datum a čas</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderByDescending(x => x.ChangeTime))
+                            {
+                                <tr>
+                                    <td>@item.ChangeTime.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                                    <td>
+                                        @switch (item.Status?.ToLower())
+                                        {
+                                            case "available":
+                                                <span class="badge bg-success">Volné</span>
+                                                break;
+                                            case "occupied":
+                                                <span class="badge bg-danger">Obsazené</span>
+                                                break;
+                                            case "under_maintenance":
+                                                <span class="badge bg-warning text-dark">V údržbě</span>
+                                                break;
+                                            default:
+                                                <span class="badge bg-secondary">@item.Status</span>
+                                                break;
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (Model != null && Model.Any())
+            {
+                // Předzpracování dat na straně serveru - formátujeme data přímo v C#
+                var formattedData = Model.OrderBy(x => x.ChangeTime).Select(item => new {
+                    id = item.id,
+                    parkingSpaceId = item.ParkingSpaceId,
+                    spaceNumber = item.SpaceNumber,
+                    status = item.Status,
+                    parkingLotId = item.ParkingLotId,
+                    changeTime = item.ChangeTime,
+                    formattedDate = item.ChangeTime.ToString("dd.MM.yyyy HH:mm:ss")
+                }).ToList();
+                
+                <text>
+                // Již předformátovaná data ze serveru
+                const historyData = @Html.Raw(JsonSerializer.Serialize(formattedData));
+                
+                // Příprava dat pro graf
+                const labels = historyData.map(item => item.formattedDate);
+                
+                // Převede status na hodnotu pro graf
+                function getStatusValue(status) {
+                    switch((status || '').toLowerCase()) {
+                        case 'available': return 2;
+                        case 'occupied': return 1;
+                        case 'under_maintenance': return 0;
+                        case 'reserved': return 1.5;
+                        default: return -1;
+                    }
+                }
+                
+                // Barvy pro různé statusy
+                const statusColors = {
+                    'available': 'rgb(75, 192, 75)',
+                    'occupied': 'rgb(255, 99, 71)',
+                    'under_maintenance': 'rgb(255, 205, 86)',
+                    'reserved': 'rgb(54, 162, 235)'
+                };
+                
+                // Vykreslení grafu
+                const ctx = document.getElementById('statusHistoryChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: historyData.map(item => getStatusValue(item.status)),
+                            label: 'Status místa',
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: historyData.map(item => statusColors[(item.status || '').toLowerCase()] || 'gray'),
+                            tension: 0.1,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                ticks: {
+                                    callback: function(value) {
+                                        if (value === 0) return 'Údržba';
+                                        if (value === 1) return 'Obsazeno';
+                                        if (value === 1.5) return 'Rezervováno';
+                                        if (value === 2) return 'Volné';
+                                        return '';
+                                    }
+                                },
+                                min: -0.5,
+                                max: 2.5
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    afterLabel: function(context) {
+                                        const item = historyData[context.dataIndex];
+                                        let statusText = '';
+                                        switch((item.status || '').toLowerCase()) {
+                                            case 'available': statusText = 'Volné'; break;
+                                            case 'occupied': statusText = 'Obsazené'; break;
+                                            case 'under_maintenance': statusText = 'V údržbě'; break;
+                                            case 'reserved': statusText = 'Rezervováno'; break;
+                                            default: statusText = item.status || 'Neznámý'; break;
+                                        }
+                                        return `Status: ${statusText}`;
+                                    }
+                                }
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+                </text>
+            }
+        });
+    </script>
+}

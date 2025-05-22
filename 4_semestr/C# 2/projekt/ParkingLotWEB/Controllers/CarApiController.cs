@@ -19,6 +19,9 @@ public class CarApiController : ControllerBase
     }
 
     [HttpPost("new")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Create([FromBody] CarCreateDto carDto)
     {
         using var reader = new StreamReader(Request.Body);
@@ -52,13 +55,15 @@ public class CarApiController : ControllerBase
     }
 
     [HttpGet("user/{userId}")]
+    [ProducesResponseType(typeof(IEnumerable<Car>), 200)]
     public async Task<IActionResult> GetByUserId(int userId)
     {
         var cars = await _repo.GetByUserIdAsync(userId);
         return Ok(cars);
     }
-    
+
     [HttpGet("GetUserCars/{userId}")]
+    [ProducesResponseType(typeof(IEnumerable<Car>), 200)]
     public async Task<IActionResult> GetUserCars(int userId)
     {
         var cars = await _userRepo.GetCarsByUserIdAsync(userId);
@@ -66,6 +71,9 @@ public class CarApiController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
         var affectedRows = await _repo.DeleteAsync(id);

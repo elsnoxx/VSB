@@ -21,6 +21,7 @@ public class UserApiController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<UserDto>), 200)]
     public async Task<IActionResult> GetAll()
     {
         var users = await _repo.GetAllAsync();
@@ -30,6 +31,7 @@ public class UserApiController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(UserDto), 200)]
     public async Task<IActionResult> Get(int id)
     {
         var user = await _repo.GetByIdAsync(id);
@@ -38,6 +40,9 @@ public class UserApiController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]    
     public async Task<IActionResult> Update(int id, [FromBody] User model)
     {
         if (string.IsNullOrEmpty(model.Password))
@@ -59,6 +64,9 @@ public class UserApiController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] User user)
     {
         if (!ModelState.IsValid)
@@ -81,6 +89,9 @@ public class UserApiController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Delete(int id)
     {
         var affected = await _repo.DeleteAsync(id);
@@ -89,13 +100,16 @@ public class UserApiController : ControllerBase
     }
 
     [HttpPut("{id}/role")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ChangeRole(int id, [FromBody] JsonElement body)
     {
         // Directly read the JSON element
         if (body.TryGetProperty("Role", out var roleElement) && roleElement.ValueKind == JsonValueKind.String)
         {
             string role = roleElement.GetString() ?? "";
-            
+
             if (string.IsNullOrEmpty(role))
             {
                 return BadRequest(new { error = "Role is required" });
@@ -107,11 +121,14 @@ public class UserApiController : ControllerBase
 
             return NoContent();
         }
-        
+
         return BadRequest(new { error = "Invalid request format. Role property is required." });
     }
 
     [HttpPut("{id}/password")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ResetPassword(int id, [FromBody] JsonElement body)
     {
         if (!body.TryGetProperty("Password", out var passwordElement) || passwordElement.ValueKind != JsonValueKind.String)
@@ -128,6 +145,7 @@ public class UserApiController : ControllerBase
     }
 
     [HttpGet("{id}/profile")]
+    [ProducesResponseType(typeof(UserProfileViewModel), 200)]
     public async Task<IActionResult> GetProfile(int id)
     {
         var user = await _repo.GetByIdAsync(id);
@@ -145,10 +163,11 @@ public class UserApiController : ControllerBase
         }).ToList();
 
         // Získej historii parkování
-        
+
         var parkingHistory = await _repo.GetParkingHistoryByUserIdAsync(id);
-    
-        var parkingHistoryDtos = parkingHistory.Select(history => {
+
+        var parkingHistoryDtos = parkingHistory.Select(history =>
+        {
             int durationMinutes = history.DepartureTime.HasValue
                 ? (int)(history.DepartureTime.Value - history.ArrivalTime).TotalMinutes
                 : 0;
@@ -203,6 +222,7 @@ public class UserApiController : ControllerBase
     }
 
     [HttpGet("GetUserCars")]
+    [ProducesResponseType(typeof(IEnumerable<UserDto>), 200)]
     public async Task<IActionResult> GetUserCars()
     {
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");

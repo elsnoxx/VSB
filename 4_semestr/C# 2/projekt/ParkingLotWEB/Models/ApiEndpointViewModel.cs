@@ -8,6 +8,7 @@ namespace ParkingLotWEB.Models
         public string Route { get; set; }
         public List<ApiEndpointParameterViewModel> Parameters { get; set; }
         public string ReturnType { get; set; }
+        public string ReturnJsonExample { get; set; }
     }
     public class ApiEndpointParameterViewModel
     {

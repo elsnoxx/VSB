@@ -1,56 +1,137 @@
-@model IEnumerable<ApiEndpointViewModel>
+@model List<ApiEndpointViewModel>
+
+<h1 class="mb-4">API Dokumentace</h1>
+
+@* Přidání CSS stylů pro lepší formátování tabulky *@
+<style>
+    .api-table {
+        table-layout: fixed;
+        width: 100%;
+    }
+    
+    .api-table th.http-col {
+        width: 80px;
+    }
+    
+    .api-table th.route-col {
+        width: 20%;
+    }
+    
+    .api-table th.action-col {
+        width: 15%;
+    }
+    
+    .api-table th.params-col {
+        width: 15%;
+    }
+    
+    .api-table th.return-col {
+        width: 50%;
+    }
+    
+    .api-table td {
+        vertical-align: top;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .api-table pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        max-width: 100%;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    .param-badge {
+        display: inline-block;
+        margin-bottom: 3px;
+        white-space: normal;
+        text-align: left;
+        max-width: 100%;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
+</style>
 
 @{
-    ViewData["Title"] = "API Endpoints";
+    var groupedEndpoints = Model.GroupBy(e => e.Controller).ToList();
 }
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
-
-<div class="container mt-4" style="margin-bottom: 80px;">
-    <h1 class="mb-4">API Endpoints</h1>
-    @foreach (var group in Model.GroupBy(e => e.Controller))
-    {
-        <div class="card mb-4 shadow">
-            <div class="card-header bg-primary text-white">
-                <h2 class="h5 mb-0">@group.Key</h2>
-            </div>
-            <div class="card-body p-0">
-                <table class="table table-striped mb-0">
-                    <thead class="table-light">
+@foreach (var group in groupedEndpoints)
+{
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">@group.Key</h2>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped mb-0 api-table">
+                    <thead>
                         <tr>
-                            <th>HTTP</th>
-                            <th>Route</th>
-                            <th>Action</th>
-                            <th>Parameters</th>
-                            <th>Return</th>
+                            <th class="http-col">HTTP</th>
+                            <th class="route-col">Route</th>
+                            <th class="action-col">Action</th>
+                            <th class="params-col">Parameters</th>
+                            <th class="return-col">Return</th>
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach (var ep in group)
-                    {
-                        <tr>
-                            <td><span class="badge bg-secondary">@ep.HttpMethod</span></td>
-                            <td><code>@ep.Route</code></td>
-                            <td>@ep.Action</td>
-                            <td>
-                                @if (ep.Parameters != null && ep.Parameters.Any())
-                                {
-                                    @foreach (var p in ep.Parameters)
-                                    {
-                                        <span class="badge bg-info text-dark me-1">@p.Name: <span class="fw-bold">@p.Type</span></span>
+                        @foreach (var endpoint in group)
+                        {
+                            <tr>
+                                <td>
+                                    @{
+                                        var badgeClass = endpoint.HttpMethod?.ToUpper() switch
+                                        {
+                                            "GET" => "badge bg-success",
+                                            "POST" => "badge bg-primary",
+                                            "PUT" => "badge bg-warning text-dark",
+                                            "DELETE" => "badge bg-danger",
+                                            "PATCH" => "badge bg-info text-dark",
+                                            _ => "badge bg-secondary"
+                                        };
                                     }
-                                }
-                                else
-                                {
-                                    <span class="text-muted">žádné</span>
-                                }
-                            </td>
-                            <td><span class="fw-bold">@ep.ReturnType</span></td>
-                        </tr>
-                    }
+                                    <span class="@badgeClass">@(endpoint.HttpMethod?.ToUpper() ?? "?")</span>
+                                </td>
+                                <td><code>@endpoint.Route</code></td>
+                                <td>@endpoint.Action</td>
+                                <td>
+                                    @if (endpoint.Parameters != null && endpoint.Parameters.Any())
+                                    {
+                                        foreach (var param in endpoint.Parameters)
+                                        {
+                                            <div class="param-badge badge bg-secondary mb-1">@param.Name: @param.Type</div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Žádné</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (endpoint.ReturnType.StartsWith("HTTP Status") || endpoint.ReturnType.StartsWith("204"))
+                                    {
+                                        <span class="badge bg-secondary">@endpoint.ReturnType</span>
+                                    }
+                                    else
+                                    {
+                                        <div class="mb-2">@endpoint.ReturnType</div>
+                                        @if (!string.IsNullOrEmpty(endpoint.ReturnJsonExample))
+                                        {
+                                            <div class="mb-1 small">
+                                                <strong>Ukázka JSON:</strong>
+                                            </div>
+                                            <pre class="small border rounded p-2 bg-light"><code>@endpoint.ReturnJsonExample</code></pre>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
         </div>
-    }
-</div>
+    </div>
+}

@@ -4,44 +4,122 @@
     ViewData["Title"] = "Admin Dashboard - " + Model.Name;
 }
 
-<h1>@Model.Name</h1>
-<p>Celková kapacita: @Model.Capacity</p>
-<p>Volných míst: @Model.FreeSpaces</p>
-<p>Obsazených míst: @Model.ParkingSpaces.Count(s => s.Status == "occupied")</p>
-<p>Nedostupných míst: @Model.ParkingSpaces.Count(s => s.Status == "under_maintenance")</p>
-<p>Celková kapacita: @Model.Capacity</p>
-<p>Cena za hodinu: @Model.PricePerHour Kč</p>
-<p>Čísla parkovacích míst: od 1 do @Model.Capacity</p>
-
-<div class="row">
-    @foreach (var space in Model.ParkingSpaces)
-    {
-        <div class="col-md-3 mb-3">
-            <div class="card">
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>@Model.Name</h1>
+        <div>
+            <a href="@Url.Action("Charts", new { id = Model.ParkingLotId })" class="btn btn-primary">
+                <i class="bi bi-bar-chart-fill"></i> Graf obsazenosti
+            </a>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-light">
                 <div class="card-body">
-                    <h5 class="card-title">Místo @space.SpaceNumber</h5>
-                    <p class="card-text">ID: @space.ParkingSpaceId</p>
-                    <p class="card-text">Status: @space.Status</p>
-                    @if (space.Status == "available")
-                    {
-                        <form asp-action="ChangeStatus" asp-controller="ParkingLot" method="post">
-                            <input type="hidden" name="parkingSpaceId" value="@space.ParkingSpaceId" />
-                            <input type="hidden" name="parkingLotId" value="@Model.ParkingLotId" />
-                            <input type="hidden" name="status" value="under_maintenance" />
-                            <button type="submit" class="btn btn-warning">Označit jako v údržbě</button>
-                        </form>
-                    }
-                    else if (space.Status == "under_maintenance")
-                    {
-                        <form asp-action="ChangeStatus" asp-controller="ParkingLot" method="post">
-                            <input type="hidden" name="parkingSpaceId" value="@space.ParkingSpaceId" />
-                            <input type="hidden" name="parkingLotId" value="@Model.ParkingLotId" />
-                            <input type="hidden" name="status" value="available" />
-                            <button type="submit" class="btn btn-success">Označit jako dostupné</button>
-                        </form>
-                    }
+                    <h5 class="card-title">Kapacita</h5>
+                    <p class="card-text fs-4">@Model.Capacity míst</p>
                 </div>
             </div>
         </div>
-    }
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Volná místa</h5>
+                    <p class="card-text fs-4">@Model.FreeSpaces</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Obsazená místa</h5>
+                    <p class="card-text fs-4">@Model.ParkingSpaces.Count(s => s.Status == "occupied")</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">V údržbě</h5>
+                    <p class="card-text fs-4">@Model.ParkingSpaces.Count(s => s.Status == "under_maintenance")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Přehled parkovacích míst</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                @foreach (var space in Model.ParkingSpaces)
+                {
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 @(space.Status == "occupied" ? "border-danger" : space.Status == "under_maintenance" ? "border-warning" : "border-success")">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Místo #@space.SpaceNumber</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <strong>Status:</strong>
+                                    @switch(space.Status)
+                                    {
+                                        case "available":
+                                            <span class="badge bg-success">Volné</span>
+                                            break;
+                                        case "occupied":
+                                            <span class="badge bg-danger">Obsazené</span>
+                                            break;
+                                        case "under_maintenance":
+                                            <span class="badge bg-warning text-dark">V údržbě</span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-secondary">@space.Status</span>
+                                            break;
+                                    }
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <div class="d-flex justify-content-between">
+                                    @if (space.Status == "available")
+                                    {
+                                        <form asp-action="ChangeStatus" asp-controller="ParkingLot" method="post">
+                                            <input type="hidden" name="parkingSpaceId" value="@space.ParkingSpaceId" />
+                                            <input type="hidden" name="parkingLotId" value="@Model.ParkingLotId" />
+                                            <input type="hidden" name="status" value="under_maintenance" />
+                                            <button type="submit" class="btn btn-warning btn-sm">
+                                                <i class="bi bi-tools"></i> Do údržby
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (space.Status == "under_maintenance")
+                                    {
+                                        <form asp-action="ChangeStatus" asp-controller="ParkingLot" method="post">
+                                            <input type="hidden" name="parkingSpaceId" value="@space.ParkingSpaceId" />
+                                            <input type="hidden" name="parkingLotId" value="@Model.ParkingLotId" />
+                                            <input type="hidden" name="status" value="available" />
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                <i class="bi bi-check-circle"></i> Označit jako dostupné
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <div></div> <!-- Prázdný div pro zarovnání -->
+                                    }
+                                    
+                                    <a href="@Url.Action("SpaceHistory", new { parkingSpaceId = space.ParkingSpaceId })" class="btn btn-info btn-sm">
+                                        <i class="bi bi-graph-up"></i> Historie
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>

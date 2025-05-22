@@ -14,6 +14,17 @@ public class ApiKeyMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
+        // Výjimka pro login a register endpointy (API i MVC)
+        var path = context.Request.Path.Value?.ToLower();
+        if (path != null && (
+                path.Contains("/login") ||
+                path.Contains("/register")
+            ))
+        {
+            await _next(context);
+            return;
+        }
+
         var hasApiKey = context.Request.Headers.TryGetValue(HEADER_NAME, out var extractedApiKey);
         string apiKeyLog = hasApiKey ? extractedApiKey.ToString() : "(žádný klíč)";
 

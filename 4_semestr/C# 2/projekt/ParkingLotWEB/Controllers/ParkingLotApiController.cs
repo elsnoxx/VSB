@@ -23,9 +23,11 @@ public class ParkingLotApiController : ControllerBase
     }
 
     [HttpGet("all")]
+    [ProducesResponseType(typeof(ParkingLot), 200)]
     public async Task<IActionResult> GetAll() => Ok(await _repo.GetAllAsync());
 
     [HttpGet("withFreespaces")]
+    [ProducesResponseType(typeof(ParkingLot), 200)]
     public async Task<IActionResult> GetAllWithFreeSpaces()
     {
         var lots = await _repo.GetAllWithFreeSpacesAsync();
@@ -33,6 +35,7 @@ public class ParkingLotApiController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(ParkingLotDto), 200)]
     public async Task<IActionResult> Get(int id)
     {
         var lot = await _repo.GetByIdAsync(id);
@@ -46,7 +49,7 @@ public class ParkingLotApiController : ControllerBase
             Longitude = lot.Longitude,
             Capacity = lot.Capacity,
             FreeSpaces = lot.FreeSpaces,
-            PricePerHour = lot.PricePerHour, 
+            PricePerHour = lot.PricePerHour,
             ParkingSpaces = spaces.Select(s => new ParkingSpaceDto
             {
                 ParkingSpaceId = s.ParkingSpaceId,
@@ -60,6 +63,8 @@ public class ParkingLotApiController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(ParkingLot), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create(ParkingLot lot)
     {
         await _repo.CreateAsync(lot);
@@ -67,6 +72,9 @@ public class ParkingLotApiController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, ParkingLot lot)
     {
         if (id != lot.ParkingLotId) return BadRequest();
@@ -75,6 +83,9 @@ public class ParkingLotApiController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
         await _repo.DeleteAsync(id);
@@ -82,6 +93,7 @@ public class ParkingLotApiController : ControllerBase
     }
 
     [HttpGet("details/{lotId}/user/{userId}")]
+    [ProducesResponseType(typeof(ParkingLotDetailsViewModel), 200)]
     public async Task<IActionResult> GetParkingLotDetailsWithUserCars(int lotId, int userId)
     {
         var lot = await _repo.GetByIdAsync(lotId);
@@ -124,6 +136,7 @@ public class ParkingLotApiController : ControllerBase
 
 
     [HttpGet("statistics/completed-last-month")]
+    [ProducesResponseType(typeof(IEnumerable<ParkingLotStatisticsViewModel>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCompletedParkingsLastMonth()
     {
         var stats = await _repo.GetCompletedParkingsLastMonthAsync();
@@ -136,8 +149,9 @@ public class ParkingLotApiController : ControllerBase
         }).ToList();
         return Ok(result);
     }
-    
+
     [HttpGet("occupancy-timeline/{id}")]
+    [ProducesResponseType(typeof(IEnumerable<OccupancyPointDto>), 200)]
     public async Task<IActionResult> GetOccupancyTimeline(int id)
     {
         var data = await _repo.GetOccupancyTimelineAsync(id);
@@ -145,6 +159,9 @@ public class ParkingLotApiController : ControllerBase
     }
 
     [HttpPut("{id}/price")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePrice(int id, [FromBody] System.Text.Json.JsonElement body)
     {
         if (!body.TryGetProperty("pricePerHour", out var priceProp) || !priceProp.TryGetDecimal(out var pricePerHour))
