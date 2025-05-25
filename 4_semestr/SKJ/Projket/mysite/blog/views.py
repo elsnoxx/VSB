@@ -597,3 +597,4 @@ def api_add_feedback(request, reservation_id):
         })
     return JsonResponse({'error': 'Invalid data'}, status=400)
 
+

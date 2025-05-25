@@ -29,8 +29,21 @@
    - Najdeš v souboru [`blog/forms.py`](blog/forms.py)
 
 6. **REST API k datům aplikace**
-   - Implementováno pomocí view, která vrací `JsonResponse` (např. autocomplete hostů, seznam rezervací v JSON).
-   - Najdeš v [`blog/views.py`](blog/views.py), např. funkce `guest_autocomplete`.
+   - Implementováno pomocí Django Ninja (`blog/api.py`).
+   - K dispozici jsou tyto endpointy:
+
+| URL                       | Popis                                 |
+|---------------------------|---------------------------------------|
+| `/api/guests/`            | Seznam hostů (Guest)                  |
+| `/api/roomtypes/`         | Seznam typů pokojů (RoomType)         |
+| `/api/rooms/`             | Seznam pokojů (Room)                  |
+| `/api/reservations/`      | Seznam rezervací (Reservation)        |
+| `/api/services/`          | Seznam služeb (Service)               |
+| `/api/payments/`          | Seznam plateb (Payment)               |
+| `/api/serviceusages/`     | Seznam využití služeb (ServiceUsage)  |
+| `/api/feedbacks/`         | Seznam hodnocení (Feedback)           |
+
+   - Vše v [`blog/api.py`](blog/api.py)
 
 7. **Aplikace tvoří logický celek a stránky jsou propojené odkazy**
    - Navigace mezi stránkami je zajištěna pomocí odkazů v šablonách.
