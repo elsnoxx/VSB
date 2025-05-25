@@ -3,75 +3,138 @@
 {% block content %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-<style>
-    .room-card {
-        min-width: 150px;
-        max-width: 180px;
-        margin-bottom: 20px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        transition: transform 0.1s, box-shadow 0.1s;
-        text-align: center;
-        font-size: 15px;
-    }
-    .room-card.free {
-        border: 2px solid #28a745;
-        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-        color: #fff;
-    }
-    .room-card.occupied {
-        border: 2px solid #dc3545;
-        background: linear-gradient(135deg, #ff5858 0%, #f09819 100%);
-        color: #fff;
-        opacity: 0.85;
-        cursor: not-allowed;
-    }
-    .room-card.free:hover {
-        transform: scale(1.04);
-        box-shadow: 0 4px 16px rgba(40,167,69,0.15);
-        text-decoration: none;
-        color: #fff;
-    }
-    .room-icon {
-        font-size: 2.5em;
-        margin-bottom: 8px;
-    }
-    .room-status {
-        font-size: 1em;
-        font-weight: bold;
-        margin-top: 8px;
-    }
-    .room-number {
-        font-size: 1.2em;
-        font-weight: bold;
-    }
-</style>
-
-{% for floor_number, rooms in floors.items %}
-<div class="floor mb-4">
-    <h2 class="mb-3"><i class="fa-solid fa-building"></i> Patro {{ floor_number }}</h2>
-    <div class="d-flex flex-wrap gap-3">
-        {% for room in rooms %}
-            {% if room.is_occupied %}
-                <div class="room-card occupied p-3">
-                    <div class="room-icon"><i class="fa-solid fa-bed"></i></div>
-                    <div class="room-number">{{ room.room_number }}</div>
-                    <div>{{ room.room_type.name }}</div>
-                    <div class="text-muted" style="font-size:0.9em;">ID: {{ room.room_id }}</div>
-                    <div class="room-status mt-2"><i class="fa-solid fa-lock"></i> Obsazeno</div>
-                </div>
-            {% else %}
-                <a href="{% url 'create_reservation' room.room_id %}" class="room-card free p-3 text-decoration-none">
-                    <div class="room-icon"><i class="fa-solid fa-bed"></i></div>
-                    <div class="room-number">{{ room.room_number }}</div>
-                    <div>{{ room.room_type.name }}</div>
-                    <div class="text-muted" style="font-size:0.9em;">ID: {{ room.room_id }}</div>
-                    <div class="room-status mt-2"><i class="fa-solid fa-unlock"></i> Volné</div>
-                </a>
-            {% endif %}
-        {% endfor %}
+<div class="container py-4">
+    <h1 class="text-center mb-4">Přehled pokojů</h1>
+    
+    <style>
+        .floor-container {
+            margin-bottom: 2.5rem;
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .floor-title {
+            position: relative;
+            font-size: 1.5rem;
+            color: #343a40;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #dee2e6;
+            text-align: center;
+        }
+        .floor-title i {
+            margin-right: 8px;
+        }
+        .rooms-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.25rem;
+            justify-content: center;
+        }
+        .room-card {
+            height: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.2s ease-in-out;
+            text-align: center;
+            padding: 1.25rem 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .room-card.free {
+            border: 2px solid #28a745;
+            background: linear-gradient(145deg, #43e97b 0%, #38f9d7 100%);
+            color: #fff;
+        }
+        .room-card.occupied {
+            border: 2px solid #dc3545;
+            background: linear-gradient(145deg, #ff5858 0%, #f09819 100%);
+            color: #fff;
+            opacity: 0.85;
+            cursor: not-allowed;
+        }
+        .room-card.free:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(40,167,69,0.2);
+            text-decoration: none;
+            color: #fff;
+        }
+        .room-icon {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+        }
+        .room-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .room-type {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        .room-id {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        .room-status {
+            font-size: 1em;
+            font-weight: bold;
+            padding: 6px 0;
+            border-radius: 20px;
+            margin-top: 8px;
+        }
+        .room-status i {
+            margin-right: 5px;
+        }
+        .btn-back {
+            margin-bottom: 1.5rem;
+            display: block;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+    {% for floor_number, rooms in floors.items %}
+    <div class="floor-container">
+        <h2 class="floor-title">
+            <i class="fa-solid fa-building"></i> Patro {{ floor_number }}
+        </h2>
+        <div class="rooms-container">
+            {% for room in rooms %}
+                {% if room.is_occupied %}
+                    <div class="room-card occupied">
+                        <div>
+                            <div class="room-icon"><i class="fa-solid fa-bed"></i></div>
+                            <div class="room-number">{{ room.room_number }}</div>
+                            <div class="room-type">{{ room.room_type.name }}</div>
+                            <div class="room-id">ID: {{ room.room_id }}</div>
+                        </div>
+                        <div class="room-status">
+                            <i class="fa-solid fa-lock"></i> Obsazeno
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="{% url 'create_reservation' room.room_id %}" class="room-card free text-decoration-none">
+                        <div>
+                            <div class="room-icon"><i class="fa-solid fa-bed"></i></div>
+                            <div class="room-number">{{ room.room_number }}</div>
+                            <div class="room-type">{{ room.room_type.name }}</div>
+                            <div class="room-id">ID: {{ room.room_id }}</div>
+                        </div>
+                        <div class="room-status">
+                            <i class="fa-solid fa-unlock"></i> Volné
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
+    {% endfor %}
 </div>
-{% endfor %}
-
 {% endblock %}

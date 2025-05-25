@@ -1,32 +1,64 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5" style="max-width: 600px;">
-    <h2 class="mb-4 text-center">Rezervace pokoje</h2>
-    <div class="card mb-4">
-        <div class="card-body">
-            <p><strong>Jméno:</strong> {{ guest.firstname }} {{ guest.lastname }}</p>
-            <p><strong>Email:</strong> {{ guest.email }}</p>
-            <p><strong>Telefon:</strong> {{ guest.phone }}</p>
-            <p><strong>Pokoj:</strong> {{ room.room_number }} ({{ room.room_type.name }})</p>
-            <p><strong>Cena za noc:</strong> {{ price }} Kč</p>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card shadow border-0 rounded-lg">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h2 class="fw-bold mb-0">Rezervace pokoje</h2>
+                </div>
+                <div class="card-body p-4">
+                    <div class="card mb-4 bg-light">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-2"><i class="fas fa-user text-primary me-2"></i> <strong>Jméno:</strong> {{ guest.firstname }} {{ guest.lastname }}</p>
+                                    <p class="mb-2"><i class="fas fa-envelope text-primary me-2"></i> <strong>Email:</strong> {{ guest.email }}</p>
+                                    <p class="mb-2"><i class="fas fa-phone text-primary me-2"></i> <strong>Telefon:</strong> {{ guest.phone|default:"Neuvedeno" }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-2"><i class="fas fa-bed text-primary me-2"></i> <strong>Pokoj:</strong> {{ room.room_number }}</p>
+                                    <p class="mb-2"><i class="fas fa-tag text-primary me-2"></i> <strong>Typ pokoje:</strong> {{ room.room_type.name }}</p>
+                                    <p class="mb-2"><i class="fas fa-money-bill text-primary me-2"></i> <strong>Cena za noc:</strong> {{ price }} Kč</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="POST" action="{% url 'create_reservation' room_id=room.room_id %}">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_check_in_date" class="form-label fw-bold">Datum příjezdu</label>
+                                {{ form.check_in_date }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_check_out_date" class="form-label fw-bold">Datum odjezdu</label>
+                                {{ form.check_out_date }}
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info d-flex align-items-center mt-3">
+                            <i class="fas fa-info-circle fa-lg me-3"></i>
+                            <div>
+                                <span class="fw-bold">Celková cena:</span>
+                                <span class="ms-2 fs-4 fw-bold"><span id="total_price">{{ price }}</span> Kč</span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-check me-2"></i> Potvrdit rezervaci
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-    <form method="POST" action="{% url 'create_reservation' room_id=room.room_id %}" class="card card-body shadow-sm">
-        {% csrf_token %}
-        <div class="mb-3">
-            {{ form.check_in_date.label_tag }}{{ form.check_in_date }}
-        </div>
-        <div class="mb-3">
-            {{ form.check_out_date.label_tag }}{{ form.check_out_date }}
-        </div>
-        <div class="mb-3">
-            <strong>Celková cena:</strong>
-            <span id="total_price">{{ price }}</span> Kč
-        </div>
-        <button type="submit" class="btn btn-success w-100">Potvrdit rezervaci</button>
-    </form>
 </div>
+
 <script>
     // Přepočet ceny podle počtu nocí
     const checkIn = document.getElementById("id_check_in_date");

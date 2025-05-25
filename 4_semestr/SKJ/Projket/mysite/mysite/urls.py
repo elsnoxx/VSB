@@ -37,4 +37,5 @@ urlpatterns = [
     path('service/management/', views.service_management, name='service_management'),
     path('ajax/guest-autocomplete/', views.guest_autocomplete, name='guest_autocomplete'),
     path('api/reservation/<int:reservation_id>/feedback/', views.api_add_feedback, name='api_add_feedback'),
+    path('profile/update/', views.profile_update, name='profile_update'),
 ]

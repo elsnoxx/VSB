@@ -13,9 +13,12 @@ from .models import Reservation, Feedback, Guest
 from .forms import FeedbackForm
 from django.views.decorators.http import require_POST
 from django.contrib.admin.views.decorators import staff_member_required
-import json
+from .models import Service, ServiceUsage
 
 
+#################################################
+# AUTENTIZACE A UŽIVATELSKÉ ÚČTY
+#################################################
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -60,9 +63,30 @@ def register_view(request):
         form = GuestRegisterForm()
     return render(request, 'register.html', {'form': form})
 
+
+#################################################
+# UŽIVATELSKÝ PROFIL
+#################################################
+
 @login_required
 def profile_view(request):
-    return render(request, 'profile.html', {'user': request.user})
+    try:
+        guest = Guest.objects.get(user=request.user)
+    except Guest.DoesNotExist:
+        guest = Guest.objects.create(
+            user=request.user,
+            firstname=request.user.first_name,
+            lastname=request.user.last_name,
+            email=request.user.email,
+            birth_date="2000-01-01",
+            street="",
+            city="",
+            postal_code="",
+            country="",
+            guest_type="normal"
+        )
+    
+    return render(request, 'profile.html', {'user': request.user, 'guest': guest})
 
 @login_required
 def profile_edit(request):
@@ -81,7 +105,55 @@ def my_reservations(request):
     reservations = Reservation.objects.filter(guest__user=request.user)
     return render(request, 'management/reservation/reservation_list.html', {'reservations': reservations, 'my_only': True})
 
-# Hlavní stránka
+@login_required
+def profile_update(request):
+    if request.method == 'POST':
+        guest = get_object_or_404(Guest, user=request.user)
+        form_type = request.POST.get('form_type')
+        
+        try:
+            if form_type == 'personal':
+                # Debug výpis
+                print(f"Před aktualizací: {guest.firstname}, {guest.lastname}, {guest.email}, {guest.phone}, {guest.birth_date}")
+                
+                guest.firstname = request.POST.get('firstname')
+                guest.lastname = request.POST.get('lastname')
+                guest.email = request.POST.get('email')
+                guest.phone = request.POST.get('phone')
+                guest.birth_date = request.POST.get('birth_date')
+                
+                # Aktualizace související údaje uživatelského účtu
+                request.user.first_name = request.POST.get('firstname')
+                request.user.last_name = request.POST.get('lastname')
+                request.user.email = request.POST.get('email')
+                request.user.save()
+                
+                # Debug výpis po aktualizaci
+                print(f"Po aktualizaci: {guest.firstname}, {guest.lastname}, {guest.email}, {guest.phone}, {guest.birth_date}")
+                
+            elif form_type == 'address':
+                guest.street = request.POST.get('street')
+                guest.city = request.POST.get('city')
+                guest.postal_code = request.POST.get('postal_code')
+                guest.country = request.POST.get('country')
+                
+            elif form_type == 'notes':
+                guest.notes = request.POST.get('notes')
+            
+            guest.save()
+            messages.success(request, 'Profil byl úspěšně aktualizován.')
+        except Exception as e:
+            messages.error(request, f'Chyba při aktualizaci profilu: {str(e)}')
+            # Debug výpis chyby
+            import traceback
+            traceback.print_exc()
+        
+        return redirect('profile')
+    return redirect('profile')
+
+#################################################
+# HLAVNÍ STRÁNKA
+#################################################
 def index(request):
     rooms = Room.objects.all()
     
@@ -98,6 +170,77 @@ def index(request):
     
     return render(request, 'management/reservation/reservation_rooms.html', {'floors': floors})
 
+
+#################################################
+# SPRÁVA HOSTŮ
+#################################################
+
+@login_required
+def guest_list(request):
+    guests = Guest.objects.all()
+    return render(request, 'management/guest/guest_list.html', {'guests': guests})
+
+# Detail hosta
+def guest_detail(request, guest_id):
+    guest = get_object_or_404(Guest, pk=guest_id)
+    return render(request, 'management/guest/guest_detail.html', {'guest': guest})
+
+@login_required
+# Vytvoření hosta
+def guest_create(request):
+    if request.method == 'POST':
+        guest_form = GuestForm(request.POST)
+        if guest_form.is_valid():
+            guest = guest_form.save(commit=False)
+            guest.guest_type = 'normal'  # nastav výchozí typ hosta
+            guest.save()
+            return redirect('guest_list')
+        else:
+            return render(request, 'management/guest/guest_form.html', {'form': guest_form})
+    else:
+        guest_form = GuestForm()
+    return render(request, 'management/guest/guest_form.html', {'form': guest_form})
+
+@login_required
+def add_guest(request):
+    if request.method == 'POST':
+        guest_form = GuestForm(request.POST)
+        if guest_form.is_valid():
+            guest = guest_form.save(commit=False)
+            guest.guest_type = 'normal'
+            guest.save()
+            return redirect('guest_list')
+    else:
+        guest_form = GuestForm()
+    return render(request, 'management/guest/guest_form.html', {'form': guest_form})
+
+@login_required
+# Editace hosta
+def guest_update(request, guest_id):
+    guest = get_object_or_404(Guest, pk=guest_id)
+    if request.method == "POST":
+        form = GuestForm(request.POST, instance=guest)
+        if form.is_valid():
+            form.save()
+            return redirect('guest_detail', guest_id=guest.pk)
+    else:
+        form = GuestForm(instance=guest)
+    return render(request, 'management/guest/guest_form.html', {'form': form})
+
+
+@login_required
+# Smazání hosta
+def guest_delete(request, guest_id):
+    guest = get_object_or_404(Guest, pk=guest_id)
+    if request.method == "POST":
+        guest.delete()
+        return JsonResponse({'success': True})  # Vrátí JSON odpověď
+    return JsonResponse({'success': False}, status=400)
+
+
+#################################################
+# SPRÁVA REZERVACÍ
+#################################################
 @login_required
 def create_reservation(request, room_id):
     room = get_object_or_404(Room, pk=room_id)
@@ -155,75 +298,6 @@ def create_reservation(request, room_id):
     })
 
 @login_required
-def guest_list(request):
-    guests = Guest.objects.all()
-    return render(request, 'management/guest/guest_list.html', {'guests': guests})
-
-# Detail hosta
-def guest_detail(request, guest_id):
-    guest = get_object_or_404(Guest, pk=guest_id)
-    return render(request, 'management/guest/guest_detail.html', {'guest': guest})
-
-@login_required
-# Vytvoření hosta
-def guest_create(request):
-    if request.method == 'POST':
-        guest_form = GuestForm(request.POST)
-        if guest_form.is_valid():
-            guest = guest_form.save(commit=False)
-            guest.guest_type = 'normal'  # nastav výchozí typ hosta
-            guest.save()
-            return redirect('guest_list')
-        else:
-            return render(request, 'management/guest/guest_form.html', {'form': guest_form})
-    else:
-        guest_form = GuestForm()
-    return render(request, 'management/guest/guest_form.html', {'form': guest_form})
-
-@login_required
-def add_guest(request):
-    if request.method == 'POST':
-        guest_form = GuestForm(request.POST)
-        if guest_form.is_valid():
-            guest = guest_form.save(commit=False)
-            guest.guest_type = 'normal'
-            guest.save()
-            return redirect('guest_list')
-    else:
-        guest_form = GuestForm()
-    return render(request, 'management/guest/guest_form.html', {'form': guest_form})
-
-@login_required
-# Room ocupancies
-def room_occupancies(request):
-    return render(request, 'room_occupancies.html')
-
-@login_required
-# Editace hosta
-def guest_update(request, guest_id):
-    guest = get_object_or_404(Guest, pk=guest_id)
-    if request.method == "POST":
-        form = GuestForm(request.POST, instance=guest)
-        if form.is_valid():
-            form.save()
-            return redirect('guest_detail', guest_id=guest.pk)
-    else:
-        form = GuestForm(instance=guest)
-    return render(request, 'management/guest/guest_form.html', {'form': form})
-
-
-@login_required
-# Smazání hosta
-def guest_delete(request, guest_id):
-    guest = get_object_or_404(Guest, pk=guest_id)
-    if request.method == "POST":
-        guest.delete()
-        return JsonResponse({'success': True})  # Vrátí JSON odpověď
-    return JsonResponse({'success': False}, status=400)
-
-
-@login_required
-# Seznam rezervací
 def reservation_list(request):
     reservations = Reservation.objects.all()
     if request.user.is_superuser:
@@ -239,7 +313,6 @@ def reservation_list(request):
 
 
 @login_required
-# Detail rezervace
 def reservation_detail(request, reservation_id):
     reservation = get_object_or_404(Reservation, pk=reservation_id)
     guest = reservation.guest
@@ -247,12 +320,10 @@ def reservation_detail(request, reservation_id):
     payment = reservation.payment
     is_admin = request.user.is_staff or request.user.is_superuser
 
-    # Všechny služby
-    from .models import Service, ServiceUsage
+    
     all_services = Service.objects.all()
     used_services = ServiceUsage.objects.filter(reservation=reservation).select_related('service')
 
-    # Výpočet celkové ceny služeb
     total_services_price = sum([us.total_price for us in used_services])
     
     feedback_exists = Feedback.objects.filter(reservation=reservation, guest=guest).exists()
@@ -271,59 +342,6 @@ def reservation_detail(request, reservation_id):
         'feedback_list': feedback_list,
     }
     return render(request, 'management/reservation/reservation_detail.html', context)
-
-
-@login_required
-@require_POST
-def add_service_to_reservation(request, reservation_id):
-    from .models import Service, ServiceUsage
-    reservation = get_object_or_404(Reservation, pk=reservation_id)
-    service_id = request.POST.get('service_id')
-    quantity = int(request.POST.get('quantity', 1))
-    service = get_object_or_404(Service, pk=service_id)
-    price = service.price
-    total_price = price * quantity
-
-    ServiceUsage.objects.create(
-        reservation=reservation,
-        service=service,
-        quantity=quantity,
-        total_price=total_price
-    )
-    payment = reservation.payment
-    payment.total_expenses += total_price
-    payment.save()
-    return redirect('reservation_detail', reservation_id=reservation_id)
-
-@login_required
-@require_POST
-def remove_service_from_reservation(request, reservation_id, usage_id):
-    usage = get_object_or_404(ServiceUsage, pk=usage_id, reservation_id=reservation_id)
-    # Odečíst cenu služby z platby
-    payment = usage.reservation.payment
-    payment.total_expenses -= usage.total_price
-    payment.save()
-    usage.delete()
-    return redirect('reservation_detail', reservation_id=reservation_id)
-
-
-@login_required
-def mark_payment_as_paid_from_reservation(request, reservation_id):
-    if request.method == "POST":
-        reservation = get_object_or_404(Reservation, pk=reservation_id)
-        payment = reservation.payment
-        if payment:
-            payment.is_paid = True
-            payment.payment_date = date.today()
-            payment.save()
-            room = reservation.room
-            room.is_occupied = False
-            room.save()
-            reservation.status = 'Closed'
-            reservation.save()
-        return redirect('reservation_detail', reservation_id=reservation_id)
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
-
 
 @login_required
 def reservation_update(request, reservation_id):
@@ -350,10 +368,117 @@ def reservation_delete(request, reservation_id):
         return redirect('reservation_list')
     return render(request, 'management/reservation/reservation_confirm_delete.html', {'reservation': reservation})
 
+@login_required
+def reservation_success(request, roomid):
+    room = get_object_or_404(Room, pk=roomid)
+    if room:
+        room.is_occupied = True
+        room.save()
+        return render(request, 'reservation_success.html', {'room': room})
+
+#################################################
+# SLUŽBY A POPLATKY
+#################################################
+@login_required
+@require_POST
+def add_service_to_reservation(request, reservation_id):
+    from .models import Service, ServiceUsage
+    reservation = get_object_or_404(Reservation, pk=reservation_id)
+    service_id = request.POST.get('service_id')
+    quantity = int(request.POST.get('quantity', 1))
+    service = get_object_or_404(Service, pk=service_id)
+    price = service.price
+    total_price = price * quantity
+
+    ServiceUsage.objects.create(
+        reservation=reservation,
+        service=service,
+        quantity=quantity,
+        total_price=total_price
+    )
+    payment = reservation.payment
+    payment.total_expenses += total_price
+    payment.save()
+    return redirect('reservation_detail', reservation_id=reservation_id)
+
+@login_required
+@require_POST
+def remove_service_from_reservation(request, reservation_id, usage_id):
+    usage = get_object_or_404(ServiceUsage, pk=usage_id, reservation_id=reservation_id)
+    
+    payment = usage.reservation.payment
+    payment.total_expenses -= usage.total_price
+    payment.save()
+    usage.delete()
+    return redirect('reservation_detail', reservation_id=reservation_id)
+
+@staff_member_required
+def service_management(request):
+    from .models import Service
+    from .forms import ServiceForm
+    services = Service.objects.all()
+    if request.method == "POST":
+        form = ServiceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('service_management')
+    else:
+        form = ServiceForm()
+    return render(request, 'management/service/service_management.html', {'services': services, 'form': form})
+
+
+#################################################
+# PLATBY
+#################################################
+@login_required
+def mark_payment_as_paid_from_reservation(request, reservation_id):
+    if request.method == "POST":
+        reservation = get_object_or_404(Reservation, pk=reservation_id)
+        payment = reservation.payment
+        if payment:
+            payment.is_paid = True
+            payment.payment_date = date.today()
+            payment.save()
+            room = reservation.room
+            room.is_occupied = False
+            room.save()
+            reservation.status = 'Closed'
+            reservation.save()
+        return redirect('reservation_detail', reservation_id=reservation_id)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@login_required
+def payment_management(request):
+    payment = Payment.objects.all()
+    return render(request, 'management/payment/payment_management.html', {'payment': payment})
+
+@login_required
+@csrf_exempt
+def mark_payment_as_paid(request, employee_id):
+    if request.method == "POST":
+        payment = get_object_or_404(Payment, pk=employee_id)
+        payment.is_paid = True
+        payment.payment_date = date.today()
+        payment.save()
+        
+        reservations = Reservation.objects.filter(payment=payment)
+        for reservation in reservations:
+            room = reservation.room
+            room.is_occupied = False
+            room.save()
+        return redirect('payment_management')
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+#################################################
+# SPRÁVA POKOJŮ
+#################################################
+
+@login_required
+def room_occupancies(request):
+    return render(request, 'room_occupancies.html')
 
 @login_required
 def room_management(request):
-    # Získání všech místností a jejich typů
     rooms = Room.objects.select_related('room_type').all()
     return render(request, 'management/room/room_management.html', {'rooms': rooms})
 
@@ -390,14 +515,10 @@ def room_delete(request, room_id):
         room.delete()
         return redirect('room_management') 
 
-@login_required
-# Rezerzervace 
-def reservation_success(request, roomid):
-    room = get_object_or_404(Room, pk=roomid)
-    if room:
-        room.is_occupied = True
-        room.save()
-        return render(request, 'reservation_success.html', {'room': room})
+
+#################################################
+# SPRÁVA POKOJŮ
+#################################################
 
 @login_required
 def employe_management(request):
@@ -410,7 +531,7 @@ def employe_create(request):
         form = EmployeeForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('employe_management')  # Přesměrování na stránku správy zaměstnanců
+            return redirect('employe_management')
     else:
         form = EmployeeForm()
     return render(request, 'forms/employe_form.html', {'form': form})
@@ -435,41 +556,10 @@ def employe_delete(request, employee_id):
         return redirect('employe_management')
     return render(request, 'management/employe/employe_confirm_delete.html', {'employee': employee})
 
-@login_required
-def payment_management(request):
-    payment = Payment.objects.all()
-    return render(request, 'management/payment/payment_management.html', {'payment': payment})
 
-@login_required
-@csrf_exempt
-def mark_payment_as_paid(request, employee_id):
-    if request.method == "POST":
-        payment = get_object_or_404(Payment, pk=employee_id)
-        payment.is_paid = True
-        payment.payment_date = date.today()
-        payment.save()
-        # Uvolnění pokoje pro všechny rezervace s tímto payment
-        reservations = Reservation.objects.filter(payment=payment)
-        for reservation in reservations:
-            room = reservation.room
-            room.is_occupied = False
-            room.save()
-        return redirect('payment_management')
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
-
-@staff_member_required
-def service_management(request):
-    from .models import Service
-    from .forms import ServiceForm
-    services = Service.objects.all()
-    if request.method == "POST":
-        form = ServiceForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('service_management')
-    else:
-        form = ServiceForm()
-    return render(request, 'management/service/service_management.html', {'services': services, 'form': form})
+#################################################
+# AUTOCOMPLETE HOSTŮ
+#################################################
 
 def guest_autocomplete(request):
     q = request.GET.get('q', '')
@@ -481,6 +571,9 @@ def guest_autocomplete(request):
     results = [f"{g.firstname} {g.lastname}" for g in guests.distinct()[:10]]
     return JsonResponse(results, safe=False)
 
+#################################################
+# ZPĚTNÁ VAZBA
+#################################################
 @login_required
 @require_POST
 def api_add_feedback(request, reservation_id):

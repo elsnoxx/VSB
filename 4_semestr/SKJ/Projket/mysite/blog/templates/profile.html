@@ -1,20 +1,226 @@
-
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-5" style="max-width: 500px;">
-    <h2>Profil uživatele</h2>
-    <ul class="list-group">
-        <li class="list-group-item"><strong>Uživatelské jméno:</strong> {{ user.username }}</li>
-        <li class="list-group-item"><strong>Email:</strong> {{ guest.email }}</li>
-        <li class="list-group-item"><strong>Jméno:</strong> {{ guest.firstname }}</li>
-        <li class="list-group-item"><strong>Příjmení:</strong> {{ guest.lastname }}</li>
-        <li class="list-group-item"><strong>Telefon:</strong> {{ guest.phone }}</li>
-        <li class="list-group-item"><strong>Datum narození:</strong> {{ guest.birth_date }}</li>
-        <li class="list-group-item"><strong>Ulice:</strong> {{ guest.street }}</li>
-        <li class="list-group-item"><strong>Město:</strong> {{ guest.city }}</li>
-        <li class="list-group-item"><strong>PSČ:</strong> {{ guest.postal_code }}</li>
-        <li class="list-group-item"><strong>Země:</strong> {{ guest.country }}</li>
-        <li class="list-group-item"><strong>Poznámky:</strong> {{ guest.notes }}</li>
-    </ul>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-lg overflow-hidden">
+                <!-- Hlavička profilu -->
+                <div class="card-header bg-primary text-white p-4 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="mb-0 fw-bold">
+                            <i class="fas fa-user-circle me-2"></i> Profil uživatele
+                        </h2>
+                        <p class="mb-0 mt-1 opacity-75">{{ user.username }}</p>
+                    </div>
+                    <a href="{% url 'my_reservations' %}" class="btn btn-outline-light">
+                        <i class="fas fa-list me-2"></i> Moje rezervace
+                    </a>
+                </div>
+
+                <div class="card-body p-4">
+                    <!-- Navigační záložky -->
+                    <ul class="nav nav-tabs mb-4" id="profileTabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#personal">Osobní údaje</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#address">Adresa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#other">Další informace</a>
+                        </li>
+                    </ul>
+
+                    <!-- Obsah záložek -->
+                    <div class="tab-content">
+                        <!-- Osobní údaje -->
+                        <div class="tab-pane fade show active" id="personal">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <h5 class="text-primary">Osobní informace</h5>
+                                            <button class="btn btn-sm btn-outline-primary edit-section" data-section="personal">
+                                                <i class="fas fa-pencil-alt"></i> Upravit
+                                            </button>
+                                        </div>
+                                        <hr>
+                                        <dl class="row view-mode" id="personal-view">
+                                            <dt class="col-sm-4">Uživatelské jméno:</dt>
+                                            <dd class="col-sm-8">{{ user.username }}</dd>
+                                            <dt class="col-sm-4">Email:</dt>
+                                            <dd class="col-sm-8">{{ guest.email }}</dd>
+                                            <dt class="col-sm-4">Jméno:</dt>
+                                            <dd class="col-sm-8">{{ guest.firstname }}</dd>
+                                            <dt class="col-sm-4">Příjmení:</dt>
+                                            <dd class="col-sm-8">{{ guest.lastname }}</dd>
+                                            <dt class="col-sm-4">Telefon:</dt>
+                                            <dd class="col-sm-8">{{ guest.phone }}</dd>
+                                            <dt class="col-sm-4">Datum narození:</dt>
+                                            <dd class="col-sm-8">{{ guest.birth_date }}</dd>
+                                        </dl>
+                                        <form id="personal-edit" class="edit-mode d-none" action="{% url 'profile_update' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="form_type" value="personal">
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email:</label>
+                                                <input type="email" class="form-control" id="email" name="email" value="{{ guest.email }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="firstname" class="form-label">Jméno:</label>
+                                                <input type="text" class="form-control" id="firstname" name="firstname" value="{{ guest.firstname }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="lastname" class="form-label">Příjmení:</label>
+                                                <input type="text" class="form-control" id="lastname" name="lastname" value="{{ guest.lastname }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="phone" class="form-label">Telefon:</label>
+                                                <input type="text" class="form-control" id="phone" name="phone" value="{{ guest.phone }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="birth_date" class="form-label">Datum narození:</label>
+                                                <input type="date" class="form-control" id="birth_date" name="birth_date" value="{{ guest.birth_date|date:'Y-m-d' }}">
+                                            </div>
+                                            <div class="d-flex justify-content-end gap-2">
+                                                <button type="button" class="btn btn-outline-secondary cancel-edit" data-section="personal">Zrušit</button>
+                                                <button type="submit" class="btn btn-success">Uložit změny</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center mx-auto mb-3" style="width: 120px; height: 120px; font-size: 48px;">
+                                            <span>{{ user.username|first|upper }}</span>
+                                        </div>
+                                        <h5 class="mb-1">{{ guest.firstname }} {{ guest.lastname }}</h5>
+                                        <p class="text-muted">Člen od {{ user.date_joined|date:"d.m.Y" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Adresa -->
+                        <div class="tab-pane fade" id="address">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="text-primary">Adresa</h5>
+                                    <button class="btn btn-sm btn-outline-primary edit-section" data-section="address">
+                                        <i class="fas fa-pencil-alt"></i> Upravit
+                                    </button>
+                                </div>
+                                <hr>
+                                <dl class="row view-mode" id="address-view">
+                                    <dt class="col-sm-4">Ulice:</dt>
+                                    <dd class="col-sm-8">{{ guest.street|default:"-" }}</dd>
+                                    <dt class="col-sm-4">Město:</dt>
+                                    <dd class="col-sm-8">{{ guest.city|default:"-" }}</dd>
+                                    <dt class="col-sm-4">PSČ:</dt>
+                                    <dd class="col-sm-8">{{ guest.postal_code|default:"-" }}</dd>
+                                    <dt class="col-sm-4">Země:</dt>
+                                    <dd class="col-sm-8">{{ guest.country|default:"-" }}</dd>
+                                </dl>
+                                <form id="address-edit" class="edit-mode d-none" action="{% url 'profile_update' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="form_type" value="address">
+                                    <div class="mb-3">
+                                        <label for="street" class="form-label">Ulice:</label>
+                                        <input type="text" class="form-control" id="street" name="street" value="{{ guest.street }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="city" class="form-label">Město:</label>
+                                        <input type="text" class="form-control" id="city" name="city" value="{{ guest.city }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="postal_code" class="form-label">PSČ:</label>
+                                        <input type="text" class="form-control" id="postal_code" name="postal_code" value="{{ guest.postal_code }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="country" class="form-label">Země:</label>
+                                        <input type="text" class="form-control" id="country" name="country" value="{{ guest.country }}">
+                                    </div>
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <button type="button" class="btn btn-outline-secondary cancel-edit" data-section="address">Zrušit</button>
+                                        <button type="submit" class="btn btn-success">Uložit změny</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Další informace -->
+                        <div class="tab-pane fade" id="other">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="text-primary">Další informace</h5>
+                                    <button class="btn btn-sm btn-outline-primary edit-section" data-section="notes">
+                                        <i class="fas fa-pencil-alt"></i> Upravit
+                                    </button>
+                                </div>
+                                <hr>
+                                <div class="view-mode" id="notes-view">
+                                    <h6>Poznámky:</h6>
+                                    <p class="p-3 bg-light rounded">{{ guest.notes|default:"Žádné poznámky" }}</p>
+                                </div>
+                                <form id="notes-edit" class="edit-mode d-none" action="{% url 'profile_update' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="form_type" value="notes">
+                                    <div class="mb-3">
+                                        <label for="notes" class="form-label">Poznámky:</label>
+                                        <textarea class="form-control" id="notes" name="notes" rows="4">{{ guest.notes }}</textarea>
+                                    </div>
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <button type="button" class="btn btn-outline-secondary cancel-edit" data-section="notes">Zrušit</button>
+                                        <button type="submit" class="btn btn-success">Uložit změny</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer p-3 bg-light">
+                    <div class="d-flex">
+                        <a href="{% url 'index' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-home me-2"></i> Zpět na hlavní stránku
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zpráva o úspěchu/chybě -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Ovládání editovatelných sekcí
+    const editButtons = document.querySelectorAll('.edit-section');
+    const cancelButtons = document.querySelectorAll('.cancel-edit');
+    
+    editButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const section = this.getAttribute('data-section');
+            document.getElementById(`${section}-view`).classList.add('d-none');
+            document.getElementById(`${section}-edit`).classList.remove('d-none');
+        });
+    });
+    
+    cancelButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const section = this.getAttribute('data-section');
+            document.getElementById(`${section}-edit`).classList.add('d-none');
+            document.getElementById(`${section}-view`).classList.remove('d-none');
+        });
+    });
+});
+</script>
 {% endblock %}
