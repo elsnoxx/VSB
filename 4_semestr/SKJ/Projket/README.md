@@ -1,6 +1,6 @@
-# Projekt – Webová aplikace v Django
+# Hotelový rezervační systém
 
-**Termín odevzdání:** na cvičeních v zápočtovém týdnu od 13.5.2024 do 17.5.2024.
+Aplikace je zaměřena na komplexní objednávkový systém pro hotely. Uživatelé mají možnost se zaregistrovat, přihlásit se do systému a následně si zarezervovat pokoj podle svých preferencí a požadavků. Po vytvoření rezervace může administrátor nebo zaměstnanec hotelu přidávat využité služby k danému pobytu (např. strava, wellness, parkování) a potvrdit jejich zaplacení. Zákazníci mají po dokončení pobytu a uhrazení platby možnost vyplnit zpětnou vazbu, ve které mohou ohodnotit kvalitu služeb a celkový dojem z pobytu. Pro administrátory systém nabízí kompletní administrativní rozhraní, které umožňuje efektivní správu hostů, pokojů, rezervací a dalších entit. Součástí aplikace je také REST API rozhraní, které poskytuje přístup k datům pro integraci s dalšími systémy nebo vytvoření mobilních aplikací.
 
 ## Splněné požadavky s popisem a umístěním v projektu
 
@@ -79,16 +79,15 @@
 ---
 
 **Admin přístup:**  
-Uživatelské jméno: `sa`  
-Heslo: `AdminTest`
+Uživatelské jméno: `admin`  
+Heslo: `admin`
 
 ---
 
 **Testovací uživatelé:**
 - `elsnoxx` / `Benjamin1*`
-- `er` / `!`
 
 ---
 
 Autor:  
-elsnoxx
+Richard Ficek
