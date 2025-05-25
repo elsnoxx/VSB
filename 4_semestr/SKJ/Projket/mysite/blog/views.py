@@ -517,47 +517,6 @@ def room_delete(request, room_id):
 
 
 #################################################
-# SPRÁVA POKOJŮ
-#################################################
-
-@login_required
-def employe_management(request):
-    emp = Employee.objects.all()
-    return render(request, 'management/employe/employe_management.html', {'emp': emp})
-
-@login_required
-def employe_create(request):
-    if request.method == 'POST':
-        form = EmployeeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('employe_management')
-    else:
-        form = EmployeeForm()
-    return render(request, 'forms/employe_form.html', {'form': form})
-
-@login_required
-def employe_update(request, employee_id):
-    employee = get_object_or_404(Employee, pk=employee_id)
-    if request.method == "POST":
-        form = EmployeeForm(request.POST, instance=employee)
-        if form.is_valid():
-            form.save()
-            return redirect('employe_management')
-    else:
-        form = EmployeeForm(instance=employee)
-    return render(request, 'forms/employee_form.html', {'form': form})
-
-@login_required
-def employe_delete(request, employee_id):
-    employee = get_object_or_404(Employee, pk=employee_id)
-    if request.method == "POST":
-        employee.delete()
-        return redirect('employe_management')
-    return render(request, 'management/employe/employe_confirm_delete.html', {'employee': employee})
-
-
-#################################################
 # AUTOCOMPLETE HOSTŮ
 #################################################
 
