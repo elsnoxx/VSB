@@ -5,28 +5,25 @@ Aplikace je zaměřena na komplexní objednávkový systém pro hotely. Uživate
 ## Splněné požadavky s popisem a umístěním v projektu
 
 1. **Aplikace obsahuje alespoň 6 modelů, které jsou vzájemně provázány vazbou**
-   - Modely: `Guest`, `Room`, `Reservation`, `Payment`, `RoomType`, `Expense`
+   - Modely: `Guest`, `Room`, `Reservation`, `Payment`, `RoomType`, `Service`, `ServiceUsage`
    - Najdeš v souboru [`blog/models.py`](blog/models.py)
    - Propojení je realizováno pomocí `ForeignKey`, `OneToOneField` a `ManyToManyField`.
 
 2. **K modelům je vytvořeno administrativní rozhraní**
-   - Django admin rozhraní pro všechny modely.
-   - Najdeš v souboru [`blog/admin.py`](blog/admin.py)
-   - Přístup přes `/admin` po spuštění aplikace.
+   - Django admin rozhraní pro všechny modely. Také implementované své vlastní rozhraní přístupné pro administrátora. Odkazy na administtraci se po přihlášení zobrazí v navigační liště.
 
 3. **Aplikace obsahuje alespoň 12 view a odpovídající URL**
    - Například: seznam hostů, detail hosta, editace hosta, seznam rezervací, detail rezervace, editace rezervace, seznam pokojů, atd.
-   - Najdeš v souboru [`blog/views.py`](blog/views.py)
-   - Odpovídající URL jsou v [`mysite/urls.py`](mysite/urls.py) a případně v `blog/urls.py` (pokud existuje).
+   - Vše v souboru [`blog/views.py`](blog/views.py)
 
 4. **View předávají obsah templatům (12 templatů)**
    - Každé view má vlastní šablonu pro zobrazení dat.
-   - Najdeš ve složce [`blog/templates/`](blog/templates/)
+   - Vše ve složce [`blog/templates/`](blog/templates/)
    - Například: `management/guest/guest_list.html`, `management/guest/guest_detail.html`, `management/reservation/reservation_list.html`, atd.
 
 5. **Aplikace obsahuje alespoň 6 formulářů**
    - Použity Django ModelForm i vlastní formuláře (např. pro hosta, rezervaci, platbu, vyhledávání, přihlášení, registraci).
-   - Najdeš v souboru [`blog/forms.py`](blog/forms.py)
+   - Vše v souboru [`blog/forms.py`](blog/forms.py)
 
 6. **REST API k datům aplikace**
    - Implementováno pomocí Django Ninja (`blog/api.py`).
@@ -47,21 +44,21 @@ Aplikace je zaměřena na komplexní objednávkový systém pro hotely. Uživate
 
 7. **Aplikace tvoří logický celek a stránky jsou propojené odkazy**
    - Navigace mezi stránkami je zajištěna pomocí odkazů v šablonách.
-   - Najdeš ve složce [`blog/templates/`](blog/templates/), např. v souborech `navbar.html`, `reservation_detail.html`, `guest_detail.html`.
+   - Vše ve složce [`blog/templates/`](blog/templates/), např. v souborech `navbar.html`, `reservation_detail.html`, `guest_detail.html`.
 
 8. **Aplikace není blog, fórum ani benzínová stanice**
    - Téma aplikace je hotelová evidence a rezervace pokoje.
 
 9. **Aplikace obsahuje grafické prvky a CSS styly**
    - Pro vzhled je použit Bootstrap a Bootstrap Icons.
-   - Najdeš v šablonách ve složce [`blog/templates/`](blog/templates/), např. v souborech `base.html`, `guest_form.html`, `reservation_list.html`.
+   - Vše v šablonách ve složce [`blog/templates/`](blog/templates/), např. v souborech `base.html`, `guest_form.html`, `reservation_list.html`.
 
 10. **Aplikace neobsahuje geografickou složku**
     - Žádné mapy ani geolokace nejsou použity.
 
 11. **Aplikace nepoužívá generické view**
-    - Všechna view jsou implementována jako vlastní funkce (function-based views).
-    - Najdeš v [`blog/views.py`](blog/views.py)
+    - Všechna view jsou implementována jako vlastní funkce.
+    - Vše v [`blog/views.py`](blog/views.py)
 
 ---
 
