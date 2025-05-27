@@ -1,0 +1,527 @@
+ASS 1
+
+Příprava
+Spočítejte levé a pravé závorky v řetězci.
+
+Vynulujte nejmenší prvek v poli.
+
+Otočte všem prvnkům v poli int a long znaménko, nepoužívejte neg.
+
+Vynulujte v poli všechna sudá čísla.
+
+
+Cvika
+Nastavení prostředí v OS Linux na učebně, zejména preferované klávesnice. Ověření přístupu, kvóty a seznámení se s vývojovým prostředím.
+Spojování zdrojových kodů C a ASM.
+Registry procesoru, datové typy, přímé adresování globálních proměnných, instrukce MOV, MOVSX, MOVZX.
+:::
+Otočit pořadí znaků v řetězci délky 5 znaků: "Ahoj!".
+
+Otočit pořadí bajtů v čísle int 0x11223344 -> 0x44332211.
+
+Přesunout obsah pole char cpole[ 4 ] = { -1, 2, -3, 4 } do int ipole[ 4 ];
+
+Vynulovat nejnižší bajt v čísle int.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+ASS 2
+
+Příprava
+Najděte v poli int nejmenší sudé číslo a v poli long největší liché číslo.
+
+Kolik číslic je v řetězci?
+
+Najděte v čísle long nevětší bajt.
+
+Rozložte číslo int na jednotlivé půl-bajty (nibbles): `0xABCEF123 -> char pole[ 8 ] = { 0x3, 0x2, 0x1, ... 0xA }
+
+Cviko
+Globální proměnné, adresování nepřímé s jedním registrem.
+Instrukce ADD, SUB, CMP, INC, DEC, NEG, AND, TEST, OR, XOR, NOT, SHL, SHR.
+Podmíněné skoky Jcc pro znaménková čísla. Podmínka a cyklus. :::
+
+Zadání
+Spočítejte, kolik bitů je v proměnné long bits = 0x1010101010101010 nastaveno na 0. Použijte shr a and.
+
+Změňte všechna záporná čísla v poli int ipole[ N ] na kladná. Nepoužívejte neg, použijte sub. Číslo N bude v ASM jako proměnná.
+
+Kolik čísel v poli char cpole[ N ] má nastavený N-tý bit? (Maska & ( 1 << M )). Pro lepší kontrolu inicializujte čísla v poli jako hex nebo binární čísla.
+
+Proveďte součet čísel z pole char pole8b[ N ] = { -80, -90, 100, -110, -120, ... } bez přetečení do proměnné int suma_pole8b.
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ASS 3
+
+Příprava není - disk rip asi
+
+
+Cviko
+Volání funkcí, návratové hodnoty, předávání parametrů,
+
+Adresování nepřímé s využítím dvojice registrů.
+
+Podmíněné skoky, cykly, složené podmínky.
+
+:::
+
+Tasks
+
+Najděte v poli čísel long nejmenší číslo, které má dolní bajt nulový.
+long nejmensi_56bit( long *tp_array, int t_N );
+
+Převeďte číslo long na hex string.
+char g_tabulka[ 16 ] = "0123456789ABCDEF";
+void long2hexstr( long t_num, char *tp_str ) {
+  opakuj { tp_str[ i ] = g_tabulka[ t_num & 0xF ]; t_num >>= 4; }
+}
+
+
+Zjistěte, zda je v řetězci více malý či velkým písmen.
+int pismena( char *tp_str ) { if ( velke ) citac++; if ( male ) citac--; }
+
+Spočítejte počet slov v řežezci. Pozor na opakující se mezery: " Pomalu zacina jaro ."
+int pocet_slov( char *tp_str ) { pres_cely_retezec { preskakuj_mezery; preskakuj_ne_mezery; }
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ASS 4
+
+Příprava
+Spočítejte faktoriál čísla int a výsledek vraťte jako hodnotu long. Pokud dojde k přetečení při výpočtu, bude výsledek 0. long faktorial( int N );
+
+Které číslo v poli čísel int má nejvyšší zbytek po dělení číslem K? Vynulujte v poli všechna čísla, která mají zbytek po dělení menší, než ten nejvyšší. int nejvetsi_modulo( int *tp_pole, int t_N, int t_K );
+
+Implementujte si funkci pro převod řetězce na velká či malá písmena. Podmíněný skok využijte jen pro cyklus, pro převod znaků se snažte využít jen instrukce CMOVxx.
+
+Ověřte, zda je číslo long prvočíslem.
+
+Vypočítejte číselný součin všech číslic v řetězci. Např. pro "Po56r4v dn3" bude výsledek 5*6*4*3=360. int soucin( char *tp_str );
+
+Cviko
+Volání funkcí, vnořený cyklus, instrukce IMUL a IDIV, instrukce CMOVxx volání funkce z JSI. :::
+Každý příklad za 1.5 bodu.
+
+Úkoly
+Spočítejte mocninu čísla X na N. Pokud dojde k přetečení, bude výsledek 0. Vyplňte pole mocninami zadaného čísla.
+void mocniny( long *tp_pole, int t_N, int t_X );
+
+Ověřte, zda dané číslo je prvočíslem. Vynulujte v poli všechna čísla, která nejsou prvočísly.
+void bez_prvocisel( int *tp_pole, int t_N );
+
+3. Implementujte si funkci pro volitelný převod řetězce na velká či malá písmena. Podmíněný skok využijte jen pro cyklus, pro převod znaků se snažte využít jen instrukce CMOVxx.
+Převeďte hex string na číslo. Pro zjednodušení předpokládejte v řetězci jen číslice a velká písmena.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+LED 1
+
+Příprava
+Prostudovat návody do cvičení a příklady na GitHub - apps-workspace.mcu.
+
+Tři základní třídy: DigitalIn, DigitalOut a Ticker. Způsob jejich použití.
+
+Dle potřeby a možností si již vyzkoušet práci s mikropočítačem v laboratoří EB430.
+
+Vyzkoušejte si práci s LED diodami v poli, aby bylo možno ovládat více LED ve smyčce.
+
+Cviko
+Programování MCU, řízení LED pomocí PWM, využití tlačítek.
+
+:::
+
+Naimplementujte si řízení jasu LED dle níže uvedeného vzoru.
+V konstruktorech nainicializujte všechny instanční proměnné a objekt PWM sám sebe připojí ke svému tickeru m_ticker.
+V metodě nastav_jas_proc přepočítejte jas LED zadaný v procentech na čas T1 nebo T0.
+Naimplementujte kód metody pwm_control.
+Vytvořte pole g_red_leds pro červené LEDky a nastavte jim jas od 0% do 35% a ověřte funkcionalitu.
+Zkuste pomocí tlačítka všechny LED zhasnout a dalším tlačítkem je uvést zpět do původního stavu.
+
+  Design aplikace:
+
+  PWMControl <<-- data <<-- [ pole LED ] <<-- nastav_jas_proc <<-- tlačítka
+#define T ??
+
+class LED
+{
+public:
+    DigitalOut m_pin;
+    uint8_t m_jas_proc;     // nastav jas v %
+    uint32_t m_T?;          // T1 nebo T0, čas sviceni/nesviceni
+
+    LED( PinName t_pin ) : m_pin( t_pin )
+    {
+    // inicializace instancnich promennych
+    }
+
+    void nastav_jas_proc( uint8_t t_jas_proc )
+    {
+        m_jas_proc = t_jas_proc;
+        m_T? = vypocet_jasu_dle m_jas_proc a T
+    }
+
+    void set_on_off( uint32_t t_on_off ){   m_pin = t_on_off; }
+};
+
+class PWMControl
+{
+public:
+    LED *mp_leds;             // pole rizenych LED
+    uint32_t m_num_leds;      // pocet rizenych LED
+    uint32_t m_ticks;         // aktualni cas periody T
+    Ticker m_ticker;          // ridici Ticker
+
+    PWMControl( LED *tp_leds, uint32_t t_num_leds )
+    {
+    // inicializace instancnich promennch
+        m_ticker.attach( callback( pridej_sam_sebe ), 1ms );
+    }
+
+    void pwm_control()
+    {
+        // for ( pro_vsechny_LED )
+        {
+            // if ( ma_nema_svitit_LED[ i ] )
+                // mp_leds[ led ].set_on_off( ON/OFF );
+        }
+
+    // rizeni m_ticks dle ukazky
+    ...
+    }
+};
+
+LED g_red_leds[] = { { PTCx }, { PTCx } };
+
+int main()
+{
+    g_red_leds[ 0 ].nastav_jas_proc( 5 );
+    g_red_leds[ 1 ].nastav_jas_proc( 35 );
+
+    PWM my_pwm( g_red_leds, 2 );
+
+    while ( 1 ) __WFI();
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+LED2
+
+Příprava
+Pro tlačítka si vytvářejte samostatný Ticker či Tickery. Může být i smyčka v main, ale není to ideální řešení. Dodržujte design aplikace, ze strany tlačítek nastavujte jas jen pomocí metody nastav_jas_proc.
+
+Ověřte si fungování PWM z posledního cvičení.
+
+Ověřte si řízení i pro RGB LEDky.
+
+Zkuste si implementovat hada. 6 LED v řadě od hlavy 40% do 10%. Dle stisku levého či pravého tlačítka had projede zleva či zprava.
+
+Zkuste si pomocí tlačítek zvyšovat či snižovat jas některých vybraných led. Např. stiskem/nestiskem jedné dvojice se tvoří 4 kombinace 0-1-2-3 a další dvojicí zvyšujte/snižujte jas.
+
+
+Cviko
+Programování MCU, řízení LED pomocí PWM, využití tlačítek. :::
+Světla auta (tříkolka Velorex, jedno světlo zadní, dvě přední).
+
+Při stisknutém tlačítku PTC11 se svítí brzdové světlo - prostřední RGB, červená 100%.
+
+Stiskem tlačítek PTC10 se rozsvítí světla (stiskem zapni, stiskem vypni): levá a pravá RGB bíle, 6x25%, prostřední RGB červeně 5%. Stále musí fungovat brzdové světlo. (2b)
+
+Stiskem tlačítka PTC9 3x problikne levý blinkr (levé 4 LED): zleva se bude postupně zvyšovat jas první LED, při dosažení 100% se začne zvyšovat jas druhé LED, atd. až po čtvrtou LED. Po rozsvícení 4x100% příslušné 4 LED zhasnou, krátce se počká a blikne znovu. (1.5b)
+
+Stiskem tlačítka PTC12 3x problikne pravý blinkr stejně (symetricky) jako levý. (0.5b)
+
+Blinkry musí být blokované, když bliká levý, nemůže blikat pravý a obráceně. Stiskem tlačítek PTC9-12 se aktivují výstražné blinkry - bliká levý i pravý současně až do vypnutí. (1b)
+
+Doporučení: zvlášť Ticker (cca 20-50ms) pro tlačítka, která jen nastaví příznak, co se má provádět. Další 2 Tickery (10-100ms) pro levý a pravý blinker.
+LED je vhodné rozdělit na 3 skupiny: levé 4 červené, pravé 4 červené a zbylé RGB.
+
+--------------------------------------------------------------------------------------------------------------------------------------
+LCD 1
+Příprava
+Pro přípravu jsou v LCD simulátoru připraveny třídy pro několik základních grafických objektů:kružnice, úsečka a znak. Doimplementujte si kód metod draw těchto tříd a ověřte, zda fungují.
+
+Odkaz na algoritmy pro úsečku a kružnici je na stránce předmětu.
+
+Bitmapové fonty různých velikostí jsou součástí simulátoru. Pište si tedy kód pro zobrazení znaku tak, aby bylo možno snadno změnit velikost fontu.
+
+Cviko
+Programování MCU, zobrazení výstupu na LCD, práce s barvami, zobrazení fontů.
+
+Vykreslení úsečky a kružnice.
+
+:::
+
+Z LCD simulátoru si převezměte fonty a soubor s grafickými prvky graph_class.hpp.
+
+Přepočítejte barvu formátu RGB888 (3xuint8_t) na RGB565 (uint16_t).
+
+Implementujte si vykreslení znaku, použijte např. font 12x16_msb, viz přednáška - for+for+if. Ověřte, zda fungují všechny základní barvy RGB (bílá, červená, zelená, modrá, žlutá, fialová a modro-zelená).
+
+Implementujte si vykreslení kružnice, viz přednáška, Bresenhemův algoritmus, odkaz na stránce předmětu.
+
+Implementujte si vykreslení úsečky, viz Bresenhemův algoritmus, odkaz na stránce předmětu.
+
+Implementujte si třídu pro vykreslení textu, volitelně text vycentrujte k zadanému bodu. (2b).
+
+Ověřte vykreslení všech grafických prvků.
+
+Zkuste jednoduchou animaci, viz příklad.
+
+Point2D g_req_pos = { LCD_WIDTH / 2, LCD_HEIGHT / 2 }; // pozadovana pozice vykresleni
+Point2D g_cur_pos = g_req_pos;                         // aktualni pozice 
+int g_refresh = 0;                                     // pozadavek prekresleni
+
+void buttons()
+{
+    if ( But9 == 0 ) { g_req_pos.x--; g_refresh = 1; }
+    if ( But10 == 0 ) { g_req_pos.x++; g_refresh = 1; }
+    if ( But11 == 0 ) ...
+    ...
+}
+
+int main()
+{
+    lcd_init();
+    // Ticker pro buttons, 20-50ms
+
+    Circle l_circle( g_cur_pos, .... );
+    Text l_text( g_cur_pos, "Ahoj", centrovat, ... );
+    while ( 1 )
+    {
+        if ( g_refresh )
+        {
+            g_refresh = 0;
+            l_circle.hide();
+            l_text.hide();
+
+            g_cur_pos = g_req_pos;
+            l_circle.m_pos = g_cur_pos;
+            l_text.m_pos = g_cur_pos;
+
+            l_circle.draw();
+            l_text.draw();
+        }
+    }
+}
+---------------------------------------------------------------------------------------------------------------------------------------------------
+LCD 2
+
+Příprava není
+
+Cviko
+Programování MCU, zobrazení výstupu na LCD, práce s barvami, zobrazení fontů.
+Vykreslení úsečky a kružnice. :::
+
+Houpačka
+
+Vytvořte si dva čítače, levý a pravý, oba v rozsahu <0, 30>. Pomocí tlačítek 9-10 zvyšujte a snižujte hodnotu levého čítače. Tlačítky 11-12 zvyšujte a snižujte hodnotu pravého čítače. Jeden stisk tlačítka by měl vždy změnit hodnotu o 1! Obě hodnoty čítačů vypisujte na dolním okraji LCD. (1b).
+
+Zvolte si střed otáčení houpačky S a vykreslete statickou oporu houpačky. Vykreslete pravou část houpačky jako úsečku. Jeden bod úsečky bude S a druhý se spočítá:
+
+x = Sx + R * g_tab_cos[ uhel ] / 1000;
+y = Sy + R * g_tab_sin[ uhel ] / 1000;
+kde úhel natočení bude rozdíl hodnot levého a pravého čítače v rozsahu <-30,30>. Levá část houpačky se spočítá symetricky pro -R. (1.5b).
+
+Na konec houpačky pověste dvě "stopky" a na "stopky" dvě kružnice. Pozice je dána koncovými body houpačky z předchozího bodu. (1.5).
+
+Do kružnic doplňte hodnoty čítačů. (1b).
+
+Při maximálním náklonu na jednu či druhou stranu se LCD rozbliká. (1b bonus).
+
+int _g_tab_sin[ 61 ] = {
+            -499, -484, -469, -453, -438, -422, -406, -390, -374, -358, -342, -325, -309, -292, -275,
+            -258, -241, -224, -207, -190, -173, -156, -139, -121, -104,  -87,  -69,  -52,  -34,  -17,
+            0,
+            17,   34,   52,   69,   87,  104,  121,  139,  156,  173,  190,  207,  224,  241,  258,
+            275,  292,  309,  325,  342,  358,  374,  390,  406,  422,  438,  453,  469,  484,  499
+};
+int _g_tab_cos[ 61 ] = {
+            866,  874,  882,  891,  898,  906,  913,  920,  927,  933,  939,  945,  951,  956,  961,
+            965,  970,  974,  978,  981,  984,  987,  990,  992,  994,  996,  997,  998,  999,  999,
+            1000,
+            999,  999,  998,  997,  996,  994,  992,  990,  987,  984,  981,  978,  974,  970,  965,
+            961,  956,  951,  945,  939,  933,  927,  920,  913,  906,  898,  891,  882,  874,  866
+};
+int *g_tab_sin = _g_tab_sin + 30;
+int *g_tab_cos = _g_tab_cos + 30;
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+I2C 1
+
+Příprava není
+
+Cviko
+Komunikace po sběrnici I2C, expandér PCF8574, FM rádion SI4735.
+
+:::
+
+Doimplementujte si funkci i2c_out_in, viz šablona níže. Funkci pak dále používejte ve svých funkcích.
+
+Vytvořte si třídu Expander s metodou void bar( uint8_t t_level );. Tato metoda zobrazí požadovaný počet (t_level) LED v řadě (sloupeček). Pro expandér si nastavte adresu: ip % 8 (viz prompt terminálu).
+
+Implementujte si třídu Radio s metodami set_volume( .. ), set_freq( .. ), search_freq( .. ), get_tune_status, atd... Příklad:
+
+uint8_t set_freq( uint16_t t_freq )
+{
+  uint8_t l_data_out[ 5 ] = { 0x20, 0x00, t_freq >> 8, t_freq & 0xFF, 0 };
+  return i2c_out_in( SI4735_ADDRESS, l_data_out, 5, nullptr, 0 );
+}
+
+uint8_t get_tune_status( uint8_t *t_data_status, uint32_t t_data_len )
+{
+  uint8_t l_data_out[ 2 ] = { 0x22, 0 };
+  return i2c_out_in( SI4735_ADDRESS, l_data_out, 2, t_data_status, t_data_len );
+}
+
+----------dalsi cast kodu
+uint8_t i2c_out_in( uint8_t t_adr,  // address without R/W, shifted?
+                   uint8_t *t_out_data, uint32_t t_out_len, 
+                   uint8_t *t_in_data, uint32_t t_in_len )
+{
+  i2c_start();
+
+  uint8_t l_ack = i2c_output( t_adr | W );
+
+  if ( l_ack == 0 )
+  {
+    for ( ... t_out_len ... )
+    {
+      l_ack |= i2c_output( t_out_data[ .. ] ); // send all t_out_data
+    }
+  }
+
+  if ( l_ack != 0 ) // error? 
+  {
+    i2c_stop();
+    return l_ack;
+  }
+
+  if ( t_in_data != nullptr ) // receive data
+  {
+    i2c_start(); // repeated start
+
+    l_ack |= i2c_output( t_adr | R );
+
+    t_in_data[ 0 ] = i2c_input();
+
+    for (  i = 1; i < t_in_len .. )
+    {
+      i2c_ack();
+      t_in_data[ .. ] = i2c_input(); // receive all t_data_in
+    }
+    i2c_nack();
+  }  
+
+  i2c_stop();
+
+  return l_ack;
+}
+------------------------------------------------------------------------------------------------------------------------------
+I2C 2
+Příprava není
+
+Cviko
+Komunikace po sběrnici I2C, expandér PCF8574, FM rádion SI4735, příjem RDS. :::
+Vytvoření aplikace rádio. Dvě tlačítka pro ladění a dvě pro změnu hlasitosti.
+
+Vyberte si cca 10 stanic v okolí Ostravy, např. radiomap. Určitě 101.4 a 87.5.
+Stiskem obou tlačítek pro ladění se postupně naladí všechny stanice ze seznamu, příkazem 0x22 se zkontroluje, zda je naladěno a zda frekvence souhlasí a pro danou stanici se zaznamená síla signálu.
+Pro další použití se bude tlačítky přepínat jen mezi pěti stanicemi s nejsilnějším signálem.
+
+Při prvním naladění stanice se pomocí RDS zjistí název stanice a uloží se k frekvenci a síle signálu.
+
+Při dalším hraní stanice s bude zobrazovat název programu.
+
+-----------------------------------------------------------------------------------------------------------------
+CUDA 1
+
+Příprava
+Seznámení se technologií CUDA. Využívání unified memory. Načtení obrázku a elementární manipulace s obrázkem.
+Manipulace s více obrázky. Nastavení mřížky dle požadavků.
+Pro přípravu je možno už i využít vzdálený přístup na počítače na učebně. Potřeba je: mít linux, i ve virtuálu, přihlásit se do školní sítě přes VPN a na školní počítače se z linuxu hlásít přes ssh. Grafický výstup by se měl zobrazit na Vašich počítačích. Není to věda, pomůže případně i google.
+
+Příklad cuda1 slouží jen pro seznámení s pojmy: mřížka, blok, index bloku, index vlákna.
+
+Příklad cuda2 si můžete zkusit upravit např. tak, že místo násobení převedete text na velká písmena pomocí tabulky. Není potřeba manipulovat s obrázky.
+Načtetě si svůj zdrojový soubor, to je v podstatě jeden dlouhý řetězec a ten převeďte na velká písmena. Výsledek uložte do souboru s příponou .UP. Kód pro převod s tabulkou v kernelu by měl vypadat asi takto: znak_souboru[ x ] = tabulka[ znak_souboru[ x ] ], kde tabulku vytvoříte už v PC (terminologií CUDA - host).
+
+Pro další přípravu použijte příklady cuda3 či cuda4, dle vlastního uvážení.
+Načtěte si barevný obrázek a rozložte si ho na 3 obrázky, kde každý bude obsahovat jen jednu barvu. Výsledné obrázky musí být také RGB, ale bude v nich vyplněna jen jedna barva.
+Kernel bude mít 4 argumenty: vstupní obrázek a 3 výstupní obrázky. Všechny stejné velikosti.
+
+Zkuste si implementovat flip (mirror) obrázku, volitelně horizontálně či vertikálně. Pozor na velikost mřížky, ta musí být jen přes půl obrázku, aby se body neprohodily 2x.
+Kernel bude mít jen 2 parametry: obrázek a volbu hor_vert.
+
+Otočte obrázek o 90°¸ volitelně ve směru hodinových ručiček a proti směru. Obrázek nesmí být čtverec.
+Kernel musí mít 3 parametry, protože dojde k prohození šířky a výšky: vstupní obrázek, výstupní obrázek a směr rotace.
+Určitě není pro otočení o 90° nutno používat sin/cos.
+
+Cviko
+Programování GPU, CUDA.
+
+:::
+
+17:45
+
+Načtěte si obrázek, min 300x200, ne čtverec. Rozložte obrázek na 3 barvy.
+
+Pro původní proveďte horizontalní flip a pro červený vertikální flip.
+
+Zelený otočte doleva a modrý doprava.
+
+16:00
+
+Načtěte si obrázek, min 300x200, ne čtverec. Proveďte flip obrázku horizontálně i vertikálně a zobrazte (rotace 180).
+
+Obrázek otočte doleva a zobrazte, doprava a zobrazte.
+
+Otočený rozložte na 3 barvy.
+
+14:15
+
+Načtěte si obrázek, min 300x200, ne čtverec. Otočte obrázek vlevo, zobrazte. Otočte vpravo, zobrazte.
+
+Otočený vpravo rozložte na 3 dle jednotlivých barev.
+
+Proveďte horizontální flip zeleného obrázku a vertikální flip červeného
+
+-----------------------------------------------------------------------------------------------------------------
+CUDA 2
+Příprava
+Manipulace s více obrázky, alfa kanál, manuální alokace paměti, animace (opakovaná manipulace s obrázkem).
+Rozšiřte si použití struktury CudaImg tak, aby byl použit třetí rozměr m_size pro informaci o počtu barev - 1, 3, 4 pro B/W, RGB a RGBA. Je také užitečné napsat si funkci, či metodu, která nastaví všechny instanční proměnné struktury CudaImg z objektu třídy Mat. Např. void set_cuda_img( cv::Mat &t_cv_img, CudaImg &t_cuda_img ) { ... }, ale možností je více.
+
+Na základě kernelu a funkce z příkldadu cuda5 si vytvořte další funkci a kernel pro vkládání obrázku, který není RGBA, ale jen RGB a alfa kanál bude zadán jako další parametr. Funkce i kernel tak bude mít 4 parametry:
+void cu_insert_rgb_image( CudaImg t_big_cuda_pic, CudaImg t_small_cuda_pic, int2 t_position, uint8_t t_alpha ).
+
+Níže je funkce implementující algoritmus pro změnu velikosti obrázku. Přepište si implementaci pro GPU (CUDA), aby konverze obrázku proběhla v kernelu (smyčky for pro souřadnice x a y nahradí mřížka).
+Upravte si kód, aby zvládl obrázky RGB i RGBA.
+
+Ověřte si své funkce například následovně: z obrázku tenisového míčku z příkladu cuda5 vytvořte "sněhuláka", tedy tří míčky nad sebou různých velikostí. Jako pozadí použijte libovolný obrázek krajiny.
+První "sněhulák" vložený do obrázku si jednou "poskočí", např. o 50 bodů nahoru a pak zpět. Pak se další "sněhuláci" vloží do obrázku 50x na náhodná místa. Po každém přidaném "sněhulákovi" se výsledek překreslí, aby bylo vidět postupné přidávání.
+
+```C void cv_run_bilin_scale( cv::Mat &t_cv_img_orig, cv::Mat &t_cv_img_resize ) { float l_scale_x = t_cv_img_orig.cols - 1; float l_scale_y = t_cv_img_orig.rows - 1; l_scale_x /= t_cv_img_resize.cols; l_scale_y /= t_cv_img_resize.rows;
+
+for ( int l_resize_x = 0; l_resize_x < t_cv_img_resize.cols; l_resize_x++ ) { for ( int l_resize_y = 0; l_resize_y < t_cv_img_resize.rows; l_resize_y++ ) { // new real position float l_orig_x = l_resize_x * l_scale_x; float l_orig_y = l_resize_y * l_scale_y; // diff x and y float l_diff_x = l_orig_x - ( int ) l_orig_x; float l_diff_y = l_orig_y - ( int ) l_orig_y;
+
+// points cv::Vec3b bgr00 = t_cv_img_orig.at<:vec3b>( ( int ) l_orig_y, ( int ) l_orig_x ); cv::Vec3b bgr01 = t_cv_img_orig.at<:vec3b>( ( int ) l_orig_y, 1 + ( int ) l_orig_x ); cv::Vec3b bgr10 = t_cv_img_orig.at<:vec3b>( 1 + ( int ) l_orig_y, ( int ) l_orig_x ); cv::Vec3b bgr11 = t_cv_img_orig.at<:vec3b>( 1 + ( int ) l_orig_y, 1 + ( int ) l_orig_x );
+
+cv::Vec3b bgr; for ( int i = 0; i < 3; i++ ) { // color calculation bgr[ i ] = bgr00[ i ] * ( 1 - l_diff_y ) * ( 1 - l_diff_x ) + bgr01[ i ] * ( 1 - l_diff_y ) * ( l_diff_x ) + bgr10[ i ] * ( l_diff_y ) * ( 1 - l_diff_x ) + bgr11[ i ] * ( l_diff_y ) * ( l_diff_x ); t_cv_img_resize.at<:vec3b>( l_resize_y, l_resize_x ) = bgr; } } } }
+
+```
+
+Cviko
+Programování GPU, CUDA. :::
+Opravy a dodělávky budou 22. 5. od 7:15 do 10:30.
+Při použití statické alokace plus bod.
+Ukázky dnešních úkolů: cd ~oli10/zadani.
+
+smile - Nálada se rychle mění. Stáhněte si dva obrázky stejné velikosti a vkládejte je do prázdného obrázku s měnící se průhledností. (2b)
+
+while ( 1 )
+{
+  insert_image( prazdny, prvni_image, 255-alpha_level );
+  insert_image( prazdny, druhy_image, alpha_level );
+  imshow( prazdny );
+}
+
+kostka - Reklamní panel, kde se vzájemně vytlačují obrázky. První obrázek určí velikost výsledného. (3b)
+
+tiger - Mikropočítače mají implementovaný watchdog. FEI má svůj watchtiger. (3b)
