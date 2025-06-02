@@ -2,6 +2,8 @@ using Dapper;
 using ParkingLotWEB.Models;
 using System.Data;
 using BCrypt.Net;
+using ParkingLotWEB.Exceptions;
+
 
 namespace ParkingLotWEB.Database
 {
@@ -56,8 +58,29 @@ namespace ParkingLotWEB.Database
         {
             using var conn = _dapper.CreateConnection();
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            var sql = "INSERT INTO `User` (Username, Password, Role, First_Name, Last_Name, Email) VALUES (@Username, @Password, @Role, @FirstName, @LastName, @Email)";
-            return await conn.ExecuteAsync(sql, new { user.Username, user.Password, user.Role, user.FirstName, user.LastName, user.Email });
+            var sql = "INSERT INTO `User` (Username, Password, Role, First_Name, Last_Name, Email) " +
+                    "VALUES (@Username, @Password, @Role, @FirstName, @LastName, @Email)";
+
+            try
+            {
+                return await conn.ExecuteAsync(sql, new
+                {
+                    user.Username,
+                    user.Password,
+                    user.Role,
+                    user.FirstName,
+                    user.LastName,
+                    user.Email
+                });
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                if (ex.Number == 1062)
+                {
+                    throw new DuplicateUsernameException("Tento uživatel již existuje.", ex);
+                }
+                throw;
+            }
         }
 
         public async Task<int> DeleteAsync(int id)

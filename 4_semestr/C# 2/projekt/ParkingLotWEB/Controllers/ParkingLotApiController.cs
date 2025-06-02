@@ -105,6 +105,7 @@ public class ParkingLotApiController : ControllerBase
         var userCars = await _userRepo.GetCarsByUserIdAsync(userId);
 
         var occupiedPlates = await _spaceRepo.GetAllOccupiedLicensePlatesAsync();
+        Console.WriteLine($"Occupied plates: {lot.FreeSpaces}");
 
         var details = new ParkingLotDetailsViewModel
         {
@@ -113,7 +114,7 @@ public class ParkingLotApiController : ControllerBase
             Latitude = lot.Latitude,
             Longitude = lot.Longitude,
             Capacity = lot.Capacity,
-            FreeSpaces = lot.Capacity - lot.FreeSpaces,
+            FreeSpaces = lot.FreeSpaces,
             PricePerHour = lot.PricePerHour,
             ParkingSpaces = spacesWithOwner.ToList(),
             UserCars = userCars?.Select(car => new CarDto
@@ -171,5 +172,16 @@ public class ParkingLotApiController : ControllerBase
         if (result > 0)
             return Ok();
         return NotFound();
+    }
+
+    [HttpGet("parkingLotId/{parkingspaceId}")]
+    [ProducesResponseType(typeof(ParkingLot), 200)]
+    public async Task<IActionResult> GetParkingLotByParkingSpaceId(int parkingspaceId)
+    {
+        var parkingLot = await _spaceRepo.GetParkingSpaceByParkingLotAsync(parkingspaceId);
+        Console.WriteLine($"ParkingLotApiController: ParkingLotId for ParkingSpaceId {parkingLot}");
+        if (parkingLot == null) return NotFound();
+
+        return Ok(parkingLot);
     }
 }

@@ -34,6 +34,7 @@ public class ParkingLotController : Controller
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         var response = await _apiClient.GetAsync($"api/ParkingLotApi/details/{id}/user/{userId}");
+        
 
         if (!response.IsSuccessStatusCode) return NotFound();
 
@@ -244,10 +245,19 @@ public class ParkingLotController : Controller
         var spaceData = JsonSerializer.Deserialize<dynamic>(spaceJson, 
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
+
         // Informace o parkovacím místě pro zobrazení
         ViewBag.SpaceNumber = historyData?.FirstOrDefault()?.SpaceNumber ?? 0;
         ViewBag.ParkingSpaceId = parkingSpaceId;
-        ViewBag.ParkingLotId = historyData?.FirstOrDefault()?.ParkingLotId ?? 0;
+        
+        var parkingLotResponse = await _apiClient.GetAsync($"api/ParkingLotApi/parkingLotId/{parkingSpaceId}");
+        if (!parkingLotResponse.IsSuccessStatusCode)
+            return NotFound();
+
+        var parkingLotJson = await parkingLotResponse.Content.ReadAsStringAsync();
+        var parkingLotId = JsonSerializer.Deserialize<int>(parkingLotJson);
+        ViewBag.ParkingLotId = parkingLotId;
+
 
         return View(historyData);
     }

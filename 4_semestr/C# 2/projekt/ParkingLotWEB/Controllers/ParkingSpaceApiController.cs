@@ -40,6 +40,7 @@ public class ParkingSpaceApiController : ControllerBase
 
         await _repo.UpdateStatusAsync(selected.ParkingSpaceId, "occupied");
         await _repo.InsertOccupancyAsync(selected.ParkingSpaceId, req.LicensePlate);
+        await _repo.InsertStatusHistoryAsync(selected.ParkingSpaceId, "occupied");
 
         return Ok(new { ParkingSpaceId = selected.ParkingSpaceId, SpaceNumber = selected.SpaceNumber });
     }
@@ -56,6 +57,8 @@ public class ParkingSpaceApiController : ControllerBase
         // 2. Ukončení poslední obsazenosti
         await _repo.ReleaseOccupancyAsync(req.ParkingSpaceId, req.ParkingLotId);
 
+        await _repo.InsertStatusHistoryAsync(req.ParkingSpaceId, "available");
+
         return Ok();
     }
 
@@ -67,6 +70,7 @@ public class ParkingSpaceApiController : ControllerBase
     {
         Console.WriteLine($"Setting status for space {parkingSpaceId} to {req.Status}");
         await _repo.UpdateStatusAsync(parkingSpaceId, req.Status);
+        await _repo.InsertStatusHistoryAsync(parkingSpaceId, req.Status);
         return Ok();
     }
 
@@ -118,6 +122,8 @@ public class ParkingSpaceApiController : ControllerBase
 
         return Ok(result);
     }
+
+    
 }
 
 
