@@ -38,14 +38,14 @@ namespace ParkingLotWPF.Views
             }
         }
 
-        private void Edit_User(object sender, RoutedEventArgs e)
+        private async void Edit_User(object sender, RoutedEventArgs e)
         {
             var user = ToApiUser();
             var editDialog = new UserDataEditing(user);
             if (editDialog.ShowDialog() == true)
             {
                 var userManagement = new ApiCalls.UserManagement();
-                var refreshedProfile = userManagement.GetUserProfileAsync(user.Id).Result;
+                var refreshedProfile = await userManagement.GetUserProfileAsync(user.Id);
                 Profile = refreshedProfile;
                 DataContext = Profile;
             }
