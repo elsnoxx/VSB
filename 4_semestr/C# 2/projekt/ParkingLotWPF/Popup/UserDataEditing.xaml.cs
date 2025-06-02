@@ -89,8 +89,8 @@ namespace ParkingLotWPF.Popup
             {
                 await userManagement.UpdateUserAsync(_user);
                 MessageBox.Show("Uživatel byl úspěšně aktualizován.", "Hotovo", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.DialogResult = true;
-                this.Close();
+                DialogResult = true;
+                Close();
             }
             catch (Exception ex)
             {

@@ -42,7 +42,13 @@ namespace ParkingLotWPF.Views
         {
             var user = ToApiUser();
             var editDialog = new UserDataEditing(user);
-            editDialog.ShowDialog();
+            if (editDialog.ShowDialog() == true)
+            {
+                var userManagement = new ApiCalls.UserManagement();
+                var refreshedProfile = userManagement.GetUserProfileAsync(user.Id).Result;
+                Profile = refreshedProfile;
+                DataContext = Profile;
+            }
         }
 
         private async void Add_Car(object sender, RoutedEventArgs e)

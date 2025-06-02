@@ -23,10 +23,11 @@ namespace ApiCalls
             return JsonSerializer.Deserialize<List<User>>(response);
         }
 
-        public async Task UpdateUserAsync(User user)
+        public async Task<bool> UpdateUserAsync(User user)
         {
             var json = JsonSerializer.Serialize(user);
-            await _httpClientWrapper.PutAsync($"api/UserApi/{user.Id}", json);
+            var response = await _httpClientWrapper.PutAsync($"api/UserApi/{user.Id}", json);
+            return string.IsNullOrEmpty(response);
         }
 
         public async Task<bool> ResetPasswordAsync(int userId, string newPassword)
