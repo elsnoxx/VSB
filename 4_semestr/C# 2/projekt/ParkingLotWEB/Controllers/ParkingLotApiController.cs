@@ -31,6 +31,8 @@ public class ParkingLotApiController : ControllerBase
     public async Task<IActionResult> GetAllWithFreeSpaces()
     {
         var lots = await _repo.GetAllWithFreeSpacesAsync();
+        
+        
         return Ok(lots);
     }
 

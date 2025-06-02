@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Security.Claims;
+using System.Globalization;
 
 namespace ParkingLotWEB
 {
@@ -65,6 +66,18 @@ namespace ParkingLotWEB
             builder.Services.AddHttpClient();
 
             var app = builder.Build();
+
+            // Nastavení kultury na en-US pro všechny požadavky
+            var cultureInfo = new CultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("en-US"),
+                SupportedCultures = new[] { cultureInfo },
+                SupportedUICultures = new[] { cultureInfo }
+            });
 
             if (!app.Environment.IsDevelopment())
             {

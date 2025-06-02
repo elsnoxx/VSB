@@ -27,7 +27,11 @@
             <div class="card bg-success text-white">
                 <div class="card-body">
                     <h5 class="card-title">Volná místa</h5>
-                    <p class="card-text fs-4">@Model.FreeSpaces</p>
+                    <p class="card-text fs-4">
+                        @(Model.Capacity 
+                        - Model.ParkingSpaces.Count(s => s.Status == "occupied") 
+                        - Model.ParkingSpaces.Count(s => s.Status == "under_maintenance"))
+                    </p>
                 </div>
             </div>
         </div>

@@ -21,10 +21,15 @@ public class ParkingLotController : Controller
     {
         var response = await _apiClient.GetAsync("api/ParkingLotApi/withFreespaces");
         var lots = new List<ParkingLot>();
+        
         if (response.IsSuccessStatusCode)
         {
             var json = await response.Content.ReadAsStringAsync();
             lots = JsonSerializer.Deserialize<List<ParkingLot>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<ParkingLot>();
+        }
+        foreach (var lot in lots)
+        {
+            Console.WriteLine($"ParkingLotApiController: price {lot.PricePerHour}");
         }
         return View(lots);
     }
@@ -61,7 +66,8 @@ public class ParkingLotController : Controller
             Name = model.Name,
             Latitude = model.Latitude,
             Longitude = model.Longitude,
-            Capacity = model.Capacity
+            Capacity = model.Capacity,
+            PricePerHour = model.PricePerHour
         };
 
         var response = await _apiClient.PostAsync("api/ParkingLotApi", lot);

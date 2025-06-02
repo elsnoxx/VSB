@@ -51,7 +51,7 @@ namespace ParkingLotWEB.Database
         {
             using var conn = _dapper.CreateConnection();
             // Vložení parkoviště a získání ID
-            var sql = "INSERT INTO ParkingLot (name, latitude, longitude, capacity) VALUES (@Name, @Latitude, @Longitude, @Capacity); SELECT LAST_INSERT_ID();";
+            var sql = "INSERT INTO ParkingLot (name, latitude, longitude, capacity, price_per_hour) VALUES (@Name, @Latitude, @Longitude, @Capacity, @PricePerHour); SELECT LAST_INSERT_ID();";
             var parkingLotId = await conn.ExecuteScalarAsync<int>(sql, lot);
 
             // Vytvoření parkovacích míst

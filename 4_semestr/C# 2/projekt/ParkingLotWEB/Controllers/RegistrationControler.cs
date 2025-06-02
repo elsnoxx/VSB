@@ -26,6 +26,16 @@ public class RegistrationController : Controller
         if (!ModelState.IsValid)
             return View(model);
 
+        // Zkontroluj, jestli už existuje uživatel se stejným emailem
+        var existingUserByEmail = (await _userRepo.GetAllAsync())
+            .FirstOrDefault(u => u.Email == model.Email);
+
+        if (existingUserByEmail != null)
+        {
+            // Přidej pouze informativní hlášku, ale pokračuj v registraci
+            ModelState.AddModelError("Email", "Tento email již byl použit, zkus se příhlásit.");
+        }
+
         var user = new User
         {
             Username = model.Username,
@@ -43,7 +53,7 @@ public class RegistrationController : Controller
         }
         catch (DuplicateUsernameException ex)
         {
-            ModelState.AddModelError("Tento email již existuje.", ex.Message);
+            ModelState.AddModelError("Username", ex.Message);
             return View(model);
         }
         catch (Exception ex)
