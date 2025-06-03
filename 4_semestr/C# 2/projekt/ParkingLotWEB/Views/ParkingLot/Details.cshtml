@@ -50,34 +50,70 @@
 
         <h4 class="mt-4">Vaše zaparkovaná auta</h4>
         <div class="d-flex flex-wrap gap-2" id="userFunctions">
-            @foreach (var space in Model.ParkingSpaces.Where(s => s.Status == "occupied" && s.OwnerId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value))
+            @{
+                var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                var userSpaces = Model.ParkingSpaces.Where(s => s.Status == "occupied" && s.OwnerId == userId).ToList();
+                var hasCars = Model.UserCars.Any();
+            }
+            @if (userSpaces.Any())
             {
-                <div class="space-item" data-space="@space.SpaceNumber" style="display:inline-block;text-align:center;">
-                    <svg width="32" height="32">
-                        <circle cx="16" cy="16" r="12" fill="red" stroke="black" stroke-width="2"/>
-                    </svg>
-                    <div>@space.SpaceNumber</div>
-                    <form asp-action="ReleaseCar" asp-controller="ParkingLot" method="post" style="display:inline;">
-                        <input type="hidden" name="ParkingSpaceId" value="@space.ParkingSpaceId" />
-                        <input type="hidden" name="ParkingLotId" value="@Model.ParkingLotId" />
-                        <button type="submit" class="btn btn-sm btn-danger mt-1">Odjet</button>
-                    </form>
-                </div>
+                foreach (var space in userSpaces)
+                {
+                    <div class="space-item" data-space="@space.SpaceNumber" style="display:inline-block;text-align:center;">
+                        <svg width="32" height="32">
+                            <circle cx="16" cy="16" r="12" fill="red" stroke="black" stroke-width="2"/>
+                        </svg>
+                        <div>@space.SpaceNumber</div>
+                        <form asp-action="ReleaseCar" asp-controller="ParkingLot" method="post" style="display:inline;">
+                            <input type="hidden" name="ParkingSpaceId" value="@space.ParkingSpaceId" />
+                            <input type="hidden" name="ParkingLotId" value="@Model.ParkingLotId" />
+                            <button type="submit" class="btn btn-sm btn-danger mt-1">Odjet</button>
+                        </form>
+                    </div>
+                }
+            }
+            else
+            {
+                if (hasCars)
+                {
+                    <div>
+                        Nemáte zde žádné zaparkované auto. <a asp-controller="User" asp-action="Profil">Přejít na profil</a>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        Nemáte registrované žádné auto. <a asp-controller="User" asp-action="Profil">Zaregistrovat auto v profilu</a>
+                    </div>
+                }
             }
         </div>
 
         <h4 class="mt-4">Zaparkovat auto</h4>
         <div class="card shadow-sm mb-4">
             <div class="card-body">
-                @foreach (var car in Model.UserCars.Where(car => !Model.OccupiedLicensePlates.Contains(car.LicensePlate)))
+                @{
+                    var availableCars = Model.UserCars.Where(car => !Model.OccupiedLicensePlates.Contains(car.LicensePlate)).ToList();
+                }
+                @if (availableCars.Any())
                 {
-                    <form asp-action="ParkCar" asp-controller="ParkingLot" method="post" style="display:inline;">
-                        <input type="hidden" name="ParkingLotId" value="@Model.ParkingLotId" />
-                        <input type="hidden" name="LicensePlate" value="@car.LicensePlate" />
-                        <button type="submit" class="btn btn-success mb-2">
-                            Zaparkovat @car.LicensePlate - @car.BrandModel
-                        </button>
-                    </form>
+                    foreach (var car in availableCars)
+                    {
+                        <form asp-action="ParkCar" asp-controller="ParkingLot" method="post" style="display:inline;">
+                            <input type="hidden" name="ParkingLotId" value="@Model.ParkingLotId" />
+                            <input type="hidden" name="LicensePlate" value="@car.LicensePlate" />
+                            <button type="submit" class="btn btn-success mb-2">
+                                Zaparkovat @car.LicensePlate - @car.BrandModel
+                            </button>
+                        </form>
+                    }
+                }
+                else
+                {
+                    <div>
+                        Nemáte žádné volné auto k zaparkování.
+                        <a asp-controller="User" asp-action="Profil">Zaregistrovat auto v profilu</a>
+                    </div>
                 }
             </div>
         </div>

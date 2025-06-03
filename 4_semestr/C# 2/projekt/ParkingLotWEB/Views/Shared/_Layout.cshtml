@@ -30,23 +30,8 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        @if (!isAuthenticated)
+                        @if (isAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Login">Přihlášení</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Registration" asp-action="Register">Registrace</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-danger" asp-controller="Auth" asp-action="Logout">Odhlásit se</a>
-                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-primary" asp-controller="User" asp-action="Profil" asp-route-id="@userId">@User.Identity.Name</a>
                             </li>
@@ -66,6 +51,19 @@
                                     <a class="nav-link text-dark" asp-controller="ApiDescription" asp-action="Index">API</a>
                                 </li>
                             }
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" asp-controller="Auth" asp-action="Logout">Odhlásit se</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Login">Přihlášení</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Registration" asp-action="Register">Registrace</a>
+                            </li>
+                            
                         }
                     </ul>
                 </div>

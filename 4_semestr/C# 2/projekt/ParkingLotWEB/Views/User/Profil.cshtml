@@ -97,7 +97,7 @@
                     <tbody>
                     @if (Model.ParkingHistory != null && Model.ParkingHistory.Any())
                     {
-                        foreach (var history in Model.ParkingHistory)
+                        @foreach (var history in Model.ParkingHistory.OrderByDescending(h => h.ArrivalTime))
                         {
                             <tr>
                                 <td>@history.LicensePlate</td>

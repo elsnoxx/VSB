@@ -21,3 +21,10 @@ A nakonec jak řešit autorizace admina,
 a ještě jak se dělala databáze co jste použili dapper treba nebo custom … nic jiného neřešil,
 
 Hodnotí i celou apku jako takovou ale videl jsem ze to dal vsem full za tu část takze zbytek nehrotí
+
+
+docker build parking lot webapp
+
+1. docker build -t parkinglotweb .
+
+2. docker run -p 8080:8080 --name parkinglotweb_container parkinglotweb
