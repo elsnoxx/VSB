@@ -1,6 +1,6 @@
 
 /*	DD S15 L01
-o	Napište dotaz pro spojování øetìzcù pomocí || , pomocí CONCAT()*/
+o	Napiï¿½te dotaz pro spojovï¿½nï¿½ ï¿½etï¿½zcï¿½ pomocï¿½ || , pomocï¿½ CONCAT()*/
 
 SELECT Name || ' ' || Surname AS full_name
 FROM EMPLOYEE
@@ -20,7 +20,7 @@ FROM Training
 SELECT DISTINCT Employee_ID, Name || ' ' || Surname AS full_name
 FROM Employee
 
-/*	WHERE podmínky pro výbìr øádkù
+/*	WHERE podmï¿½nky pro vï¿½bï¿½r ï¿½ï¿½dkï¿½
 	Funkce LOWER, UPPER, INITCAP */
 
 SELECT
@@ -41,8 +41,8 @@ SELECT INITCAP(email)
 FROM EMPLOYEE
 
 
-/*•	DD S16 L03
-o	BETWEEN … AND
+/*ï¿½	DD S16 L03
+o	BETWEEN ï¿½ AND
 o	LIKE (%, _)
 o	IN()
 o	IS NULL, IS NOT NULL*/
@@ -67,7 +67,7 @@ WHERE EoEmployment IS NULL
 
 /* 	DD S17 L01
 o	AND, OR, NOT
-o	Priorita vyhodnocení pomocí () */
+o	Priorita vyhodnocenï¿½ pomocï¿½ () */
 
 SELECT *
 FROM EMPLOYEE 
@@ -81,9 +81,9 @@ SELECT  Employee_id,Name || ' ' || Surname AS full_name
 FROM Employee
 WHERE surname NOT LIKE 'S%';
 
-/*•	DD S17 L02
+/*ï¿½	DD S17 L02
 o	ORDER BY atr [ASC/DESC]*/
-o	Tøídìní podle jednoho nebo vice atributù */
+o	Tï¿½ï¿½dï¿½nï¿½ podle jednoho nebo vice atributï¿½ */
 
 SELECT Employee_id, name,surname
 FROM Employee
@@ -98,8 +98,8 @@ SELECT Employee_id,surname, name
 FROM Employee
 ORDER BY name ASC,surname
 
-/*o	Jednoøádkové funkce
-o	víceøádkové funkce MIN, MAX, AVG, SUM, COUNT */
+/*o	Jednoï¿½ï¿½dkovï¿½ funkce
+o	vï¿½ceï¿½ï¿½dkovï¿½ funkce MIN, MAX, AVG, SUM, COUNT */
 
 
 SELECT MAX(salary)
@@ -118,7 +118,7 @@ SELECT COUNT(salary)
 FROM salary_change
 
 
-/*víceøádkové funkce MIN, MAX, AVG, SUM, COUNT*/
+/*vï¿½ceï¿½ï¿½dkovï¿½ funkce MIN, MAX, AVG, SUM, COUNT*/
 
 SELECT Employee_id, MAX(salary)
 FROM  Salary_change 
@@ -188,10 +188,10 @@ SELECT REPLACE(surname,'Kraning','FUCKING')
 FROM Employee
 WHERE employee_id = 1
 
-/*o	Použijte tabulku DUAL
+/*o	Pouï¿½ijte tabulku DUAL
 o	SQL S01 L02
-•	SQL S01 L02
-o	ROUND, TRUNC zaukrouhlení na 2 desetinná místa, na celé tisíce MOD
+ï¿½	SQL S01 L02
+o	ROUND, TRUNC zaukrouhlenï¿½ na 2 desetinnï¿½ mï¿½sta, na celï¿½ tisï¿½ce MOD
 MONTHS_BETWEEN, ADD_MONTHS, NEXT_DAY, LAST_DAY, ROUND, TRUNC*/
 
 SELECT ROUND(15.193,2) 
@@ -208,7 +208,7 @@ SELECT TRUNC(1500.79,0)
 FROM DUAL;
 
 /*o	MONTHS_BETWEEN, ADD_MONTHS, NEXT_DAY, LAST_DAY, ROUND, TRUNC
-o	Systémová konstanta SYSDATE*/
+o	Systï¿½movï¿½ konstanta SYSDATE*/
 
 SELECT MONTHS_BETWEEN 
    (TO_DATE('09-06-2022','MM-DD-YYYY'),
@@ -248,7 +248,7 @@ SELECT
 TO_NUMBER('4687841', '9999999')
 FROM DUAL;
 
-/*•	SQL S02 L02
+/*ï¿½	SQL S02 L02
 o	NVL, NVL2, NULLIF, COALESCE*/
 
 SELECT nvl(Hobbies,'Missing information on someone`s hobbies ')
@@ -263,7 +263,7 @@ FROM Employee
 SELECT Hobbies, COALESCE(Hobbies, 'UNKNOWN') AS Hobby
 FROM PI
 
-/*•	SQL S02 L03
+/*ï¿½	SQL S02 L03
 o	DECODE, CASE, IF-THEN-ELSE*/
 
 SELECT Employee_ID,
@@ -281,7 +281,7 @@ SELECT  salary,
    END) salary   
 FROM    Salary_Change
 
-/*•	SQL S03 L01
+/*ï¿½	SQL S03 L01
 o	NATURAL JOIN, CROSS JOIN*/
 
 SELECT Employee_ID, name, surname, salary
@@ -293,8 +293,8 @@ FROM Employee
 CROSS JOIN Salary_change;
 
 /*	SQL S03 L02
-o	JOIN … USING(atr)
-o	JOIN .. ON (podmínka spojení) */
+o	JOIN ï¿½ USING(atr)
+o	JOIN .. ON (podmï¿½nka spojenï¿½) */
 
 SELECT Employee_ID, name, surname, salary
 FROM Employee 
@@ -305,10 +305,10 @@ FROM Employee e
 JOIN Salary_change s ON e.Employee_ID = s.Employee_Id
 
 
-/*•	SQL S03 L03
-o	LEFT OUTER JOIN … ON ()
-o	RIGHT OUTER JOIN … ON ()
-o	FULL OUTER JOIN … ON () */
+/*ï¿½	SQL S03 L03
+o	LEFT OUTER JOIN ï¿½ ON ()
+o	RIGHT OUTER JOIN ï¿½ ON ()
+o	FULL OUTER JOIN ï¿½ ON () */
 
 SELECT e.Employee_ID, name, surname, salary
 FROM Employee e
@@ -322,9 +322,9 @@ SELECT e.Employee_ID, name, surname, salary
 FROM Employee e
 FULL OUTER JOIN Salary_change s ON e.Employee_ID = s.Employee_Id
 
-/*•	SQL S03 L04
-o	Spojování 2x stejné tabulky s pøejmenováním (vazba mezi nadøízenými a podøízenými v jedné tabulce)
-o	Hierarchické dotazování – stromová struktura zanoøení START WITH, CONNECT BY PRIOR, LEVEL
+/*ï¿½	SQL S03 L04
+o	Spojovï¿½nï¿½ 2x stejnï¿½ tabulky s pï¿½ejmenovï¿½nï¿½m (vazba mezi nadï¿½ï¿½zenï¿½mi a podï¿½ï¿½zenï¿½mi v jednï¿½ tabulce)
+o	Hierarchickï¿½ dotazovï¿½nï¿½ ï¿½ stromovï¿½ struktura zanoï¿½enï¿½ START WITH, CONNECT BY PRIOR, LEVEL
 
 SELECT Employee_id,Surname, NAME, Manager_id
 FROM Employee
@@ -350,7 +350,7 @@ AS "Manager name"
 FROM employee W JOIN employee M
 ON (W.manager_id = M.employee_id);
 
-/*•	SQL S04 L02
+/*ï¿½	SQL S04 L02
 o	AVG, COUNT, MIN, MAX, SUM, VARIANCE, STDDEV*/
 
 
@@ -392,10 +392,10 @@ SELECT STDDEV(SALARY)
 FROM Employee
 NATURAL JOIN Salary_change
 
-/*•	SQL S04 L03
+/*ï¿½	SQL S04 L03
 o	COUNT, COUNT(DISTINCT ), NVL
-o	Rozdíl mezi COUNT (*) a COUNT (atribut)
-o	Proè NVL u agregaèních funkcí */
+o	Rozdï¿½l mezi COUNT (*) a COUNT (atribut)
+o	Proï¿½ NVL u agregaï¿½nï¿½ch funkcï¿½ */
 
 
 SELECT COUNT(employee_id) AS NO_EMPLOYEES
@@ -409,7 +409,7 @@ SELECT count(DISTINCT(employee_id)) AS NO_EMPLOYEES
 FROM employee
 
 
-/* •	SQL S05 L01
+/* ï¿½	SQL S05 L01
 o	GROUP BY
 o	HAVING */
 
@@ -421,7 +421,7 @@ HAVING AVG(SALARY) > 100000
 ORDER BY Employee_id
 
 
-/* •	SQL S05 L02
+/* ï¿½	SQL S05 L02
 o	ROLLUP, CUBE, ROUPING SETS */
 
 SELECT Employee_ID, jobdesc, SUM(SALARY)
@@ -441,9 +441,9 @@ GROUP BY GROUPING SETS
 ((jobdesc, manager_id),(Employee_ID, jobdesc),
 (Employee_ID, manager_id))
 
-/*•	SQL S05 L03
-o	Množinové operace v SQL – UNION, UNION ALL, INTERSECT, MINUS
-o	ORDER BY u množinových operací*/
+/*ï¿½	SQL S05 L03
+o	Mnoï¿½inovï¿½ operace v SQL ï¿½ UNION, UNION ALL, INTERSECT, MINUS
+o	ORDER BY u mnoï¿½inovï¿½ch operacï¿½*/
 
 SELECT  Employee_id, Surname, Name
 FROM Employee
@@ -487,9 +487,9 @@ SELECT  Employee_id, Surname, Name
 FROM Employee
 WHERE Manager_ID IS NULL
 
-/*o	Vnoøené dotazy
-o	Výsledek jako jediná hodnota
-o	Vícesloupcový poddotaz
+/*o	Vnoï¿½enï¿½ dotazy
+o	Vï¿½sledek jako jedinï¿½ hodnota
+o	Vï¿½cesloupcovï¿½ poddotaz
 o	EXISTS, NOT EXISTS */
 
 SELECT Employee_ID
@@ -534,8 +534,8 @@ FROM employee mgr
 WHERE  mgr.manager_id = emp.employee_id)
 
 
-/*•	SQL S06 L03
-o	Víceøádkové poddotazy IN, ANY, ALL
+/*ï¿½	SQL S06 L03
+o	Vï¿½ceï¿½ï¿½dkovï¿½ poddotazy IN, ANY, ALL
 o	NULL hodnoty v poddotazech*/
 
 SELECT Employee_id,Surname,name, boEmployment
@@ -584,7 +584,7 @@ WHERE   EXTRACT(YEAR FROM boEmployment) IN
 2016)
 AND employee_id NOT IN(1,4);
 
-/*•	SQL S06 L04
+/*ï¿½	SQL S06 L04
 o	WITH .. AS() konstrukce poddotazu*/
 
 WITH managers AS
@@ -598,17 +598,17 @@ WHERE employee_id NOT IN
 (SELECT * 
 FROM managers);
 
-/*•	SQL S07 L01
+/*ï¿½	SQL S07 L01
 o	INSERT INTO Tab VALUES()
 o	INSERT INTo Tab (atr, atr) VALUES()
-o	INSERT INTO Tab AS SELECT … */
+o	INSERT INTO Tab AS SELECT ï¿½ */
 
 INSERT INTO employee (employee_id,name,surname,phone,email,dob,bn,jobdesc,"User",login,boemployment,eoemployment,Record_date,address_id,manager_id)
-VALUES (6,'Jana','Machová','+420605311565','Jana.Machova@hilite.com',TO_DATE('06/03/1990', 'DD/MM/YYYY'),'900306/5321','Accountant',1,
+VALUES (6,'Jana','Machovï¿½','+420605311565','Jana.Machova@hilite.com',TO_DATE('06/03/1990', 'DD/MM/YYYY'),'900306/5321','Accountant',1,
 'MAC211',TO_DATE('03/03/2018', 'DD/MM/YYYY'),TO_DATE(NULL),CURRENT_DATE,5,1);
 
 INSERT INTO employee 
-VALUES (7,'Margita','Malá','+420732693693','Margita.Mala@msa.com',TO_DATE('06/11/1976', 'DD/MM/YYYY'),'761106/5020','HR generalist',1,
+VALUES (7,'Margita','Malï¿½','+420732693693','Margita.Mala@msa.com',TO_DATE('06/11/1976', 'DD/MM/YYYY'),'761106/5020','HR generalist',1,
 'MAL001',TO_DATE('02/05/2015', 'DD/MM/YYYY'),TO_DATE(NULL),CURRENT_DATE,1,1);
 
 
@@ -626,9 +626,9 @@ FROM   employee
 WHERE  jobdesc LIKE '%HR%';
 
 
-/*•	SQL S07 L02
-o	UPDATE Tab SET atr= …. WHERE podm
-o	DELETE FROM Tab WHERE atr=… */
+/*ï¿½	SQL S07 L02
+o	UPDATE Tab SET atr= ï¿½. WHERE podm
+o	DELETE FROM Tab WHERE atr=ï¿½ */
 
 UPDATE Employee
 SET phone = '+420603306090'
@@ -637,7 +637,7 @@ WHERE employee_id = 5;
 DELETE FROM Employee
 WHERE employee_id = 7;
 
-/*•	SQL S07 L03
+/*ï¿½	SQL S07 L03
 o	DEFAULT, MERGE, Multi-Table Inserts*/
 
 CREATE TABLE my_employees (
@@ -646,7 +646,7 @@ CREATE TABLE my_employees (
     last_name VARCHAR2(15))
 
 INSERT INTO employee 
-VALUES (7,'Margita','Malá','+420732693693','Margita.Mala@msa.com',TO_DATE('06/11/1976', 'DD/MM/YYYY'),'761106/5020','HR generalist',1,
+VALUES (7,'Margita','Malï¿½','+420732693693','Margita.Mala@msa.com',TO_DATE('06/11/1976', 'DD/MM/YYYY'),'761106/5020','HR generalist',1,
 'MAL001',TO_DATE('02/05/2015', 'DD/MM/YYYY'),DEFAULT,CURRENT_DATE,1,1);
 
 
@@ -670,7 +670,7 @@ INSERT ALL
     (305,'Rebecca','Graham','IT_PROG')
 SELECT * FROM dual
 
-/*o	Objekty v databází – Tabulky, Indexy, Constraint, View, Sequnce, Synonym
+/*o	Objekty v databï¿½zï¿½ ï¿½ Tabulky, Indexy, Constraint, View, Sequnce, Synonym
 o	CREATE, ALTER, DROP, RENAME, TRUNCATE
 o	CREATE TABLE (atr DAT TYP, DEFAULT NOT NULL )
 o	ORGANIZATION EXTERNAL, TYPE ORACLE_LOADER, DEFAULT DICTIONARY, ACESS PARAMETERS, RECORDS DELIMITED BY NEWLINE, FIELDS, LOCATION */
@@ -720,7 +720,7 @@ LOCATION ('info.dat'));
 */
 
 /*
-•	SQL S08 L02
+ï¿½	SQL S08 L02
 o	TIMESTAMP, TIMESTAMP WITH TIME ZONE, TIMESTAM WITH LOCAL TIMEZONE
 o	INTERVAL YEAT TO MONTH, INTERVAL DAY TO SECOND
 o	CHAR, VARCHAR2, CLOB
@@ -761,7 +761,7 @@ INSERT INTO ccc (c, cc, ccc,n,b)
 VALUES ('Michal','Kraninger', 'Pokus', 125, utl_raw.cast_to_raw('fuck you!!!'));    
 
 /*
-•	SQL S08 L03
+ï¿½	SQL S08 L03
 o	ALTER TABLE (ADD, MODIFY, DROP), DROP, RENAME
 o	FLASHBACK TABLE Tab TO BEFORE DROP (pohled USER_RECYCLEBIN)
 o	DELETE, TRUNCATE
@@ -818,9 +818,9 @@ SELECT employee_id, surname, name, jobdesc
 FROM   employee
 WHERE  jobdesc LIKE '%HR%';
 
-/*•	SQL S10 L02
-o	CONSTRAINT – NOT NULL, UNIQUE, PRIMARY KEY, FOREIGN KEY (atr REFERENCES Tab(atr) ), CHECK
-o	Cizí klíèe, ON DELETE, ON UPDATE, RESTRICT, CASCADE atd.*/
+-- 	SQL S10 L02
+-- o	CONSTRAINT ï¿½ NOT NULL, UNIQUE, PRIMARY KEY, FOREIGN KEY (atr REFERENCES Tab(atr) ), CHECK
+-- o	Cizï¿½ klï¿½ï¿½e, ON DELETE, ON UPDATE, RESTRICT, CASCADE atd.
 
 
 CREATE TABLE K(
@@ -847,16 +847,16 @@ CONSTRAINT Employee_id_fk_1 FOREIGN KEY (d) REFERENCES employee(employee_id) ON 
 ALTER TABLE K2
 DROP CONSTRAINT Employee_id_fk_1
 
-/*
-•	SQL S10 L03
-o	USER_CONSTRAINTS */
+-- 
+-- SQL S10 L03
+-- USER_CONSTRAINTS
 
 SELECT constraint_name, table_name, constraint_type, status
 FROM USER_CONSTRAINTS
 WHERE table_name ='Employee'
 
-/*•	SQL S11 L01
-•	SQL S11 L01
+/*ï¿½	SQL S11 L01
+ï¿½	SQL S11 L01
 o	CREATE VIEW
 o	FORCE, NOFORCE
 o	WITCH CHECK OPTION
@@ -905,8 +905,8 @@ ON e.employee_id = s.employee_id
 WHERE surname LIKE '%K%';
 
 /*
-•	SQL S11 L03
-o	INLINE VIEW Poddotaz v podobì tabulky SELECT atr FROM (SELECT * FROM Tab) alt_tab */
+ï¿½	SQL S11 L03
+o	INLINE VIEW Poddotaz v podobï¿½ tabulky SELECT atr FROM (SELECT * FROM Tab) alt_tab */
 
 SELECT e.surname, e.name, e.phone, a.maxaddress
 FROM employee e,
@@ -917,7 +917,7 @@ WHERE e.address_id = a.address_id
 AND e.address_id = a.maxaddress;
 
 /*
-•	SQL S12 L01
+ï¿½	SQL S12 L01
 o	CREATE SEQUENCE nazev INCREMENT BY n START WITH m, (NO)MAXVALUE, (NO)MINVALUE, 
     ALTER SEQUENCE
 */
@@ -941,7 +941,7 @@ last_number
 FROM user_sequences;
 
 /*
-    •	SQL S12 L02
+    ï¿½	SQL S12 L02
     o	CREATE INDEX, PRIMARY KEY, UNIQUE KEY, FOREINGN KEY
 */
 
@@ -949,8 +949,8 @@ CREATE INDEX check_date_index
 ON checks(Check_date);
 
 /*
-•	SQL S13 L01
-o	GRANT … ON … TO … PUBLIC
+ï¿½	SQL S13 L01
+o	GRANT ï¿½ ON ï¿½ TO ï¿½ PUBLIC
 */
 
 GRANT SELECT ON employee TO public;
@@ -958,9 +958,9 @@ GRANT SELECT ON employee TO public;
 REVOKE SELECT ON employee FROM public;
 
 /*
-o	Jaká práva lze pøidìlit na jaké objekty? (ALTER, DELETE, EXECUTE, INDEX, INSERT, REFERENCES, SELECT, UPDATE) – (TABLE, VIEW, SEQUENCE, PROCEDURE)
-•	SQL S13 L03
-o	Regulární výrazy
+o	Jakï¿½ prï¿½va lze pï¿½idï¿½lit na jakï¿½ objekty? (ALTER, DELETE, EXECUTE, INDEX, INSERT, REFERENCES, SELECT, UPDATE) ï¿½ (TABLE, VIEW, SEQUENCE, PROCEDURE)
+ï¿½	SQL S13 L03
+o	Regulï¿½rnï¿½ vï¿½razy
 o	REGEXP_LIKE, REGEXP_REPLACE, REGEXP_INSTR, REGEXP_SUBSTR, REGEXP_COUNT */
 
 GRANT ALTER, DELETE, INDEX, INSERT, REFERENCES, SELECT, UPDATE ON Whours
@@ -986,8 +986,8 @@ TO PUBLIC;
 
 /*
 
-•	SQL S13 L03
-o	Regulární výrazy
+ï¿½	SQL S13 L03
+o	Regulï¿½rnï¿½ vï¿½razy
 o	REGEXP_LIKE, REGEXP_REPLACE, REGEXP_INSTR, REGEXP_SUBSTR, REGEXP_COUNT
 
 */
@@ -1013,7 +1013,7 @@ SELECT employee_id,surname, REGEXP_SUBSTR (surname, 'a|e|i|o|u', 1, 1, 'i') AS "
 FROM employee;
 
 /*
-•	SQL S14 L01
+ï¿½	SQL S14 L01
 o	Transakce, COMMIT, ROLLBACK, SAVEPOINT
 */
 
@@ -1030,9 +1030,9 @@ SAVEPOINT one;
 Rollback to SAVEPOINT one;
 
 /*
-•	SQL S15 L01
-o	Alternativní zápis spojování bez JOIN s podmínkou spojení ve WHERE
-o	Levé a pravé spojení s pomocí atrA = atrB (+)
+ï¿½	SQL S15 L01
+o	Alternativnï¿½ zï¿½pis spojovï¿½nï¿½ bez JOIN s podmï¿½nkou spojenï¿½ ve WHERE
+o	Levï¿½ a pravï¿½ spojenï¿½ s pomocï¿½ atrA = atrB (+)
 */
 
 SELECT employee.employee_id, employee.surname, employee.name, salary_change.salary
