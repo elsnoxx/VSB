@@ -12,6 +12,7 @@ CREATE TABLE Guest (
   country VARCHAR2(100) NOT NULL,
   guest_type VARCHAR2(50) NOT NULL,
   registration_date DATE DEFAULT SYSDATE,
+  manager_id NUMBER,
   notes VARCHAR2(2000)
 );
 
@@ -24,7 +25,6 @@ CREATE TABLE Employee (
   street VARCHAR2(255) NOT NULL,
   city VARCHAR2(100) NOT NULL,
   postal_code CHAR(10) NOT NULL,
-  manager_id NUMBER,
   country VARCHAR2(100) NOT NULL
 );
 
@@ -51,7 +51,16 @@ CREATE TABLE Payment (
   total_accommodation NUMBER(10,2) NOT NULL,
   total_expenses NUMBER(10,2) NOT NULL,
   payment_date DATE,
-  is_paid NUMBER(1) DEFAULT 0 NOT NULL
+  is_paid NUMBER(1) DEFAULT 0 NOT NULL,
+  reservation_id NUMBER,
+  usage_id NUMBER,
+  CONSTRAINT fk_payment_reservation FOREIGN KEY (reservation_id) REFERENCES Reservation(reservation_id),
+  CONSTRAINT fk_payment_usage FOREIGN KEY (usage_id) REFERENCES ServiceUsage(usage_id),
+  CONSTRAINT chk_payment_arc CHECK (
+    (reservation_id IS NOT NULL AND usage_id IS NULL)
+    OR
+    (reservation_id IS NULL AND usage_id IS NOT NULL)
+  )
 );
 
 -- Reservation table

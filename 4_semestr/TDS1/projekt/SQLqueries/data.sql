@@ -43,48 +43,59 @@ INSERT INTO Guest (firstname, lastname, email, phone, birth_date, street, city, 
 ('Adam', 'Nový', 'adam.novy@email.cz', '123456789', TO_DATE('1995-01-01', 'YYYY-MM-DD'), 'Nová 1', 'Praha', '11000', 'ČR', 'standard', SYSDATE, NULL);
 INSERT INTO Guest (firstname, lastname, email, phone, birth_date, street, city, postal_code, country, guest_type, registration_date, notes) VALUES
 ('Eva', 'Nová', 'eva.nova@email.cz', '987654321', TO_DATE('1990-02-02', 'YYYY-MM-DD'), 'Staré 2', 'Brno', '60200', 'ČR', 'vip', SYSDATE, NULL);
+INSERT INTO Guest (firstname, lastname, email, phone, birth_date, street, city, postal_code, country, guest_type, registration_date, notes) VALUES
+('Jan', 'SVOBODA', 'jan.svoboda@email.cz', '123456789', TO_DATE('1990-01-01', 'YYYY-MM-DD'), 'Hlavní 1', 'Praha', '11000', 'ČR', 'standard', SYSDATE, NULL);
+
 
 -- Employee
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Petr', 'Svoboda', 'recepční', 'Vedlejší 2', 'Praha', '11000', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Jana', 'Novotná', 'recepční', 'Hlavní 3', 'Brno', '60200', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Martin', 'Král', 'údržbář', 'Třetí 4', 'Ostrava', '70030', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Eva', 'Bartošová', 'pokojská', 'Čtvrtá 5', 'Plzeň', '30100', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Tomáš', 'Dvořák', 'recepční', 'Pátá 6', 'Liberec', '46001', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Lucie', 'Kovářová', 'pokojská', 'Šestá 7', 'Olomouc', '77900', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('David', 'Procházka', 'údržbář', 'Sedmá 8', 'Zlín', '76001', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Barbora', 'Urbanová', 'recepční', 'Osmá 9', 'Pardubice', '53002', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Filip', 'Horák', 'recepční', 'Devátá 10', 'Hradec Králové', '50003', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Veronika', 'Němcová', 'pokojská', 'Desátá 11', 'Ústí nad Labem', '40001', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Ondřej', 'Marek', 'údržbář', 'Jedenáctá 12', 'České Budějovice', '37001', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Tereza', 'Pokorná', 'recepční', 'Dvanáctá 13', 'Jihlava', '58601', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Roman', 'Pospíšil', 'recepční', 'Třináctá 14', 'Karlovy Vary', '36001', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Kateřina', 'Hájek', 'pokojská', 'Čtrnáctá 15', 'Teplice', '41501', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Jakub', 'Sedláček', 'údržbář', 'Patnáctá 16', 'Opava', '74601', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Michaela', 'Doležalová', 'recepční', 'Šestnáctá 17', 'Trutnov', '54101', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Radek', 'Zeman', 'recepční', 'Sedmnáctá 18', 'Příbram', '26101', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Simona', 'Kolářová', 'pokojská', 'Osmnáctá 19', 'Mladá Boleslav', '29301', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Alena', 'Navrátilová', 'recepční', 'Devatenáctá 20', 'Kladno', '27201', 'ČR');
-INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country) VALUES
-('Jan', 'Beneš', 'údržbář', 'Dvacátá 21', 'Znojmo', '66902', 'ČR');
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Karel', 'Novák', 'ředitel', 'Hlavní 10', 'Praha', '11000', 'ČR', NULL);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Pavel', 'Černý', 'generální manager', 'Manažerská 1', 'Praha', '11000', 'ČR', 1);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Martina', 'Svobodová', 'vedoucí recepce', 'Vedlejší 2', 'Praha', '11000', 'ČR', 2);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Tomáš', 'Novotný', 'vedoucí údržby', 'Hlavní 3', 'Brno', '60200', 'ČR', 2);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Petr', 'Svoboda', 'recepční', 'Třetí 4', 'Praha', '11000', 'ČR', 3);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Jana', 'Novotná', 'recepční', 'Čtvrtá 5', 'Praha', '11000', 'ČR', 3);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Martin', 'Král', 'údržbář', 'Pátá 6', 'Brno', '60200', 'ČR', 4);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Eva', 'Bartošová', 'pokojská', 'Šestá 7', 'Brno', '60200', 'ČR', 4);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Tomáš', 'Dvořák', 'recepční', 'Sedmá 8', 'Praha', '11000', 'ČR', 3);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Lucie', 'Kovářová', 'pokojská', 'Osmá 9', 'Brno', '60200', 'ČR', 4);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('David', 'Procházka', 'údržbář', 'Devátá 10', 'Brno', '60200', 'ČR', 4);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Barbora', 'Urbanová', 'recepční', 'Desátá 11', 'Praha', '11000', 'ČR', 3);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Filip', 'Horák', 'recepční', 'Jedenáctá 12', 'Praha', '11000', 'ČR', 3);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Veronika', 'Němcová', 'pokojská', 'Dvanáctá 13', 'Brno', '60200', 'ČR', 4);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Ondřej', 'Marek', 'údržbář', 'Třináctá 14', 'Brno', '60200', 'ČR', 4);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Tereza', 'Pokorná', 'recepční', 'Čtrnáctá 15', 'Praha', '11000', 'ČR', 3);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Roman', 'Pospíšil', 'recepční', 'Patnáctá 16', 'Praha', '11000', 'ČR', 3);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Kateřina', 'Hájek', 'pokojská', 'Šestnáctá 17', 'Brno', '60200', 'ČR', 4);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Jakub', 'Sedláček', 'údržbář', 'Sedmnáctá 18', 'Brno', '60200', 'ČR', 4);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Michaela', 'Doležalová', 'recepční', 'Osmnáctá 19', 'Praha', '11000', 'ČR', 3);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Radek', 'Zeman', 'recepční', 'Devatenáctá 20', 'Praha', '11000', 'ČR', 3);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Simona', 'Kolářová', 'pokojská', 'Dvacátá 21', 'Brno', '60200', 'ČR', 4);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Alena', 'Navrátilová', 'recepční', 'Dvacátáprva 22', 'Praha', '11000', 'ČR', 3);
+INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country, manager_id) VALUES
+('Jan', 'Beneš', 'údržbář', 'Dvacátádruhá 23', 'Brno', '60200', 'ČR', 4);
 
 -- RoomType
 INSERT INTO RoomType (name, bed_count) VALUES ('Jednolůžkový', 1); 
@@ -107,6 +118,7 @@ INSERT INTO RoomType (name, bed_count) VALUES ('Jednolůžkový Premium', 1);
 INSERT INTO RoomType (name, bed_count) VALUES ('Dvoulůžkový Premium', 2);
 INSERT INTO RoomType (name, bed_count) VALUES ('Třílůžkový Premium', 3);
 INSERT INTO RoomType (name, bed_count) VALUES ('Apartmán Premium', 4);
+INSERT INTO RoomType (name, bed_count) VALUES ('Prezidentské apartmá', 2);
 
 -- Room
 INSERT INTO Room (room_type_id, room_number, is_occupied) VALUES (1, '101', 0);
@@ -176,48 +188,70 @@ INSERT INTO Service (name, description) VALUES ('Solárium', 'Vstup do solária'
 INSERT INTO Service (name, description) VALUES ('Tenis', 'Tenisový kurt');
 
 -- RoomTypePriceHistory
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (1, 500, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (2, 800, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (3, 1200, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (4, 2000, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (5, 600, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (6, 900, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (7, 1300, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (8, 2100, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (9, 550, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (10, 850, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (11, 1250, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (12, 2050, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (13, 520, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (14, 820, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (15, 1220, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (16, 2020, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (17, 650, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (18, 950, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (19, 1350, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (20, 2150, TO_DATE('2024-01-01' AS DATE), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (1, 500, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (2, 800, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (3, 1200, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (4, 2000, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (5, 600, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (6, 900, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (7, 1300, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (8, 2100, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (9, 550, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (10, 850, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (11, 1250, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (12, 2050, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (13, 520, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (14, 820, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (15, 1220, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (16, 2020, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (17, 650, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (18, 950, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (19, 1350, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO RoomTypePriceHistory (room_type_id, price_per_night, valid_from, valid_to) VALUES (20, 2150, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
 
 -- ServicePriceHistory
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (1, 100, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (2, 200, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (3, 150, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (4, 50, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (5, 120, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (6, 180, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (7, 250, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (8, 90, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (9, 110, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (10, 130, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (11, 170, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (12, 140, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (13, 160, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (14, 210, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (15, 80, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (16, 60, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (17, 190, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (18, 220, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (19, 230, TO_DATE('2024-01-01' AS DATE), NULL);
-INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (20, 240, TO_DATE('2024-01-01' AS DATE), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (1, 100, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (2, 200, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (3, 150, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (4, 50, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (5, 120, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (6, 180, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (7, 250, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (8, 90, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (9, 110, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (10, 130, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (11, 170, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (12, 140, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (13, 160, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (14, 210, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (15, 80, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (16, 60, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (17, 190, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (18, 220, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (19, 230, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+INSERT INTO ServicePriceHistory (service_id, price, valid_from, valid_to) VALUES (20, 240, TO_DATE('2024-01-01' , 'YYYY-MM-DD'), NULL);
+
+-- Reservation
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (1, 1, 1, SYSDATE, TO_DATE('2024-06-01' , 'YYYY-MM-DD'), TO_DATE('2024-06-05' , 'YYYY-MM-DD'), 1, 'Confirmed', 2000);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (2, 2, 2, SYSDATE, TO_DATE('2024-06-02' , 'YYYY-MM-DD'), TO_DATE('2024-06-06' , 'YYYY-MM-DD'), 2, 'Confirmed', 3200);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (3, 3, 3, SYSDATE, TO_DATE('2024-06-03' , 'YYYY-MM-DD'), TO_DATE('2024-06-07' , 'YYYY-MM-DD'), 3, 'Pending', 1500);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (4, 4, 4, SYSDATE, TO_DATE('2024-06-04' , 'YYYY-MM-DD'), TO_DATE('2024-06-08' , 'YYYY-MM-DD'), 4, 'Confirmed', 4000);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (5, 5, 5, SYSDATE, TO_DATE('2024-06-05' , 'YYYY-MM-DD'), TO_DATE('2024-06-09' , 'YYYY-MM-DD'), 5, 'Cancelled', 2500);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (6, 6, 6, SYSDATE, TO_DATE('2024-06-06' , 'YYYY-MM-DD'), TO_DATE('2024-06-10' , 'YYYY-MM-DD'), 6, 'Confirmed', 1800);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (7, 7, 7, SYSDATE, TO_DATE('2024-06-07' , 'YYYY-MM-DD'), TO_DATE('2024-06-11' , 'YYYY-MM-DD'), 7, 'Confirmed', 3500);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (8, 8, 8, SYSDATE, TO_DATE('2024-06-08' , 'YYYY-MM-DD'), TO_DATE('2024-06-12' , 'YYYY-MM-DD'), 8, 'Pending', 2200);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (9, 9, 9, SYSDATE, TO_DATE('2024-06-09' , 'YYYY-MM-DD'), TO_DATE('2024-06-13' , 'YYYY-MM-DD'), 9, 'Confirmed', 4100);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (10, 10, 10, SYSDATE, TO_DATE('2024-06-10' , 'YYYY-MM-DD'), TO_DATE('2024-06-14' , 'YYYY-MM-DD'), 10, 'Confirmed', 2600);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (11, 11, 11, SYSDATE, TO_DATE('2024-06-11' , 'YYYY-MM-DD'), TO_DATE('2024-06-15' , 'YYYY-MM-DD'), 11, 'Pending', 1900);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (12, 12, 12, SYSDATE, TO_DATE('2024-06-12' , 'YYYY-MM-DD'), TO_DATE('2024-06-16' , 'YYYY-MM-DD'), 12, 'Confirmed', 3600);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (13, 13, 13, SYSDATE, TO_DATE('2024-06-13' , 'YYYY-MM-DD'), TO_DATE('2024-06-17' , 'YYYY-MM-DD'), 13, 'Confirmed', 2300);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (14, 14, 14, SYSDATE, TO_DATE('2024-06-14' , 'YYYY-MM-DD'), TO_DATE('2024-06-18' , 'YYYY-MM-DD'), 14, 'Pending', 4200);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (15, 15, 15, SYSDATE, TO_DATE('2024-06-15' , 'YYYY-MM-DD'), TO_DATE('2024-06-19' , 'YYYY-MM-DD'), 15, 'Confirmed', 2700);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (16, 16, 16, SYSDATE, TO_DATE('2024-06-16' , 'YYYY-MM-DD'), TO_DATE('2024-06-20' , 'YYYY-MM-DD'), 16, 'Confirmed', 1950);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (17, 17, 17, SYSDATE, TO_DATE('2024-06-17' , 'YYYY-MM-DD'), TO_DATE('2024-06-21' , 'YYYY-MM-DD'), 17, 'Pending', 3650);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (18, 18, 18, SYSDATE, TO_DATE('2024-06-18' , 'YYYY-MM-DD'), TO_DATE('2024-06-22' , 'YYYY-MM-DD'), 18, 'Confirmed', 2350);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (19, 19, 19, SYSDATE, TO_DATE('2024-06-19' , 'YYYY-MM-DD'), TO_DATE('2024-06-23' , 'YYYY-MM-DD'), 19, 'Confirmed', 4300);
+INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (20, 20, 20, SYSDATE, TO_DATE('2024-06-20' , 'YYYY-MM-DD'), TO_DATE('2024-06-24' , 'YYYY-MM-DD'), 20, 'Cancelled', 2800);
 
 -- Feedback
 INSERT INTO Feedback (guest_id, reservation_id, rating, note, feedback_date) VALUES (1, 1, 5, 'Vše v pořádku', SYSDATE);
@@ -240,7 +274,8 @@ INSERT INTO Feedback (guest_id, reservation_id, rating, note, feedback_date) VAL
 INSERT INTO Feedback (guest_id, reservation_id, rating, note, feedback_date) VALUES (18, 18, 3, 'Průměrné jídlo', SYSDATE);
 INSERT INTO Feedback (guest_id, reservation_id, rating, note, feedback_date) VALUES (19, 19, 4, 'Příjemné prostředí', SYSDATE);
 INSERT INTO Feedback (guest_id, reservation_id, rating, note, feedback_date) VALUES (20, 20, 5, 'Doporučuji', SYSDATE);
-note ServiceUsage
+
+--  ServiceUsage
 INSERT INTO ServiceUsage (reservation_id, service_id, quantity, total_price) VALUES (1, 1, 2, 300);
 INSERT INTO ServiceUsage (reservation_id, service_id, quantity, total_price) VALUES (2, 2, 1, 500);
 INSERT INTO ServiceUsage (reservation_id, service_id, quantity, total_price) VALUES (3, 3, 1, 200);
@@ -262,24 +297,3 @@ INSERT INTO ServiceUsage (reservation_id, service_id, quantity, total_price) VAL
 INSERT INTO ServiceUsage (reservation_id, service_id, quantity, total_price) VALUES (19, 19, 1, 150);
 INSERT INTO ServiceUsage (reservation_id, service_id, quantity, total_price) VALUES (20, 20, 1, 200);
 
--- Reservation
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (1, 1, 1, SYSDATE, CAST('2024-06-01' AS DATE), CAST('2024-06-05' AS DATE), 1, 'Confirmed', 2000);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (2, 2, 2, SYSDATE, CAST('2024-06-02' AS DATE), CAST('2024-06-06' AS DATE), 2, 'Confirmed', 3200);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (3, 3, 3, SYSDATE, CAST('2024-06-03' AS DATE), CAST('2024-06-07' AS DATE), 3, 'Pending', 1500);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (4, 4, 4, SYSDATE, CAST('2024-06-04' AS DATE), CAST('2024-06-08' AS DATE), 4, 'Confirmed', 4000);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (5, 5, 5, SYSDATE, CAST('2024-06-05' AS DATE), CAST('2024-06-09' AS DATE), 5, 'Cancelled', 2500);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (6, 6, 6, SYSDATE, CAST('2024-06-06' AS DATE), CAST('2024-06-10' AS DATE), 6, 'Confirmed', 1800);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (7, 7, 7, SYSDATE, CAST('2024-06-07' AS DATE), CAST('2024-06-11' AS DATE), 7, 'Confirmed', 3500);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (8, 8, 8, SYSDATE, CAST('2024-06-08' AS DATE), CAST('2024-06-12' AS DATE), 8, 'Pending', 2200);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (9, 9, 9, SYSDATE, CAST('2024-06-09' AS DATE), CAST('2024-06-13' AS DATE), 9, 'Confirmed', 4100);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (10, 10, 10, SYSDATE, CAST('2024-06-10' AS DATE), CAST('2024-06-14' AS DATE), 10, 'Confirmed', 2600);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (11, 11, 11, SYSDATE, CAST('2024-06-11' AS DATE), CAST('2024-06-15' AS DATE), 11, 'Pending', 1900);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (12, 12, 12, SYSDATE, CAST('2024-06-12' AS DATE), CAST('2024-06-16' AS DATE), 12, 'Confirmed', 3600);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (13, 13, 13, SYSDATE, CAST('2024-06-13' AS DATE), CAST('2024-06-17' AS DATE), 13, 'Confirmed', 2300);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (14, 14, 14, SYSDATE, CAST('2024-06-14' AS DATE), CAST('2024-06-18' AS DATE), 14, 'Pending', 4200);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (15, 15, 15, SYSDATE, CAST('2024-06-15' AS DATE), CAST('2024-06-19' AS DATE), 15, 'Confirmed', 2700);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (16, 16, 16, SYSDATE, CAST('2024-06-16' AS DATE), CAST('2024-06-20' AS DATE), 16, 'Confirmed', 1950);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (17, 17, 17, SYSDATE, CAST('2024-06-17' AS DATE), CAST('2024-06-21' AS DATE), 17, 'Pending', 3650);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (18, 18, 18, SYSDATE, CAST('2024-06-18' AS DATE), CAST('2024-06-22' AS DATE), 18, 'Confirmed', 2350);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (19, 19, 19, SYSDATE, CAST('2024-06-19' AS DATE), CAST('2024-06-23' AS DATE), 19, 'Confirmed', 4300);
-INSERT INTO Reservation (guest_id, room_id, employee_id, creation_date, check_in_date, check_out_date, payment_id, status, accommodation_price) VALUES (20, 20, 20, SYSDATE, CAST('2024-06-20' AS DATE), CAST('2024-06-24' AS DATE), 20, 'Cancelled', 2800);

@@ -1,4 +1,24 @@
--- Guest table
+CREATE TABLE Country (
+  country_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR2(100) NOT NULL
+);
+
+CREATE TABLE City (
+  city_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name VARCHAR2(100) NOT NULL,
+  postal_code CHAR(10) NOT NULL,
+  country_id NUMBER NOT NULL,
+  CONSTRAINT fk_city_country FOREIGN KEY (country_id) REFERENCES Country(country_id)
+);
+
+CREATE TABLE Address (
+  address_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  street VARCHAR2(255) NOT NULL,
+  city_id NUMBER NOT NULL,
+  CONSTRAINT fk_address_city FOREIGN KEY (city_id) REFERENCES City(city_id)
+);
+
+
 CREATE TABLE Guest (
   guest_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   firstname VARCHAR2(100) NOT NULL,
@@ -6,27 +26,26 @@ CREATE TABLE Guest (
   email VARCHAR2(100) NOT NULL,
   phone VARCHAR2(30),
   birth_date DATE NOT NULL,
-  street VARCHAR2(255) NOT NULL,
-  city VARCHAR2(100) NOT NULL,
-  postal_code CHAR(10) NOT NULL,
-  country VARCHAR2(100) NOT NULL,
+  address_id NUMBER NOT NULL,
   guest_type VARCHAR2(50) NOT NULL,
   registration_date DATE DEFAULT SYSDATE,
-  notes VARCHAR2(2000)
+  manager_id NUMBER,
+  notes VARCHAR2(2000),
+  CONSTRAINT fk_guest_address FOREIGN KEY (address_id) REFERENCES Address(address_id)
 );
 
--- Employee table
 CREATE TABLE Employee (
   employee_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   firstname VARCHAR2(100) NOT NULL,
   lastname VARCHAR2(100) NOT NULL,
   position VARCHAR2(50) NOT NULL,
-  street VARCHAR2(255) NOT NULL,
-  city VARCHAR2(100) NOT NULL,
-  postal_code CHAR(10) NOT NULL,
+  address_id NUMBER NOT NULL,
   manager_id NUMBER,
-  country VARCHAR2(100) NOT NULL
+  CONSTRAINT fk_employee_address FOREIGN KEY (address_id) REFERENCES Address(address_id),
+  CONSTRAINT fk_employee_manager FOREIGN KEY (manager_id) REFERENCES Employee(employee_id)
 );
+
+
 
 -- RoomType table
 CREATE TABLE RoomType (

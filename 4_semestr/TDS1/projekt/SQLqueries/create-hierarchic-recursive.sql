@@ -12,6 +12,7 @@ CREATE TABLE Guest (
   country VARCHAR2(100) NOT NULL,
   guest_type VARCHAR2(50) NOT NULL,
   registration_date DATE DEFAULT SYSDATE,
+  manager_id NUMBER,
   notes VARCHAR2(2000)
 );
 
@@ -24,9 +25,11 @@ CREATE TABLE Employee (
   street VARCHAR2(255) NOT NULL,
   city VARCHAR2(100) NOT NULL,
   postal_code CHAR(10) NOT NULL,
+  country VARCHAR2(100) NOT NULL,
   manager_id NUMBER,
-  country VARCHAR2(100) NOT NULL
+  CONSTRAINT fk_employee_manager FOREIGN KEY (manager_id) REFERENCES Employee(employee_id)
 );
+
 
 -- RoomType table
 CREATE TABLE RoomType (

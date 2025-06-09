@@ -9,41 +9,82 @@ FROM Guest;
 
 SELECT DISTINCT firstname || ' ' || lastname AS full_name
 FROM Guest;
-
+/*********************************************************************************************************/
 -- DD S16 L02
 -- WHERE condition for selecting rows Functions LOWER, UPPER, INITCAP
-SELECT firstname, lastname,
-       LOWER(firstname) AS lower_firstname,
-       UPPER(lastname) AS upper_lastname,
-       INITCAP(firstname || ' ' || lastname) AS initcap_fullname
-FROM Guest
-WHERE city = 'Prague';
+SELECT
+  employee_id, firstname, lastname, email
+FROM
+  employee
+WHERE
+  UPPER(lastname) = 'Svoboda'; 
+    
+SELECT
+  guest_id, firstname, lastname, email
+FROM
+  Guest
+WHERE
+  lower(email) = 'ellen.kacalova@msa.com'; 
 
+SELECT INITCAP(email)
+FROM Guest;
+
+/*********************************************************************************************************/
 -- DD S16 L03
 -- BETWEEN … AND LIKE (%, _) IN(), IS NULL, IS NOT NULL
 
+SELECT * FROM Payment
+where total_accommodation BETWEEN 2000 AND 2500;
 
+
+SELECT *
+FROM EMPLOYEE 
+WHERE SURNAME LIKE 'K%';
+
+SELECT *
+FROM EMPLOYEE 
+WHERE Employee_id IN (select employee_id from EMPLOYEE);
+
+SELECT *
+FROM feedback 
+WHERE note IS NULL;
+/*********************************************************************************************************/
 -- DD S17 L01
 -- AND, OR, NOT, Evaluation priority ()
 
+-- Vyber hosty z Prahy nebo Brna, kteří jsou z České republiky nebo Slovenska
 SELECT firstname, lastname, city
 FROM Guest
 WHERE (city = 'Prague' OR city = 'Brno')
-  AND (country = 'Czech Republic' OR country = 'Slovakia')
+  AND (country = 'ČR' OR country = 'SK');
+
+-- Vyber hosty, kteří nemají vyplněný PSČ
+SELECT firstname, lastname, postal_code
+FROM Guest
+WHERE NOT (postal_code IS NOT NULL);
+
+-- Vyber hosty, jejichž jméno začíná na "A" nebo jejich příjmení končí na "ova"
+SELECT firstname, lastname
+FROM Guest
+WHERE (firstname LIKE 'A%' OR lastname LIKE '%ova');
+
+-- Kombinace podmínek s prioritizací závorek
+SELECT firstname, lastname, city
+FROM Guest
+WHERE (city = 'Prague' OR city = 'Znojmo')
   AND NOT (postal_code IS NULL)
-    AND (firstname LIKE 'A%' OR lastname LIKE '%ova')
-ORDER BY city, lastname;
+  AND (firstname LIKE 'A%' OR lastname LIKE '%ova');
 
-
+/*********************************************************************************************************/
 -- DD S17 L02
 -- ORDER BY atr [ASC/DESC], Sorting by using one or more attributes
 SELECT firstname, lastname, city, postal_code
 FROM Guest
-WHERE city = 'Prague'
+WHERE city = 'Brno'
 ORDER BY city ASC, lastname DESC;
 
 
-
+/*********************************************************************************************************/
 -- DD S17 L03
 -- Single row functions, Column functions MIN, MAX, AVG, SUM, COUNT
 SELECT 
@@ -53,27 +94,29 @@ SELECT
     SUM(accommodation_price) AS total_price,
     COUNT(*) AS total_reservations
 FROM Reservation
-WHERE status = 'confirmed';
-
+WHERE status = 'Confirmed';
+/*********************************************************************************************************/
 -- SQL S01 L01
 -- LOWER, UPPER, INITCAP
 -- CONCAT, SUBSTR, LENGTH, INSTR, LPAD, RPAD, TRIM, REPLACE
 -- Use virtual table DUAL
 
+-- Ukázka použití funkcí na datech z tabulky Guest
 SELECT
-    LOWER('HELLO WORLD') AS lower_case,       
-    UPPER('hello world') AS upper_case,       
-    INITCAP('hello world') AS initcap_case,   
-    CONCAT('Hello', ' World') AS concatenated,
-    SUBSTR('Hello World', 1, 5) AS substring, 
-    LENGTH('Hello World') AS length_of_string,
-    INSTR('Hello World', 'World') AS position,
-    LPAD('123', 5, '0') AS left_padded,       
-    RPAD('123', 5, '0') AS right_padded,      
-    TRIM('  Hello World  ') AS trimmed,       
-    REPLACE('Hello World', 'World', 'Oracle') AS replaced
-FROM DUAL;
-
+    LOWER(firstname) AS lower_case_firstname,
+    UPPER(lastname) AS upper_case_lastname,
+    INITCAP(city) AS initcap_city,
+    CONCAT(firstname, ' ') || lastname AS full_name,
+    SUBSTR(email, 1, INSTR(email, '@') - 1) AS email_username,
+    LENGTH(email) AS email_length,
+    INSTR(email, '@') AS at_position,
+    LPAD(postal_code, 10, '0') AS left_padded_postal_code,
+    RPAD(postal_code, 10, '0') AS right_padded_postal_code,
+    TRIM(' ' FROM notes) AS trimmed_notes,
+    REPLACE(country, 'ČR', 'Czech Republic') AS replaced_country
+FROM Guest
+WHERE city = 'Praha' OR city = 'Brno';
+/*********************************************************************************************************/
 -- • SQL S01 L02
 -- ROUND, TRUNC round for two decimal places, whole thousands MOD
 
@@ -84,19 +127,24 @@ SELECT
     TRUNC(total_accommodation, -3) AS truncated_to_thousands,
     MOD(total_accommodation, 1000) AS remainder_thousands
 FROM Payment;
-
+/*********************************************************************************************************/
 -- SQL S01 L03
 -- MONTHS_BETWEEN, ADD_MONTHS, NEXT_DAY, LAST_DAY, ROUND, TRUNC, System constant SYSDATE
-SELECT 
-    payment_date,
-    MONTHS_BETWEEN(SYSDATE, payment_date) AS months_between_now_and_payment,
-    ADD_MONTHS(payment_date, 3) AS payment_plus_3_months,
-    NEXT_DAY(payment_date, 'MONDAY') AS next_monday_after_payment,
-    LAST_DAY(payment_date) AS last_day_of_payment_month,
-    ROUND(MONTHS_BETWEEN(SYSDATE, payment_date)) AS rounded_months_between,
-    TRUNC(payment_date, 'MONTH') AS first_day_of_payment_month
-FROM Payment;
+SELECT TO_CHAR(MONTHS_BETWEEN 
+   (TO_DATE('09-06-2022','MM-DD-YYYY'),
+    SYSDATE))
+    FROM DUAL;
 
+SELECT TO_DATE(
+    'January 15, 1989, 11:00 A.M.',
+    'Month dd, YYYY, HH:MI A.M.',
+     'NLS_DATE_LANGUAGE = American')
+     FROM DUAL;
+     
+SELECT
+TO_NUMBER('4687841', '9999999')
+FROM DUAL;
+/*********************************************************************************************************/
 -- SQL S02 L01
 -- o TO_CHAR, TO_NUMBER, TO_DATE
 
@@ -106,24 +154,24 @@ SELECT
     TO_DATE('2023-10-01', 'YYYY-MM-DD') AS converted_date
 FROM Payment;
 
-
+/*********************************************************************************************************/
 -- SQL S02 L02
 -- o NVL, NVL2, NULLIF, COALESCE
 SELECT 
-    NVL(accommodation_price, 0) AS accommodation_price_or_zero,
-    NVL2(accommodation_price, 'Price available', 'No price') AS price_status,
-    NULLIF(accommodation_price, 0) AS price_if_not_zero,
-    COALESCE(accommodation_price, total_expenses, 0) AS first_non_null_value
-FROM Reservation;
-
+    NVL(total_accommodation, 0) AS accommodation_price_or_zero,
+    NVL2(total_accommodation, 'Price available', 'No price') AS price_status,
+    NULLIF(total_accommodation, 0) AS price_if_not_zero,
+    COALESCE(total_accommodation, total_expenses, 0) AS first_non_null_value
+FROM Payment;
+/*********************************************************************************************************/
 -- • SQL S02 L03
 -- DECODE, CASE, IF-THEN-ELSE
 
 SELECT 
     DECODE(status, 
-           'confirmed', 'Reservation confirmed', 
-           'cancelled', 'Reservation cancelled', 
-           'pending', 'Reservation pending', 
+           'Confirmed', 'Reservation confirmed', 
+           'Cancelled', 'Reservation cancelled', 
+           'Pending', 'Reservation pending', 
            'Unknown status') AS reservation_status,
     CASE 
         WHEN accommodation_price > 1000 THEN 'High price'
@@ -131,7 +179,7 @@ SELECT
         ELSE 'Low price'
     END AS price_category
 FROM Reservation;
-
+/*********************************************************************************************************/
 -- • SQL S03 L01
 -- NATURAL JOIN, CROSS JOIN
 
@@ -143,6 +191,7 @@ FROM Guest g NATURAL JOIN Reservation r;
 SELECT g.firstname, g.lastname, r.room_number
 FROM Guest g CROSS JOIN Room r;
 
+/*********************************************************************************************************/
 -- • SQL S03 L02
 -- JOIN … USING(atr), JOIN .. ON (joining condition)
 
@@ -156,7 +205,7 @@ FROM Guest g
 JOIN Reservation r ON g.guest_id = r.guest_id
 JOIN Payment p ON r.payment_id = p.payment_id
 WHERE p.is_paid = 0;
-
+/*********************************************************************************************************/
 -- • SQL S03 L03
 -- LEFT OUTER JOIN … ON ()
 -- Find all guests and their reservations (including guests with no reservations)
@@ -178,31 +227,30 @@ FROM Guest g
 FULL OUTER JOIN Feedback f ON g.guest_id = f.guest_id
 ORDER BY g.lastname, f.feedback_date;
 
-
+/*********************************************************************************************************/
 -- • SQL S03 L04
--- o Joining 2x of the same table with renaming (link between superiors and subordinates
--- in one table)
+-- o Joining 2x of the same table with renaming (link between superiors and subordinates in one table)
 -- Find pairs of employees working in the same city
-SELECT 
-    e1.employee_id AS emp1_id,
-    e1.firstname || ' ' || e1.lastname AS emp1_name,
-    e2.employee_id AS emp2_id,
-    e2.firstname || ' ' || e2.lastname AS emp2_name,
-    e1.city AS shared_city
-FROM 
-    Employee e1 
-JOIN 
-    Employee e2 ON e1.city = e2.city
-WHERE 
-    e1.employee_id < e2.employee_id
-ORDER BY 
-    e1.city, e1.lastname, e2.lastname;
+SELECT e1.employee_id AS emp1_id,
+       e1.firstname || ' ' || e1.lastname AS employee1_name,
+       e2.employee_id AS emp2_id,
+       e2.firstname || ' ' || e2.lastname AS employee2_name,
+       e1.city
+FROM Employee e1
+JOIN Employee e2 ON e1.city = e2.city
+WHERE e1.employee_id < e2.employee_id
+ORDER BY e1.city, e1.employee_id;
 
 -- o Hierarchical querying – tree structure of START WITH, CONNECT BY PRIOR, LEVEL
--- dive
+SELECT LEVEL, employee_id, 
+       LPAD(' ', (LEVEL-1)*2) || firstname || ' ' || lastname AS employee_name, 
+       position, manager_id
+FROM Employee
+START WITH manager_id IS NULL
+CONNECT BY PRIOR employee_id = manager_id
+ORDER SIBLINGS BY employee_id;
 
--- todo
-
+/*********************************************************************************************************/
 -- • SQL S04 L02
 -- o AVG, COUNT, MIN, MAX, SUM, VARIANCE, STDDEV
 
@@ -236,6 +284,7 @@ FROM Feedback;
 SELECT STDDEV(rating) AS rating_stddev
 FROM Feedback;
 
+/*********************************************************************************************************/
 -- • SQL S04 L03
 -- o COUNT, COUNT(DISTINCT ), NVL
 
@@ -266,7 +315,7 @@ SELECT
     COUNT(notes) AS count_without_nvl,
     COUNT(NVL(notes, 'None')) AS count_with_nvl
 FROM Guest;
-
+/*********************************************************************************************************/
 
 -- • SQL S05 L01
 -- o GROUP BY
@@ -282,8 +331,9 @@ SELECT city, COUNT(*) AS guest_count
 FROM Guest
 GROUP BY city
 HAVING COUNT(*) > 1
-ORDER BY guest_count DESC
+ORDER BY guest_count DESC;
 
+/*********************************************************************************************************/
 -- • SQL S05 L02
 -- o ROLLUP, CUBE, ROUPING SETS
 
@@ -299,7 +349,7 @@ FROM Guest
 GROUP BY CUBE(city, guest_type)
 ORDER BY city, guest_type;
 
-
+/*********************************************************************************************************/
 -- • SQL S05 L03
 -- o Multiple operations in SQL – UNION, UNION ALL, INTERSECT, MINUS
 -- Find all cities where either guests or employees are from
@@ -345,7 +395,7 @@ SELECT firstname, lastname, 'Employee' AS person_type
 FROM Employee
 ORDER BY person_type, lastname, firstname;
 
-
+/*********************************************************************************************************/
 -- • SQL S06 L01
 -- o Nested queries
 -- o Result as a single value
@@ -366,7 +416,7 @@ FROM Guest g
 WHERE (g.city, g.guest_type) IN (
     SELECT city, guest_type
     FROM Guest
-    WHERE guest_type = 'vip' AND city = 'Praha'
+    WHERE guest_type = 'standard' AND city = 'Praha'
 )
 ORDER BY g.lastname;
 
@@ -382,18 +432,8 @@ WHERE EXISTS (
 )
 ORDER BY g.lastname;
 
--- Find rooms that have never been booked
-SELECT r.room_id, r.room_number, rt.name AS room_type
-FROM Room r
-JOIN RoomType rt ON r.room_type_id = rt.room_type_id
-WHERE NOT EXISTS (
-    SELECT 1
-    FROM Reservation res
-    WHERE res.room_id = r.room_id
-)
-ORDER BY r.room_number;
 
-
+/*********************************************************************************************************/
 -- • SQL S06 L02
 -- o One-line subqueries
 -- Calculate how much each reservation differs from the average accommodation price
@@ -402,7 +442,7 @@ SELECT r.reservation_id, r.guest_id, r.accommodation_price,
 FROM Reservation r
 ORDER BY price_difference DESC;
 
-
+/*********************************************************************************************************/
 -- • SQL S06 L03
 -- o Multi-line subqueries IN, ANY, ALL
 -- Find all reservations for VIP guests
@@ -435,7 +475,7 @@ WHERE r.accommodation_price > ALL (
     SELECT r2.accommodation_price
     FROM Reservation r2
     JOIN Guest g2 ON r2.guest_id = g2.guest_id
-    WHERE g2.guest_type = 'standard'
+    WHERE g2.guest_type = 'vip'
 )
 ORDER BY r.accommodation_price;
 
@@ -449,23 +489,45 @@ WHERE NOT EXISTS (
     FROM Reservation r
     WHERE r.guest_id = g.guest_id
 );
-
+/*********************************************************************************************************/
 -- • SQL S06 L04
 -- o WITH .. AS() subquery construction
 
+-- Find guests who have not made any reservations
+WITH reserved_guests AS (
+  SELECT DISTINCT guest_id
+  FROM Reservation
+)
 
+SELECT firstname || ' ' || lastname AS "Guest without reservation"
+FROM Guest
+WHERE guest_id NOT IN (
+  SELECT guest_id
+  FROM reserved_guests
+);
+
+/*********************************************************************************************************/
 -- • SQL S07 L01
 -- o INSERT INTO Tab VALUES()
 -- Insert a new room type with all values
 INSERT INTO RoomType VALUES
-(21, 'Prezidentské apartmá', 5);
+('Prezidentské apartmá', 5);
 -- o INSERT INTo Tab (atr, atr) VALUES()
 -- Insert a new employee with only required fields
 INSERT INTO Employee (firstname, lastname, position, street, city, postal_code, country)
 VALUES ('Pavel', 'Malý', 'manažer', 'Zelená 8', 'Brno', '60100', 'ČR');
 -- o INSERT INTO Tab AS SELECT …
-???
+-- Vložení nových záznamů do tabulky RoomType na základě existujících dat
+INSERT INTO RoomType (name, bed_count)
+SELECT DISTINCT 'Standardní pokoj', 2
+FROM Room
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM RoomType
+    WHERE name = 'Standardní pokoj' AND bed_count = 2
+);
 
+/*********************************************************************************************************/
 -- SQL S07 L02
 -- o UPDATE Tab SET atr= …. WHERE condition
 -- Update the price of a specific room type
@@ -483,6 +545,7 @@ WHERE reservation_id IN (
     AND creation_date < ADD_MONTHS(SYSDATE, -6)
 );
 
+/*********************************************************************************************************/
 -- • SQL S07 L03
 -- o DEFAULT, MERGE, Multi-Table Inserts
 
@@ -514,6 +577,7 @@ WHEN NOT MATCHED THEN
     INSERT (firstname, lastname, email, phone, birth_date, street, city, postal_code, country, guest_type, registration_date, notes)
     VALUES ('New', 'Guest', u.email, u.new_phone, SYSDATE, 'Unknown', 'Unknown', '00000', 'ČR', 'standard', SYSDATE, 'Added via MERGE');
 
+/*********************************************************************************************************/
 -- • SQL S08 L01
 -- o Objects in databases – Tables, Indexes, Constraint, View, Sequence, Synonym
 -- o CREATE, ALTER, DROP, RENAME, TRUNCATE
@@ -521,7 +585,7 @@ WHEN NOT MATCHED THEN
 -- o ORGANIZATION EXTERNAL, TYPE ORACLE_LOADER, DEFAULT DICTIONARY, ACCESS
 -- PARAMETERS, RECORDS DELIMITED BY NEWLINE, FIELDS, LOCATION
 
--- Basic table creation
+-- 1. Table creation
 CREATE TABLE GuestArchive (
   guest_id NUMBER PRIMARY KEY,
   firstname VARCHAR2(100) NOT NULL,
@@ -530,27 +594,38 @@ CREATE TABLE GuestArchive (
   archived_date DATE DEFAULT SYSDATE
 );
 
--- Create an index on the guest email column
+CREATE TABLE Invoices (
+  invoice_id NUMBER PRIMARY KEY,
+  amount NUMBER(10,2) NOT NULL,
+  description VARCHAR2(255) NOT NULL,
+  invoice_date DATE DEFAULT SYSDATE
+);
+
+-- 2. Index creation
+-- Single-column index
 CREATE INDEX idx_guest_email ON Guest(email);
 
--- Create a composite index on multiple columns
+-- Composite index
 CREATE INDEX idx_room_type_number ON Room(room_type_id, room_number);
 
--- Add a check constraint to ensure valid ratings
+-- 3. Constraints
+-- Check constraint for valid ratings
 ALTER TABLE Feedback 
 ADD CONSTRAINT chk_rating_range CHECK (rating BETWEEN 1 AND 5);
 
--- Add a unique constraint
+-- Unique constraint for guest email
 ALTER TABLE Guest
 ADD CONSTRAINT uq_guest_email UNIQUE (email);
 
--- Create a view of VIP guests
+-- 4. Views
+-- View for VIP guests
 CREATE VIEW vip_guests_view AS
 SELECT guest_id, firstname, lastname, email, phone, city
 FROM Guest
-WHERE guest_type = 'vip'
+WHERE guest_type = 'vip';
 
--- Create a sequence for a new table
+-- 5. Sequences
+-- Sequence for invoice IDs
 CREATE SEQUENCE seq_invoice_id
 START WITH 1000
 INCREMENT BY 1
@@ -561,19 +636,20 @@ NOCYCLE;
 INSERT INTO Invoices (invoice_id, amount, description)
 VALUES (seq_invoice_id.NEXTVAL, 1500, 'Room charge');
 
--- Create a synonym for a frequently accessed table
-CREATE SYNONYM active_reservations FOR 
-  (SELECT * FROM Reservation WHERE status = 'Confirmed');
+-- 6. Synonyms
+-- Synonym for frequently accessed table
+CREATE SYNONYM active_reservations FOR Reservation;
 
 
-
+/*********************************************************************************************************/
 -- • SQL S08 L02
+-- o TIMESTAMP, TIMESTAMP WITH TIME ZONE, TIMESTAMP WITH LOCAL TIMEZONE
 CREATE TABLE EventLog (
   event_id NUMBER PRIMARY KEY,
   event_time TIMESTAMP WITH TIME ZONE DEFAULT SYSTIMESTAMP,
   event_description VARCHAR2(255) NOT NULL
 );
--- o TIMESTAMP, TIMESTAMP WITH TIME ZONE, TIMESTAMP WITH LOCAL TIMEZONE
+
 -- Insert events with different time zones
 INSERT INTO EventLog (event_id, event_time, event_description)
 VALUES (1, TIMESTAMP '2024-06-08 14:30:00 +02:00', 'System backup started');
@@ -593,14 +669,47 @@ FROM EventLog;
 -- Filter events by time, accounting for time zones
 SELECT event_id, event_description, event_time
 FROM EventLog
-WHERE event_time > TIMESTAMP '2024-06-08 13:00:00 +00:00';
--- o INTERVAL YEAT TO MONTH, INTERVAL DAY TO SECOND
+WHERE event_time < TIMESTAMP '2024-06-08 13:00:00 +00:00';
+
+-- o INTERVAL YEAR TO MONTH, INTERVAL DAY TO SECOND
+SELECT  SYSDATE + delka1 AS "120 months from now", 
+        SYSDATE + delka2 AS "3 years 6 months from now"
+FROM time_ex4;
+
 -- o CHAR, VARCHAR2, CLOB
+-- Example of CHAR and VARCHAR2
+CREATE TABLE TextExample (
+  fixed_text CHAR(10),
+  variable_text VARCHAR2(50),
+  large_text CLOB
+);
+
+INSERT INTO TextExample (fixed_text, variable_text, large_text)
+VALUES ('Fixed', 'Variable length text', 'This is a large text stored in CLOB.');
+
 -- o about NUMBER
+-- Example of NUMBER precision and scale
+CREATE TABLE NumberExample (
+  id NUMBER(10),
+  price NUMBER(10,2)
+);
+
+INSERT INTO NumberExample (id, price)
+VALUES (1, 12345.67);
+
 -- o about BLOB
+-- Example of BLOB usage
+CREATE TABLE BlobExample (
+  id NUMBER PRIMARY KEY,
+  image_data BLOB
+);
 
--- todo
+-- Insert a sample BLOB (requires tools or programming language support)
+-- Example query to retrieve BLOB data
+SELECT id, image_data
+FROM BlobExample;
 
+/*********************************************************************************************************/
 -- • SQL S08 L03
 -- o ALTER TABLE (ADD, MODIFY, DROP), DROP, RENAME
 -- Add a new column to Guest table
@@ -710,7 +819,7 @@ ALTER TABLE Guest DROP UNUSED COLUMNS;
 -- Mark column as unused and drop in one operation
 ALTER TABLE Guest SET UNUSED COLUMN notes DROP UNUSED COLUMNS;
 
-
+/*********************************************************************************************************/
 -- • SQL S10 L01
 -- o CREATE TABLE (NOT NULL AND UNIQUE constraint)
 -- Create a new table with explicit NOT NULL and UNIQUE constraints
@@ -728,9 +837,9 @@ CREATE TABLE GuestProfile (
 
 -- o CREATE TABLE Tab AS SELECT …
 -- Create an empty table with the same structure as another table
-CREATE TABLE GuestArchive AS
+CREATE TABLE GuestArchive2 AS
 SELECT * FROM Guest
-WHERE 1 = 0;  -- This condition is always false, so no rows are selected
+WHERE 1 = 0;
 
 -- o Own vs. system naming CONSTRAINT conditions
 
@@ -752,13 +861,13 @@ CREATE TABLE HotelService (
 
 -- Creating constraints without explicit names (system will generate names)
 CREATE TABLE ServiceBooking (
-  booking_id NUMBER PRIMARY KEY,  -- System will name this constraint
-  guest_id NUMBER NOT NULL,       -- NOT NULL constraints don't get names
+  booking_id NUMBER PRIMARY KEY,
+  guest_id NUMBER NOT NULL,
   service_id NUMBER,
   booking_date DATE,
-  UNIQUE (guest_id, service_id, booking_date), -- System will name this constraint
-  FOREIGN KEY (guest_id) REFERENCES Guest(guest_id), -- System will name this constraint
-  FOREIGN KEY (service_id) REFERENCES HotelService(service_id) -- System will name this
+  UNIQUE (guest_id, service_id, booking_date),
+  FOREIGN KEY (guest_id) REFERENCES Guest(guest_id),
+  FOREIGN KEY (service_id) REFERENCES HotelService(service_id)
 );
 
 -- Viewing constraint names (including system-generated ones)
@@ -766,7 +875,7 @@ SELECT constraint_name, constraint_type, table_name, search_condition
 FROM user_constraints
 WHERE table_name = 'SERVICEBOOKING';
 
-
+/*********************************************************************************************************/
 -- • SQL S10 L02
 -- o CONSTRAINT – NOT NULL, UNIQUE, PRIMARY KEY, FOREIGN KEY (atr REFERENCES
 -- Add NOT NULL constraint to an existing column
@@ -854,7 +963,7 @@ CREATE TABLE GuestNote (
 
 -- When a guest is deleted, their notes remain but guest_id becomes NULL
 
-
+/*********************************************************************************************************/
 -- • SQL S10 L03
 -- o about USER_CONSTRAINTS
 
@@ -867,7 +976,7 @@ SELECT constraint_name, constraint_type, search_condition,
 FROM USER_CONSTRAINTS
 WHERE table_name = 'RESERVATION';
 
-
+/*********************************************************************************************************/
 -- • SQL S11 L01
 -- o CREATE VIEW
 -- o about FORCE, NOFORCE
@@ -884,7 +993,7 @@ WHERE is_occupied = 0;
 -- FORCE view (creates even if referenced table doesn't exist)
 CREATE FORCE VIEW future_bookings AS
 SELECT guest_id, check_in_date, room_number
-FROM ReservationCalendar  -- This table doesn't exist yet
+FROM ReservationCalendar
 WHERE check_in_date > SYSDATE;
 
 -- NOFORCE view (default - only creates if table exists)
@@ -907,44 +1016,159 @@ FROM Payment
 WHERE payment_date IS NOT NULL
 WITH READ ONLY;
 
-
+/*********************************************************************************************************/
 -- • SQL S11 L03
 -- o INLINE VIEW Subquery in the form of a table SELECT atr FROM (SELECT * FROM Tab)
 -- alt_tab
 
+SELECT g.firstname, g.lastname, g.email, r.max_price
+FROM Guest g,
+    (SELECT guest_id, MAX(accommodation_price) AS max_price
+     FROM Reservation
+     GROUP BY guest_id) r
+WHERE g.guest_id = r.guest_id
+AND r.max_price > 3000;
 
+/*********************************************************************************************************/
 -- • SQL S12 L01
 -- o CREATE SEQUENCE name INCREMENT BY n START WITH m, (NO)MAXVALUE,
 -- (NO)MINVALUE, (NO)CYCLE, (NO)CACHE
 -- o about ALTER SEQUENCE
+CREATE SEQUENCE Sekvence2
+    INCREMENT BY 1
+    START WITH 1
+    MAXVALUE 50000
+    MINVALUE 1
+    NOCACHE
+    NOCYCLE;
 
+ALTER SEQUENCE Sekvence2
+    INCREMENT BY 1
+    MAXVALUE 999999
+    NOCACHE
+    NOCYCLE;
+        
+SELECT sequence_name, min_value, max_value, increment_by, 
+last_number
+FROM user_sequences;
 
+/*********************************************************************************************************/
 -- • SQL S12 L02
 -- o CREATE INDEX, PRIMARY KEY, UNIQUE KEY, FOREIGN KEY
 
 CREATE INDEX index_name ON table_name (column_name);
 
--- • SQL S13 L01
--- o GRANT … ON … TO … PUBLIC
--- o about REVOKE
--- o What rights can be assigned to which objects? (ALTER, DELETE, EXECUTE, INDEX,
--- INSERT, REFERENCES, SELECT, UPDATE) – (TABLE, VIEW, SEQUENCE, PROCEDURE)
+/*********************************************************************************************************/
+-- SQL S13 L01
+-- Granting permissions to PUBLIC
+-- Grant SELECT and UPDATE permissions on the Guest table to all users
+GRANT SELECT, UPDATE ON Guest TO PUBLIC;
+
+-- Grant EXECUTE permission on a procedure to a specific user
+GRANT EXECUTE ON UpdateGuestInfo TO user_name;
+
+-- Grant INSERT permission on the Reservation table to a specific role
+GRANT INSERT ON Reservation TO hotel_staff;
+
+-- Revoking permissions
+-- Revoke SELECT permission on the Guest table from PUBLIC
+REVOKE SELECT ON Guest FROM PUBLIC;
+
+-- Revoke EXECUTE permission on a procedure from a specific user
+REVOKE EXECUTE ON UpdateGuestInfo FROM user_name;
+
+-- Revoke INSERT permission on the Reservation table from a specific role
+REVOKE INSERT ON Reservation FROM hotel_staff;
+
+-- Viewing granted permissions
+-- Check all grants for the current user
+SELECT * FROM USER_TAB_PRIVS;
+
+-- Check all grants for a specific table
+SELECT * FROM ALL_TAB_PRIVS WHERE TABLE_NAME = 'GUEST';
 
 
--- • SQL S13 L03
--- o Regular expressions
--- o REGEXP_LIKE, REGEXP_REPLACE, REGEXP_INSTR, REGEXP_SUBSTR, REGEXP_COUNT
+
+/*********************************************************************************************************/
+-- SQL S13 L03
+-- Regular expressions
+
+-- 1. REGEXP_LIKE: Zkontroluje, zda text odpovídá regulárnímu výrazu
+-- Najděte hosty, jejichž email obsahuje doménu "email.cz"
+SELECT firstname, lastname, email
+FROM Guest
+WHERE REGEXP_LIKE(email, '@email\.cz$');
+
+-- 2. REGEXP_REPLACE: Nahrazuje část textu odpovídající regulárnímu výrazu
+-- Nahraďte doménu "email.cz" za "example.com" v emailových adresách
+SELECT firstname, lastname, REGEXP_REPLACE(email, '@email\.cz$', '@example.com') AS updated_email
+FROM Guest;
+
+-- 3. REGEXP_INSTR: Vrací pozici, kde regulární výraz odpovídá textu
+-- Najděte pozici "@" v emailových adresách
+SELECT firstname, lastname, email, REGEXP_INSTR(email, '@') AS at_position
+FROM Guest;
+
+-- 4. REGEXP_SUBSTR: Vrací část textu odpovídající regulárnímu výrazu
+-- Extrahujte doménu z emailové adresy
+SELECT firstname, lastname, email, REGEXP_SUBSTR(email, '@[^\.]+') AS domain
+FROM Guest;
+
+-- 5. REGEXP_COUNT: Počítá počet výskytů regulárního výrazu v textu
+-- Spočítejte počet teček v emailových adresách
+SELECT firstname, lastname, email, REGEXP_COUNT(email, '\.') AS dot_count
+FROM Guest;
 
 
--- • SQL S14 L01
--- o Transactions, COMMIT, ROLLBACK, SAVEPOINT
+/*********************************************************************************************************/
+-- SQL S14 L01
+-- Transactions, COMMIT, ROLLBACK, SAVEPOINT
 
+-- Start a transaction
+BEGIN
+  -- Insert a new guest
+  INSERT INTO Guest (firstname, lastname, email, phone, birth_date, street, city, postal_code, country, guest_type, registration_date, notes)
+  VALUES ('John', 'Doe', 'john.doe@email.com', '123456789', TO_DATE('1985-05-15', 'YYYY-MM-DD'), 'Main Street 1', 'Prague', '11000', 'ČR', 'standard', SYSDATE, null);
 
+  -- Create a savepoint
+  SAVEPOINT guest_inserted;
+
+  -- Update the guest's phone number
+  UPDATE Guest
+  SET phone = '987654321'
+  WHERE firstname = 'John' AND lastname = 'Doe';
+
+  -- Rollback to the savepoint
+  ROLLBACK TO guest_inserted;
+
+  -- Commit the transaction
+  COMMIT;
+END;
+
+/*********************************************************************************************************/
 -- • SQL S15 L01
 -- o Alternative join notation without JOIN with join condition in WHERE
 -- o Left and right connection using atrA = atrB (+)
 
 
+SELECT g.firstname, g.lastname, r.check_in_date, r.check_out_date
+FROM Guest g, Reservation r
+WHERE g.guest_id = r.guest_id;
+
+-- Left outer join using (+)
+SELECT g.firstname, g.lastname, r.check_in_date, r.check_out_date
+FROM Guest g, Reservation r
+WHERE g.guest_id = r.guest_id(+);
+
+-- Right outer join using (+)
+SELECT r.room_id, r.room_number, rt.name AS room_type_name
+FROM Room r, RoomType rt
+WHERE r.room_type_id(+) = rt.room_type_id;
+
+
+/*********************************************************************************************************/
 -- • SQL S16 L03
 -- o Recapitulation of commands and parameters - complete everything that was not
 -- mentioned in the previous points here
+
+-- ??

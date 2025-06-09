@@ -2,6 +2,9 @@
 \usepackage[left=20mm,right=30mm,top=30mm,bottom=35mm]{geometry} 
 
 \usepackage[english]{babel}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{pdflscape}
 \usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -19,11 +22,11 @@
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt}
-\rhead{Project DS II - Hotel}
+\rhead{Project TDS I - Hotel}
 \lfoot{Richard Ficek, FIC0024}
 \rfoot{\thepage}
 
-\title{Project DS II - Hotel}
+\title{Project TDS I - Hotel}
 \author{Richard Ficek, FIC0024}
 \date{\today}
 
@@ -58,15 +61,19 @@
     is just a set of data points about a guest.
 
     Similarly, in the \texttt{Reservation} table, several records might look like:
-    \begin{quote}
-        \begin{verbatim}
-reservation_id: 1, guest_id: 5, room_id: 101, employee_id: 3, creation_date: 2024-04-01, check_in_date: 2024-04-10, check_out_date: 2024-04-15, payment_id: 7, status: "confirmed", accommodation_price: 500.00
+\begin{description}
+    \item[reservation\_id] 1
+    \item[guest\_id] 5
+    \item[room\_id] 101
+    \item[employee\_id] 3
+    \item[creation\_date] 2024-04-01
+    \item[check\_in\_date] 2024-04-10
+    \item[check\_out\_date] 2024-04-15
+    \item[payment\_id] 7
+    \item[status] \texttt{"confirmed"}
+    \item[accommodation\_price] 500.00
+\end{description}
 
-reservation_id: 2, guest_id: 8, room_id: 102, employee_id: 2, creation_date: 2024-04-02, check_in_date: 2024-04-12, check_out_date: 2024-04-14, payment_id: 8, status: "cancelled", accommodation_price: 0.00
-
-reservation_id: 3, guest_id: 12, room_id: 103, employee_id: 4, creation_date: 2024-04-03, check_in_date: 2024-04-15, check_out_date: 2024-04-18, payment_id: 9, status: "confirmed", accommodation_price: 450.00
-        \end{verbatim}
-    \end{quote}
     These are just raw data entries about guests and reservations.
 
     \item \textbf{Information:} If we process the data, we can find that ``Most guests who stayed in the hotel in 2024 were born after 1990,'' or, after analyzing the reservations, we can obtain information such as: \\
@@ -74,6 +81,11 @@ reservation_id: 3, guest_id: 12, room_id: 103, employee_id: 4, creation_date: 20
     This information provides insight and helps in decision-making, such as targeting marketing campaigns to a younger audience or optimizing pricing and staffing for busy periods.
 \end{itemize}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{reservation.png}
+    \label{fig:matrix_diagram}
+\end{figure}
 
 \newpage
 
@@ -112,6 +124,187 @@ In this example:
     \item Each field (e.g., \texttt{check\_in\_date}, \texttt{status}) is an attribute.
     \item \texttt{reservation\_id} is the identifier.
 \end{itemize}
+
+\begin{figure}[H]
+    \centering
+
+    \begin{minipage}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{reservation.png}
+        \caption{Rezervace}
+        \label{fig:reservation}
+    \end{minipage}
+    \hspace{0.05\textwidth}
+    \begin{minipage}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{room.png}
+        \caption{Pokoj}
+        \label{fig:room}
+    \end{minipage}
+
+\end{figure}
+
+\newpage
+
+\section*{Database Tables and Attributes}
+
+\section*{Attributes: Guest}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{9cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+guest\_id & Unique identifier for guest (auto-generated) \\
+firstname & Guest's first name \\
+lastname & Guest's last name \\
+email & Guest's email address \\
+phone & Guest's phone number \\
+birth\_date & Guest's date of birth \\
+street & Guest's street address \\
+city & Guest's city \\
+postal\_code & Guest's postal code \\
+country & Guest's country \\
+guest\_type & Type of guest (standard, VIP, etc.) \\
+registration\_date & Date when guest registered (default: current date) \\
+manager\_id & Reference to managing employee \\
+notes & Additional notes about the guest \\
+\hline
+\end{longtable}
+
+\section*{Attributes: Employee}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{9cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+employee\_id & Unique identifier for employee (auto-generated) \\
+firstname & Employee's first name \\
+lastname & Employee's last name \\
+position & Employee's job position \\
+street & Employee's street address \\
+city & Employee's city \\
+postal\_code & Employee's postal code \\
+country & Employee's country \\
+\hline
+\end{longtable}
+
+\section*{Attributes: RoomType}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{9cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+room\_type\_id & Unique identifier for room type (auto-generated) \\
+name & Name of the room type \\
+bed\_count & Number of beds in this room type \\
+\hline
+\end{longtable}
+
+\section*{Attributes: Room}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{9cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+room\_id & Unique identifier for room (auto-generated) \\
+room\_type\_id & Reference to room type \\
+room\_number & Unique room number \\
+is\_occupied & Room occupation status (0=free, 1=occupied) \\
+\hline
+\end{longtable}
+
+\section*{Attributes: Payment}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{9cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+payment\_id & Unique identifier for payment (auto-generated) \\
+total\_accommodation & Total accommodation cost \\
+total\_expenses & Total additional expenses \\
+payment\_date & Date of payment \\
+is\_paid & Payment status (0=unpaid, 1=paid) \\
+\hline
+\end{longtable}
+
+\section*{Attributes: Reservation}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{9cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+reservation\_id & Unique identifier for reservation (auto-generated) \\
+guest\_id & Reference to guest making the reservation \\
+room\_id & Reference to reserved room \\
+employee\_id & Reference to employee handling the reservation \\
+creation\_date & Date when reservation was created \\
+check\_in\_date & Guest check-in date \\
+check\_out\_date & Guest check-out date \\
+payment\_id & Reference to payment for this reservation \\
+status & Reservation status (confirmed, cancelled, etc.) \\
+accommodation\_price & Price for accommodation \\
+\hline
+\end{longtable}
+
+\section*{Attributes: Service}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{9cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+service\_id & Unique identifier for service (auto-generated) \\
+name & Name of the service \\
+description & Detailed description of the service \\
+\hline
+\end{longtable}
+
+\section*{Attributes: ServiceUsage}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{9cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+usage\_id & Unique identifier for service usage (auto-generated) \\
+reservation\_id & Reference to reservation using the service \\
+service\_id & Reference to service being used \\
+quantity & Quantity of service used \\
+total\_price & Total price for service usage \\
+\hline
+\end{longtable}
+
+\newpage
+
+\section*{Attributes: Feedback}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{9cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+feedback\_id & Unique identifier for feedback (auto-generated) \\
+guest\_id & Reference to guest providing feedback \\
+reservation\_id & Reference to reservation being rated \\
+rating & Numerical rating for the stay \\
+note & Additional comments from guest \\
+feedback\_date & Date when feedback was submitted \\
+\hline
+\end{longtable}
+
+\section*{Attributes: ServicePriceHistory}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{9cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+sph\_id & Unique identifier for service price history (auto-generated) \\
+service\_id & Reference to service \\
+price & Price of service during this period \\
+valid\_from & Start date of price validity \\
+valid\_to & End date of price validity \\
+\hline
+\end{longtable}
+
+\section*{Attributes: RoomTypePriceHistory}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{9cm}|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+rtph\_id & Unique identifier for room type price history (auto-generated) \\
+room\_type\_id & Reference to room type \\
+price\_per\_night & Price per night during this period \\
+valid\_from & Start date of price validity \\
+valid\_to & End date of price validity \\
+\hline
+\end{longtable}
 
 \newpage
 
@@ -157,26 +350,49 @@ In this example:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{ER_diagram.png}
+    \includegraphics[width=0.8\textwidth]{konceptualERD.png}
     \caption{ER Diagram for Hotel Database}
     \label{fig:er_diagram}
-\end{figure>
+\end{figure}
 
 
 \newpage
 
+\begin{landscape}
 \section{DD S30 L04}
 
 \texttt{Task: } Matrix diagram with relationships, draw for your solution 
 
 \bigskip
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{matrix_diagram.png}
-    \caption{Matrix Diagram for Hotel Database Relationships}
-    \label{fig:matrix_diagram}
-\end{figure}
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{|l|c|c|c|c|c|c|c|c|c|c|}
+\hline
+ & \textbf{Guest} & \textbf{Employee} & \textbf{Room} & \textbf{RoomType} & \textbf{Reservation} & \textbf{Payment} & \textbf{Service} & \textbf{ServiceUsage} & \textbf{Feedback} & \textbf{ServicePriceHistory} \\
+\hline
+\textbf{Guest} &  &  &  &  & 1:N &  &  &  & 1:N &  \\
+\hline
+\textbf{Employee} &  &  &  &  & 1:N &  &  &  &  &  \\
+\hline
+\textbf{Room} &  &  &  & 1:N & 1:N &  &  &  &  &  \\
+\hline
+\textbf{RoomType} &  &  & N:1 &  &  &  &  &  &  & 1:N \\
+\hline
+\textbf{Reservation} & N:1 & N:1 & N:1 &  &  & 1:1 &  & 1:N & 1:N &  \\
+\hline
+\textbf{Payment} &  &  &  &  & 1:1 &  &  &  &  &  \\
+\hline
+\textbf{Service} &  &  &  &  &  &  &  & 1:N &  & 1:N \\
+\hline
+\textbf{ServiceUsage} &  &  &  &  & N:1 &  & N:1 &  &  &  \\
+\hline
+\textbf{Feedback} & N:1 &  &  &  & N:1 &  &  &  &  &  \\
+\hline
+\textbf{ServicePriceHistory} &  &  &  & N:1 &  &  & N:1 &  &  &  \\
+\hline
+\end{longtable}
+\end{landscape}
 
 \newpage
 
@@ -204,6 +420,13 @@ In the hotel project, an example of a supertype and subtype can be found in the 
 \end{quote}
 This record is an instance of the supertype \texttt{Guest} and the subtype \texttt{VIP Guest}.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{guest.png}
+    \caption{Guest table}
+    \label{fig:er_diagram}
+\end{figure}
+
 \newpage
 
 \section{DD S04 L02}
@@ -225,6 +448,182 @@ This record is an instance of the supertype \texttt{Guest} and the subtype \text
     \item Employees are responsible for managing reservations and must be assigned to each reservation.
 \end{itemize}
 
+\begin{table}[H]
+\caption{Guest Table Attributes}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Name} & \textbf{Data Type} & \textbf{Length} & \textbf{Key} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Meaning} \\ \hline
+    guest\_id & int & - & P & N & A & - & Guest ID \\ \hline
+    firstname & varchar & 100 & - & N & - & - & Guest first name \\ \hline
+    lastname & varchar & 100 & - & N & - & - & Guest last name \\ \hline
+    email & varchar & 100 & - & N & - & - & Guest email \\ \hline
+    phone & varchar & 30 & - & A & - & - & Guest phone number \\ \hline
+    birth\_date & date & - & - & N & - & - & Guest birth date \\ \hline
+    street & varchar & 255 & - & N & - & - & Street \\ \hline
+    city & varchar & 100 & - & N & - & - & City \\ \hline
+    postal\_code & char & 10 & - & N & - & - & Postal code \\ \hline
+    country & varchar & 100 & - & N & - & - & Country \\ \hline
+    guest\_type & varchar & 50 & - & N & - & - & Guest type \\ \hline
+    registration\_date & date & - & - & A & - & - & Registration date \\ \hline
+    notes & clob & - & - & A & - & - & Notes about guest \\ 
+    \hline
+\end{tabular}
+\label{tab:guest}
+\end{table}
+
+\begin{table}[H]
+\caption{Employee Table Attributes}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Name} & \textbf{Data Type} & \textbf{Length} & \textbf{Key} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Meaning} \\ \hline
+    employee\_id & int & - & P & N & A & - & Employee ID \\ \hline
+    firstname & varchar & 100 & - & N & - & - & Employee first name \\ \hline
+    lastname & varchar & 100 & - & N & - & - & Employee last name \\ \hline
+    position & varchar & 50 & - & N & - & - & Employee position \\ \hline
+    street & varchar & 255 & - & N & - & - & Street \\ \hline
+    city & varchar & 100 & - & N & - & - & City \\ \hline
+    postal\_code & char & 10 & - & N & - & - & Postal code \\ \hline
+    country & varchar & 100 & - & N & - & - & Country \\ 
+    \hline
+\end{tabular}
+\label{tab:employee}
+\end{table}
+
+\begin{table}[H]
+\caption{RoomType Table Attributes}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Name} & \textbf{Data Type} & \textbf{Length} & \textbf{Key} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Meaning} \\ \hline
+    room\_type\_id & int & - & P & N & A & - & Room type ID \\ \hline
+    name & varchar & 100 & - & N & - & - & Room type name \\ \hline
+    bed\_count & int & - & - & N & - & - & Bed count \\ 
+    \hline
+\end{tabular}
+\label{tab:roomtype}
+\end{table}
+
+\begin{table}[H]
+\caption{Room Table Attributes}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Name} & \textbf{Data Type} & \textbf{Length} & \textbf{Key} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Meaning} \\ \hline
+    room\_id & int & - & P & N & A & - & Room ID \\ \hline
+    room\_type\_id & int & - & F(RoomType) & N & - & - & Room type ID \\ \hline
+    room\_number & varchar & 20 & - & N & U & - & Room number \\ \hline
+    is\_occupied & boolean & - & - & N & - & - & Room occupancy \\ 
+    \hline
+\end{tabular}
+\label{tab:room}
+\end{table}
+
+\begin{table}[H]
+\caption{Payment Table Attributes}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Name} & \textbf{Data Type} & \textbf{Length} & \textbf{Key} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Meaning} \\ \hline
+    payment\_id & int & - & P & N & A & - & Payment ID \\ \hline
+    total\_accommodation & decimal & - & - & N & - & - & Total accommodation cost \\ \hline
+    total\_expenses & decimal & - & - & N & - & - & Total expenses \\ \hline
+    payment\_date & date & - & - & A & - & - & Payment date \\ \hline
+    is\_paid & boolean & - & - & N & - & - & Payment status \\ 
+    \hline
+\end{tabular}
+\label{tab:payment}
+\end{table}
+
+\begin{table}[H]
+\caption{Reservation Table Attributes}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Name} & \textbf{Data Type} & \textbf{Length} & \textbf{Key} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Meaning} \\ \hline
+    reservation\_id & int & - & P & N & A & - & Reservation ID \\ \hline
+    guest\_id & int & - & F(Guest) & N & - & - & Guest ID \\ \hline
+    room\_id & int & - & F(Room) & N & - & - & Room ID \\ \hline
+    employee\_id & int & - & F(Employee) & N & - & - & Employee ID \\ \hline
+    creation\_date & date & - & - & N & - & - & Creation date \\ \hline
+    check\_in\_date & date & - & - & N & - & - & Check-in date \\ \hline
+    check\_out\_date & date & - & - & N & - & - & Check-out date \\ \hline
+    payment\_id & int & - & F(Payment) & N & - & - & Payment ID \\ \hline
+    status & varchar & 30 & - & N & - & - & Reservation status \\ 
+    \hline
+\end{tabular}
+\label{tab:reservation}
+\end{table}
+
+\begin{table}[H]
+\caption{Service Table Attributes}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Name} & \textbf{Data Type} & \textbf{Length} & \textbf{Key} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Meaning} \\ \hline
+    service\_id & int & - & P & N & A & - & Service ID \\ \hline
+    name & varchar & 100 & - & N & - & - & Service name \\ \hline
+    description & clob & - & - & A & - & - & Service description \\ 
+    \hline
+\end{tabular}
+\label{tab:service}
+\end{table}
+
+\begin{table}[H]
+\caption{ServiceUsage Table Attributes}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Name} & \textbf{Data Type} & \textbf{Length} & \textbf{Key} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Meaning} \\ \hline
+    usage\_id & int & - & P & N & A & - & Service usage ID \\ \hline
+    reservation\_id & int & - & F(Reservation) & N & - & - & Reservation ID \\ \hline
+    service\_id & int & - & F(Service) & N & - & - & Service ID \\ \hline
+    quantity & int & - & - & N & - & - & Quantity \\ \hline
+    total\_price & decimal & - & - & N & - & - & Total price \\ 
+    \hline
+\end{tabular}
+\label{tab:serviceusage}
+\end{table}
+
+\begin{table}[H]
+\caption{Feedback Table Attributes}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Name} & \textbf{Data Type} & \textbf{Length} & \textbf{Key} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Meaning} \\ \hline
+    feedback\_id & int & - & P & N & A & - & Feedback ID \\ \hline
+    guest\_id & int & - & F(Guest) & N & - & - & Guest ID \\ \hline
+    reservation\_id & int & - & F(Reservation) & N & - & - & Reservation ID \\ \hline
+    rating & int & - & - & N & - & - & Rating (1-5) \\ \hline
+    comment & clob & - & - & A & - & - & Comment \\ \hline
+    feedback\_date & date & - & - & A & - & - & Feedback date \\ 
+    \hline
+\end{tabular}
+\label{tab:feedback}
+\end{table}
+
+\begin{table}[H]
+\caption{ServicePriceHistory Table Attributes}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Name} & \textbf{Data Type} & \textbf{Length} & \textbf{Key} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Meaning} \\ \hline
+    sph\_id & int & - & P & N & A & - & Service price history ID \\ \hline
+    service\_id & int & - & F(Service) & N & - & - & Service ID \\ \hline
+    price & decimal & - & - & N & - & - & Service price \\ \hline
+    valid\_from & date & - & - & N & - & - & Valid from \\ \hline
+    valid\_to & date & - & - & A & - & - & Valid to \\
+    \hline
+\end{tabular}
+\label{tab:servicepricehistory}
+\end{table}
+
+\begin{table}[H]
+\caption{RoomTypePriceHistory Table Attributes}
+\begin{tabular}{|l|l|c|c|c|c|c|l|}
+    \hline
+    \textbf{Name} & \textbf{Data Type} & \textbf{Length} & \textbf{Key} & \textbf{Null} & \textbf{Index} & \textbf{IO} & \textbf{Meaning} \\ \hline
+    rtph\_id & int & - & P & N & A & - & Room type price history ID \\ \hline
+    room\_type\_id & int & - & F(RoomType) & N & - & - & Room type ID \\ \hline
+    price\_per\_night & decimal & - & - & N & - & - & Price per night \\ \hline
+    valid\_from & date & - & - & N & - & - & Valid from \\ \hline
+    valid\_to & date & - & - & A & - & - & Valid to \\
+    \hline
+\end{tabular}
+\label{tab:roomtypepricehistory}
+\end{table}
+
 \newpage
 
 \section{DD S05 L01}
@@ -233,11 +632,60 @@ This record is an instance of the supertype \texttt{Guest} and the subtype \text
 
 \bigskip
 
-\begin{itemize}
-    \item \textbf{Portable binding:} The use of foreign key constraints in the SQL schema (e.g., \texttt{CONSTRAINT fk_reservation_guest FOREIGN KEY (guest\_id) REFERENCES Guest(guest\_id)}) is a portable binding, as it is supported by most relational database systems and ensures referential integrity regardless of the specific database platform.
-    
-    \item \textbf{Non-portable binding:} The use of the \texttt{IDENTITY(1,1)} property for auto-incrementing primary keys in SQL Server (e.g., \texttt{guest\_id INT IDENTITY(1,1) PRIMARY KEY}) is a non-portable binding, as this syntax is specific to Microsoft SQL Server and may not work in other database systems like MySQL or PostgreSQL.
-\end{itemize}
+In the project, the following types of bindings are present:
+
+\begin{table}[H]
+\caption{Portable and Non-portable Bindings in the Project}
+\begin{tabular}{|l|p{6cm}|p{6cm}|}
+\hline
+\textbf{Table} & \textbf{Portable Binding (Example)} & \textbf{Non-portable Binding (Example)} \\
+\hline
+Guest & 
+Foreign key: \texttt{manager\_id} referencing \texttt{Employee} (supported in all major RDBMS) &
+\texttt{NUMBER GENERATED ALWAYS AS IDENTITY} (Oracle-specific auto-increment syntax) \\
+\hline
+Employee & 
+Primary key: \texttt{employee\_id} as PK (portable) &
+\texttt{NUMBER GENERATED ALWAYS AS IDENTITY} (Oracle-specific) \\
+\hline
+RoomType & 
+Primary key: \texttt{room\_type\_id} as PK (portable) &
+\texttt{NUMBER GENERATED ALWAYS AS IDENTITY} (Oracle-specific) \\
+\hline
+Room & 
+Foreign key: \texttt{room\_type\_id} referencing \texttt{RoomType} (portable) &
+\texttt{uq\_room\_number UNIQUE (room\_number)} (constraint name syntax is not portable) \\
+\hline
+Payment & 
+Primary key: \texttt{payment\_id} as PK (portable) &
+\texttt{NUMBER GENERATED ALWAYS AS IDENTITY} (Oracle-specific) \\
+\hline
+Reservation & 
+Foreign keys: \texttt{guest\_id}, \texttt{room\_id}, \texttt{employee\_id}, \texttt{payment\_id} (portable) &
+\texttt{NUMBER GENERATED ALWAYS AS IDENTITY} (Oracle-specific) \\
+\hline
+Service & 
+Primary key: \texttt{service\_id} as PK (portable) &
+\texttt{NUMBER GENERATED ALWAYS AS IDENTITY} (Oracle-specific) \\
+\hline
+ServiceUsage & 
+Foreign keys: \texttt{reservation\_id}, \texttt{service\_id} (portable) &
+\texttt{NUMBER GENERATED ALWAYS AS IDENTITY} (Oracle-specific) \\
+\hline
+Feedback & 
+Foreign keys: \texttt{guest\_id}, \texttt{reservation\_id} (portable) &
+\texttt{NUMBER GENERATED ALWAYS AS IDENTITY} (Oracle-specific) \\
+\hline
+ServicePriceHistory & 
+Foreign key: \texttt{service\_id} referencing \texttt{Service} (portable) &
+\texttt{NUMBER GENERATED ALWAYS AS IDENTITY} (Oracle-specific) \\
+\hline
+RoomTypePriceHistory & 
+Foreign key: \texttt{room\_type\_id} referencing \texttt{RoomType} (portable) &
+\texttt{NUMBER GENERATED ALWAYS AS IDENTITY} (Oracle-specific) \\
+\hline
+\end{tabular}
+\end{table}
 
 \newpage
 
@@ -247,13 +695,22 @@ This record is an instance of the supertype \texttt{Guest} and the subtype \text
 
 \bigskip
 
-\begin{itemize}
-    \item \textbf{M:N relationship without information:} The relationship between \texttt{Guest} and \texttt{Room} could be modeled as M:N if we only wanted to track which guests have ever stayed in which rooms, without any additional details. In this case, a join table (e.g., \texttt{GuestRoom}) would contain only the foreign keys \texttt{guest\_id} and \texttt{room\_id}.
-    
-    \item \textbf{M:N relationship with information:} The relationship between \texttt{Reservation} and \texttt{Service} is M:N with information, implemented by the \texttt{ServiceUsage} table. This table not only links reservations and services but also stores additional information such as \texttt{quantity} and \texttt{total\_price}.
-\end{itemize}
+\begin{table}[H]
+\caption{Examples of M:N Relationships in the Project}
+\begin{tabular}{|l|l|l|p{6cm}|}
+\hline
+\textbf{Relationship} & \textbf{Join Table} & \textbf{With Information} & \textbf{Description / Additional Attributes} \\
+\hline
+Guest -- Room & GuestRoom & No & Only tracks which guests have stayed in which rooms; join table contains only \texttt{guest\_id}, \texttt{room\_id} \\
+\hline
+Reservation -- Service & ServiceUsage & Yes & Tracks which services were used in which reservations; join table contains \texttt{reservation\_id}, \texttt{service\_id}, plus additional attributes like \texttt{quantity}, \texttt{total\_price} \\
+\hline
+\end{tabular}
+\end{table}
 
 \newpage
+
+\begin{landscape}
 
 \section{DD S06 L01}
 
@@ -261,8 +718,22 @@ This record is an instance of the supertype \texttt{Guest} and the subtype \text
 
 \bigskip
 
-An example of a 1:N identifying relationship in the project is the relationship between \texttt{RoomType} and \texttt{RoomTypePriceHistory}. Each price history record (\texttt{RoomTypePriceHistory}) is uniquely identified by its own primary key, but it also contains the foreign key \texttt{room\_type\_id}, which is mandatory and links it to the parent \texttt{RoomType}. In an alternative design, the primary key of \texttt{RoomTypePriceHistory} could be a composite key consisting of \texttt{room\_type\_id} and \texttt{valid\_from}, making the foreign key also part of the primary key, which is typical for identifying relationships.
+\begin{table}[H]
+\caption{Example of 1:N Identifying Relationship}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Parent Table} & \textbf{Child Table} & \textbf{Identifying Foreign Key} & \textbf{Primary Key in Child} \\
+\hline
+RoomType & RoomTypePriceHistory & room\_type\_id & \begin{tabular}[c]{@{}l@{}}(1) \texttt{rtph\_id} (simple PK)\\ (2) \texttt{room\_type\_id}, \texttt{valid\_from} (composite PK,\\ foreign key is part of PK)\end{tabular} \\
+\hline
+\end{tabular}
+\end{table}
 
+\medskip
+
+In the current design, each \texttt{RoomTypePriceHistory} record has its own primary key (\texttt{rtph\_id}) and a mandatory foreign key (\texttt{room\_type\_id}) referencing \texttt{RoomType}. In an alternative identifying relationship, the primary key of \texttt{RoomTypePriceHistory} could be a composite key (\texttt{room\_type\_id}, \texttt{valid\_from}), making the foreign key also part of the primary key, which is typical for identifying relationships.
+
+\end{landscape}
 \newpage
 
 \section{DD S06 L02-04}
@@ -271,18 +742,33 @@ An example of a 1:N identifying relationship in the project is the relationship 
 
 \bigskip
 
-\begin{itemize}
-    \item \textbf{First Normal Form (1NF):} All tables in the schema have atomic (indivisible) values. There are no repeating groups or arrays; each field contains only a single value. For example, the \texttt{Guest} table stores only one email, one name, etc., per row.
-    
-    \item \textbf{Second Normal Form (2NF):} The schema is in 2NF because all non-key attributes are fully functionally dependent on the whole primary key. There are no partial dependencies, as all tables with composite keys (e.g., possible in history tables) have all non-key attributes dependent on the entire key.
-    
-    \item \textbf{Third Normal Form (3NF):} The schema is in 3NF because there are no transitive dependencies between non-key attributes. All non-key attributes depend only on the primary key and not on other non-key attributes. For example, in the \texttt{Guest} table, attributes like \texttt{email}, \texttt{firstname}, and \texttt{country} depend only on \texttt{guest\_id}.
-\end{itemize}
+\begin{table}[H]
+\caption{Normalization Forms and Tables in the Project}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{Normal Form} & \textbf{Tables in the Project} \\
+\hline
+First Normal Form (1NF) & 
+All tables: \texttt{Guest}, \texttt{Employee}, \texttt{RoomType}, \texttt{Room}, \texttt{Payment}, \texttt{Reservation}, \texttt{Service}, \texttt{ServiceUsage}, \texttt{Feedback}, \texttt{ServicePriceHistory}, \texttt{RoomTypePriceHistory}. \newline
+\textit{All attributes are atomic, there are no repeating groups or arrays.}
+\\
+\hline
+Second Normal Form (2NF) & 
+All tables: \texttt{Guest}, \texttt{Employee}, \texttt{RoomType}, \texttt{Room}, \texttt{Payment}, \texttt{Reservation}, \texttt{Service}, \texttt{ServiceUsage}, \texttt{Feedback}, \texttt{ServicePriceHistory}, \texttt{RoomTypePriceHistory}. \newline
+\textit{All non-key attributes are fully functionally dependent on the whole primary key. No partial dependencies exist.}
+\\
+\hline
+Third Normal Form (3NF) & 
+All tables: \texttt{Guest}, \texttt{Employee}, \texttt{RoomType}, \texttt{Room}, \texttt{Payment}, \texttt{Reservation}, \texttt{Service}, \texttt{ServiceUsage}, \texttt{Feedback}, \texttt{ServicePriceHistory}, \texttt{RoomTypePriceHistory}. \newline
+\textit{No transitive dependencies between non-key attributes. All non-key attributes depend only on the primary key.}
+\\
+\hline
+\end{tabular}
+\end{table}
 
 \medskip
 
-This ensures that the database design avoids redundancy and update anomalies, and supports data integrity.
-
+All tables in the project schema meet the requirements for 1NF, 2NF, and 3NF.
 \newpage
 
 \section{DD S07 L01}
@@ -295,6 +781,15 @@ An example of an ARC (Alternative Relationship Constraint) in the hotel project 
 
 \medskip
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{ARC.png}
+    \caption{Alternative Relationship Constraint}
+    \label{fig:er_diagram}
+\end{figure}
+
+\newpage
+
 \section{DD S07 L02}
 
 \texttt{Task: } Try to define hierarchical and recursive relations in your project
@@ -304,6 +799,25 @@ An example of an ARC (Alternative Relationship Constraint) in the hotel project 
 A hierarchical or recursive relationship can be represented in the \texttt{Employee} table, where an employee can be a manager of other employees. This is modeled by adding a nullable foreign key \texttt{manager\_id} referencing \texttt{employee\_id} in the same table, allowing you to build an organizational hierarchy.
 
 \medskip
+
+\begin{figure}[H]
+    \centering
+
+    \begin{minipage}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{rekurzivni-relation.png}
+        \caption{Rekurzivv}
+        \label{fig:reservation}
+    \end{minipage}
+    \hspace{0.05\textwidth}
+    \begin{minipage}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{hiearchic.png}
+        \caption{Pokoj}
+        \label{fig:room}
+    \end{minipage}
+
+\end{figure}
 
 \section{DD S07 L03}
 
@@ -323,8 +837,7 @@ Historical data in the system is recorded using dedicated history tables, such a
 
 Journaling in the hotel project is implemented by using dedicated history tables that store changes over time. For example, the \texttt{RoomTypePriceHistory} and \texttt{ServicePriceHistory} tables record every change in room type prices and service prices, including the period of validity for each price. This allows the system to keep a complete record of all past prices and retrieve historical data as needed.
 
-A similar approach could be used for tracking changes in employee positions or salaries by creating an \texttt{EmployeePositionHistory} table, where each record would store the employee ID, position, salary, start date, and end date, thus maintaining a journal of all changes for each employee.
-
+\newpage
 
 \section{DD S10 L01}
 
@@ -332,8 +845,30 @@ A similar approach could be used for tracking changes in employee positions or s
 
 \bigskip
 
-todo
+\section*{Main ERD – Reservation-Centric View}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{reservation.png}
+    \caption{Main ER Diagram centered around Reservation}
+\end{figure}
 
+\section*{Diagram Description}
+
+This diagram describes the relationships and structure of the hotel reservation system.
+
+\begin{itemize}
+  \item \textbf{Guest} stores customer personal data.
+  \item \textbf{Employee} represents staff, including those managing reservations.
+  \item \textbf{Reservation} links a guest, room, employee, and payment.
+  \item \textbf{Room} is typed using \texttt{RoomType}, which in turn has a price history.
+  \item \textbf{Service} and \textbf{ServiceUsage} are linked to a reservation.
+  \item \textbf{Payment} connects to reservations.
+  \item \textbf{Feedback} captures guest opinions tied to reservations.
+  \item Tables like \texttt{ServicePriceHistory} and \texttt{RoomTypePriceHistory} track historical pricing.
+\end{itemize}
+
+
+\newpage
 
 \section{DD S10 L02}
 
@@ -345,19 +880,57 @@ traditional data structure design methods
 
 todo
 
+% filepath: c:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\4_semestr\TDS1\projekt\text.tex
 \section{DD S11 L01}
 
-\texttt{Task: } Describe examples of integrity constraints on your project for entities, bindings,
-attributes, and user-defined integrity
+\texttt{Task: } Describe examples of integrity constraints on your project for entities, bindings, attributes, and user-defined integrity
 
 \bigskip
 
-todo
+\begin{table}[H]
+\caption{Examples of Integrity Constraints in the Project}
+\begin{tabular}{|l|p{4cm}|p{8cm}|}
+\hline
+\textbf{Constraint Type} & \textbf{Example} & \textbf{Description} \\
+\hline
+Entity Integrity & Primary Key (\texttt{guest\_id}, \texttt{reservation\_id}, etc.) & Ensures each record is uniquely identified and primary keys cannot be NULL or duplicated. \\
+\hline
+Entity Integrity & IDENTITY Property & \texttt{GENERATED ALWAYS AS IDENTITY} automatically generates unique sequential values for primary keys. \\
+\hline
+Referential Integrity & Foreign Key (\texttt{fk\_reservation\_guest}, \texttt{fk\_reservation\_room}, \texttt{fk\_serviceusage\_reservation}) & Ensures referenced records exist and prevents orphaned records in related tables. \\
+\hline
+Domain Integrity & NOT NULL (\texttt{firstname}, \texttt{lastname}, \texttt{email}) & Ensures essential attributes must always have a value. \\
+\hline
+Domain Integrity & Data Type (\texttt{VARCHAR2(100)}, \texttt{NUMBER(10,2)}, \texttt{DATE}) & Restricts attribute values to specific types and formats. \\
+\hline
+Domain Integrity & DEFAULT Value (\texttt{registration\_date}, \texttt{creation\_date}) & Automatically assigns a value (e.g., \texttt{SYSDATE}) if none is provided. \\
+\hline
+User-Defined Integrity & UNIQUE (\texttt{uq\_room\_number}) & Ensures each room has a unique room number. \\
+\hline
+User-Defined Integrity & CHECK (e.g., \texttt{rating} 1--5, \texttt{is\_occupied} 0/1, \texttt{is\_paid} 0/1) & Enforces business rules and valid value ranges for attributes. \\
+\hline
+User-Defined Integrity & Custom Business Rules & E.g., check-out date must be after check-in date (enforced by triggers or application logic). \\
+\hline
+\end{tabular}
+\end{table}
+
+\medskip
+
+These integrity constraints work together to ensure data consistency, prevent invalid data entry, and maintain the overall reliability of the hotel management database system.
+
+
+\newpage
 
 \section{DD S11 L02-04}
 
 \texttt{Task: } Generate a relational schema from your conceptual model and note the changes that
 have occurred in the schema and why
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Relational_1.png}
+    \caption{ER Diagram for Hotel Database}
+    \label{fig:er_diagram}
+\end{figure}
 
 \end{document}
