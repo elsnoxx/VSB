@@ -27,4 +27,8 @@ docker build parking lot webapp
 
 1. docker build -t parkinglotweb .
 
-2. docker run -p 8080:8080 --name parkinglotweb_container parkinglotweb
+2. docker run -d -p 5062:5062 --name parkinglotweb_container parkinglotweb
+
+docker for database
+
+1. docker run -d --name mariadb-parkinglot -e MYSQL_ROOT_PASSWORD=mysqlparkinglot -p 3306:3306 mariadb:latest
