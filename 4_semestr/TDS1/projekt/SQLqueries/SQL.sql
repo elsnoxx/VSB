@@ -130,16 +130,22 @@ FROM Payment;
 /*********************************************************************************************************/
 -- SQL S01 L03
 -- MONTHS_BETWEEN, ADD_MONTHS, NEXT_DAY, LAST_DAY, ROUND, TRUNC, System constant SYSDATE
-SELECT TO_CHAR(MONTHS_BETWEEN 
-   (TO_DATE('09-06-2022','MM-DD-YYYY'),
-    SYSDATE))
-    FROM DUAL;
 
-SELECT TO_DATE(
-    'January 15, 1989, 11:00 A.M.',
-    'Month dd, YYYY, HH:MI A.M.',
-     'NLS_DATE_LANGUAGE = American')
-     FROM DUAL;
+-- Calculate the number of months between a specific date and today
+SELECT TO_CHAR(MONTHS_BETWEEN (TO_DATE('09-06-2022','MM-DD-YYYY'), SYSDATE)) FROM DUAL;
+-- Calculate the difference in days between a specific date and today
+SELECT TO_DATE('09-06-2022','MM-DD-YYYY') - SYSDATE AS days_difference FROM DUAL;
+-- Add 3 months to the current date
+select ADD_MONTHS(SYSDATE, 3) AS three_months_later FROM DUAL;
+-- These all return the next Sunday:
+SELECT NEXT_DAY(TO_DATE(SYSDATE,'MM-DD-YYYY'), 1) AS next_sunday FROM DUAL;
+-- Get the last day of the current month
+SELECT LAST_DAY(SYSDATE) AS last_day_of_month FROM DUAL;
+-- Round the current date to the nearest month
+SELECT ROUND(SYSDATE, 'MM') AS rounded_to_month FROM DUAL;
+-- Truncate the current date to the first day of the month
+SELECT TRUNC(SYSDATE, 'YYYY') AS truncated_to_month FROM DUAL;
+
      
 SELECT
 TO_NUMBER('4687841', '9999999')
@@ -247,8 +253,7 @@ SELECT LEVEL, employee_id,
        position, manager_id
 FROM Employee
 START WITH manager_id IS NULL
-CONNECT BY PRIOR employee_id = manager_id
-ORDER SIBLINGS BY employee_id;
+CONNECT BY PRIOR employee_id = manager_id;
 
 /*********************************************************************************************************/
 -- • SQL S04 L02
