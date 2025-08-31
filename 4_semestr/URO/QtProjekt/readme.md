@@ -1,9 +1,4 @@
-Dobrý den,
-
-odevzdávám doplněnou aplikaci s následujícími úpravami:
-- Přidána položka "O aplikaci" (About).
-- Umožněno roztáhnutí okna přes celou obrazovku.
-- Opraveno zobrazení tabulky, která se nyní roztahuje na celou dostupnou plochu.
-
-S pozdravem  
-Richard Ficek FIC0024
+<div>
+<p>Vyvořte pomocí C++ a Qt evidenci, podobně jako v Python/Tk (evidence aut, pacientů, knih, květi apod.). Můžete se indpirovat části vašeho Tk projektu. Evidence by měla mít opět vyhledávací část, tabulku se záznamy a detal záznamu. Projekt by měl obsahovat statická data pro demonstraci funkčnosti. </p>
+<p>Odevzdejte výsledný Qt projekt (*.zip) a náhledy výsledné aplikace (*.png)</p>
+</div>
