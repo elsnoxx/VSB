@@ -1,41 +1,26 @@
-CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++11
+TARGET = gennum
+LIBNAME = generator
+LIBFILE = lib$(LIBNAME).a
 
-TARGET1 = bin/gennum
-TARGET2 = bin/verbank
+CPPFLAGS += -g
+LDFLAGS += -L. 
+LDLIBS += -l$(LIBNAME)
 
-SOURCE1 = gennum.cpp
-SOURCE2 = verbank.cpp
-GENSRC  = generator.cpp
+all: $(TARGET)
 
-GENLIB  = lib/libgenerator.a
-GENOBJ  = lib/generator.o
-
-all: $(GENLIB) $(TARGET1) $(TARGET2)
-
-# Vytvoření složek bin a lib, pokud neexistují
-bin:
-	mkdir -p bin
-	mkdir -p lib
-
-# kompilace statické knihovny
-$(GENLIB): $(GENOBJ)
-	ar rcs $(GENLIB) $(GENOBJ)
-
-$(GENOBJ): $(GENSRC) | bin
-	$(CXX) $(CXXFLAGS) -c $(GENSRC) -o $(GENOBJ)
-
-# gennum linkuje knihovnu
-$(TARGET1): $(SOURCE1) $(GENLIB) | bin
-	$(CXX) $(CXXFLAGS) -o $(TARGET1) $(SOURCE1) -Llib -lgenerator
-
-# druhý program
-$(TARGET2): $(SOURCE2) | bin
-	$(CXX) $(CXXFLAGS) -o $(TARGET2) $(SOURCE2)
-
+# clean binary files
 clean:
-	rm -f $(TARGET1) $(TARGET2) $(GENOBJ) $(GENLIB)
-	rmdir bin 2>/dev/null || true
-	rmdir lib 2>/dev/null || true
+	rm -rf $(TARGET) $(LIBFILE) *.o
 
-.PHONY: all clean bin
+# creating static library 
+$(LIBFILE): ${LIBNAME}.o 
+	@echo "\nCreating static library...\n"
+	#rm -f $@
+	ar r $@ $^
+	@echo "\nStatic library created: '$(LIBFILE)'.\n"
+
+# creating application
+$(TARGET): $(TARGET).cpp $(LIBFILE)
+	@echo "\nCreating application...\n"
+	g++ $(CFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+	@echo "\nApplication '$(TARGET)' is ready.\n"

@@ -1,36 +1,37 @@
-CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++11 -fPIC
-LDFLAGS = -shared
+TARGET  = verbank
+LIBNAME = validateNumber
+LIBFILE = lib$(LIBNAME).so
+LIBFILE1 = rodnecislo/lib$(LIBNAME).so
 
-TARGET2 = bin/verbank
-VALSRC  = validateNumber.cpp
-VALSRC1 = rodnecislo/validateNumber.cpp
+CPPFLAGS  += -g 
+LDFLAGS += -L. 
+LDLIBS += -l$(LIBNAME)
 
-DYNLIB  = lib/libvalidateNumber.so
-DYNLIB1 = rodnecislo/libvalidateNumber.so
+ifeq ($(shell uname -m),x86_64) 
+ CPPFLAGS += -fPIC
+endif
 
-all: $(DYNLIB) $(DYNLIB1) $(TARGET2)
+all: $(TARGET) $(LIBFILE1)
 
-# Vytvoření složek bin a lib, pokud neexistují
-bin:
-	mkdir -p bin
-	mkdir -p lib
-
-# Kompilace dynamické knihovny accountValidator
-$(DYNLIB): $(VALSRC) | bin
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(DYNLIB) $(VALSRC)
-
-# Kompilace dynamické knihovny rodnecislo
-$(DYNLIB1): $(VALSRC1) | bin
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(DYNLIB1) $(VALSRC1)
-
-# Překlad programu verbank
-$(TARGET2): verbank.cpp $(DYNLIB) | bin
-	$(CXX) $(CXXFLAGS) -o $(TARGET2) verbank.cpp -Llib -lvalidateNumber
-
+# clean binary files
 clean:
-	rm -f $(TARGET2) $(DYNLIB) $(DYNLIB1)
-	rmdir bin 2>/dev/null || true
-	rmdir lib 2>/dev/null || true
+	rm -rf $(TARGET) $(LIBFILE) $(LIBFILE1) *.o
 
-.PHONY: all clean bin
+# creating dynamic library verbank
+$(LIBFILE): ${LIBNAME}.o
+	@echo "\nCreating dynamic library...\n"
+	g++ $(CPPFLAGS) $^ -shared $(LDFLAGS) -o $@
+	@echo "\nDynamic library created: '$(LIBFILE)'.\n"
+
+# creating dynamic library rodnecislo
+$(LIBFILE1): rodnecislo/validateNumber.cpp | rodnecislo
+	@echo "\nCreating dynamic library for rodnecislo...\n"
+	g++ $(CPPFLAGS) -shared $< $(LDFLAGS) -o $@
+	@echo "\nDynamic library created: '$(LIBFILE1)'.\n"
+
+# creating application
+$(TARGET): $(TARGET).cpp $(LIBFILE)
+	@echo "\nCreating application...\n"
+	g++ $(CFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+	@echo "\nApplication '$(TARGET)' is ready.\n"
+	@echo "Set path to library: 'export LD_LIBRARY_PATH=.' !\n"

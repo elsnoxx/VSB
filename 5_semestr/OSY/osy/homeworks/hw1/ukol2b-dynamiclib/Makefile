@@ -1,30 +1,30 @@
-CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++11 -fPIC
-LDFLAGS = -shared
+TARGET  = verbank
+LIBNAME = validateNumber
+LIBFILE = lib$(LIBNAME).so
 
-TARGET2 = bin/verbank
-VALSRC  = validateNumber.cpp
+CPPFLAGS  += -g 
+LDFLAGS += -L. 
+LDLIBS += -l$(LIBNAME)
 
-DYNLIB  = lib/libvalidateAcc.so
+ifeq ($(shell uname -m),x86_64) 
+ CPPFLAGS += -fPIC
+endif
 
-all: $(DYNLIB) $(TARGET2)
+all: $(TARGET)
 
-# Vytvoření složek bin a lib, pokud neexistují
-bin:
-	mkdir -p bin
-	mkdir -p lib
-
-# Kompilace dynamické knihovny
-$(DYNLIB): $(VALSRC) | bin
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(DYNLIB) $(VALSRC)
-
-# Překlad programu verbank
-$(TARGET2): verbank.cpp $(DYNLIB) | bin
-	$(CXX) $(CXXFLAGS) -o $(TARGET2) verbank.cpp -Llib -lvalidateAcc
-
+# clean binary files
 clean:
-	rm -f $(TARGET2) $(DYNLIB)
-	rmdir bin 2>/dev/null || true
-	rmdir lib 2>/dev/null || true
+	rm -rf $(TARGET) $(LIBFILE) *.o
 
-.PHONY: all clean bin
+# creating dynamic library 
+$(LIBFILE): ${LIBNAME}.o
+	@echo "\nCreating dynamic library...\n"
+	g++ $(CPPFLAGS) $^ -shared $(LDFLAGS) -o $@
+	@echo "\nDynamic library created: '$(LIBFILE)'.\n"
+
+# creating application
+$(TARGET): $(TARGET).cpp $(LIBFILE)
+	@echo "\nCreating application...\n"
+	g++ $(CFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+	@echo "\nApplication '$(TARGET)' is ready.\n"
+	@echo "Set path to library: 'export LD_LIBRARY_PATH=.' !\n"
