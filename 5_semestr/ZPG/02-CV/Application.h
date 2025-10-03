@@ -4,21 +4,20 @@
 //Include GLFW
 #include <GLFW/glfw3.h> 
 
-
-
 //Include the standard C++ headers  
 #include <stdlib.h>
 #include <stdio.h>
 
 class Application {
 	public:
-		Application();
-		~Application();
-
 
 		void initialization();
 		void createShaders();
 		void createModels();
+
+		void printVersionInfo();
+		void updateViewport();
+
 		void run();
 
 	private:
@@ -30,4 +29,5 @@ class Application {
 		GLuint VBO;
 		int width, height;
 
+		
 };
