@@ -1,6 +1,9 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
-#include <stdbool.h>
 
 void genereteBankNumber(long N, long S, bool binary) {
     for (long i = 0; i < N; i++) {

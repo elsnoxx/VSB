@@ -1,10 +1,5 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include "generator.cpp"
+#include "gennum.h"
+
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {

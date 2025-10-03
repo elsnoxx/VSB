@@ -1,12 +1,4 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-// Deklarace funkce z dynamické knihovny
-extern bool IsNumberValid(long accountNumber);
+#include "verbank.h"
 
 void printHelp() {
     fprintf(stderr, "Použití: -v pro výpis pouze validních čísel\n");
