@@ -48,3 +48,99 @@ BEGIN
     );
 END;
 
+
+
+-- Tabulka (pole) INDEXED BY TABLE
+CREATE OR REPLACE PROCEDURE guest_info_table AS
+    TYPE t_guest_table IS TABLE OF GUEST%ROWTYPE INDEXED BY PLS_INTEGER;
+    v_guest_table t_guest_table;
+    v_counter     PLS_INTEGER := 0;
+
+BEGIN
+    SELECT *
+    BULK COLLECT INTO v_guest_table
+    FROM GUEST;
+
+    v_counter := v_guest_table.COUNT;
+
+    FOR i IN 1..v_counter LOOP
+        DBMS_OUTPUT.PUT_LINE(
+            v_guest_table(i).FIRSTNAME || ' ' ||
+            v_guest_table(i).LASTNAME  || ' lives in: ' ||
+            v_guest_table(i).CITY      || ' and customer registrated from ' ||
+            v_guest_table(i).REGISTRATION_DATE
+        );
+    END LOOP;
+END;
+
+
+--  INDEXED BY TEBLE OF RECORDS
+CREATE OR REPLACE PROCEDURE guest_info_table_of_records AS
+    TYPE t_guest_record IS RECORD (
+        GUEST_ID  GUEST.guest_id%TYPE,
+        FIRSTNAME GUEST.FIRSTNAME%TYPE,
+        LASTNAME  GUEST.LASTNAME%TYPE,
+        CITY      GUEST.CITY%TYPE,
+        YEARS_CUSTOMER NUMBER
+    );
+
+    TYPE t_guest_table IS TABLE OF t_guest_record INDEXED BY PLS_INTEGER;
+    v_guest_table t_guest_table;
+    v_counter     PLS_INTEGER := 0;
+
+BEGIN
+    SELECT GUEST_ID,
+           FIRSTNAME,
+           LASTNAME,
+           CITY,
+           ROUND((SYSDATE - REGISTRATION_DATE), 1)
+    BULK COLLECT INTO v_guest_table
+    FROM GUEST;
+
+    v_counter := v_guest_table.COUNT;
+
+    FOR i IN 1..v_counter LOOP
+        DBMS_OUTPUT.PUT_LINE(
+            v_guest_table(i).FIRSTNAME || ' ' ||
+            v_guest_table(i).LASTNAME  || ' lives in: ' ||
+            v_guest_table(i).CITY      || ' customer for ' ||
+            v_guest_table(i).YEARS_CUSTOMER || ' days'
+        );
+    END LOOP;
+END;
+
+
+--  INDEX BY BINARY_INTEGER
+CREATE OR REPLACE PROCEDURE guest_info_indexed_by_binary_integer AS
+    TYPE t_guest_record IS RECORD (
+        GUEST_ID  GUEST.guest_id%TYPE,
+        FIRSTNAME GUEST.FIRSTNAME%TYPE,
+        LASTNAME  GUEST.LASTNAME%TYPE,
+        CITY      GUEST.CITY%TYPE,
+        YEARS_CUSTOMER NUMBER
+    );
+
+    TYPE t_guest_table IS TABLE OF t_guest_record INDEXED BY BINARY_INTEGER;
+    v_guest_table t_guest_table;
+    v_counter     PLS_INTEGER := 0; -- PLS_INTEGER is preferred for loop counters
+
+BEGIN
+    SELECT GUEST_ID,
+           FIRSTNAME,
+           LASTNAME,
+           CITY,
+           ROUND((SYSDATE - REGISTRATION_DATE), 1)
+    BULK COLLECT INTO v_guest_table
+    FROM GUEST;
+
+    v_counter := v_guest_table.COUNT;
+
+    FOR i IN 1..v_counter LOOP
+        DBMS_OUTPUT.PUT_LINE(
+            v_guest_table(i).FIRSTNAME || ' ' ||
+            v_guest_table(i).LASTNAME  || ' lives in: ' ||
+            v_guest_table(i).CITY      || ' customer for ' ||
+            v_guest_table(i).YEARS_CUSTOMER || ' days'
+        );
+    END LOOP;
+END;
