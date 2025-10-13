@@ -1,7 +1,7 @@
 #pragma once
 #include "Application.h"
-#include "Callbacks.h"
-#include "Models/sphere.h"
+
+Model* sphereModel = nullptr;
 
 //float points[] = {
 //    0.0f, 0.5f, 0.0f,
@@ -59,39 +59,20 @@ void Application::updateViewport() {
 }
 
 void Application::createModels() {
-    glGenBuffers(1, &VBO);
-    // vytvoreni buffer
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    // nahrajese data na grafickou  kartu
-    //glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(sphere), sphere, GL_STATIC_DRAW);
-
-    glGenVertexArrays(1, &VAO);
-    // pracuj s nastaveny polem
-    glBindVertexArray(VAO);
-    // na kolik casti je to pole rozsekane
-    glEnableVertexAttribArray(0);
-    // je potreba zapnout shadery
-    glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    // 3*sizeof(float) - nastavuje velikost jen pro fragmenty, pokud je potreba i normala barvy tak je potreba to zmenit na 6
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (GLvoid*)0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (GLvoid*)(3 * sizeof(float)));
+    sphereModel = new Model(sphere, sizeof(sphere) / sizeof(float));
 }
 
 void Application::createShaders() {
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertex_shader, NULL);
-    glCompileShader(vertexShader);
-
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragment_shader, NULL);
-    glCompileShader(fragmentShader);
+    VertexShader vShader;
+    FragmentShader fShader;
+    vShader.compile(vertex_shader);
+    fShader.compile(fragment_shader);
 
     shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, fragmentShader);
-    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, vShader.getId());
+    glAttachShader(shaderProgram, fShader.getId());
     glLinkProgram(shaderProgram);
+    // ... kontrola chyb
 }
 
 void Application::initialization() {

@@ -18,18 +18,30 @@
     <ClCompile Include="Projekt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application.cpp">
+    <ClCompile Include="core\Application.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="Callbacks.cpp">
+    <ClCompile Include="general\Callbacks.cpp">
       <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\VertexShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\FragmentShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Model.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application.h">
+    <ClInclude Include="core\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Callbacks.h">
+    <ClInclude Include="general\Callbacks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Models\Models\bushes.h">
@@ -72,6 +84,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Models\tree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\VertexShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\FragmentShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

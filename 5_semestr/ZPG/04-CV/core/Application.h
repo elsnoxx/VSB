@@ -8,6 +8,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+//Aditional classes
+#include "VertexShader.h"
+#include "FragmentShader.h"
+#include "Model.h"
+#include "../general/Callbacks.h"
+#include "../Models/sphere.h"
+
 class Application {
 	public:
 
@@ -28,6 +35,7 @@ class Application {
 		GLuint VAO;
 		GLuint VBO;
 		int width, height;
+		
 
 		
 };

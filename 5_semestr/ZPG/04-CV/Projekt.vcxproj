@@ -126,13 +126,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Application.cpp" />
-    <ClCompile Include="Callbacks.cpp" />
+    <ClCompile Include="core\Application.cpp" />
+    <ClCompile Include="core\FragmentShader.cpp" />
+    <ClCompile Include="general\Callbacks.cpp" />
+    <ClCompile Include="core\Model.cpp" />
     <ClCompile Include="Projekt.cpp" />
+    <ClCompile Include="core\Shader.cpp" />
+    <ClCompile Include="core\VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application.h" />
-    <ClInclude Include="Callbacks.h" />
+    <ClInclude Include="core\Application.h" />
+    <ClInclude Include="core\FragmentShader.h" />
+    <ClInclude Include="general\Callbacks.h" />
+    <ClInclude Include="core\Model.h" />
     <ClInclude Include="Models\bushes.h" />
     <ClInclude Include="Models\gift.h" />
     <ClInclude Include="Models\Models\bushes.h" />
@@ -147,6 +153,8 @@
     <ClInclude Include="Models\suzi_flat.h" />
     <ClInclude Include="Models\suzi_smooth.h" />
     <ClInclude Include="Models\tree.h" />
+    <ClInclude Include="core\Shader.h" />
+    <ClInclude Include="core\VertexShader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
