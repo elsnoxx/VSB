@@ -55,12 +55,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "ZPG/Lekce 2.md",
+                "file": "VIS.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Lekce 2"
+              "title": "VIS"
             }
           }
         ],
@@ -211,10 +211,10 @@
   },
   "active": "1b12b55c8b52d63e",
   "lastOpenFiles": [
-    "ZPG",
-    "ZSU.md",
-    "ZPG/Lekce 2.md",
     "TAMZ2.md",
-    "VIS.md"
+    "ZSU.md",
+    "VIS.md",
+    "ZPG/Lekce 2.md",
+    "ZPG"
   ]
 }
