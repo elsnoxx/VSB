@@ -1,22 +1,10 @@
-#pragma once
 #include "Application.h"
-
-Model* sphereModel = nullptr;
-
-//float points[] = {
-//    0.0f, 0.5f, 0.0f,
-//    0.5f, -0.5f, 0.0f,
-//    -0.5f, -0.5f, 0.0f
-//};
-
-//float points[] = {
-//    0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-//    0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-//   -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-//    0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-//    -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-//   -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f
-//};
+#include "../general/Callbacks.h"
+#include "../Models/sphere.h"
+#include "Shader/Shader.h"
+#include "Shader/ShaderProgram.h"
+#include "Model.h"
+#include "DrawableObject.h"
 
 const char* vertex_shader =
 "#version 330\n"
@@ -59,20 +47,22 @@ void Application::updateViewport() {
 }
 
 void Application::createModels() {
-    sphereModel = new Model(sphere, sizeof(sphere) / sizeof(float));
+    // Vytvoření Model objektu místo ručního VBO/VAO
+    int vertexCount = sizeof(sphere) / (6 * sizeof(float)); // 6 floatů na vrchol (pozice + barva)
+    model = new Model(sphere, sizeof(sphere), vertexCount);
 }
 
 void Application::createShaders() {
-    VertexShader vShader;
-    FragmentShader fShader;
-    vShader.compile(vertex_shader);
-    fShader.compile(fragment_shader);
+    // Vytvoření Shader objektu (obsahuje VS a FS)
+    Shader* shader = new Shader(vertex_shader, fragment_shader);
+    
+    // Vytvoření ShaderProgram objektu
+    shaderProgram = new ShaderProgram(shader);
+}
 
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vShader.getId());
-    glAttachShader(shaderProgram, fShader.getId());
-    glLinkProgram(shaderProgram);
-    // ... kontrola chyb
+void Application::createDrawableObjects() {
+    // Vytvoření DrawableObject
+    drawableObject = new DrawableObject(model, shaderProgram);
 }
 
 void Application::initialization() {
@@ -82,7 +72,7 @@ void Application::initialization() {
         exit(EXIT_FAILURE);
     }
 
-    // Voliteln�: nastaven� verze OpenGL
+    // Volitelně: nastavení verze OpenGL
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -104,7 +94,7 @@ void Application::initialization() {
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
 
-    // Nastaven� callback�
+    // Nastavení callbacků
     glfwSetKeyCallback(window, callbackKey);
     glfwSetCursorPosCallback(window, callbackCursor);
     glfwSetMouseButtonCallback(window, callbackButton);
@@ -114,31 +104,31 @@ void Application::initialization() {
 
     printVersionInfo();
     updateViewport();
+    
+    // Vytvoření objektů podle nové struktury
+    createShaders();
+    createModels();
+    createDrawableObjects();
 }
-
 
 void Application::run() {
     glEnable(GL_DEPTH_TEST);
-    GLint status;
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &status);
-    if (status == GL_FALSE)
-    {
-        GLint infoLogLength;
-        glGetProgramiv(shaderProgram, GL_INFO_LOG_LENGTH, &infoLogLength);
-        GLchar* strInfoLog = new GLchar[infoLogLength + 1];
-        glGetProgramInfoLog(shaderProgram, infoLogLength, NULL, strInfoLog);
-        fprintf(stderr, "Linker failure: %s\n", strInfoLog);
-        delete[] strInfoLog;
-    }
+    
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glUseProgram(shaderProgram);
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, sizeof(sphere) * 3);
+        
+        // Vykreslení pomocí DrawableObject
+        drawableObject->draw();
+        
         glfwPollEvents();
-        // vymeni buffer, jeden se vykresli a druhy se smaze do nej se zakresli a potom se zase swapne
         glfwSwapBuffers(window);
     }
+    
+    // Cleanup
+    delete drawableObject;
+    delete model;
+    delete shaderProgram;
+    
     glfwDestroyWindow(window);
     glfwTerminate();
     exit(EXIT_SUCCESS);

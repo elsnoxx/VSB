@@ -119,24 +119,34 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)lib\glm-master\glm-master\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(ProjectDir)lib\glm;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="core\Application.cpp" />
-    <ClCompile Include="core\FragmentShader.cpp" />
+    <ClCompile Include="core\Shader\FragmentShader.cpp" />
+    <ClCompile Include="core\DrawableObject.cpp" />
     <ClCompile Include="general\Callbacks.cpp" />
     <ClCompile Include="core\Model.cpp" />
     <ClCompile Include="Projekt.cpp" />
-    <ClCompile Include="core\Shader.cpp" />
-    <ClCompile Include="core\VertexShader.cpp" />
+    <ClCompile Include="core\Shader\Shader.cpp" />
+    <ClCompile Include="core\Shader\VertexShader.cpp" />
+    <ClCompile Include="core\Transformation\Transformation.cpp" />
+    <ClCompile Include="core\Transformation\Rotate.cpp" />
+    <ClCompile Include="core\Transformation\Scale.cpp" />
+    <ClCompile Include="core\Transformation\TransformationAbstract.cpp" />
+    <ClCompile Include="core\Transformation\Translate.cpp" />
+    <ClCompile Include="core\Shader\ShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Application.h" />
-    <ClInclude Include="core\FragmentShader.h" />
+    <ClInclude Include="core\Shader\FragmentShader.h" />
+    <ClInclude Include="core\DrawableObject.h" />
     <ClInclude Include="general\Callbacks.h" />
     <ClInclude Include="core\Model.h" />
     <ClInclude Include="Models\bushes.h" />
@@ -153,8 +163,14 @@
     <ClInclude Include="Models\suzi_flat.h" />
     <ClInclude Include="Models\suzi_smooth.h" />
     <ClInclude Include="Models\tree.h" />
-    <ClInclude Include="core\Shader.h" />
-    <ClInclude Include="core\VertexShader.h" />
+    <ClInclude Include="core\Shader\Shader.h" />
+    <ClInclude Include="core\Shader\VertexShader.h" />
+    <ClInclude Include="core\Transformation\Transformation.h" />
+    <ClInclude Include="core\Transformation\Rotate.h" />
+    <ClInclude Include="core\Transformation\Scale.h" />
+    <ClInclude Include="core\Transformation\TransformationAbstract.h" />
+    <ClInclude Include="core\Transformation\Translate.h" />
+    <ClInclude Include="core\Shader\ShaderProgram.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

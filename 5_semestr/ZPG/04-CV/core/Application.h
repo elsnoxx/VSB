@@ -1,41 +1,31 @@
 #pragma once
-//Include GLEW
 #include <GL/glew.h>
-//Include GLFW
-#include <GLFW/glfw3.h> 
+#include <GLFW/glfw3.h>
 
-//Include the standard C++ headers  
-#include <stdlib.h>
-#include <stdio.h>
-
-//Aditional classes
-#include "VertexShader.h"
-#include "FragmentShader.h"
-#include "Model.h"
-#include "../general/Callbacks.h"
-#include "../Models/sphere.h"
+// Forward declarations
+class ShaderProgram;
+class Model;
+class DrawableObject;
 
 class Application {
-	public:
-
-		void initialization();
-		void createShaders();
-		void createModels();
-
-		void printVersionInfo();
-		void updateViewport();
-
-		void run();
-
-	private:
-		GLFWwindow* window;
-		GLuint shaderProgram;
-		GLuint vertexShader;
-		GLuint fragmentShader;
-		GLuint VAO;
-		GLuint VBO;
-		int width, height;
-		
-
-		
+private:
+    GLFWwindow* window;
+    int width, height;
+    
+    // OOP objekty místo raw OpenGL handles
+    ShaderProgram* shaderProgram;
+    Model* model;
+    DrawableObject* drawableObject;
+    
+public:
+    Application() : window(nullptr), shaderProgram(nullptr), 
+                   model(nullptr), drawableObject(nullptr) {}
+    
+    void initialization();
+    void createShaders();
+    void createModels();
+    void createDrawableObjects();
+    void run();
+    void printVersionInfo();
+    void updateViewport();
 };
