@@ -1,31 +1,29 @@
 #include "Model.h"
 
-Model::Model(const float* vertices, int size, int vertCount) : vertexCount(vertCount) {
+Model::Model(const float* data, size_t size, int count)
+    : vertexCount(count)
+{
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
-    
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    
+
+    glEnableVertexAttribArray(0); // pozice
+    glEnableVertexAttribArray(1); // barva
+
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (GLvoid*)0);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (GLvoid*)(3 * sizeof(float)));
 }
 
 Model::~Model() {
-    glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-}
-
-void Model::bind() const {
-    glBindVertexArray(VAO);
+    glDeleteVertexArrays(1, &VAO);
 }
 
 void Model::draw() const {
-    bind();
+    glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 }

@@ -23,7 +23,15 @@ void callbackWindowSize(GLFWwindow* window, int width, int height) {
 
 void callbackKey(GLFWwindow* t_window, int t_key, int t_scancode, int t_action, int t_mods) {
 	printf("<callback> key : key %d, scancode %d, action %d, mods %d\n", t_key, t_scancode, t_action, t_mods);
+	Application* app = static_cast<Application*>(glfwGetWindowUserPointer(t_window));
+	if (!app) return;
 
+	if (t_action == GLFW_PRESS) {
+		if (t_key >= GLFW_KEY_1 && t_key <= GLFW_KEY_9) {
+			int index = t_key - GLFW_KEY_1;
+			app->switchScene(index);
+		}
+	}
 	if (t_key == GLFW_KEY_ESCAPE && t_action == GLFW_PRESS)
 		glfwSetWindowShouldClose(t_window, GL_TRUE);
 }

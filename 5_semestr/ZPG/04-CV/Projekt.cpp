@@ -1,4 +1,4 @@
-#include "./core/Application.h"
+#include "Application.h"
 
 int main(void)
 {
@@ -8,6 +8,11 @@ int main(void)
 	//Loading scene
 	app->createShaders();
 	app->createModels();
+	app->createDrawableObjects();
+
+	//scean creation
+	app->createScenes();
+
 	app->run(); //Rendering 
 	
 }

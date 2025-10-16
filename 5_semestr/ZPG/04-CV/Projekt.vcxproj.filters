@@ -18,51 +18,51 @@
     <ClCompile Include="Projekt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\Application.cpp">
+    <ClCompile Include="Application.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="general\Callbacks.cpp">
+    <ClCompile Include="Callbacks.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\Shader\Shader.cpp">
+    <ClCompile Include="Shader\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\Shader\VertexShader.cpp">
+    <ClCompile Include="Shader\VertexShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\Shader\FragmentShader.cpp">
+    <ClCompile Include="Shader\FragmentShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\Model.cpp">
+    <ClCompile Include="Shader\ShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\Transformation\Transformation.cpp">
+    <ClCompile Include="DrawableObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\Transformation\TransformationAbstract.cpp">
+    <ClCompile Include="Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\Transformation\Rotate.cpp">
+    <ClCompile Include="Transform\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\Transformation\Scale.cpp">
+    <ClCompile Include="Transform\Translation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\Transformation\Translate.cpp">
+    <ClCompile Include="Transform\Rotation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\Shader\ShaderProgram.cpp">
+    <ClCompile Include="Transform\Scale.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\DrawableObject.cpp">
+    <ClCompile Include="Scene\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core\Application.h">
+    <ClInclude Include="Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="general\Callbacks.h">
+    <ClInclude Include="Callbacks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Models\Models\bushes.h">
@@ -107,37 +107,40 @@
     <ClInclude Include="Models\tree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\Shader\Shader.h">
+    <ClInclude Include="Shader\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\Shader\VertexShader.h">
+    <ClInclude Include="Shader\VertexShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\Shader\FragmentShader.h">
+    <ClInclude Include="Shader\FragmentShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\Model.h">
+    <ClInclude Include="Shader\ShaderProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\Transformation\Transformation.h">
+    <ClInclude Include="DrawableObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\Transformation\TransformationAbstract.h">
+    <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\Transformation\Rotate.h">
+    <ClInclude Include="Transform\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\Transformation\Scale.h">
+    <ClInclude Include="Transform\AbstractTransform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\Transformation\Translate.h">
+    <ClInclude Include="Transform\Translation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\Shader\ShaderProgram.h">
+    <ClInclude Include="Transform\Rotation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\DrawableObject.h">
+    <ClInclude Include="Transform\Scale.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

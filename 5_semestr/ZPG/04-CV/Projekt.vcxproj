@@ -102,12 +102,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)lib\glm-master\glm;$(ProjectDir)lib\glew-2.1.0-win32\glew-2.1.0\include;$(ProjectDir)lib\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\04-CV\lib\glm-master\glm;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Projekt\lib\glew-2.1.0-win32\glew-2.1.0\include;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Projekt\lib\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)lib\glew-2.1.0-win32\glew-2.1.0\lib\Release\x64;$(ProjectDir)lib\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Projekt\lib\glew-2.1.0-win32\glew-2.1.0\lib\Release\x64;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Projekt\lib\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;glfw3.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -119,36 +119,38 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)lib\glm-master\glm-master\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)lib\glm;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="core\Application.cpp" />
-    <ClCompile Include="core\Shader\FragmentShader.cpp" />
-    <ClCompile Include="core\DrawableObject.cpp" />
-    <ClCompile Include="general\Callbacks.cpp" />
-    <ClCompile Include="core\Model.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Callbacks.cpp" />
+    <ClCompile Include="DrawableObject.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Transform\Rotation.cpp" />
+    <ClCompile Include="Transform\Scale.cpp" />
+    <ClCompile Include="Shader\FragmentShader.cpp" />
     <ClCompile Include="Projekt.cpp" />
-    <ClCompile Include="core\Shader\Shader.cpp" />
-    <ClCompile Include="core\Shader\VertexShader.cpp" />
-    <ClCompile Include="core\Transformation\Transformation.cpp" />
-    <ClCompile Include="core\Transformation\Rotate.cpp" />
-    <ClCompile Include="core\Transformation\Scale.cpp" />
-    <ClCompile Include="core\Transformation\TransformationAbstract.cpp" />
-    <ClCompile Include="core\Transformation\Translate.cpp" />
-    <ClCompile Include="core\Shader\ShaderProgram.cpp" />
+    <ClCompile Include="Shader\ShaderProgram.cpp" />
+    <ClCompile Include="Shader\Shader.cpp" />
+    <ClCompile Include="Shader\VertexShader.cpp" />
+    <ClCompile Include="Transform\Transform.cpp" />
+    <ClCompile Include="Transform\Translation.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core\Application.h" />
-    <ClInclude Include="core\Shader\FragmentShader.h" />
-    <ClInclude Include="core\DrawableObject.h" />
-    <ClInclude Include="general\Callbacks.h" />
-    <ClInclude Include="core\Model.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Transform\AbstractTransform.h" />
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="Callbacks.h" />
+    <ClInclude Include="DrawableObject.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="Transform\Rotation.h" />
+    <ClInclude Include="Transform\Scale.h" />
+    <ClInclude Include="Shader\FragmentShader.h" />
     <ClInclude Include="Models\bushes.h" />
     <ClInclude Include="Models\gift.h" />
     <ClInclude Include="Models\Models\bushes.h" />
@@ -163,14 +165,11 @@
     <ClInclude Include="Models\suzi_flat.h" />
     <ClInclude Include="Models\suzi_smooth.h" />
     <ClInclude Include="Models\tree.h" />
-    <ClInclude Include="core\Shader\Shader.h" />
-    <ClInclude Include="core\Shader\VertexShader.h" />
-    <ClInclude Include="core\Transformation\Transformation.h" />
-    <ClInclude Include="core\Transformation\Rotate.h" />
-    <ClInclude Include="core\Transformation\Scale.h" />
-    <ClInclude Include="core\Transformation\TransformationAbstract.h" />
-    <ClInclude Include="core\Transformation\Translate.h" />
-    <ClInclude Include="core\Shader\ShaderProgram.h" />
+    <ClInclude Include="Shader\ShaderProgram.h" />
+    <ClInclude Include="Shader\Shader.h" />
+    <ClInclude Include="Shader\VertexShader.h" />
+    <ClInclude Include="Transform\Transform.h" />
+    <ClInclude Include="Transform\Translation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
