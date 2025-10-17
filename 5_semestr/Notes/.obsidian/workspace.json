@@ -55,12 +55,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "VIS.md",
+                "file": "TAMZ2.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "VIS"
+              "title": "TAMZ2"
             }
           }
         ],
@@ -211,9 +211,9 @@
   },
   "active": "1b12b55c8b52d63e",
   "lastOpenFiles": [
+    "VIS.md",
     "TAMZ2.md",
     "ZSU.md",
-    "VIS.md",
     "ZPG/Lekce 2.md",
     "ZPG"
   ]
