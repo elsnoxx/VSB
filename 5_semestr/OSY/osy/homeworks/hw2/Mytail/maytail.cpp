@@ -1,14 +1,11 @@
 #include "maytail.h"
 
-
-
-
-
-//main test
+//main test function
 int main(int argc, char *argv[]) {
     vector<string> files;
 
     parse_args(argc, argv, files);
+    
 
     if (files.empty()) {
         printHelp();
