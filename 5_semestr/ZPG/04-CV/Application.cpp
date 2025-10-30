@@ -18,7 +18,8 @@ const char* vertex_shader =
 "out vec3 color;"
 "void main () {"
 "     color = vc;"
-"     gl_Position = vec4 (vp, 1.0);"
+//"     gl_Position = vec4 (vp, 1.0);"
+"     gl_Position = modelMatrix * vec4(vp, 1.0);"
 "}";
 
 const char* fragment_shader =
@@ -95,7 +96,8 @@ void Application::createScenes() {
     DrawableObject* obj2 = new DrawableObject(treeModel, shader);
 
     Transform t2;
-    t2.addTransform(std::make_shared<Translation>(glm::vec3(0.5f, 0.0f, 0.0f)));
+    t2.addTransform(std::make_shared<Scale>(glm::vec3(0.15f)));
+    t2.addTransform(std::make_shared<Translation>(glm::vec3(-0.5f, -1.5f, 0.0f)));
     obj2->setTransform(t2);
 
     scene2->addObject(obj2);
@@ -105,16 +107,26 @@ void Application::createScenes() {
     Scene* scene3 = new Scene();
 
     // jednoduchý trojúhelník
-    const float triangle[] = {
-        0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-       -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f
+    /*float triangle[] = {
+        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+       -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+       -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f
+    };*/
+    float triangle[] = {
+         0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  // nahoøe
+         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  // vpravo dole
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f   // vlevo dole
     };
+
     Model* triangleModel = new Model(triangle, sizeof(triangle), sizeof(triangle) / (6 * sizeof(float)));
     DrawableObject* obj3 = new DrawableObject(triangleModel, shaderProgram);
 
     // Transformace s rotací
     Transform t3;
+    t3.addTransform(std::make_shared<Translation>(glm::vec3(-0.25f, 0.17f, 0.0f)));
     t3.addTransform(std::make_shared<Rotation>([&]() -> float {
         return (float)glfwGetTime() * 50.0f; // rotace podle èasu
         }, glm::vec3(0.0f, 0.0f, 1.0f))); // rotace kolem Z
@@ -126,19 +138,20 @@ void Application::createScenes() {
     // SCÉNA 4 – ètyøi koule symetricky
     Scene* scene4 = new Scene();
 
-    float offset = 0.5f; // vzdálenost od støedu
+    float offset = 3.0f; // vzdálenost od støedu
 
     // Souøadnice koule [X, Y, Z]
     std::vector<glm::vec3> positions = {
-        glm::vec3(offset,  offset, 0.0f),
-        glm::vec3(-offset,  offset, 0.0f),
-        glm::vec3(offset, -offset, 0.0f),
-        glm::vec3(-offset, -offset, 0.0f)
+        glm::vec3(offset,  0.0f, 0.0f),  // +X
+        glm::vec3(-offset, 0.0f, 0.0f),  // -X
+        glm::vec3(0.0f,  offset, 0.0f),  // +Y
+        glm::vec3(0.0f, -offset, 0.0f)   // -Y
     };
 
     for (const auto& pos : positions) {
-        DrawableObject* obj = new DrawableObject(model, shaderProgram);
+        DrawableObject* obj = new DrawableObject(sphereModel, shaderProgram);
         Transform t;
+        t.addTransform(std::make_shared<Scale>(glm::vec3(0.2f)));
         t.addTransform(std::make_shared<Translation>(pos));
         obj->setTransform(t);
         scene4->addObject(obj);
@@ -146,56 +159,124 @@ void Application::createScenes() {
 
     scenes.push_back(scene4);
 
-    // SCÉNA 5 – komplexní scéna s 20 objekty
+    // --- SCÉNA 5 - komplexní scéna s rùznými modely ---
     Scene* scene5 = new Scene();
 
-    // Modely a shadery (pøedpokládáme, že všechny modely jsou pøipravené)
-    Model* bushesModel = new Model(bushes, sizeof(bushes), sizeof(bushes) / (6 * sizeof(float)));
+    // Vytvoøení modelù
+    Model* bushModel = new Model(bushes, sizeof(bushes), sizeof(bushes) / (6 * sizeof(float)));
     Model* giftModel = new Model(gift, sizeof(gift), sizeof(gift) / (6 * sizeof(float)));
-    Model* plainModel = new Model(plain, sizeof(plain), sizeof(plain) / (6 * sizeof(float)));
-    Model* suziFlatModel = new Model(suziFlat, sizeof(suziFlat), sizeof(suziFlat) / (6 * sizeof(float)));
     Model* suziSmoothModel = new Model(suziSmooth, sizeof(suziSmooth), sizeof(suziSmooth) / (6 * sizeof(float)));
-    std::vector<Model*> models = {
-        sphereModel, bushesModel, giftModel, plainModel, suziFlatModel, suziSmoothModel, treeModel
+    Model* suziFlatModel = new Model(suziFlat, sizeof(suziFlat), sizeof(suziFlat) / (6 * sizeof(float)));
+    Model* plainModel = new Model(plain, sizeof(plain), sizeof(plain) / (6 * sizeof(float)));
+
+    // 1. Vytvoøení podlahy (plain)
+    {
+        DrawableObject* floor = new DrawableObject(plainModel, shader);
+        Transform t;
+        t.addTransform(std::make_shared<Scale>(glm::vec3(5.0f, 1.0f, 5.0f)));
+        t.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, -2.0f, 0.0f)));
+        floor->setTransform(t);
+        scene5->addObject(floor);
+    }
+
+    // 2. Pøidání stromù do scény (4 stromy v rozích)
+    std::vector<glm::vec3> treePositions = {
+        glm::vec3(-4.0f, -3.0f, -3.0f),
+        glm::vec3(3.0f, -3.0f, -3.0f),
+        glm::vec3(-3.0f, -3.0f,  3.0f),
+        glm::vec3(4.0f, -3.0f,  3.0f)
     };
 
-    VertexShader vertex(vertex_shader);
-    FragmentShader fragment(fragment_shader);
-    ShaderProgram* shader1 = new ShaderProgram(vertex, fragment);
+    for (const auto& pos : treePositions) {
+        DrawableObject* tree = new DrawableObject(treeModel, shader);
+        Transform t;
+        t.addTransform(std::make_shared<Scale>(glm::vec3(0.2f)));
+        t.addTransform(std::make_shared<Translation>(pos));
+        tree->setTransform(t);
+        scene5->addObject(tree);
+    }
 
-    // Pokud chceš více shaderù, vytvoø je stejnì:
-    ShaderProgram* shader2 = new ShaderProgram(vertex, fragment); // jen jako pøíklad
+    // 3. Pøidání keøù (6 keøù mezi stromy)
+    float startX = -2.5f; // zaèátek øady
+    float zPos = -4.5f;   // konstantní pozice Z
+    float spacing = 1.0f; // vzdálenost mezi keøi
 
-    std::vector<ShaderProgram*> shaders = {
-        shader1, shader2
-    };
+    for (int i = 0; i < 6; i++) {
+        DrawableObject* bush = new DrawableObject(bushModel, shader);
+        Transform t;
+        t.addTransform(std::make_shared<Scale>(glm::vec3(0.2f)));
 
-    // Rozmístìní objektù – jednoduchý grid nebo náhodnì
-    int count = 0;
-    for (int x = -2; x <= 2; x++) {
-        for (int z = -2; z <= 2; z++) {
-            if (count >= 20) break;
+        float x = startX + i * spacing; // postupnì posouváme podle i
+        t.addTransform(std::make_shared<Translation>(
+            glm::vec3(x, -4.5f, zPos)
+        ));
 
-            Model* model = models[count % models.size()];         // cyklicky vyber model
-            ShaderProgram* shader = shaders[count % shaders.size()]; // cyklicky vyber shader
+        bush->setTransform(t);
+        scene5->addObject(bush);
+    }
 
-            DrawableObject* obj = new DrawableObject(model, shader);
+    // 4. Rotující dárky ve støedu (4 dárky)
+    for (int i = 0; i < 2; i++) {
+        DrawableObject* gift = new DrawableObject(giftModel, shader);
+        Transform t;
+        t.addTransform(std::make_shared<Scale>(glm::vec3(0.15f)));
 
+        float spacing = 0.5f; // vzdálenost mezi dárky
+        float x = (i % 2 == 0) ? -spacing : spacing;
+        float z = (i / 2 == 0) ? -spacing : spacing;
+        t.addTransform(std::make_shared<Translation>(glm::vec3(x, -2.0f, z)));
+
+        t.addTransform(std::make_shared<Rotation>([i]() {
+            return (float)glfwGetTime() * 30.0f + i * 90.0f;
+            }, glm::vec3(0, 1, 0)));
+        gift->setTransform(t);
+        scene5->addObject(gift);
+    }
+
+    for (int i = 0; i < 2; i++) {
+        DrawableObject* gift = new DrawableObject(giftModel, shader);
+        Transform t;
+        t.addTransform(std::make_shared<Scale>(glm::vec3(0.15f)));
+
+        float spacing = 0.5f; // vzdálenost mezi dárky
+        float x = (i % 2 == 0) ? -spacing : spacing;
+        float z = (i / 2 == 0) ? -spacing : spacing;
+        t.addTransform(std::make_shared<Translation>(glm::vec3(x, -3.0f, z)));
+
+        t.addTransform(std::make_shared<Rotation>([i]() {
+            return (float)glfwGetTime() * 30.0f + i * 90.0f;
+            }, glm::vec3(0, 1, 0)));
+        gift->setTransform(t);
+        scene5->addObject(gift);
+    }
+
+    // 5. Suzi hlavy (3 øady po 2 hlavách, støídavì smooth a flat)
+    for (int row = 0; row < 3; row++) {
+        for (int col = 0; col < 2; col++) {
+            DrawableObject* suzi = new DrawableObject(
+                (row % 2 == 0) ? suziSmoothModel : suziFlatModel,
+                shader
+            );
             Transform t;
-            t.addTransform(std::make_shared<Translation>(glm::vec3(x * 0.8f, 0.0f, z * 0.8f)));
-            // Pøidáme rotaci pro vizuální rozmanitost
-            t.addTransform(std::make_shared<Rotation>((float)(count * 15), glm::vec3(0, 1, 0)));
-            // Pøidáme náhodné škálování
-            t.addTransform(std::make_shared<Scale>(glm::vec3(0.5f + 0.1f * (count % 3))));
-
-            obj->setTransform(t);
-            scene5->addObject(obj);
-
-            count++;
+            t.addTransform(std::make_shared<Scale>(glm::vec3(0.1f)));
+            t.addTransform(std::make_shared<Translation>(
+                glm::vec3(
+                    col * 3.0f - 1.5f, // vìtší rozestup na X
+                    0.5f + row * 2.0f, // vìtší rozestup na Y
+                    0.0f
+                )
+            ));
+            t.addTransform(std::make_shared<Rotation>([=]() {
+                return (float)glfwGetTime() * 20.0f + (row * 2 + col) * 45.0f;
+                }, glm::vec3(0, 1, 0)));
+            suzi->setTransform(t);
+            scene5->addObject(suzi);
         }
     }
 
     scenes.push_back(scene5);
+
+
 }
 
 

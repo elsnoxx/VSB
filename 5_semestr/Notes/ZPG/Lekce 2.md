@@ -1,6 +1,7 @@
 
 ## Info o funkcích
-- VBO - buffer s indexaci
+- VBO - buffer s indexaci, nastavi radu floutu 3 pro
+- VAO - navod jak ma graficka karta cist 
 - projit si a kouknout se na ty prikazy, popsat si a napsat si co jednotlive dela a jak to probiha
 - prvni 3f zanci pozici ty druhe 3f znaci normala barvy --> to dava do hromady jeden vrchol, tak to jde potom tak samo dale
 

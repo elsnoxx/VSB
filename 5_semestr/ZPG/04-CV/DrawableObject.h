@@ -11,11 +11,7 @@ public:
 
     void setTransform(const Transform& t) { transform = t; }
 
-    void draw() {
-        shader->use();
-        shader->setUniformMat4("modelMatrix", transform.getMatrix());
-        model->draw(); // volá vlastní draw metodu modelu, která ví, jak použít VAO/VBO
-    }
+    void draw();
 
 private:
     Model* model;
