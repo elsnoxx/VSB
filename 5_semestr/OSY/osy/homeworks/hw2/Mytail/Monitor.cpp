@@ -3,6 +3,7 @@
 void getFileInfo(const vector<string> &files) {
     int n = files.size();
     int roura[n][2];
+    int logroura[2];
     
     // Vytvoření rour před fork()
     for (int i = 0; i < n; i++) {

@@ -1,6 +1,6 @@
 #include "ParseArgs.h"
 
-void parse_args(int argc, char *argv[], vector<string> &files) {
+void parse_args(int argc, char *argv[], vector<string> &files, string &logfile) {
     for (int i = 1; i < argc; i++) {
         if (is_directory(argv[i]) || file_can_execute(argv[i]) || !file_can_read(argv[i])) {
             continue;
