@@ -18,37 +18,36 @@
 #include "./Transform/Rotation.h"
 #include "./Transform/Scale.h"
 #include "./Scene/Scene.h"
+#include "./Scene/Camera.h"
 
 class Application {
-	public:
-		int currentSceneIndex = 0;
+    public:
+        int currentSceneIndex = 0;
+        void initialization();
+        void createShaders();
+        void createModels();
+        void createDrawableObjects();
+        void printVersionInfo();
+        void updateViewport();
+        void run();
+        void switchScene(int index);
+        void createScenes();
 
-		void initialization();
-		void createShaders();
-		void createModels();
+        // předávání kurzoru do aplikace (callback volá tuto metodu)
+        void processCursor(double x, double y);
 
-		void createDrawableObjects();
+    private:
+        GLFWwindow* window;
+        int width, height;
 
-		void printVersionInfo();
-		void updateViewport();
+        // camera
+        Camera* camera = nullptr;
 
-		void run();
+        // objektov
+        ShaderProgram* shaderProgram;
+        Model* model;
+        DrawableObject* drawableObject;
 
-		void switchScene(int index);
-		void createScenes();
-
-	private:
-		GLFWwindow* window;
-		int width, height;
-
-		// objektov�
-		ShaderProgram* shaderProgram;
-		Model* model;
-		DrawableObject* drawableObject;
-
-		// scene
-		std::vector<Scene*> scenes;
-		
-
-		
+        // scene
+        std::vector<Scene*> scenes;
 };

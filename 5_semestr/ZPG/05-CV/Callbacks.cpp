@@ -42,5 +42,8 @@ void callbackButton(GLFWwindow* t_window, int t_button, int t_action, int t_mode
 }
 
 void callbackCursor(GLFWwindow* t_window, double t_x, double t_y) {
-	printf("<callback> cursor\n");
+    Application* app = static_cast<Application*>(glfwGetWindowUserPointer(t_window));
+    if (app) {
+        app->processCursor(t_x, t_y);
+    }
 }

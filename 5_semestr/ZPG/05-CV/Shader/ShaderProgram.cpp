@@ -1,4 +1,6 @@
 #include "ShaderProgram.h"
+#include "../Scene/Camera.h"
+#include <algorithm>
 
 ShaderProgram::ShaderProgram(const VertexShader& vertex, const FragmentShader& fragment) {
     id = glCreateProgram();
@@ -16,6 +18,7 @@ ShaderProgram::ShaderProgram(const VertexShader& vertex, const FragmentShader& f
 }
 
 ShaderProgram::~ShaderProgram() {
+    removeAllCameras();
     glDeleteProgram(id);
 }
 
@@ -41,4 +44,59 @@ void ShaderProgram::setUniformFloat(const char* name, float value) const {
 void ShaderProgram::setUniformInt(const char* name, int value) const {
     GLint location = glGetUniformLocation(id, name);
     if (location != -1) glUniform1i(location, value);
+}
+
+void ShaderProgram::addCamera(Camera* cam) {
+    if (!cam) return;
+    
+    // Zkontroluj, zda kamera už není přidána
+    if (std::find(m_cameras.begin(), m_cameras.end(), cam) != m_cameras.end()) {
+        return;
+    }
+    
+    m_cameras.push_back(cam);
+    cam->addObserver(this);
+    
+    // Pokud je to první kamera, aktualizuj uniformy
+    if (m_cameras.size() == 1) {
+        updateCameraUniforms();
+    }
+}
+
+void ShaderProgram::removeCamera(Camera* cam) {
+    if (!cam) return;
+    
+    auto it = std::find(m_cameras.begin(), m_cameras.end(), cam);
+    if (it != m_cameras.end()) {
+        cam->removeObserver(this);
+        m_cameras.erase(it);
+    }
+}
+
+void ShaderProgram::removeAllCameras() {
+    for (Camera* cam : m_cameras) {
+        if (cam) cam->removeObserver(this);
+    }
+    m_cameras.clear();
+}
+
+void ShaderProgram::onCameraChanged(Camera* camera) {
+    // Aktualizuj uniformy, pokud se změnila aktivní kamera (první v seznamu)
+    if (!m_cameras.empty() && m_cameras[0] == camera) {
+        updateCameraUniforms();
+    }
+}
+
+void ShaderProgram::updateCameraUniforms() {
+    if (m_cameras.empty()) return;
+    
+    Camera* activeCamera = m_cameras[0]; // použij první kameru jako aktivní
+    
+    use(); // aktivuj shader program
+    
+    glm::mat4 view = activeCamera->getViewMatrix();
+    glm::mat4 proj = activeCamera->getProjectionMatrix();
+    
+    setUniformMat4("viewMatrix", view);
+    setUniformMat4("projectionMatrix", proj);
 }

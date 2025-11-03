@@ -60,6 +60,9 @@
     <ClCompile Include="Shader\ShaderLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -149,9 +152,16 @@
     <ClInclude Include="Shader\ShaderLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\vertex\Base.vert" />
     <None Include="Assets\Shader\fragment\Base.frag" />
+    <None Include="Assets\Shader\fragment\constant.frag" />
+    <None Include="Assets\Shader\fragment\lambert.frag" />
+    <None Include="Assets\Shader\fragment\phong.frag" />
+    <None Include="Assets\Shader\fragment\blinn.frag" />
   </ItemGroup>
 </Project>
