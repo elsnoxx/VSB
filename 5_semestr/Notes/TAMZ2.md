@@ -6,6 +6,13 @@ mit v apce lokalizaci, a pohrat si s intenty
 
 adb soubor aplikace pro pripojeni k telefonu
 
+komunikaci udelat v laknet, lepsi pouzivat knihovny ktere to resi za nas =okHttp, Retrofit, Ktor Client, Volley ==> bets je Retrofit
+
+
+nordick semiconductors for bloothooth
+
+
+telnk semiconductor ATC_F35859
 ## Projekt
 - asp.net API - volaní DB procedur, REST API
 - Authentizace a authorizace pomoci JWT tokvenu
