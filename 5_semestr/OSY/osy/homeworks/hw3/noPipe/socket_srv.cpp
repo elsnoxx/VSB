@@ -118,93 +118,65 @@ void handle_client( int t_sock_client )
     
     log_msg( LOG_INFO, "Received resolution request: '%s'", l_buf );
     
-    // Create resize argument string (with '!' as required)
+    // Create resize argument string
     char resize_arg[64];
     snprintf(resize_arg, sizeof(resize_arg), "%s!", l_buf);
     
-    log_msg( LOG_INFO, "Starting convert | xz with resolution %s", resize_arg );
-
-    int pipefd[2];
-    if ( pipe(pipefd) < 0 )
-    {
-        log_msg( LOG_ERROR, "pipe() failed" );
-        close( t_sock_client );
-        exit(1);
-    }
-
-    // First child: convert -> writes to pipefd[1]
-    pid_t pid_convert = fork();
-    if ( pid_convert < 0 )
-    {
-        log_msg( LOG_ERROR, "fork() failed for convert" );
-        close(pipefd[0]); close(pipefd[1]);
-        close( t_sock_client );
-        exit(1);
-    }
-
-    if ( pid_convert == 0 )
-    {   // convert child
-        // stdout -> pipe write
-        dup2(pipefd[1], STDOUT_FILENO);
-        // close unused fds
-        close(pipefd[0]);
-        close(pipefd[1]);
+    log_msg( LOG_INFO, "Starting convert process with resolution %s", resize_arg );
+    
+    // Fork another process for convert
+    pid_t convert_pid = fork();
+    
+    if (convert_pid == 0)
+    { 
+        // Child process - exec convert
+        
+        // Redirect stdout to client socket
+        if (dup2(t_sock_client, STDOUT_FILENO) < 0)
+        {
+            log_msg( LOG_ERROR, "Unable to redirect stdout to socket." );
+            exit( 1 );
+        }
+        
+        // Close the original socket descriptor
         close(t_sock_client);
-        // exec convert
-        execlp("convert", "convert", "-resize", resize_arg, "podzim.png", "-", (char*)NULL);
-        // if exec fails
-        log_msg( LOG_ERROR, "exec convert failed" );
-        _exit(1);
+        
+        // Execute convert command
+        execl("/usr/bin/convert", "convert", "-resize", resize_arg, "podzim.png", "-", (char*)NULL);
+        
+        // If we get here, exec failed
+        log_msg( LOG_ERROR, "Unable to execute convert command." );
+        exit( 1 );
     }
-
-    // Second child: xz reads from pipefd[0] and writes to client socket
-    pid_t pid_xz = fork();
-    if ( pid_xz < 0 )
+    else if (convert_pid > 0)
     {
-        log_msg( LOG_ERROR, "fork() failed for xz" );
-        // try to clean up
-        kill(pid_convert, SIGTERM);
-        close(pipefd[0]); close(pipefd[1]);
+        // Parent process - wait for convert to finish
+        log_msg( LOG_INFO, "Waiting for convert process %d to finish.", convert_pid );
+        
+        int status;
+        waitpid(convert_pid, &status, 0);
+        
+        if (WIFEXITED(status))
+        {
+            log_msg( LOG_INFO, "Convert process finished with exit code %d.", WEXITSTATUS(status) );
+        }
+        else
+        {
+            log_msg( LOG_ERROR, "Convert process terminated abnormally." );
+        }
+        
+        // Close client socket after convert is done
         close( t_sock_client );
-        exit(1);
+        log_msg( LOG_INFO, "Image sent to client, connection closed." );
     }
-
-    if ( pid_xz == 0 )
-    {   // xz child
-        // stdin <- pipe read
-        dup2(pipefd[0], STDIN_FILENO);
-        // stdout -> client socket
-        dup2(t_sock_client, STDOUT_FILENO);
-        // close unused fds
-        close(pipefd[0]);
-        close(pipefd[1]);
-        close(t_sock_client);
-        // exec xz: xz - --stdout
-        execlp("xz", "xz", "-", "--stdout", (char*)NULL);
-        log_msg( LOG_ERROR, "exec xz failed" );
-        _exit(1);
+    else
+    {
+        // Fork failed
+        log_msg( LOG_ERROR, "Unable to fork convert process." );
+        close( t_sock_client );
+        exit( 1 );
     }
-
-    // parent (the original per-client child): close pipe ends and socket, wait for children
-    close(pipefd[0]);
-    close(pipefd[1]);
-
-    int status;
-    waitpid(pid_convert, &status, 0);
-    if ( WIFEXITED(status) )
-        log_msg( LOG_INFO, "convert exited %d", WEXITSTATUS(status) );
-    else
-        log_msg( LOG_ERROR, "convert terminated abnormally" );
-
-    waitpid(pid_xz, &status, 0);
-    if ( WIFEXITED(status) )
-        log_msg( LOG_INFO, "xz exited %d", WEXITSTATUS(status) );
-    else
-        log_msg( LOG_ERROR, "xz terminated abnormally" );
-
-    // close client socket (xz child already duplicated it, but close here too)
-    close( t_sock_client );
-
+    
     log_msg( LOG_INFO, "Child process finished handling client." );
     exit( 0 );
 }
