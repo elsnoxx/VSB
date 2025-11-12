@@ -83,16 +83,16 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Tasks.md",
+                "file": "ZSU.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Tasks"
+              "title": "ZSU"
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -237,14 +237,14 @@
       "bases:Create new base": false
     }
   },
-  "active": "08c9ca626414fb89",
+  "active": "eff41a9948d78485",
   "lastOpenFiles": [
-    "ZPG/Lekce 3.md",
-    "Tasks.md",
-    "ZPG/Lekce 2.md",
-    "TAMZ2.md",
     "VIS.md",
     "ZSU.md",
+    "Tasks.md",
+    "TAMZ2.md",
+    "ZPG/Lekce 3.md",
+    "ZPG/Lekce 2.md",
     "ZPG"
   ]
 }
