@@ -33,7 +33,5 @@ Zde uvedete všechny klíčové technologie, které jste definoval v sekci "Jak?
 - Databáze: MariaDB
 - Backend: ASP.NET Core (pro serverovou logiku a REST API)
 - Frontend: React framework (pro uživatelské rozhraní)
-- Hosting/Runtime: Linuxový server (Docker Compose)
-- API / Komunikace: REST API
-- Autentifikace: Cookies a JSON Web Token (JWT)
+- Hosting: Linuxový server (Docker Compose)
 - Verzování kódu: Git + Github
