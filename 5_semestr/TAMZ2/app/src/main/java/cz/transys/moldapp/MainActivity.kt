@@ -6,19 +6,37 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import cz.transys.moldapp.ui.scanners.HoneywellScanner
 import cz.transys.moldapp.ui.screens.*
 
+// shared scanner
+val LocalScanner = staticCompositionLocalOf<HoneywellScanner?> { null }
 class MainActivity : ComponentActivity() {
+    private lateinit var scanner: HoneywellScanner
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        scanner = HoneywellScanner(this)
+        scanner.open()
+
         setContent {
-            MoldAppApp()
+            CompositionLocalProvider(LocalScanner provides scanner) {
+                MoldAppApp()
+            }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scanner.close()
     }
 }
 

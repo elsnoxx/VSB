@@ -14,7 +14,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
+import cz.transys.moldapp.LocalScanner
+import kotlinx.coroutines.delay
 import cz.transys.moldapp.ui.localdata.LocalStorage
 
 @Composable
@@ -24,7 +28,39 @@ fun LoginScreen(navController: NavHostController) {
     val context = LocalContext.current
     val storage = remember { LocalStorage(context) }
     val scope = rememberCoroutineScope()
+    val focusRequester = remember { FocusRequester() }
 
+    fun validateAndProceed(data: String) {
+        val cleanData = data.trim()
+        if (cleanData.matches(Regex("^\\d+$"))) {
+            userId = cleanData
+            errorMessage = ""
+        } else {
+            errorMessage = "Naskenovaný kód není platné User ID (povolena jsou jen čísla)"
+            userId = ""
+        }
+    }
+
+    val scanner = LocalScanner.current
+    // 🧩 zaregistrujeme listener na sken
+    LaunchedEffect(scanner) {
+        scanner?.setOnScanListener { scannedData ->
+            validateAndProceed(scannedData.trim())
+        }
+    }
+
+    DisposableEffect(scanner) {
+        onDispose {
+            // po opuštění obrazovky zrušíme listener
+            scanner?.setOnScanListener { }
+        }
+    }
+
+    // Po načtení obrazovky nastaví fokus
+    LaunchedEffect(Unit) {
+        delay(300) // malá prodleva, aby se view inicializovalo
+//        focusRequester.requestFocus()
+    }
 
     Column(
         modifier = Modifier
@@ -48,6 +84,7 @@ fun LoginScreen(navController: NavHostController) {
                 userId = it
                 errorMessage = ""
             },
+
             label = { Text("User ID") },
             placeholder = { Text("Zadej své ID") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -55,6 +92,7 @@ fun LoginScreen(navController: NavHostController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
+                .focusRequester(focusRequester)
         )
 
         if (errorMessage.isNotEmpty()) {

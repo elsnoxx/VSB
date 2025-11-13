@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -55,6 +57,11 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.compose.ui:ui:1.6.0")
+    implementation( files("androidscannersdk.aar"))
+    implementation("io.ktor:ktor-client-core:2.3.6")
+    implementation("io.ktor:ktor-client-okhttp:2.3.6")      // Android engine
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.6")
+    implementation("io.ktor:ktor-serialization-gson:2.3.6")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,5 +1,7 @@
 package cz.transys.moldapp.ui.screens
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -8,24 +10,104 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cz.transys.moldapp.LocalScanner
+import cz.transys.moldapp.ui.apicalls.ApiClient
+import cz.transys.moldapp.ui.apicalls.MoldRepairRepository
+import cz.transys.moldapp.ui.apicalls.RepairTypes
+import cz.transys.moldapp.ui.localdata.LocalStorage
+import kotlinx.coroutines.launch
+import android.provider.Settings
+import android.widget.Toast
+import cz.transys.moldapp.ui.apicalls.MoldRepairSent
 
+@SuppressLint("HardwareIds")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoldRepairScreen(onBack: () -> Unit) {
+    // api
+    val repairRepo = remember { MoldRepairRepository() }
+    val scope = rememberCoroutineScope()
+    // Stav načítání
+    var error by remember { mutableStateOf<String?>(null) }
+    var loading by remember { mutableStateOf(true) }
+    val scanner = LocalScanner.current
+
+    // variables
+    val context = LocalContext.current
+    val deviceId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+    val storage = remember { LocalStorage(context) }
     var mold by remember { mutableStateOf("") }
     var outDate by remember { mutableStateOf("") }
-    var repairer by remember { mutableStateOf("") }
+    var carType by remember { mutableStateOf("") }
+    var type by remember { mutableStateOf("") }
 
     // comboBox – TYPE
     var expanded by remember { mutableStateOf(false) }
     var selectedType by remember { mutableStateOf("") }
 
     // zatím testovací statická data (později nahradíš výsledkem API)
-    val typeList = listOf("Mechanical", "Electrical", "Polishing", "Hydraulic", "Other")
+    var typeList by remember { mutableStateOf<List<RepairTypes>>(emptyList()) }
+
+    fun validateAndProceed(data: String) {
+        val clean = data.trim()
+        mold = clean
+
+        if (clean.isNotEmpty()) {
+            scope.launch {
+                try {
+                    loading = true
+                    val info = repairRepo.getMoldRepairInfo(clean)
+
+                    if (info == null) {
+                        error = "Mold nebyl nalezen."
+                        carType = ""
+                        outDate = ""
+                        type = ""
+                    } else {
+                        carType = info.caR_CODE
+                        outDate = info.savE_DTTM
+                        type = info.molD_NAME
+                        error = null
+                    }
+
+                } catch (e: Exception) {
+                    error = "API chyba: ${e.localizedMessage}"
+                    Log.d(error, "Issue while calling api")
+                } finally {
+                    loading = false
+                }
+            }
+        }
+    }
+
+
+    // Zaregistrujeme listener na sken
+    LaunchedEffect(scanner) {
+        scanner?.setOnScanListener { scannedData ->
+            validateAndProceed(scannedData)
+        }
+
+        loading = true
+        try {
+            typeList = repairRepo.getAllRepairTypes()
+        } catch (e: Exception) {
+            error = e.localizedMessage
+        } finally {
+            loading = false
+        }
+    }
+
+    DisposableEffect(scanner) {
+        onDispose {
+            // po opuštění obrazovky zrušíme listener
+            scanner?.setOnScanListener { }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -36,7 +118,7 @@ fun MoldRepairScreen(onBack: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "🟠 MOLD Repair",
+            text = "MOLD Repair",
             fontSize = 26.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF1565C0),
@@ -84,9 +166,9 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                 ) {
                     typeList.forEach { type ->
                         DropdownMenuItem(
-                            text = { Text(type) },
+                            text = { Text(type.repaiR_NAME2) },
                             onClick = {
-                                selectedType = type
+                                selectedType = type.repaiR_NAME2
                                 expanded = false
                             }
                         )
@@ -94,63 +176,140 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                 }
             }
 
-            // Out Date
-            OutlinedTextField(
-                value = outDate,
-                onValueChange = { outDate = it },
-                label = { Text("Out Date") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
+                    .background(Color(0xFFF5F5F5))   // gray background)
+                    .padding(12.dp)
+            ) {
 
-            // Repairer
-            OutlinedTextField(
-                value = repairer,
-                onValueChange = { repairer = it },
-                label = { Text("Repairer") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
+                Column {
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+
+                        // left side – Car Code
+                        OutlinedTextField(
+                            value = carType,
+                            onValueChange = { },
+                            readOnly = true,
+                            label = { Text("Car") },
+                            modifier = Modifier
+                                .weight(.5f)
+                                .padding(vertical = 4.dp)
+                        )
+
+                        // right side – Type
+                        OutlinedTextField(
+                            value = type,
+                            onValueChange = { },
+                            readOnly = true,
+                            label = { Text("Type") },
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(vertical = 4.dp)
+                        )
+                    }
+
+                    // Out Date
+                    OutlinedTextField(
+                        value = outDate,
+                        onValueChange = { },
+                        readOnly = true,
+                        label = { Text("Out Date") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                    )
+
+                    // Repairer
+                    OutlinedTextField(
+                        value = storage.getUserId().toString(),
+                        onValueChange = { },
+                        readOnly = true,
+                        label = { Text("Repairer") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                    )
+                }
+            }
+
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Repair button
-            Button(
-                onClick = {
-                    // TODO: tady později volání API, např.:
-                    // repairApi.submit(mold, selectedType, outDate, repairer)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF1565C0),
-                    contentColor = Color.White
-                )
-            ) {
-                Text(
-                    text = "REPAIR",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Zpět na menu
-            Button(
-                onClick = onBack,
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Gray,
-                    contentColor = Color.White
-                )
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Text("Zpět na menu")
+
+                // 🔧 REPAIR button
+                Button(
+                    onClick = {
+                        scope.launch {
+                            try {
+                                val deviceId = Settings.Secure.getString(
+                                    context.contentResolver,
+                                    Settings.Secure.ANDROID_ID
+                                )
+
+                                val model = MoldRepairSent(
+                                    sysId = deviceId,
+                                    moldCode = mold,
+                                    repairCode = selectedType,
+                                    empId = storage.getUserId().toString()
+                                )
+
+                                val success = repairRepo.postMoldRepair(model)
+
+                                if (success) {
+                                    Toast.makeText(
+                                        context,
+                                        "Úspěšně odesláno",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            } catch (e: Exception) {
+                                Toast.makeText(
+                                    context,
+                                    "API chyba: ${e.localizedMessage}",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(60.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF1565C0),
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text(
+                        text = "REPAIR",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                }
+
+                // ⬅️ ZPĚT
+                Button(
+                    onClick = onBack,
+                    modifier = Modifier
+                        .weight(.5f)
+                        .height(60.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Gray,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text("Zpět")
+                }
             }
+
         }
     }
 }
