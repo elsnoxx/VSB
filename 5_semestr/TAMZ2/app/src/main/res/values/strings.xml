@@ -1,3 +1,81 @@
 <resources>
+    <!--    General screen    -->
+    <string name="type_label">Type</string>
+    <string name="back_button">Back</string>
+    <string name="carrier_label">Carrier</string>
+    <string name="car_label">Car</string>
+    <string name="mold1_title">Mold #1</string>
+    <string name="mold2_title">Mold #2</string>
+    <string name="type_placeholder">e.g. NX4E FC LH - 08</string>
+    <string name="type2_placeholder">e.g. NX4E FC RH - 08</string>
+    <string name="mold_id_label">Mold ID</string>
+    <string name="mold_id_placeholder">e.g. M88150N7001-08</string>
+    <string name="mold2_id_placeholder">e.g. M88250N7001-08</string>
+    <string name="error_missing_fields">Please fill in the mold and type of repair.</string>
+
+
+    <!--    Mold Repair screen    -->
     <string name="app_name">MoldApp</string>
+    <string name="mold_repair_title">MOLD Repair</string>
+    <string name="mold_label">Mold</string>
+    <string name="out_date_label">Out Date</string>
+    <string name="repairer_label">Repairer</string>
+    <string name="repair_button">Repair</string>
+    <string name="success_sent">Successfully sent</string>
+    <string name="api_error">API error</string>
+    <string name="api_error_full">API error: %1$s</string>
+    <string name="mold_not_found">Mold not found</string>
+
+    <!--    Login screen    -->
+    <string name="moldapp_login_title">MoldApp Login</string>
+    <string name="user_id">User ID</string>
+    <string name="user_id_placeholder">Enter your ID</string>
+    <string name="continue_button">Continue</string>
+    <string name="invalid_user_id">Scanned code is not a valid User ID (digits only)</string>
+    <string name="empty_user_id">Please enter your User ID</string>
+
+    <!--    Menu screen    -->
+    <string name="menu_tag_write">Tag Write</string>
+    <string name="menu_mold_repair">Mold Repair</string>
+    <string name="menu_part_change">Part Change</string>
+    <string name="menu_mold_mount">Mold Mount</string>
+    <string name="menu_rf_tag_info">RF-Tag Info</string>
+    <string name="menu_test_reading">Test Scan</string>
+
+    <!--    Mold Mount screen    -->
+    <string name="mold_mount_title">MOLD Mount</string>
+    <string name="mount_button">MOUNT</string>
+
+    <!--    Mold Part Change screen    -->
+    <string name="part_change_title">Part Change</string>
+    <string name="submit_button">SUBMIT</string>
+    <string name="mold_code">Mold Code</string>
+
+    <!--    Tag Write screen    -->
+    <string name="tag_write_title">RF-Tag Write</string>
+    <string name="mode_mold">MOLD</string>
+    <string name="mode_carrier">CARRIER</string>
+    <string name="side_label">Side</string>
+    <string name="write_button">WRITE</string>
+    <string name="read_button">READ</string>
+
+    <!--    RF Tag screen    -->
+    <string name="rf_tag_info_title">RF-Tag Information</string>
+    <string name="rf_tag_label">RF-TAG</string>
+    <string name="rf_tag_placeholder">Scan or enter code</string>
+    <string name="error_tag_not_found">RF-TAG was not found in the system</string>
+    <string name="error_api">API error: %1$s</string>
+    <string name="field_mold_id">Mold ID</string>
+    <string name="field_part_type">Part Type</string>
+    <string name="field_car">Car</string>
+    <string name="field_status">Status</string>
+    <string name="field_total_cycles">Total Cycles</string>
+    <string name="load_data_button">LOAD DATA</string>
+
+    <!--    Test Reading screen    -->
+    <string name="test_reading_title">Test Reading Screen</string>
+    <string name="scanned_count">Scanned items: %1$d</string>
+    <string name="no_scans_yet">No scans yet</string>
+    <string name="clear_list_button">Clear list</string>
+
 </resources>

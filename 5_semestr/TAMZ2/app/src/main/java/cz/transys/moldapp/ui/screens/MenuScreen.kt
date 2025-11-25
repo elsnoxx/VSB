@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,28 +30,28 @@ fun MenuScreen(context: Context, navController: NavHostController) {
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Row(modifier = Modifier.weight(1f)) {
-            CustomButton("Tag Write", R.drawable.rfid, Modifier.weight(1f)) {
+            CustomButton(R.string.menu_tag_write, R.drawable.writeblack, Modifier.weight(1f)) {
                 navController.navigate("tag_write")
             }
-            CustomButton("Mold Repair", R.drawable.rfid, Modifier.weight(1f)) {
+            CustomButton(R.string.menu_mold_repair, R.drawable.repairblack, Modifier.weight(1f)) {
                 navController.navigate("mold_repair")
             }
         }
 
         Row(modifier = Modifier.weight(1f)) {
-            CustomButton("Part Change", R.drawable.rfid, Modifier.weight(1f)) {
+            CustomButton(R.string.menu_part_change, R.drawable.changeblack, Modifier.weight(1f)) {
                 navController.navigate("part_change")
             }
-            CustomButton("Mold Mount", R.drawable.rfid, Modifier.weight(1f)) {
+            CustomButton(R.string.menu_mold_mount, R.drawable.mountblack, Modifier.weight(1f)) {
                 navController.navigate("mold_mount")
             }
         }
 
         Row(modifier = Modifier.weight(1f)) {
-            CustomButton("RF-Tag Info", R.drawable.rfid, Modifier.weight(1f)) {
+            CustomButton(R.string.menu_rf_tag_info, R.drawable.infoblack, Modifier.weight(1f)) {
                 navController.navigate("rf_tag_info")
             }
-            CustomButton("Test reading", R.drawable.rfid, Modifier.weight(1f)) {
+            CustomButton(R.string.menu_test_reading, R.drawable.rfid, Modifier.weight(1f)) {
                 navController.navigate("test_reading")
             }
         }
@@ -58,17 +60,20 @@ fun MenuScreen(context: Context, navController: NavHostController) {
 
 @Composable
 fun CustomButton(
-    name: String,
+    nameResId: Int,
     imageRes: Int? = null,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
+    val name = stringResource(id = nameResId)
+    val colors = MaterialTheme.colorScheme
+
     Button(
         onClick = onClick,
         shape = RectangleShape,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF1565C0), // modrá (#1565C0 = material blue 800)
-            contentColor = Color.White          // barva textu a ikon
+            containerColor = colors.primary,
+            contentColor = colors.onPrimary
         ),
         modifier = modifier
             .padding(4.dp)
@@ -93,11 +98,12 @@ fun CustomButton(
             }
 
             Spacer(modifier = Modifier.height(8.dp))
+
             Text(
                 text = name,
-                fontSize = 20.sp,        // větší písmo
-                fontWeight = FontWeight.Bold, // tučné
-                color = Color.White
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = colors.onPrimary
             )
         }
     }

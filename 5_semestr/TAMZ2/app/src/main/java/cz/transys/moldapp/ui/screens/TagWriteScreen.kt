@@ -8,253 +8,403 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cz.transys.moldapp.R
 import cz.transys.moldapp.ui.apicalls.CarCodeList
+import cz.transys.moldapp.ui.apicalls.CarriersList
 import cz.transys.moldapp.ui.apicalls.MoldApiRepository
 import cz.transys.moldapp.ui.apicalls.MoldRepairRepository
+import cz.transys.moldapp.ui.apicalls.MoldsList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TagWriteScreen(onBack: () -> Unit) {
-    //api
+
+    val colors = MaterialTheme.colorScheme
     val moldRepo = remember { MoldApiRepository() }
-    // Stav přepínače MOLD / CARRIER
+
     var selectedMode by remember { mutableStateOf("MOLD") }
 
-    // Car ComboBox
     var expandedCar by remember { mutableStateOf(false) }
     var selectedCar by remember { mutableStateOf("") }
     var carList by remember { mutableStateOf<List<CarCodeList>>(emptyList()) }
 
-    // Mold ComboBox
     var expandedMold by remember { mutableStateOf(false) }
     var selectedMold by remember { mutableStateOf("") }
     val moldList = listOf("M88150N7001-08", "M88250N7001-08", "M88300N7010-09")
 
-    // Type & Side text fields
-    var type by remember { mutableStateOf("") }
-    var side by remember { mutableStateOf("") }
+    var type by remember { mutableStateOf("FC LH 08") }
+    var side by remember { mutableStateOf("LH") }
 
-    // Stav načítání
+    var carrierList by remember { mutableStateOf<List<CarriersList>>(emptyList()) }
+
     var loading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<String?>(null) }
 
-    // Načtení dat z API
     LaunchedEffect(Unit) {
         loading = true
         try {
             carList = moldRepo.getAllCars()
+            carrierList = moldRepo.getAllCarriers()
         } catch (e: Exception) {
             error = e.localizedMessage
-//            Log.d("Error", error)
         } finally {
             loading = false
         }
     }
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFECECEC))
+            .background(colors.background)
             .padding(16.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "RF-Tag Write",
+            text = stringResource(R.string.tag_write_title),
             fontSize = 26.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF1565C0),
+            color = colors.primary,
             modifier = Modifier.padding(bottom = 20.dp)
         )
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(colors.surface)
                 .padding(16.dp)
         ) {
-            // Přepínací tlačítka MOLD / CARRIER
+
+            // --- Toggle buttons ---
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ) {
-                ModeButton(
-                    text = "MOLD",
-                    selected = selectedMode == "MOLD",
-                    onClick = { selectedMode = "MOLD" }
-                )
-                ModeButton(
-                    text = "CARRIER",
-                    selected = selectedMode == "CARRIER",
-                    onClick = { selectedMode = "CARRIER" }
-                )
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    ModeButton(
+                        text = "MOLD",
+                        selected = selectedMode == "MOLD",
+                        onClick = { selectedMode = "MOLD" }
+                    )
+                    ModeButton(
+                        text = "CARRIER",
+                        selected = selectedMode == "CARRIER",
+                        onClick = { selectedMode = "CARRIER" }
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Car ComboBox
-            ExposedDropdownMenuBox(
-                expanded = expandedCar,
-                onExpandedChange = { expandedCar = !expandedCar }
-            ) {
-                OutlinedTextField(
-                    value = selectedCar,
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text("Car") },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCar)
-                    },
-                    modifier = Modifier
-                        .menuAnchor()
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp)
+
+            // --- Dynamic UI based on mode ---
+            when (selectedMode) {
+                "MOLD" -> MoldModeSection(
+                    repo = moldRepo,
+                    selectedCar = selectedCar,
+                    onCarChange = { selectedCar = it },
+                    selectedMold = selectedMold,
+                    onMoldChange = { selectedMold = it },
+                    type = type,
+                    side = side
                 )
 
-                ExposedDropdownMenu(
-                    expanded = expandedCar,
-                    onDismissRequest = { expandedCar = false }
+
+                "CARRIER" -> CarrierModeSection(
+                    carrierList = carrierList,
+                    selectedCarrier = selectedCar,
+                    onCarrierChange = { selectedCar = it }
+                )
+
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // --- Buttons ---
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+
+                // WRITE (big)
+                Button(
+                    onClick = {},
+                    modifier = Modifier
+                        .weight(2f)
+                        .height(55.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colors.primary,
+                        contentColor = colors.onPrimary
+                    )
                 ) {
+                    Text(
+                        text = stringResource(R.string.write_button),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                // BACK
+                Button(
+                    onClick = onBack,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(55.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colors.secondary,
+                        contentColor = colors.onSecondary
+                    )
+                ) {
+                    Text(
+                        text = stringResource(R.string.back_button)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MoldModeSection(
+    repo: MoldApiRepository,
+    selectedCar: String,
+    onCarChange: (String) -> Unit,
+    selectedMold: String,
+    onMoldChange: (String) -> Unit,
+    type: String,
+    side: String
+) {
+    val colors = MaterialTheme.colorScheme
+
+    // Data + loading + error
+    var carList by remember { mutableStateOf<List<CarCodeList>>(emptyList()) }
+    var moldList by remember { mutableStateOf<List<MoldsList>>(emptyList()) }
+
+    var loadingCars by remember { mutableStateOf(true) }
+    var loadingMolds by remember { mutableStateOf(false) }
+
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    // Dropdown states
+    var expandedCar by remember { mutableStateOf(false) }
+    var expandedMold by remember { mutableStateOf(false) }
+
+    // Načtení seznamu Car (SAFE)
+    LaunchedEffect(Unit) {
+        loadingCars = true
+        try {
+            carList = repo.getAllCars()
+        } catch (e: Exception) {
+            errorMessage = "Failed to load cars: ${e.localizedMessage}"
+            carList = emptyList()
+        } finally {
+            loadingCars = false
+        }
+    }
+
+    // Po výběru Car → načti Molds
+    LaunchedEffect(selectedCar) {
+        if (selectedCar.isNotEmpty()) {
+            loadingMolds = true
+            try {
+                moldList = repo.getMoldsByCarCode(selectedCar.lowercase())
+            } catch (e: Exception) {
+                errorMessage = "Failed to load molds: ${e.localizedMessage}"
+                moldList = emptyList()
+            } finally {
+                loadingMolds = false
+            }
+        } else {
+            moldList = emptyList()
+        }
+    }
+
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+
+        // Zobrazení error hlášky
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Medium
+            )
+        }
+
+        // CAR COMBOBOX
+        ExposedDropdownMenuBox(
+            expanded = expandedCar,
+            onExpandedChange = { expandedCar = !expandedCar }
+        ) {
+            OutlinedTextField(
+                value = if (loadingCars) "Loading..." else selectedCar,
+                onValueChange = {},
+                readOnly = true,
+                enabled = !loadingCars && carList.isNotEmpty(),
+                label = { Text("Car") },
+                trailingIcon = {
+                    if (!loadingCars) {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCar)
+                    }
+                },
+                modifier = Modifier
+                    .menuAnchor()
+                    .fillMaxWidth()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expandedCar,
+                onDismissRequest = { expandedCar = false }
+            ) {
+                if (carList.isEmpty()) {
+                    DropdownMenuItem(
+                        text = { Text("No cars available") },
+                        onClick = {}
+                    )
+                } else {
                     carList.forEach { car ->
                         DropdownMenuItem(
-                            text = { Text("${car.caR_NAME}") },
+                            text = { Text(car.car_name) },
                             onClick = {
-                                selectedCar = "${car.caR_CODE}"
+                                onCarChange(car.car_code)
+                                onMoldChange("")
                                 expandedCar = false
                             }
                         )
                     }
                 }
             }
+        }
 
-            // Mold ComboBox
-            ExposedDropdownMenuBox(
-                expanded = expandedMold,
-                onExpandedChange = { expandedMold = !expandedMold }
-            ) {
-                OutlinedTextField(
-                    value = selectedMold,
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text("Mold") },
-                    trailingIcon = {
+        // MOLD COMBOBOX
+        ExposedDropdownMenuBox(
+            expanded = expandedMold,
+            onExpandedChange = { expandedMold = !expandedMold }
+        ) {
+            OutlinedTextField(
+                value = if (loadingMolds) "Loading..." else selectedMold,
+                onValueChange = {},
+                readOnly = true,
+                enabled = selectedCar.isNotEmpty() && moldList.isNotEmpty(),
+                label = { Text("Mold") },
+                trailingIcon = {
+                    if (!loadingMolds && selectedCar.isNotEmpty())
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedMold)
-                    },
-                    modifier = Modifier
-                        .menuAnchor()
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp)
-                )
+                },
+                modifier = Modifier
+                    .menuAnchor()
+                    .fillMaxWidth()
+            )
 
-                ExposedDropdownMenu(
-                    expanded = expandedMold,
-                    onDismissRequest = { expandedMold = false }
-                ) {
+            ExposedDropdownMenu(
+                expanded = expandedMold,
+                onDismissRequest = { expandedMold = false }
+            ) {
+                if (loadingMolds) {
+                    DropdownMenuItem(
+                        text = { Text("Loading...") },
+                        onClick = {}
+                    )
+                } else if (moldList.isEmpty()) {
+                    DropdownMenuItem(
+                        text = { Text("No molds available") },
+                        onClick = {}
+                    )
+                } else {
                     moldList.forEach { mold ->
                         DropdownMenuItem(
-                            text = { Text(mold) },
+                            text = { Text("${mold.mold_code} (${mold.mold_side})") },
                             onClick = {
-                                selectedMold = mold
+                                onMoldChange(mold.mold_code)
                                 expandedMold = false
                             }
                         )
                     }
                 }
             }
+        }
 
-            // Type & Side
-            OutlinedTextField(
-                value = type,
-                onValueChange = { type = it },
-                label = { Text("Type") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
-
-            OutlinedTextField(
-                value = side,
-                onValueChange = { side = it },
-                label = { Text("Side") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Write Button
-            Button(
-                onClick = {
-                    // TODO: API call to write RF tag
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF1565C0),
-                    contentColor = Color.White
-                )
-            ) {
-                Text(
-                    text = "WRITE",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Read Button (spodní)
-            Button(
-                onClick = {
-                    // TODO: API call to read tag
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFFB300),
-                    contentColor = Color.Black
-                )
-            ) {
-                Text(
-                    text = "READ",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = onBack,
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Gray,
-                    contentColor = Color.White
-                )
-            ) {
-                Text("Zpět na menu")
-            }
+        // 🟩 TYPE + SIDE (read-only)
+        if (selectedMold.isNotEmpty()) {
+            ReadOnlyField("Type", type)
+            ReadOnlyField("Side", side)
         }
     }
 }
 
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CarrierModeSection(
+    carrierList: List<CarriersList>,
+    selectedCarrier: String,
+    onCarrierChange: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+
+        // Dropdown pro výběr carrieru
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded }
+        ) {
+            OutlinedTextField(
+                value = selectedCarrier,
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Carrier") },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                carrierList.forEach { carrier ->
+                    DropdownMenuItem(
+                        text = { Text(carrier.code_value2) },   // #01, #02 atd.
+                        onClick = {
+                            onCarrierChange(carrier.code_value2)
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
+
+        // Zobrazení vybraného carrieru (read-only)
+        if (selectedCarrier.isNotEmpty()) {
+            ReadOnlyField(label = "Selected Carrier", value = selectedCarrier)
+        }
+    }
+}
+
+
+
+
+
 @Composable
 fun ModeButton(text: String, selected: Boolean, onClick: () -> Unit) {
+    val colors = MaterialTheme.colorScheme
+
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (selected) Color(0xFFFFB300) else Color(0xFFBDBDBD),
-            contentColor = Color.Black
+            containerColor = if (selected) colors.primary else colors.surfaceVariant,
+            contentColor = colors.onPrimary
         ),
-        modifier = Modifier
-            .height(45.dp)
+        modifier = Modifier.height(45.dp)
     ) {
         Text(
             text = text,

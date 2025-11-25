@@ -8,30 +8,31 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cz.transys.moldapp.LocalScanner
+import cz.transys.moldapp.R
 
 @Composable
 fun TestReadingScreen(onBack: () -> Unit) {
     val scanner = LocalScanner.current
     val scannedItems = remember { mutableStateListOf<String>() }
 
-    // Posloucháme Honeywell scanner
+    val colors = MaterialTheme.colorScheme
+
+    // Scanner listener
     LaunchedEffect(scanner) {
         scanner?.setOnScanListener { scannedData ->
             if (scannedData.isNotBlank()) {
-                scannedItems.add(0, scannedData.trim()) // přidá nově naskenovaný na začátek
+                scannedItems.add(0, scannedData.trim())
             }
         }
     }
 
     DisposableEffect(scanner) {
-        onDispose {
-            // po opuštění obrazovky zrušíme listener
-            scanner?.setOnScanListener { }
-        }
+        onDispose { scanner?.setOnScanListener { } }
     }
 
     Column(
@@ -41,29 +42,32 @@ fun TestReadingScreen(onBack: () -> Unit) {
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 🔹 Nadpis
+
+        // Title
         Text(
-            "🧩 Test Reading Screen",
+            text = stringResource(R.string.test_reading_title),
             fontSize = 26.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF1565C0),
+            color = colors.primary,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        // 🔹 Počet naskenovaných
+        // Count
         Text(
-            "📦 Počet naskenovaných: ${scannedItems.size}",
+            text = stringResource(R.string.scanned_count, scannedItems.size),
             fontSize = 16.sp,
-            color = Color.Gray,
+            color = colors.onBackground.copy(alpha = 0.7f),
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        // 🔹 Scrollovatelný seznam výsledků
+        // List
         Card(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFF7F9FC))
+            colors = CardDefaults.cardColors(
+                containerColor = colors.surface
+            )
         ) {
             if (scannedItems.isEmpty()) {
                 Box(
@@ -72,7 +76,10 @@ fun TestReadingScreen(onBack: () -> Unit) {
                         .padding(32.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Žádné skeny zatím neproběhly", color = Color.Gray)
+                    Text(
+                        text = stringResource(R.string.no_scans_yet),
+                        color = colors.onSurface.copy(alpha = 0.6f)
+                    )
                 }
             } else {
                 LazyColumn(
@@ -83,7 +90,9 @@ fun TestReadingScreen(onBack: () -> Unit) {
                     items(scannedItems) { item ->
                         Card(
                             modifier = Modifier.fillMaxWidth(),
-                            colors = CardDefaults.cardColors(containerColor = Color(0xFFE3F2FD))
+                            colors = CardDefaults.cardColors(
+                                containerColor = colors.secondaryContainer
+                            )
                         ) {
                             Column(
                                 modifier = Modifier.padding(12.dp)
@@ -91,7 +100,8 @@ fun TestReadingScreen(onBack: () -> Unit) {
                                 Text(
                                     text = item,
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 18.sp
+                                    fontSize = 18.sp,
+                                    color = colors.onSecondaryContainer
                                 )
                             }
                         }
@@ -102,34 +112,44 @@ fun TestReadingScreen(onBack: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 🔹 Vymazat všechny skeny
-        Button(
-            onClick = { scannedItems.clear() },
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFFFB300),
-                contentColor = Color.Black
-            )
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text("Vymazat seznam", fontWeight = FontWeight.Bold)
+
+            // Clear
+            Button(
+                onClick = { scannedItems.clear() },
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colors.tertiary,
+                    contentColor = colors.onTertiary
+                )
+            ) {
+                Text(
+                    stringResource(R.string.clear_list_button),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            // Back
+            Button(
+                onClick = onBack,
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colors.secondary,
+                    contentColor = colors.onSecondary
+                )
+            ) {
+                Text(
+                    stringResource(R.string.back_button),
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // 🔹 Zpět
-        Button(
-            onClick = onBack,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Gray,
-                contentColor = Color.White
-            )
-        ) {
-            Text("Zpět na menu", fontWeight = FontWeight.Bold)
-        }
     }
 }
+

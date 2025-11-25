@@ -17,12 +17,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import cz.transys.moldapp.LocalScanner
+import cz.transys.moldapp.R
 import kotlinx.coroutines.delay
 import cz.transys.moldapp.ui.localdata.LocalStorage
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
+    val colors = MaterialTheme.colorScheme
+
     var userId by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     val context = LocalContext.current
@@ -36,13 +40,13 @@ fun LoginScreen(navController: NavHostController) {
             userId = cleanData
             errorMessage = ""
         } else {
-            errorMessage = "Naskenovaný kód není platné User ID (povolena jsou jen čísla)"
+            errorMessage = context.getString(R.string.invalid_user_id)
             userId = ""
         }
     }
 
     val scanner = LocalScanner.current
-    // 🧩 zaregistrujeme listener na sken
+
     LaunchedEffect(scanner) {
         scanner?.setOnScanListener { scannedData ->
             validateAndProceed(scannedData.trim())
@@ -50,31 +54,22 @@ fun LoginScreen(navController: NavHostController) {
     }
 
     DisposableEffect(scanner) {
-        onDispose {
-            // po opuštění obrazovky zrušíme listener
-            scanner?.setOnScanListener { }
-        }
-    }
-
-    // Po načtení obrazovky nastaví fokus
-    LaunchedEffect(Unit) {
-        delay(300) // malá prodleva, aby se view inicializovalo
-//        focusRequester.requestFocus()
+        onDispose { scanner?.setOnScanListener { } }
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFECECEC))
+            .background(colors.background)      // ← použijeme theme background
             .padding(32.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "🔑 MoldApp Login",
+            text = stringResource(R.string.moldapp_login_title),
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF1565C0),
+            color = colors.primary,             // ← ikonická barva theme
             modifier = Modifier.padding(bottom = 32.dp)
         )
 
@@ -84,21 +79,26 @@ fun LoginScreen(navController: NavHostController) {
                 userId = it
                 errorMessage = ""
             },
-
-            label = { Text("User ID") },
-            placeholder = { Text("Zadej své ID") },
+            label = { Text(stringResource(R.string.user_id)) },
+            placeholder = { Text(stringResource(R.string.user_id_placeholder)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
-                .focusRequester(focusRequester)
+                .focusRequester(focusRequester),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = colors.primary,
+                unfocusedBorderColor = colors.outline,
+                focusedLabelColor = colors.primary,
+                cursorColor = colors.primary
+            )
         )
 
         if (errorMessage.isNotEmpty()) {
             Text(
                 text = errorMessage,
-                color = Color.Red,
+                color = colors.error,            // ← chyba podle theme
                 fontSize = 14.sp,
                 modifier = Modifier.padding(4.dp)
             )
@@ -109,9 +109,8 @@ fun LoginScreen(navController: NavHostController) {
         Button(
             onClick = {
                 if (userId.isBlank()) {
-                    errorMessage = "Prosím, zadej své User ID"
+                    errorMessage = context.getString(R.string.empty_user_id)
                 } else {
-                    // TODO: zde můžeš později ověřit ID z API
                     storage.saveUserId(userId)
                     navController.navigate("menu")
                 }
@@ -120,12 +119,12 @@ fun LoginScreen(navController: NavHostController) {
                 .fillMaxWidth()
                 .height(60.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF1565C0),
-                contentColor = Color.White
+                containerColor = colors.primary,          // ← theme primary
+                contentColor = colors.onPrimary           // ← text kontrast
             )
         ) {
             Text(
-                text = "Pokračovat",
+                text = stringResource(R.string.continue_button),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             )

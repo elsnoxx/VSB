@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cz.transys.moldapp.ui.scanners.HoneywellScanner
 import cz.transys.moldapp.ui.screens.*
+import cz.transys.moldapp.ui.theme.MoldAppTheme
 
 // shared scanner
 val LocalScanner = staticCompositionLocalOf<HoneywellScanner?> { null }
@@ -29,7 +30,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             CompositionLocalProvider(LocalScanner provides scanner) {
-                MoldAppApp()
+                MoldAppTheme {
+                    MoldAppApp()
+                }
             }
         }
     }
@@ -48,7 +51,8 @@ fun MoldAppApp() {
     Surface {
         NavHost(
             navController = navController,
-            startDestination = "login" // ← nová startovací stránka
+//            startDestination = "login"
+            startDestination = "mold_mount"
         ) {
             composable("login") {
                 LoginScreen(navController)

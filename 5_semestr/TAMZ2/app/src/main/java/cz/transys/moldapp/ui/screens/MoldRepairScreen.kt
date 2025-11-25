@@ -23,12 +23,15 @@ import cz.transys.moldapp.ui.localdata.LocalStorage
 import kotlinx.coroutines.launch
 import android.provider.Settings
 import android.widget.Toast
+import androidx.compose.ui.res.stringResource
+import cz.transys.moldapp.R
 import cz.transys.moldapp.ui.apicalls.MoldRepairSent
 
 @SuppressLint("HardwareIds")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoldRepairScreen(onBack: () -> Unit) {
+    val colors = MaterialTheme.colorScheme
     // api
     val repairRepo = remember { MoldRepairRepository() }
     val scope = rememberCoroutineScope()
@@ -50,7 +53,7 @@ fun MoldRepairScreen(onBack: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     var selectedType by remember { mutableStateOf("") }
 
-    // zatím testovací statická data (později nahradíš výsledkem API)
+    // zatím testovací statická data
     var typeList by remember { mutableStateOf<List<RepairTypes>>(emptyList()) }
 
     fun validateAndProceed(data: String) {
@@ -64,7 +67,7 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                     val info = repairRepo.getMoldRepairInfo(clean)
 
                     if (info == null) {
-                        error = "Mold nebyl nalezen."
+                        error = context.getString(R.string.mold_not_found)
                         carType = ""
                         outDate = ""
                         type = ""
@@ -76,7 +79,7 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                     }
 
                 } catch (e: Exception) {
-                    error = "API chyba: ${e.localizedMessage}"
+                    error = context.getString(R.string.api_error_full, e.localizedMessage)
                     Log.d(error, "Issue while calling api")
                 } finally {
                     loading = false
@@ -112,34 +115,45 @@ fun MoldRepairScreen(onBack: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFECECEC))
+            .background(colors.background)
             .padding(16.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        // Title
         Text(
-            text = "MOLD Repair",
+            text = stringResource(id = R.string.mold_repair_title),
             fontSize = 26.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF1565C0),
+            color = colors.primary,
             modifier = Modifier.padding(bottom = 20.dp)
         )
 
+        // From for mold and type
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(colors.surface, MaterialTheme.shapes.medium)
                 .padding(16.dp)
         ) {
             // Mold
             OutlinedTextField(
                 value = mold,
-                onValueChange = { mold = it },
-                label = { Text("Mold") },
+                onValueChange = {},
+                readOnly = true,
+                label = { Text(stringResource(id = R.string.mold_label)) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp)
+                    .padding(vertical = 4.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = colors.primary,
+                    unfocusedBorderColor = colors.outline,
+                    focusedLabelColor = colors.primary,
+                    cursorColor = colors.primary
+                )
             )
+
 
             // Type (ComboBox)
             ExposedDropdownMenuBox(
@@ -150,14 +164,19 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                     value = selectedType,
                     onValueChange = { },
                     readOnly = true,
-                    label = { Text("Type") },
+                    label = { Text(stringResource(id = R.string.type_label)) },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                     },
                     modifier = Modifier
                         .menuAnchor()
                         .fillMaxWidth()
-                        .padding(vertical = 4.dp)
+                        .padding(vertical = 4.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = colors.primary,
+                        unfocusedBorderColor = colors.outline,
+                        focusedLabelColor = colors.primary
+                    )
                 )
 
                 ExposedDropdownMenu(
@@ -176,10 +195,12 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                 }
             }
 
+            Spacer(modifier = Modifier.height(16.dp))
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFF5F5F5))   // gray background)
+                    .background(colors.surfaceVariant, MaterialTheme.shapes.medium)
                     .padding(12.dp)
             ) {
 
@@ -195,7 +216,7 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                             value = carType,
                             onValueChange = { },
                             readOnly = true,
-                            label = { Text("Car") },
+                            label = { Text(stringResource(id = R.string.car_label)) },
                             modifier = Modifier
                                 .weight(.5f)
                                 .padding(vertical = 4.dp)
@@ -206,7 +227,7 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                             value = type,
                             onValueChange = { },
                             readOnly = true,
-                            label = { Text("Type") },
+                            label = { Text(stringResource(id = R.string.type_label)) },
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(vertical = 4.dp)
@@ -218,7 +239,7 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                         value = outDate,
                         onValueChange = { },
                         readOnly = true,
-                        label = { Text("Out Date") },
+                        label = { Text(stringResource(id = R.string.out_date_label)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
@@ -229,7 +250,7 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                         value = storage.getUserId().toString(),
                         onValueChange = { },
                         readOnly = true,
-                        label = { Text("Repairer") },
+                        label = { Text(stringResource(id = R.string.repairer_label)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
@@ -255,6 +276,15 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                                     Settings.Secure.ANDROID_ID
                                 )
 
+                                if (mold.isBlank() || selectedType.isBlank()) {
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.error_missing_fields),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    return@launch
+                                }
+
                                 val model = MoldRepairSent(
                                     sysId = deviceId,
                                     moldCode = mold,
@@ -267,14 +297,14 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                                 if (success) {
                                     Toast.makeText(
                                         context,
-                                        "Úspěšně odesláno",
+                                        context.getString(R.string.success_sent),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
                             } catch (e: Exception) {
                                 Toast.makeText(
                                     context,
-                                    "API chyba: ${e.localizedMessage}",
+                                    context.getString(R.string.api_error_full, e.localizedMessage),
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
@@ -284,29 +314,29 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                         .weight(1f)
                         .height(60.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF1565C0),
-                        contentColor = Color.White
+                        containerColor = colors.tertiary,
+                        contentColor = colors.onTertiary
                     )
                 ) {
                     Text(
-                        text = "REPAIR",
+                        text = stringResource(id = R.string.repair_button),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
                 }
 
-                // ⬅️ ZPĚT
+                // ZPĚT
                 Button(
                     onClick = onBack,
                     modifier = Modifier
                         .weight(.5f)
                         .height(60.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Gray,
-                        contentColor = Color.White
+                        containerColor = colors.secondary,
+                        contentColor = colors.onSecondary
                     )
                 ) {
-                    Text("Zpět")
+                    Text(stringResource(id = R.string.back_button) )
                 }
             }
 
