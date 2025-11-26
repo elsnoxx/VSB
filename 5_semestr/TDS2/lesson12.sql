@@ -1,51 +1,65 @@
-/*
-===============================================================================
-LEKCE 12: DYNAMICKÉ SQL A OPTIMALIZACE VÝKONU
-===============================================================================
-Obsah:
-1. DBMS_SQL pro dynamicky generované SQL
-2. EXECUTE IMMEDIATE s různými variantami
-3. ALTER COMPILE pro procedury, funkce a package
-4. Optimalizace výkonu: NOCOPY, DETERMINISTIC, FORALL, BULK COLLECT
-===============================================================================
-*/
-
+-- Lesson 12 - Zkrácená verze pro vaši DB
+SET SERVEROUTPUT ON;
 
 -- =============================================
--- 2. DYNAMICKÉ SQL POMOCÍ DBMS_SQL
+-- A) DYNAMICKÉ SQL POMOCÍ DBMS_SQL
 -- =============================================
 
-CREATE OR REPLACE PROCEDURE demo_dbms_sql AS
-    v_cursor_id     INTEGER;
-    v_sql           VARCHAR2(1000);
-    v_rows_processed NUMBER;
-    v_guest_id      NUMBER;
-    v_firstname     VARCHAR2(100);
-    v_lastname      VARCHAR2(100);
-    v_guest_type    VARCHAR2(50);
+CREATE OR REPLACE PROCEDURE execute_dynamic_sql(
+    p_sql_query VARCHAR2,
+    p_input_param NUMBER,
+    p_output_param OUT NUMBER
+) AS
+    v_cursor INTEGER;
+    v_result NUMBER;
 BEGIN
-    DBMS_OUTPUT.PUT_LINE('=== DEMO DBMS_SQL ===');
+    v_cursor := DBMS_SQL.OPEN_CURSOR;
+
+    DBMS_SQL.PARSE(v_cursor, p_sql_query, DBMS_SQL.NATIVE);
+    DBMS_SQL.BIND_VARIABLE(v_cursor, ':input_param', p_input_param);
+    DBMS_SQL.DEFINE_COLUMN(v_cursor, 1, p_output_param);
+
+    v_result := DBMS_SQL.EXECUTE(v_cursor);
+
+    IF DBMS_SQL.FETCH_ROWS(v_cursor) > 0 THEN
+        DBMS_SQL.COLUMN_VALUE(v_cursor, 1, p_output_param);
+    END IF;
+
+    DBMS_SQL.CLOSE_CURSOR(v_cursor);
+EXCEPTION
+    WHEN OTHERS THEN
+        IF DBMS_SQL.IS_OPEN(v_cursor) THEN
+            DBMS_SQL.CLOSE_CURSOR(v_cursor);
+        END IF;
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RAISE;
+END;
+/
+
+-- Procedura pro dynamické dotazy na Guest tabulku
+CREATE OR REPLACE PROCEDURE demo_guest_dynamic_sql AS
+    v_cursor_id INTEGER;
+    v_sql VARCHAR2(1000);
+    v_guest_id NUMBER;
+    v_firstname VARCHAR2(100);
+    v_lastname VARCHAR2(100);
+    v_guest_type VARCHAR2(50);
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('=== DEMO DBMS_SQL S GUEST TABULKOU ===');
     
-    -- 1. Otevření kurzoru
     v_cursor_id := DBMS_SQL.OPEN_CURSOR;
     
-    -- 2. Příprava SQL příkazu
     v_sql := 'SELECT guest_id, firstname, lastname, guest_type FROM Guest WHERE guest_type = :type';
     DBMS_SQL.PARSE(v_cursor_id, v_sql, DBMS_SQL.NATIVE);
-    
-    -- 3. Binding parametrů
     DBMS_SQL.BIND_VARIABLE(v_cursor_id, ':type', 'VIP');
     
-    -- 4. Definice výstupních sloupců
     DBMS_SQL.DEFINE_COLUMN(v_cursor_id, 1, v_guest_id);
     DBMS_SQL.DEFINE_COLUMN(v_cursor_id, 2, v_firstname, 100);
     DBMS_SQL.DEFINE_COLUMN(v_cursor_id, 3, v_lastname, 100);
     DBMS_SQL.DEFINE_COLUMN(v_cursor_id, 4, v_guest_type, 50);
     
-    -- 5. Vykonání
-    v_rows_processed := DBMS_SQL.EXECUTE(v_cursor_id);
+    DBMS_SQL.EXECUTE(v_cursor_id);
     
-    -- 6. Načítání výsledků
     DBMS_OUTPUT.PUT_LINE('VIP hosté:');
     WHILE DBMS_SQL.FETCH_ROWS(v_cursor_id) > 0 LOOP
         DBMS_SQL.COLUMN_VALUE(v_cursor_id, 1, v_guest_id);
@@ -56,121 +70,62 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE(v_guest_id || ': ' || v_firstname || ' ' || v_lastname || ' (' || v_guest_type || ')');
     END LOOP;
     
-    -- 7. Zavření kurzoru
     DBMS_SQL.CLOSE_CURSOR(v_cursor_id);
-    
 EXCEPTION
     WHEN OTHERS THEN
         IF DBMS_SQL.IS_OPEN(v_cursor_id) THEN
             DBMS_SQL.CLOSE_CURSOR(v_cursor_id);
         END IF;
-        RAISE;
+        DBMS_OUTPUT.PUT_LINE('Chyba: ' || SQLERRM);
 END;
+
+
 /
 
 -- =============================================
--- 3. EXECUTE IMMEDIATE - RŮZNÉ VARIANTY
+-- B) ALTER COMPILE DEMO
 -- =============================================
 
-CREATE OR REPLACE PROCEDURE demo_execute_immediate AS
-    v_sql           VARCHAR2(1000);
-    v_count         NUMBER;
-    v_avg_price     NUMBER;
-    v_max_price     NUMBER;
-    v_guest_type    VARCHAR2(50) := 'VIP';
-    v_min_price     NUMBER := 2000;
+-- Testovací procedura
+CREATE OR REPLACE PROCEDURE my_procedure AS
 BEGIN
-    DBMS_OUTPUT.PUT_LINE('=== DEMO EXECUTE IMMEDIATE ===');
-    
-    -- 1. Jednoduchý SELECT INTO
-    EXECUTE IMMEDIATE 'SELECT COUNT(*) FROM Guest' INTO v_count;
-    DBMS_OUTPUT.PUT_LINE('Celkový počet hostů: ' || v_count);
-    
-    -- 2. SELECT s parametry USING IN
-    EXECUTE IMMEDIATE 
-        'SELECT AVG(accommodation_price), MAX(accommodation_price) FROM Reservation WHERE accommodation_price > :1'
-        INTO v_avg_price, v_max_price
-        USING IN v_min_price;
-    
-    DBMS_OUTPUT.PUT_LINE('Rezervace s cenou nad ' || v_min_price || ':');
-    DBMS_OUTPUT.PUT_LINE('  Průměrná cena: ' || ROUND(v_avg_price, 2));
-    DBMS_OUTPUT.PUT_LINE('  Maximální cena: ' || v_max_price);
-    
-    -- 3. UPDATE s vstupními parametry
-    EXECUTE IMMEDIATE 
-        'UPDATE Guest SET guest_type = :new_type WHERE guest_type = :old_type AND guest_id > :min_id'
-        USING IN 'Premium', 'Regular', 50;
-    
-    DBMS_OUTPUT.PUT_LINE('Aktualizováno ' || SQL%ROWCOUNT || ' záznamů hostů');
-    
-    -- 4. INSERT s RETURNING klauzulí
-    DECLARE
-        v_new_id NUMBER;
-    BEGIN
-        EXECUTE IMMEDIATE 
-            'INSERT INTO Service (name, description) VALUES (:name, :desc) RETURNING service_id INTO :new_id'
-            USING IN 'Room Service', 'In-room dining service'
-            RETURNING INTO v_new_id;
-            
-        DBMS_OUTPUT.PUT_LINE('Vložena nová služba s ID: ' || v_new_id);
-    END;
-    
-    -- 5. DDL příkaz
-    BEGIN
-        EXECUTE IMMEDIATE 'CREATE TABLE temp_reservation_stats (guest_type VARCHAR2(50), reservation_count NUMBER)';
-        DBMS_OUTPUT.PUT_LINE('Dočasná tabulka vytvořena');
-        
-        EXECUTE IMMEDIATE 'DROP TABLE temp_reservation_stats';
-        DBMS_OUTPUT.PUT_LINE('Dočasná tabulka smazána');
-    EXCEPTION
-        WHEN OTHERS THEN
-            DBMS_OUTPUT.PUT_LINE('Chyba při práci s dočasnou tabulkou: ' || SQLERRM);
-    END;
-    
-    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('Hello from my_procedure');
 END;
 /
 
--- =============================================
--- 4. ALTER COMPILE DEMO
--- =============================================
-
--- Vytvoření testovacích objektů pro hotel
-CREATE OR REPLACE FUNCTION calc_room_revenue(p_room_id NUMBER) RETURN NUMBER AS
-    v_revenue NUMBER;
+-- Testovací funkce pro hotel
+CREATE OR REPLACE FUNCTION my_function RETURN NUMBER AS
 BEGIN
-    SELECT NVL(SUM(accommodation_price), 0) INTO v_revenue
-    FROM Reservation 
-    WHERE room_id = p_room_id AND status = 'Checked-out';
-    
-    RETURN v_revenue;
+    RETURN 42;
 END;
 /
 
-CREATE OR REPLACE PROCEDURE show_guest_info(p_guest_id NUMBER) AS
-    v_firstname VARCHAR2(100);
-    v_lastname VARCHAR2(100);
-    v_guest_type VARCHAR2(50);
+-- Funkce pro počítání hostů
+CREATE OR REPLACE FUNCTION count_guests_by_type(p_guest_type VARCHAR2) RETURN NUMBER AS
+    v_count NUMBER;
 BEGIN
-    SELECT firstname, lastname, guest_type 
-    INTO v_firstname, v_lastname, v_guest_type
-    FROM Guest WHERE guest_id = p_guest_id;
+    SELECT COUNT(*) INTO v_count 
+    FROM Guest 
+    WHERE guest_type = p_guest_type;
     
-    DBMS_OUTPUT.PUT_LINE('Host: ' || v_firstname || ' ' || v_lastname || ' (' || v_guest_type || ')');
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE('Host s ID ' || p_guest_id || ' nenalezen');
+    RETURN v_count;
 END;
 /
 
-CREATE OR REPLACE PACKAGE hotel_management AS
+-- Package pro hotel management
+CREATE OR REPLACE PACKAGE compiled_package IS
+    PROCEDURE my_procedure;
     FUNCTION get_guest_count RETURN NUMBER;
-    FUNCTION get_room_occupancy RETURN NUMBER;
-    PROCEDURE show_reservation_summary(p_guest_id NUMBER);
-END;
+    PROCEDURE show_guest_stats;
+END compiled_package;
 /
 
-CREATE OR REPLACE PACKAGE BODY hotel_management AS
+CREATE OR REPLACE PACKAGE BODY compiled_package IS
+    PROCEDURE my_procedure AS
+    BEGIN
+        DBMS_OUTPUT.PUT_LINE('Hello from compiled_package.my_procedure');
+    END;
+    
     FUNCTION get_guest_count RETURN NUMBER IS
         v_count NUMBER;
     BEGIN
@@ -178,285 +133,111 @@ CREATE OR REPLACE PACKAGE BODY hotel_management AS
         RETURN v_count;
     END;
     
-    FUNCTION get_room_occupancy RETURN NUMBER IS
-        v_occupied NUMBER;
-        v_total NUMBER;
+    PROCEDURE show_guest_stats AS
     BEGIN
-        SELECT COUNT(*) INTO v_total FROM Room;
-        SELECT COUNT(*) INTO v_occupied FROM Room WHERE is_occupied = 1;
-        
-        RETURN CASE WHEN v_total > 0 THEN ROUND((v_occupied / v_total) * 100, 2) ELSE 0 END;
+        FOR rec IN (SELECT guest_type, COUNT(*) as cnt FROM Guest GROUP BY guest_type) LOOP
+            DBMS_OUTPUT.PUT_LINE(rec.guest_type || ': ' || rec.cnt || ' hostů');
+        END LOOP;
     END;
+END compiled_package;
+/
+
+-- =============================================
+-- C) OPTIMALIZACE - BULK COLLECT DEMO
+-- =============================================
+
+CREATE OR REPLACE PROCEDURE demo_bulk_collect AS
+    TYPE t_guest_array IS TABLE OF Guest%ROWTYPE;
+    v_guests t_guest_array;
+    v_start_time NUMBER;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('=== DEMO BULK COLLECT ===');
     
-    PROCEDURE show_reservation_summary(p_guest_id NUMBER) IS
-        v_count NUMBER;
-        v_total_spent NUMBER;
-    BEGIN
-        SELECT COUNT(*), NVL(SUM(accommodation_price), 0)
-        INTO v_count, v_total_spent
-        FROM Reservation 
-        WHERE guest_id = p_guest_id;
-        
-        DBMS_OUTPUT.PUT_LINE('Host ID ' || p_guest_id || ': ' || v_count || ' rezervací, celkem ' || v_total_spent || ' Kč');
-    EXCEPTION
-        WHEN NO_DATA_FOUND THEN
-            DBMS_OUTPUT.PUT_LINE('Žádné rezervace pro hosta ID ' || p_guest_id);
-    END;
+    v_start_time := DBMS_UTILITY.GET_TIME;
+    
+    -- BULK COLLECT načtení všech hostů
+    SELECT * BULK COLLECT INTO v_guests 
+    FROM Guest 
+    WHERE ROWNUM <= 20;
+    
+    DBMS_OUTPUT.PUT_LINE('BULK COLLECT načetl ' || v_guests.COUNT || ' hostů za: ' || 
+                        (DBMS_UTILITY.GET_TIME - v_start_time) || ' centisekund');
+    
+    -- Zpracování dat
+    FOR i IN 1..v_guests.COUNT LOOP
+        IF MOD(i, 5) = 0 THEN  -- Každý 5. host
+            DBMS_OUTPUT.PUT_LINE('Host ' || i || ': ' || v_guests(i).firstname || ' ' || v_guests(i).lastname);
+        END IF;
+    END LOOP;
 END;
 /
 
--- Demonstrace ALTER COMPILE
-CREATE OR REPLACE PROCEDURE demo_alter_compile AS
+-- =============================================
+-- D) SPUŠTĚNÍ TESTŮ
+-- =============================================
+
 BEGIN
-    DBMS_OUTPUT.PUT_LINE('=== DEMO ALTER COMPILE ===');
-    
-    -- Kompilace funkce
-    EXECUTE IMMEDIATE 'ALTER FUNCTION calc_room_revenue COMPILE';
-    DBMS_OUTPUT.PUT_LINE('Funkce calc_room_revenue zkompilována');
+    DBMS_OUTPUT.PUT_LINE('=== LESSON 12 - DYNAMIC SQL AND COMPILATION ===');
+    DBMS_OUTPUT.PUT_LINE('');
+
+    -- Test 1: Dynamické SQL
+    DBMS_OUTPUT.PUT_LINE('1. Testing dynamic SQL:');
+    DECLARE
+        my_input_param NUMBER := 42;
+        my_output_param NUMBER;
+    BEGIN
+        execute_dynamic_sql('SELECT :input_param * 2 FROM DUAL', my_input_param, my_output_param);
+        DBMS_OUTPUT.PUT_LINE('Result: ' || my_output_param);
+    END;
+    DBMS_OUTPUT.PUT_LINE('');
+
+    -- Test 2: Dynamické SQL s Guest tabulkou
+    DBMS_OUTPUT.PUT_LINE('2. Testing dynamic SQL with Guest table:');
+    demo_guest_dynamic_sql;
+    DBMS_OUTPUT.PUT_LINE('');
+
+    -- Test 3: ALTER COMPILE
+    DBMS_OUTPUT.PUT_LINE('3. Testing ALTER COMPILE:');
     
     -- Kompilace procedury
-    EXECUTE IMMEDIATE 'ALTER PROCEDURE show_guest_info COMPILE';
-    DBMS_OUTPUT.PUT_LINE('Procedura show_guest_info zkompilována');
+    EXECUTE IMMEDIATE 'ALTER PROCEDURE my_procedure COMPILE';
+    DBMS_OUTPUT.PUT_LINE('Procedura my_procedure zkompilována');
+    my_procedure;
     
-    -- Kompilace package specification
-    EXECUTE IMMEDIATE 'ALTER PACKAGE hotel_management COMPILE SPECIFICATION';
-    DBMS_OUTPUT.PUT_LINE('Package specification zkompilována');
-    
-    -- Kompilace package body
-    EXECUTE IMMEDIATE 'ALTER PACKAGE hotel_management COMPILE BODY';
-    DBMS_OUTPUT.PUT_LINE('Package body zkompilováno');
-    
-    -- Kompilace celého package
-    EXECUTE IMMEDIATE 'ALTER PACKAGE hotel_management COMPILE';
-    DBMS_OUTPUT.PUT_LINE('Celý package zkompilován');
-    
-END;
-/
-
--- =============================================
--- 5. OPTIMALIZACE VÝKONU
--- =============================================
-
--- A) NOCOPY optimalizace
-CREATE OR REPLACE PROCEDURE demo_nocopy AS
-    TYPE t_guest_array IS TABLE OF Guest%ROWTYPE INDEX BY PLS_INTEGER;
-    
-    -- Bez NOCOPY - kopíruje celé pole
-    PROCEDURE process_without_nocopy(p_guests IN t_guest_array) AS
-        v_start_time NUMBER;
+    -- Kompilace funkce
+    EXECUTE IMMEDIATE 'ALTER FUNCTION my_function COMPILE';
+    DBMS_OUTPUT.PUT_LINE('Funkce my_function zkompilována');
+    DECLARE
+        result NUMBER;
     BEGIN
-        v_start_time := DBMS_UTILITY.GET_TIME;
-        -- Simulace zpracování
-        FOR i IN 1..p_guests.COUNT LOOP
-            NULL; -- nějaké zpracování
-        END LOOP;
-        DBMS_OUTPUT.PUT_LINE('Bez NOCOPY: ' || (DBMS_UTILITY.GET_TIME - v_start_time) || ' centisekund');
+        result := my_function;
+        DBMS_OUTPUT.PUT_LINE('Result from my_function: ' || result);
     END;
     
-    -- S NOCOPY - předává referenci
-    PROCEDURE process_with_nocopy(p_guests IN NOCOPY t_guest_array) AS
-        v_start_time NUMBER;
-    BEGIN
-        v_start_time := DBMS_UTILITY.GET_TIME;
-        -- Simulace zpracování
-        FOR i IN 1..p_guests.COUNT LOOP
-            NULL; -- nějaké zpracování
-        END LOOP;
-        DBMS_OUTPUT.PUT_LINE('S NOCOPY: ' || (DBMS_UTILITY.GET_TIME - v_start_time) || ' centisekund');
-    END;
+    -- Kompilace package
+    EXECUTE IMMEDIATE 'ALTER PACKAGE compiled_package COMPILE';
+    DBMS_OUTPUT.PUT_LINE('Package compiled_package zkompilován');
+    compiled_package.my_procedure;
+    DBMS_OUTPUT.PUT_LINE('');
+
+    -- Test 4: Hotel funkce
+    DBMS_OUTPUT.PUT_LINE('4. Testing hotel functions:');
+    DBMS_OUTPUT.PUT_LINE('Celkem hostů: ' || compiled_package.get_guest_count);
+    DBMS_OUTPUT.PUT_LINE('VIP hostů: ' || count_guests_by_type('VIP'));
+    DBMS_OUTPUT.PUT_LINE('Regular hostů: ' || count_guests_by_type('Regular'));
+    compiled_package.show_guest_stats;
+    DBMS_OUTPUT.PUT_LINE('');
+
+    -- Test 5: BULK COLLECT
+    DBMS_OUTPUT.PUT_LINE('5. Testing BULK COLLECT optimization:');
+    demo_bulk_collect;
+    DBMS_OUTPUT.PUT_LINE('');
+
+    DBMS_OUTPUT.PUT_LINE('=== ALL TESTS COMPLETED ===');
     
-    v_guests t_guest_array;
-BEGIN
-    DBMS_OUTPUT.PUT_LINE('=== DEMO NOCOPY ===');
-    
-    -- Naplnění pole daty
-    SELECT * BULK COLLECT INTO v_guests FROM Guest WHERE ROWNUM <= 50;
-    
-    process_without_nocopy(v_guests);
-    process_with_nocopy(v_guests);
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error in main test: ' || SQLERRM);
+        ROLLBACK;
 END;
 /
-
--- B) DETERMINISTIC optimalizace
-CREATE OR REPLACE FUNCTION calculate_loyalty_points(p_guest_type VARCHAR2) 
-RETURN NUMBER DETERMINISTIC AS
-BEGIN
-    RETURN CASE p_guest_type
-        WHEN 'VIP' THEN 100
-        WHEN 'Premium' THEN 50
-        WHEN 'Business' THEN 30
-        ELSE 10
-    END;
-END;
-/
-
--- C) FORALL a BULK COLLECT optimalizace
-CREATE OR REPLACE PROCEDURE demo_bulk_operations AS
-    TYPE t_id_array IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
-    TYPE t_price_array IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
-    
-    v_reservation_ids t_id_array;
-    v_old_prices t_price_array;
-    v_new_prices t_price_array;
-    v_start_time NUMBER;
-BEGIN
-    DBMS_OUTPUT.PUT_LINE('=== DEMO BULK OPERATIONS ===');
-    
-    -- BULK COLLECT - rychlé načítání dat
-    v_start_time := DBMS_UTILITY.GET_TIME;
-    
-    SELECT reservation_id, accommodation_price
-    BULK COLLECT INTO v_reservation_ids, v_old_prices
-    FROM Reservation 
-    WHERE status = 'Confirmed' AND ROWNUM <= 20;
-    
-    DBMS_OUTPUT.PUT_LINE('BULK COLLECT načetl ' || v_reservation_ids.COUNT || ' záznamů za: ' || 
-                        (DBMS_UTILITY.GET_TIME - v_start_time) || ' centisekund');
-    
-    -- Úprava cen (5% sleva)
-    FOR i IN 1..v_old_prices.COUNT LOOP
-        v_new_prices(i) := v_old_prices(i) * 0.95;
-    END LOOP;
-    
-    -- FORALL - rychlá aktualizace
-    v_start_time := DBMS_UTILITY.GET_TIME;
-    
-    FORALL i IN 1..v_reservation_ids.COUNT
-        UPDATE Reservation 
-        SET accommodation_price = v_new_prices(i) 
-        WHERE reservation_id = v_reservation_ids(i);
-    
-    DBMS_OUTPUT.PUT_LINE('FORALL aktualizoval ' || SQL%ROWCOUNT || ' záznamů za: ' || 
-                        (DBMS_UTILITY.GET_TIME - v_start_time) || ' centisekund');
-    
-    COMMIT;
-END;
-/
-
--- D) Optimalizace s RETURNING klauzulí
-CREATE OR REPLACE PROCEDURE demo_returning_clause AS
-    TYPE t_id_array IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
-    TYPE t_price_array IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
-    
-    v_guest_ids t_id_array;
-    v_old_types t_price_array;
-    v_new_ids t_id_array;
-BEGIN
-    DBMS_OUTPUT.PUT_LINE('=== DEMO RETURNING CLAUSE ===');
-    
-    -- Načtení ID hostů pro upgrade
-    SELECT guest_id 
-    BULK COLLECT INTO v_guest_ids
-    FROM Guest 
-    WHERE guest_type = 'Regular' AND ROWNUM <= 5;
-    
-    -- Upgrade hostů s RETURNING - vrací ID v jednom kroku
-    FORALL i IN 1..v_guest_ids.COUNT
-        UPDATE Guest 
-        SET guest_type = 'Premium'
-        WHERE guest_id = v_guest_ids(i)
-        RETURNING guest_id BULK COLLECT INTO v_new_ids;
-    
-    -- Zobrazení výsledků
-    FOR i IN 1..v_new_ids.COUNT LOOP
-        DBMS_OUTPUT.PUT_LINE('Host ID ' || v_new_ids(i) || ' upgradován na Premium');
-    END LOOP;
-    
-    COMMIT;
-END;
-/
-
--- E) Porovnání výkonu FETCH vs BULK COLLECT
-CREATE OR REPLACE PROCEDURE demo_fetch_vs_bulk AS
-    CURSOR c_reservations IS 
-        SELECT reservation_id, guest_id, accommodation_price 
-        FROM Reservation 
-        WHERE status IN ('Confirmed', 'Checked-in');
-    
-    TYPE t_res_array IS TABLE OF c_reservations%ROWTYPE;
-    v_reservations t_res_array;
-    v_res_rec c_reservations%ROWTYPE;
-    v_start_time NUMBER;
-    v_count NUMBER := 0;
-BEGIN
-    DBMS_OUTPUT.PUT_LINE('=== DEMO FETCH VS BULK COLLECT ===');
-    
-    -- 1. Klasický FETCH
-    v_start_time := DBMS_UTILITY.GET_TIME;
-    v_count := 0;
-    
-    OPEN c_reservations;
-    LOOP
-        FETCH c_reservations INTO v_res_rec;
-        EXIT WHEN c_reservations%NOTFOUND;
-        v_count := v_count + 1;
-        -- Simulace zpracování
-        NULL;
-    END LOOP;
-    CLOSE c_reservations;
-    
-    DBMS_OUTPUT.PUT_LINE('Klasický FETCH: ' || v_count || ' záznamů za ' || 
-                        (DBMS_UTILITY.GET_TIME - v_start_time) || ' centisekund');
-    
-    -- 2. BULK COLLECT
-    v_start_time := DBMS_UTILITY.GET_TIME;
-    
-    OPEN c_reservations;
-    FETCH c_reservations BULK COLLECT INTO v_reservations;
-    CLOSE c_reservations;
-    
-    -- Zpracování
-    FOR i IN 1..v_reservations.COUNT LOOP
-        -- Simulace zpracování
-        NULL;
-    END LOOP;
-    
-    DBMS_OUTPUT.PUT_LINE('BULK COLLECT: ' || v_reservations.COUNT || ' záznamů za ' || 
-                        (DBMS_UTILITY.GET_TIME - v_start_time) || ' centisekund');
-END;
-/
-
--- =============================================
--- 6. SPUŠTĚNÍ VŠECH DEMO PROCEDUR
--- =============================================
-
-BEGIN
-    DBMS_OUTPUT.PUT_LINE('===============================================================================');
-    DBMS_OUTPUT.PUT_LINE('SPOUŠTĚNÍ VŠECH DEMO PROCEDUR - LEKCE 12 (HOTEL MANAGEMENT)');
-    DBMS_OUTPUT.PUT_LINE('===============================================================================');
-    
-    -- Vytvoření testovacích dat
-    create_test_data;
-    DBMS_OUTPUT.PUT_LINE('');
-    
-    -- 1. DBMS_SQL
-    demo_dbms_sql;
-    DBMS_OUTPUT.PUT_LINE('');
-    
-    -- 2. EXECUTE IMMEDIATE
-    demo_execute_immediate;
-    DBMS_OUTPUT.PUT_LINE('');
-    
-    -- 3. ALTER COMPILE
-    demo_alter_compile;
-    DBMS_OUTPUT.PUT_LINE('');
-    
-    -- 4. Optimalizace výkonu
-    demo_nocopy;
-    DBMS_OUTPUT.PUT_LINE('');
-    
-    demo_bulk_operations;
-    DBMS_OUTPUT.PUT_LINE('');
-    
-    demo_returning_clause;
-    DBMS_OUTPUT.PUT_LINE('');
-    
-    demo_fetch_vs_bulk;
-    DBMS_OUTPUT.PUT_LINE('');
-    
-    DBMS_OUTPUT.PUT_LINE('===============================================================================');
-    DBMS_OUTPUT.PUT_LINE('VŠECHNY DEMO PROCEDURY DOKONČENY');
-    DBMS_OUTPUT.PUT_LINE('===============================================================================');
-END;
-/
-

@@ -22,14 +22,14 @@ END;
 -- Implement a procedure with IF-THEN-ELSE and IF-ELSEIF-ELSE
 
 CREATE OR REPLACE PROCEDURE FEEDBACK_RATING(
-    P_FEEDBACK_ID IN NUMBER,
-    
+    P_FEEDBACK_ID IN NUMBER
 ) IS
     v_result NUMBER;
 BEGIN
-    SELECT RATING(P_FEEDBACK_ID) INTO v_result FROM FEEDBACK WHERE FEEDBACK_ID = P_FEEDBACK_ID;
+    -- OPRAVENO: RATING(P_FEEDBACK_ID) → RATING
+    SELECT RATING INTO v_result FROM FEEDBACK WHERE FEEDBACK_ID = P_FEEDBACK_ID;
 
-    IF  v_result = 5 THEN
+    IF v_result = 5 THEN
         DBMS_OUTPUT.PUT_LINE('Satisfied');
     ELSIF v_result = 4 THEN
         DBMS_OUTPUT.PUT_LINE('Neutral');
@@ -43,15 +43,13 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE('No rating available');
     END IF;
 
-
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
         v_result := NULL;
         DBMS_OUTPUT.PUT_LINE('No feedback found with the given ID.');
     WHEN OTHERS THEN
         RAISE;
-    
-    COMMIT;
+    -- OPRAVENO: COMMIT přesunut mimo EXCEPTION blok
 END;
 
 
@@ -93,7 +91,11 @@ CREATE OR REPLACE PROCEDURE ROOM_TYPE(
 ) IS
     v_room_type VARCHAR2(20);
 BEGIN
-    SELECT TYPE INTO v_room_type FROM ROOM WHERE ROOM_ID = P_ROOM_ID;
+    SELECT rt.NAME 
+    INTO v_room_type 
+    FROM ROOM r
+    JOIN ROOMTYPE rt ON rt.ROOM_TYPE_ID = r.ROOM_TYPE_ID
+    WHERE r.ROOM_ID = P_ROOM_ID;
 
     CASE v_room_type
         WHEN 'SINGLE' THEN
@@ -103,7 +105,7 @@ BEGIN
         WHEN 'SUITE' THEN
             DBMS_OUTPUT.PUT_LINE('Suite Room');
         ELSE
-            DBMS_OUTPUT.PUT_LINE('Unknown Room Type');
+            DBMS_OUTPUT.PUT_LINE('Unknown Room Type: ' || v_room_type);
     END CASE;
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
@@ -111,30 +113,47 @@ EXCEPTION
     WHEN OTHERS THEN
         RAISE;
 END;
+/
 
 
 
 -- Implement a procedure solving all variants of combinations of logical operators AND, OR, NOT with input values TRUE, FALSE, NULL
 CREATE OR REPLACE PROCEDURE CHECK_LOGICAL_OPERATORS(
-    P_VAL1 IN VARCHAR2,
-    P_VAL2 IN VARCHAR2
+    P_VAL1 IN BOOLEAN,
+    P_VAL2 IN BOOLEAN
 ) IS
-    v_result VARCHAR2(50);
+    result_and BOOLEAN;
+    result_or BOOLEAN;
+    result_not1 BOOLEAN;
+    result_not2 BOOLEAN;
 BEGIN
-    v_result := (P_VAL1 AND P_VAL2) OR (P_VAL1 NOT P_VAL2);
-    IF v_result IS NULL THEN
-        DBMS_OUTPUT.PUT_LINE('Result is NULL');
-    ELSIF v_result = 'TRUE' THEN
-        DBMS_OUTPUT.PUT_LINE('Result is TRUE');
-    ELSIF v_result = 'FALSE' THEN
-        DBMS_OUTPUT.PUT_LINE('Result is FALSE');
-    ELSE
-        DBMS_OUTPUT.PUT_LINE('Unexpected result');
-    END IF;
+    -- Správné logické operace
+    result_and := P_VAL1 AND P_VAL2;
+    result_or := P_VAL1 OR P_VAL2;
+    result_not1 := NOT P_VAL1;
+    result_not2 := NOT P_VAL2;
+    
+    -- Výpis všech kombinací
+    DBMS_OUTPUT.PUT_LINE('=== Testing logical operators ===');
+    DBMS_OUTPUT.PUT_LINE('P_VAL1 = ' || bool_to_string(P_VAL1));
+    DBMS_OUTPUT.PUT_LINE('P_VAL2 = ' || bool_to_string(P_VAL2));
+    DBMS_OUTPUT.PUT_LINE('');
+    
+    -- AND operátor
+    DBMS_OUTPUT.PUT_LINE(bool_to_string(P_VAL1) || ' AND ' || bool_to_string(P_VAL2) || ' = ' || bool_to_string(result_and));
+    
+    -- OR operátor
+    DBMS_OUTPUT.PUT_LINE(bool_to_string(P_VAL1) || ' OR ' || bool_to_string(P_VAL2) || ' = ' || bool_to_string(result_or));
+    
+    -- NOT operátor
+    DBMS_OUTPUT.PUT_LINE('NOT ' || bool_to_string(P_VAL1) || ' = ' || bool_to_string(result_not1));
+    DBMS_OUTPUT.PUT_LINE('NOT ' || bool_to_string(P_VAL2) || ' = ' || bool_to_string(result_not2));
+
 EXCEPTION
     WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
         RAISE;
-END; 
+END;
 
 --  Implement a loop with LOOP – EXIT [WHEN] – END LOOP
 CREATE OR REPLACE PROCEDURE SIMPLE_COUNTDOWN(

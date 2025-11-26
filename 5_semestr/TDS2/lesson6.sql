@@ -52,23 +52,19 @@ END;
 
 -- Tabulka (pole) INDEXED BY TABLE
 CREATE OR REPLACE PROCEDURE guest_info_table AS
-    TYPE t_guest_table IS TABLE OF GUEST%ROWTYPE INDEXED BY PLS_INTEGER;
+    TYPE t_guest_table IS TABLE OF GUEST%ROWTYPE;
     v_guest_table t_guest_table;
-    v_counter     PLS_INTEGER := 0;
-
 BEGIN
     SELECT *
     BULK COLLECT INTO v_guest_table
     FROM GUEST;
 
-    v_counter := v_guest_table.COUNT;
-
-    FOR i IN 1..v_counter LOOP
+    FOR i IN 1..v_guest_table.COUNT LOOP
         DBMS_OUTPUT.PUT_LINE(
-            v_guest_table(i).FIRSTNAME || ' ' ||
-            v_guest_table(i).LASTNAME  || ' lives in: ' ||
-            v_guest_table(i).CITY      || ' and customer registrated from ' ||
-            v_guest_table(i).REGISTRATION_DATE
+            v_guest_table(i).firstname || ' ' ||
+            v_guest_table(i).lastname  || ' lives in: ' ||
+            v_guest_table(i).city      || ' and customer registered from ' ||
+            v_guest_table(i).registration_date
         );
     END LOOP;
 END;
@@ -84,30 +80,37 @@ CREATE OR REPLACE PROCEDURE guest_info_table_of_records AS
         YEARS_CUSTOMER NUMBER
     );
 
-    TYPE t_guest_table IS TABLE OF t_guest_record INDEXED BY PLS_INTEGER;
+    TYPE t_guest_table IS TABLE OF t_guest_record INDEX BY PLS_INTEGER;
     v_guest_table t_guest_table;
-    v_counter     PLS_INTEGER := 0;
 
+    i PLS_INTEGER := 1;
 BEGIN
-    SELECT GUEST_ID,
-           FIRSTNAME,
-           LASTNAME,
-           CITY,
-           ROUND((SYSDATE - REGISTRATION_DATE), 1)
-    BULK COLLECT INTO v_guest_table
-    FROM GUEST;
+    FOR rec IN (
+        SELECT GUEST_ID,
+               FIRSTNAME,
+               LASTNAME,
+               CITY,
+               ROUND((SYSDATE - REGISTRATION_DATE), 1) AS YEARS_CUSTOMER
+        FROM GUEST
+    ) LOOP
+        v_guest_table(i).GUEST_ID       := rec.GUEST_ID;
+        v_guest_table(i).FIRSTNAME      := rec.FIRSTNAME;
+        v_guest_table(i).LASTNAME       := rec.LASTNAME;
+        v_guest_table(i).CITY           := rec.CITY;
+        v_guest_table(i).YEARS_CUSTOMER := rec.YEARS_CUSTOMER;
+        i := i + 1;
+    END LOOP;
 
-    v_counter := v_guest_table.COUNT;
-
-    FOR i IN 1..v_counter LOOP
+    FOR j IN 1 .. v_guest_table.COUNT LOOP
         DBMS_OUTPUT.PUT_LINE(
-            v_guest_table(i).FIRSTNAME || ' ' ||
-            v_guest_table(i).LASTNAME  || ' lives in: ' ||
-            v_guest_table(i).CITY      || ' customer for ' ||
-            v_guest_table(i).YEARS_CUSTOMER || ' days'
+            v_guest_table(j).FIRSTNAME || ' ' ||
+            v_guest_table(j).LASTNAME  || ' lives in: ' ||
+            v_guest_table(j).CITY      || ', customer for ' ||
+            v_guest_table(j).YEARS_CUSTOMER || ' days'
         );
     END LOOP;
 END;
+
 
 
 --  INDEX BY BINARY_INTEGER
@@ -120,27 +123,33 @@ CREATE OR REPLACE PROCEDURE guest_info_indexed_by_binary_integer AS
         YEARS_CUSTOMER NUMBER
     );
 
-    TYPE t_guest_table IS TABLE OF t_guest_record INDEXED BY BINARY_INTEGER;
+    TYPE t_guest_table IS TABLE OF t_guest_record INDEX BY BINARY_INTEGER;
     v_guest_table t_guest_table;
-    v_counter     PLS_INTEGER := 0; -- PLS_INTEGER is preferred for loop counters
 
+    i BINARY_INTEGER := 1;
 BEGIN
-    SELECT GUEST_ID,
-           FIRSTNAME,
-           LASTNAME,
-           CITY,
-           ROUND((SYSDATE - REGISTRATION_DATE), 1)
-    BULK COLLECT INTO v_guest_table
-    FROM GUEST;
+    FOR rec IN (
+        SELECT GUEST_ID,
+               FIRSTNAME,
+               LASTNAME,
+               CITY,
+               ROUND((SYSDATE - REGISTRATION_DATE), 1) AS YEARS_CUSTOMER
+        FROM GUEST
+    ) LOOP
+        v_guest_table(i).GUEST_ID       := rec.GUEST_ID;
+        v_guest_table(i).FIRSTNAME      := rec.FIRSTNAME;
+        v_guest_table(i).LASTNAME       := rec.LASTNAME;
+        v_guest_table(i).CITY           := rec.CITY;
+        v_guest_table(i).YEARS_CUSTOMER := rec.YEARS_CUSTOMER;
+        i := i + 1;
+    END LOOP;
 
-    v_counter := v_guest_table.COUNT;
-
-    FOR i IN 1..v_counter LOOP
+    FOR j IN 1 .. v_guest_table.COUNT LOOP
         DBMS_OUTPUT.PUT_LINE(
-            v_guest_table(i).FIRSTNAME || ' ' ||
-            v_guest_table(i).LASTNAME  || ' lives in: ' ||
-            v_guest_table(i).CITY      || ' customer for ' ||
-            v_guest_table(i).YEARS_CUSTOMER || ' days'
+            v_guest_table(j).FIRSTNAME || ' ' ||
+            v_guest_table(j).LASTNAME  || ' lives in: ' ||
+            v_guest_table(j).CITY      || ', customer for ' ||
+            v_guest_table(j).YEARS_CUSTOMER || ' days'
         );
     END LOOP;
 END;

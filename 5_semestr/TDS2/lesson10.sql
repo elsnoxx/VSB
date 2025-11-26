@@ -48,9 +48,23 @@ END guest_pkg;
 -- Implementuje FUNKCI, která bude mít libovolný počet textových parametrů, které
 -- následně spojí v opačném pořadí dohromady, nebo vymyslete jinou alternativní
 -- funkci (proceduru)
-CREATE OR REPLACE PACKAGE string_pkg AS
-    FUNCTION reverse_concat(p_str1 IN VARCHAR2) RETURN VARCHAR2;
-    FUNCTION reverse_concat(p_str1 IN VARCHAR2, p_str2 IN VARCHAR2) RETURN VARCHAR2;
-    FUNCTION reverse_concat(p_str1 IN VARCHAR2, p_str2 IN VARCHAR2, p_str3 IN VARCHAR2) RETURN VARCHAR2;
+CREATE OR REPLACE PACKAGE BODY string_pkg AS
+    -- Overload s 1 parametrem
+    FUNCTION reverse_concat(p_str1 IN VARCHAR2) RETURN VARCHAR2 IS
+    BEGIN
+        RETURN p_str1; -- Jen jeden string, takže ho vrátí
+    END reverse_concat;
+    
+    -- Overload se 2 parametry
+    FUNCTION reverse_concat(p_str1 IN VARCHAR2, p_str2 IN VARCHAR2) RETURN VARCHAR2 IS
+    BEGIN
+        RETURN p_str2 || ' ' || p_str1; -- Opačné pořadí: p_str2 p_str1
+    END reverse_concat;
+    
+    -- Overload se 3 parametry  
+    FUNCTION reverse_concat(p_str1 IN VARCHAR2, p_str2 IN VARCHAR2, p_str3 IN VARCHAR2) RETURN VARCHAR2 IS
+    BEGIN
+        RETURN p_str3 || ' ' || p_str2 || ' ' || p_str1; -- Opačné pořadí: p_str3 p_str2 p_str1
+    END reverse_concat;
 END string_pkg;
 

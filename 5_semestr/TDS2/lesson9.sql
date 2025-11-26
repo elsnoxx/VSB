@@ -17,6 +17,15 @@ BEGIN
     RETURN v_fullname;
 END;
 
+CREATE OR REPLACE FUNCTION bool_to_string(p_bool IN BOOLEAN) RETURN VARCHAR2 IS
+BEGIN
+    RETURN CASE 
+        WHEN p_bool IS NULL THEN 'NULL'
+        WHEN p_bool THEN 'TRUE'
+        ELSE 'FALSE'
+    END;
+END;
+
 -- Použijte vámi definovanou funkci přímo v příkazu jazyka SQL, v sekce SELECT, WHERE, GROUP BY, ORDER BY
 
 SELECT guest_fullname(GUEST_ID) AS FULLNAME

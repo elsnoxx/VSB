@@ -1,13 +1,12 @@
 -- Ošetřování výjimek EXEPTION WHEN … THEN s WHEN OTHERS THEN
-
-CREATE OR REPLACE PROCEDUREB basic_guset_info AS
+CREATE OR REPLACE PROCEDURE basic_guset_info AS
     v_firstname GUEST.FIRSTNAME%TYPE;
     v_lastname  GUEST.LASTNAME%TYPE;
 BEGIN
     SELECT FIRSTNAME, LASTNAME
     INTO v_firstname, v_lastname
     FROM GUEST
-    WHERE GUEST_ID = 10;
+    WHERE GUEST_ID = 100;
 
     DBMS_OUTPUT.PUT_LINE('Guest: ' || v_firstname || ' ' || v_lastname);
 EXCEPTION
@@ -29,7 +28,7 @@ BEGIN
     SELECT FIRSTNAME, LASTNAME
     INTO v_firstname, v_lastname
     FROM GUEST
-    WHERE GUEST_ID = 10;
+    WHERE GUEST_ID = 100;
 
     DBMS_OUTPUT.PUT_LINE('Guest: ' || v_firstname || ' ' || v_lastname);
 EXCEPTION

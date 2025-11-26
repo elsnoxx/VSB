@@ -13,7 +13,10 @@ DECLARE
     payment_price_discounted NUMBER;
 
 BEGIN
-    payment_price := 2300;
+    SELECT TOTAL_EXPENSES + TOTAL_ACCOMMODATION
+    INTO payment_price
+    FROM PAYMENT
+    WHERE PAYMENT_ID = 2;
 
 
     IF payment_price IS NOT NULL THEN
