@@ -425,4 +425,3 @@ GROUP BY department_id;
 
 ## Relace mezi konceptuálním a relačním modelem
 🔹 Proces převodu z ER diagramu do konkrétní struktury databázových tabulek a vysvětlení případných změn.
-
