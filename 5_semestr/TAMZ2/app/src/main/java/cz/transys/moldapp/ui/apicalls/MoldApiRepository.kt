@@ -14,6 +14,11 @@ class MoldApiRepository {
     suspend fun getMoldsByCarCode(carCode: String): List<MoldsList> {
         return ApiClient.get("foampad/moldpda/molds/$carCode")
     }
+
+    suspend fun getCarrierMount(carrier: String): CarrierMountResponse {
+        return ApiClient.get("foampad/moldpda/mount/carrier?carrier=$carrier")
+    }
+
 }
 
 
@@ -32,4 +37,16 @@ data class MoldsList(
     val mold_code: String,
     val mold_side: String,
     val code_value2: String
+)
+
+data class CarrierMountResponse(
+    val mold_code1: String?,
+    val part_code1: String?,
+    val mold_code2: String?,
+    val part_code2: String?,
+    val mold_name1: String?,
+    val mold_name2: String?,
+    val car_code1: String?,
+    val car_code2: String?,
+    val mut_part_flag: String?
 )

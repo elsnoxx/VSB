@@ -32,24 +32,45 @@ fun RfTagInfoScreen(onBack: () -> Unit) {
     var error by remember { mutableStateOf<String?>(null) }
 
     fun loadData(tag: String) {
+        Log.d("TAG_LOAD", "loadData() called with tag = '$tag'")
+
         scope.launch {
             loading = true
             error = null
             info = null
+
             try {
+                Log.d("TAG_API", "Requesting tag info for '$tag'")
                 val result = repo.getTagInfo(tag)
+                Log.d("TAG_API", "Response: $result")
+
                 if (result == null) {
                     error = context.getString(R.string.error_tag_not_found)
-                } else {
+                }
+                else if (
+                    result.mold_code == null &&
+                    result.mold_name == null &&
+                    result.car_code == null &&
+                    result.code_value1 == null
+                ) {
+                    error = context.getString(R.string.error_tag_not_found)
+                }
+                else {
+                    Log.d("TAG_DATA", "Mapping result into state: $result")
                     info = result
                 }
+
             } catch (e: Exception) {
+                Log.e("TAG_ERROR", "API exception: ${e.localizedMessage}", e)
                 error = context.getString(R.string.error_api, e.localizedMessage ?: "")
             } finally {
                 loading = false
+                Log.d("TAG_STATE", "Loading finished (loading = $loading)")
             }
         }
     }
+
+
 
     fun onScanned(value: String) {
         val clean = value.trim()
@@ -118,11 +139,11 @@ fun RfTagInfoScreen(onBack: () -> Unit) {
                         .padding(12.dp)
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        ReadOnlyField(stringResource(R.string.field_mold_id), info!!.mold)
-                        ReadOnlyField(stringResource(R.string.field_part_type), info!!.type)
-                        ReadOnlyField(stringResource(R.string.field_car), info!!.car)
-                        ReadOnlyField(stringResource(R.string.field_status), info!!.status)
-                        ReadOnlyField(stringResource(R.string.field_total_cycles), info!!.total)
+                        ReadOnlyField(stringResource(R.string.field_mold_id), info!!.mold_name)
+                        ReadOnlyField(stringResource(R.string.field_part_type), info!!.mold_code)
+                        ReadOnlyField(stringResource(R.string.field_car), info!!.car_code)
+                        ReadOnlyField(stringResource(R.string.field_status), info!!.code_value1)
+//                        ReadOnlyField(stringResource(R.string.field_total_cycles), info!!.total)
                     }
                 }
             }

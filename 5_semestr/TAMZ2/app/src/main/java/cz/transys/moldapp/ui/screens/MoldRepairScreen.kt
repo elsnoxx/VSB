@@ -23,8 +23,12 @@ import cz.transys.moldapp.ui.localdata.LocalStorage
 import kotlinx.coroutines.launch
 import android.provider.Settings
 import android.widget.Toast
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import cz.transys.moldapp.R
+import cz.transys.moldapp.ui.apicalls.CarrierMountResponse
+import cz.transys.moldapp.ui.apicalls.CarriersList
+import cz.transys.moldapp.ui.apicalls.MoldApiRepository
 import cz.transys.moldapp.ui.apicalls.MoldRepairSent
 
 @SuppressLint("HardwareIds")
@@ -34,11 +38,15 @@ fun MoldRepairScreen(onBack: () -> Unit) {
     val colors = MaterialTheme.colorScheme
     // api
     val repairRepo = remember { MoldRepairRepository() }
+    val repo = remember { MoldApiRepository() }
     val scope = rememberCoroutineScope()
     // Stav načítání
     var error by remember { mutableStateOf<String?>(null) }
     var loading by remember { mutableStateOf(true) }
     val scanner = LocalScanner.current
+
+    var carrierList by remember { mutableStateOf<List<CarriersList>>(emptyList()) }
+    var mountInfo by remember { mutableStateOf<CarrierMountResponse?>(null) }
 
     // variables
     val context = LocalContext.current
@@ -60,29 +68,56 @@ fun MoldRepairScreen(onBack: () -> Unit) {
         val clean = data.trim()
         mold = clean
 
+        Log.d("MOLD_SCAN", "Scanned: '$data' → Cleaned: '$clean'")
+
         if (clean.isNotEmpty()) {
             scope.launch {
                 try {
                     loading = true
+
+                    Log.d("MOLD_API", "Calling getMoldRepairInfo('$clean')")
+
                     val info = repairRepo.getMoldRepairInfo(clean)
 
+                    Log.d("MOLD_API", "API Result: $info")
+
                     if (info == null) {
+                        Log.w("MOLD_API", "Mold not found for code: $clean")
+
                         error = context.getString(R.string.mold_not_found)
                         carType = ""
                         outDate = ""
                         type = ""
+
                     } else {
-                        carType = info.caR_CODE
-                        outDate = info.savE_DTTM
-                        type = info.molD_NAME
+
+                        Log.d("MOLD_DATA", """
+                        ✔ Mapping API response:
+                        car_code    = ${info.car_code}
+                        save_dttm   = ${info.save_dttm}
+                        mold_name   = ${info.mold_name}
+                    """.trimIndent())
+
+                        carType = info.car_code
+                        outDate = info.save_dttm
+                        type = info.mold_name
+
                         error = null
                     }
 
                 } catch (e: Exception) {
+
+                    Log.e(
+                        "MOLD_API_ERROR",
+                        "Exception while calling API: ${e.localizedMessage}",
+                        e
+                    )
+
                     error = context.getString(R.string.api_error_full, e.localizedMessage)
-                    Log.d(error, "Issue while calling api")
+
                 } finally {
                     loading = false
+                    Log.d("MOLD_STATE", "Loading finished. loading=$loading")
                 }
             }
         }
@@ -98,6 +133,7 @@ fun MoldRepairScreen(onBack: () -> Unit) {
         loading = true
         try {
             typeList = repairRepo.getAllRepairTypes()
+            Log.d("Repair Types API", "Repair types: $typeList")
         } catch (e: Exception) {
             error = e.localizedMessage
         } finally {
@@ -185,9 +221,9 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                 ) {
                     typeList.forEach { type ->
                         DropdownMenuItem(
-                            text = { Text(type.repaiR_NAME2) },
+                            text = { Text(type.repair_name) },
                             onClick = {
-                                selectedType = type.repaiR_NAME2
+                                selectedType = type.repair_name
                                 expanded = false
                             }
                         )

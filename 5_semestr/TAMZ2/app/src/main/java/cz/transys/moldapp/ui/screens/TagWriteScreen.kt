@@ -40,6 +40,7 @@ fun TagWriteScreen(onBack: () -> Unit) {
     var side by remember { mutableStateOf("LH") }
 
     var carrierList by remember { mutableStateOf<List<CarriersList>>(emptyList()) }
+    var selectedCarrier by remember { mutableStateOf("") }
 
     var loading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<String?>(null) }
@@ -116,8 +117,8 @@ fun TagWriteScreen(onBack: () -> Unit) {
 
                 "CARRIER" -> CarrierModeSection(
                     carrierList = carrierList,
-                    selectedCarrier = selectedCar,
-                    onCarrierChange = { selectedCar = it }
+                    selectedCarrier = selectedCarrier,
+                    onCarrierChange = { selectedCarrier = it }
                 )
 
             }
@@ -350,7 +351,6 @@ fun CarrierModeSection(
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
 
-        // Dropdown pro výběr carrieru
         ExposedDropdownMenuBox(
             expanded = expanded,
             onExpandedChange = { expanded = !expanded }
@@ -364,6 +364,7 @@ fun CarrierModeSection(
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                 },
                 modifier = Modifier
+                    .menuAnchor()
                     .fillMaxWidth()
             )
 
@@ -373,7 +374,7 @@ fun CarrierModeSection(
             ) {
                 carrierList.forEach { carrier ->
                     DropdownMenuItem(
-                        text = { Text(carrier.code_value2) },   // #01, #02 atd.
+                        text = { Text(carrier.code_value1) },
                         onClick = {
                             onCarrierChange(carrier.code_value2)
                             expanded = false
@@ -383,9 +384,8 @@ fun CarrierModeSection(
             }
         }
 
-        // Zobrazení vybraného carrieru (read-only)
         if (selectedCarrier.isNotEmpty()) {
-            ReadOnlyField(label = "Selected Carrier", value = selectedCarrier)
+            ReadOnlyField("Selected Carrier", selectedCarrier)
         }
     }
 }

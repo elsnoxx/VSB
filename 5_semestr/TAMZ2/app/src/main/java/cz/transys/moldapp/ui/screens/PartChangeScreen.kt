@@ -1,5 +1,6 @@
 package cz.transys.moldapp.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -13,14 +14,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cz.transys.moldapp.R
+import cz.transys.moldapp.ui.apicalls.CarrierMountResponse
 import cz.transys.moldapp.ui.apicalls.CarriersList
 import cz.transys.moldapp.ui.apicalls.MoldApiRepository
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PartChangeScreen(onBack: () -> Unit) {
     val colors = MaterialTheme.colorScheme
+    val scope = rememberCoroutineScope()
+
 
     val repo = remember { MoldApiRepository() }
 
@@ -28,23 +33,31 @@ fun PartChangeScreen(onBack: () -> Unit) {
     var expandedCarrier by remember { mutableStateOf(false) }
     var selectedCarrier by remember { mutableStateOf("") }
 
-    // SPRÁVNĚ — teď máš stejný model jako u MoldMount
-    var carrierList by remember { mutableStateOf<List<CarriersList>>(emptyList()) }
 
-    // Mold 1 (API loaded)
+    var carrierList by remember { mutableStateOf<List<CarriersList>>(emptyList()) }
+    var mountInfo by remember { mutableStateOf<CarrierMountResponse?>(null) }
+
+
+    // Mold 1
     var mold1Type by remember { mutableStateOf("") }
     var mold1Code by remember { mutableStateOf("") }
+    var carCode1 by remember { mutableStateOf("") }
 
-    // Mold 2 (scanned)
+    // Mold 2
     var mold2Type by remember { mutableStateOf("") }
     var mold2Code by remember { mutableStateOf("") }
+    var carCode2 by remember { mutableStateOf("") }
 
     // Load carriers
     LaunchedEffect(Unit) {
         try {
             carrierList = repo.getAllCarriers()
-        } catch (_: Exception) { }
+            Log.d("CARRIERS", "Loaded carriers: $carrierList")
+        } catch (e: Exception) {
+            Log.e("CARRIERS", "Cannot load carriers: ${e.localizedMessage}")
+        }
     }
+
 
     Column(
         modifier = Modifier
@@ -84,6 +97,7 @@ fun PartChangeScreen(onBack: () -> Unit) {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCarrier)
                     },
                     modifier = Modifier
+                        .menuAnchor()   // 🔥 POVINNÉ
                         .fillMaxWidth()
                 )
 
@@ -91,17 +105,43 @@ fun PartChangeScreen(onBack: () -> Unit) {
                     expanded = expandedCarrier,
                     onDismissRequest = { expandedCarrier = false }
                 ) {
-                    carrierList.forEach { carrier ->
+                    if (carrierList.isEmpty()) {
                         DropdownMenuItem(
-                            text = { Text(carrier.code_value2) },
-                            onClick = {
-                                selectedCarrier = carrier.code_value1
-                                expandedCarrier = false
-                            }
+                            text = { Text("No carriers loaded") },
+                            onClick = {}
                         )
+                    } else {
+                        carrierList.forEach { carrier ->
+                            DropdownMenuItem(
+                                text = { Text(carrier.code_value2) },
+                                onClick = {
+                                    selectedCarrier = carrier.code_value1
+                                    expandedCarrier = false
+
+                                    scope.launch {
+                                        try {
+                                            mountInfo = repo.getCarrierMount(selectedCarrier)
+                                            Log.d("MOUNT_API", "Mount info: $mountInfo")
+
+                                            mold1Code = mountInfo?.mold_code1 ?: ""
+                                            mold1Type = mountInfo?.mold_name1 ?: ""
+                                            carCode1 = mountInfo?.car_code1 ?: ""
+
+                                            mold2Code = mountInfo?.mold_code2 ?: ""
+                                            mold2Type = mountInfo?.mold_name2 ?: ""
+                                            carCode2 = mountInfo?.car_code2 ?: ""
+
+                                        } catch (e: Exception) {
+                                            Log.e("MOUNT_API", "Error: ${e.localizedMessage}")
+                                        }
+                                    }
+                                }
+                            )
+                        }
                     }
                 }
             }
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -109,12 +149,13 @@ fun PartChangeScreen(onBack: () -> Unit) {
             MoldPartChangeSection(
                 title = stringResource(R.string.mold1_title),
                 color = colors.tertiary,
-                carCode = selectedCarrier,
+                carCode = carCode1,
                 type = mold1Type,
                 code = mold1Code,
                 readOnlyCode = true,
                 onCodeChange = { }
             )
+
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -122,12 +163,13 @@ fun PartChangeScreen(onBack: () -> Unit) {
             MoldPartChangeSection(
                 title = stringResource(R.string.mold2_title),
                 color = colors.error,
-                carCode = selectedCarrier,
+                carCode = carCode2,
                 type = mold2Type,
                 code = mold2Code,
                 readOnlyCode = false,
                 onCodeChange = { mold2Code = it }
             )
+
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -233,7 +275,8 @@ fun MoldPartChangeSection(
                 focusedBorderColor = colors.primary,
                 unfocusedBorderColor = colors.outline
             ),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
         )
     }
 }

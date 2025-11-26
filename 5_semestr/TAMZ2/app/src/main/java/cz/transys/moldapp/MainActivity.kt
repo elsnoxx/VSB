@@ -51,8 +51,8 @@ fun MoldAppApp() {
     Surface {
         NavHost(
             navController = navController,
-//            startDestination = "login"
-            startDestination = "mold_mount"
+            startDestination = "login"
+//            startDestination = "mold_mount"
         ) {
             composable("login") {
                 LoginScreen(navController)
