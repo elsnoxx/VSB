@@ -5,8 +5,12 @@
 #include <iostream>
 #include "VertexShader.h"
 #include "FragmentShader.h"
+#include "../Observer/Observer.h"
+#include "../Scene/Camera.h"
 
-class ShaderProgram {
+
+
+class ShaderProgram : public Observer {
 private:
     GLuint id;
 
@@ -15,6 +19,12 @@ public:
     ~ShaderProgram();
 
     void use() const;
+
+    void updateCameraMatrices(const Camera& cam, float aspect);
+
+    // Observer callback:
+    void onCameraChanged(const Camera& cam) override;
+    void updateMatricesInGPU() const;
 
     void setUniformMat4(const char* name, const glm::mat4& matrix) const;
     void setUniformVec3(const char* name, const glm::vec3& vec) const;

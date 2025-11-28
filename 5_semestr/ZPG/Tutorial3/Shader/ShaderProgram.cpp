@@ -42,3 +42,19 @@ void ShaderProgram::setUniformInt(const char* name, int value) const {
     GLint location = glGetUniformLocation(id, name);
     if (location != -1) glUniform1i(location, value);
 }
+
+
+void ShaderProgram::updateCameraMatrices(const Camera& cam, float aspect) {
+    setUniformMat4("viewMatrix", cam.getViewMatrix());
+    setUniformMat4("projectionMatrix", cam.getProjectionMatrix(aspect));
+}
+
+void ShaderProgram::onCameraChanged(const Camera& cam) {
+    view = cam.getViewMatrix();
+    // projection nastavíme pøi resize nebo pøi startu
+}
+
+void ShaderProgram::updateMatricesInGPU() const {
+    setUniformMat4("viewMatrix", view);
+    setUniformMat4("projectionMatrix", projection);
+}

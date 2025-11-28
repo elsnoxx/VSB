@@ -18,6 +18,7 @@
 #include "./Transform/Rotation.h"
 #include "./Transform/Scale.h"
 #include "./Scene/Scene.h"
+#include "./Scene/Camera.h"
 
 class Application {
 	public:
@@ -31,6 +32,8 @@ class Application {
 
 		void printVersionInfo();
 		void updateViewport();
+
+		Camera* getCurrentCamera();
 
 		void run();
 
@@ -49,6 +52,7 @@ class Application {
 		// scene
 		std::vector<Scene*> scenes;
 		
-
+		// camera
+		Camera* camera;
 		
 };

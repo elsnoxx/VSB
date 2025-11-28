@@ -1,15 +1,18 @@
 #pragma once
 #include <vector>
 #include "../DrawableObject.h"
+#include "../Scene/Camera.h"
+
 
 class Scene {
 public:
-    Scene() = default;
+    Scene(ShaderProgram* shader);
 
-    void addObject(DrawableObject* obj);
+    Camera* getCamera() { return camera; }
 
-    void draw();
 
 private:
-    std::vector<DrawableObject*> objects;
+    Camera* camera;
+    ShaderProgram* shaderProgram;
 };
+

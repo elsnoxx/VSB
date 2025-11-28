@@ -128,6 +128,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Callbacks.cpp" />
+    <ClCompile Include="Scene\Camera.cpp" />
     <ClCompile Include="DrawableObject.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Scene\SceneFactory.cpp" />
@@ -143,6 +144,9 @@
     <ClCompile Include="Transform\Translation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Observer\Observer.h" />
+    <ClInclude Include="Observer\Subject.h" />
+    <ClInclude Include="Scene\Camera.h" />
     <ClInclude Include="Scene\SceneFactory.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Transform\AbstractTransform.h" />

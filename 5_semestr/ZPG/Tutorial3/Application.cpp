@@ -72,6 +72,10 @@ void Application::createScenes() {
     scenes = SceneFactory::createAllScenes(shaderProgram);
 }
 
+Camera* Application::getCurrentCamera() {
+    if (scenes.empty()) return nullptr;
+    return scenes[currentSceneIndex]->getCamera();
+}
 
 void Application::switchScene(int index) {
     if (scenes.empty()) {
@@ -103,15 +107,19 @@ void Application::switchScene(int index) {
 void Application::run() {
     glEnable(GL_DEPTH_TEST);
     while (!glfwWindowShouldClose(window)) {
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        if (!scenes.empty()) {
-            scenes[currentSceneIndex]->draw();
-        }
+        shaderProgram->use();
 
-        glfwPollEvents();
+        shaderProgram->updateMatricesInGPU();
+
+        scenes[currentSceneIndex]->draw();
+
         glfwSwapBuffers(window);
+        glfwPollEvents();
     }
+
 }
 
 void Application::initialization() {
@@ -144,8 +152,12 @@ void Application::initialization() {
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
+    
+    // camera settings
+    camera = new Camera(glm::vec3(0, 0, 5), shaderProgram);
 
-    // Nastavení callbackù
+
+    // settings callbacks
     glfwSetKeyCallback(window, callbackKey);
     glfwSetCursorPosCallback(window, callbackCursor);
     glfwSetMouseButtonCallback(window, callbackButton);
