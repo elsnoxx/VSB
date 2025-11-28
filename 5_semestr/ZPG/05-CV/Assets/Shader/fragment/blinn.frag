@@ -1,31 +1,43 @@
 #version 330 core
-in vec3 Normal;
-in vec3 FragPos;
 
-out vec4 FragColor;
+in VS_OUT {
+    vec3 worldPos;
+    vec3 worldNormal;
+} fs_in;
 
-uniform vec3 lightPos;
-uniform vec3 viewPos;
-uniform vec3 lightColor;
-uniform vec3 objectColor;
+out vec4 fragColor;
+
+// Object material
+uniform vec3 uAlbedo       = vec3(0.8); // base color
+uniform float uShininess   = 32.0;      // specular exponent
+
+// Light properties
+uniform vec3 uLightPos;
+uniform vec3 uLightColor   = vec3(1.0);
+uniform float uLightIntensity = 1.0;
+
+// Camera
+uniform vec3 uCamPos;
 
 void main()
 {
-    vec3 norm = normalize(Normal);
-    vec3 lightDir = normalize(lightPos - FragPos);
-    vec3 viewDir = normalize(viewPos - FragPos);
+    // Normal, light, view
+    vec3 N = normalize(fs_in.worldNormal);
+    vec3 L = normalize(uLightPos - fs_in.worldPos);
+    vec3 V = normalize(uCamPos - fs_in.worldPos);
+    vec3 H = normalize(L + V);   // Blinn–Phong half-vector
 
-    // Difúzní složka
-    float diff = max(dot(norm, lightDir), 0.0);
+    // Diffuse term
+    float diff = max(dot(N, L), 0.0);
 
-    // Half-vector
-    vec3 halfDir = normalize(lightDir + viewDir);
-    float spec = pow(max(dot(norm, halfDir), 0.0), 32);
+    // Specular term
+    float spec = pow(max(dot(N, H), 0.0), uShininess);
 
-    vec3 ambient = 0.1 * lightColor;
-    vec3 diffuse = diff * lightColor;
-    vec3 specular = spec * lightColor;
+    // Lighting components
+    vec3 ambient  = 0.1 * uAlbedo;  // Ambient based on material color
+    vec3 diffuse  = uAlbedo * uLightColor * (uLightIntensity * diff);
+    vec3 specular = uLightColor * (uLightIntensity * spec);
 
-    vec3 result = (ambient + diffuse + specular) * objectColor;
-    FragColor = vec4(result, 1.0);
+    vec3 finalColor = ambient + diffuse + specular;
+    fragColor = vec4(finalColor, 1.0);
 }
