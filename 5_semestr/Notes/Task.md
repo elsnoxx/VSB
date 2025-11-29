@@ -8,8 +8,11 @@
 VIS
 - [ ] Projekt
 --------------------------------------------------------------------------
-TDS 2
-- [ ] Projekt
+TDS 2 - DONE
+- [x] Projekt
+	- [x] Nahrat vse do toho Apexu
+	- [x] Leeon4 problem s create
+	- [x] lesson5 problem s create
 - [x] Testy
 - [x] Ukoly
 --------------------------------------------------------------------------
