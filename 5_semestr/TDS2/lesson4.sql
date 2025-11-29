@@ -1,24 +1,5 @@
 -- SQL script for lesson 4 tasks
--- Richard Ficek 2025
 -- Database schema: HOTEL_MANAGEMENT
-
-
--- Running script for calling created procedures
-BEGIN
-    -- Call procedures here for testing
-    FEEDBACK_RATING(1);
-    GUEST_TYPE(1);
-    ROOM_TYPE(101);
-    CHECK_LOGICAL_OPERATORS('TRUE', 'FALSE');
-    SIMPLE_COUNTDOWN(5);
-    WHILE_COUNTDOWN(5);
-    FOR_COUNTDOWN(5);
-    REVERSE_COUNTDOWN(5);
-    NESTED_LOOPS_EXIT_LABELS;
-END;
-
-
-
 -- Implement a procedure with IF-THEN-ELSE and IF-ELSEIF-ELSE
 
 CREATE OR REPLACE PROCEDURE FEEDBACK_RATING(
@@ -26,7 +7,6 @@ CREATE OR REPLACE PROCEDURE FEEDBACK_RATING(
 ) IS
     v_result NUMBER;
 BEGIN
-    -- OPRAVENO: RATING(P_FEEDBACK_ID) → RATING
     SELECT RATING INTO v_result FROM FEEDBACK WHERE FEEDBACK_ID = P_FEEDBACK_ID;
 
     IF v_result = 5 THEN
@@ -49,9 +29,7 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('No feedback found with the given ID.');
     WHEN OTHERS THEN
         RAISE;
-    -- OPRAVENO: COMMIT přesunut mimo EXCEPTION blok
 END;
-
 
 --  Implement a procedure with CASE-WHEN-ELSE (with a variable after the CASE) as a separate implementation, or as the result of an assignment to a variable
 CREATE OR REPLACE PROCEDURE GUEST_TYPE(
@@ -81,10 +59,8 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('No reservations found for the given guest ID.');
     WHEN OTHERS THEN
         RAISE;
-
 END;
-
-
+/
 -- Implement CASE-WHEN-ELSE with a condition after WHEN
 CREATE OR REPLACE PROCEDURE ROOM_TYPE(
     P_ROOM_ID IN NUMBER
@@ -225,3 +201,12 @@ BEGIN
         END IF;
     END LOOP outer_loop;
 END;
+/
+-- Testovací anonymní blok (spouštějte až po uložení/kompilaci všech CREATE)
+SET SERVEROUTPUT ON;
+BEGIN
+    FEEDBACK_RATING(1);
+    GUEST_TYPE(1);
+    ROOM_TYPE(101);
+END;
+/
