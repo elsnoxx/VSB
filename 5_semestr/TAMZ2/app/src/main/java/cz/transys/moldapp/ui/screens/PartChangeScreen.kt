@@ -14,9 +14,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cz.transys.moldapp.R
-import cz.transys.moldapp.ui.apicalls.CarrierMountResponse
-import cz.transys.moldapp.ui.apicalls.CarriersList
-import cz.transys.moldapp.ui.apicalls.MoldApiRepository
+import cz.transys.moldapp.buisines.apicalls.moldapi.CarrierMountResponse
+import cz.transys.moldapp.buisines.apicalls.moldapi.CarriersList
+import cz.transys.moldapp.buisines.apicalls.moldapi.MoldApiRepository
+import cz.transys.moldapp.buisines.apicalls.partchange.PartChangeRepository
+import cz.transys.moldapp.buisines.apicalls.partchange.PartChangeRequest
 import kotlinx.coroutines.launch
 
 
@@ -28,6 +30,8 @@ fun PartChangeScreen(onBack: () -> Unit) {
 
 
     val repo = remember { MoldApiRepository() }
+    val partRepo = remember { PartChangeRepository() }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     // Carrier dropdown
     var expandedCarrier by remember { mutableStateOf(false) }
@@ -48,6 +52,48 @@ fun PartChangeScreen(onBack: () -> Unit) {
     var mold2Code by remember { mutableStateOf("") }
     var carCode2 by remember { mutableStateOf("") }
 
+    fun submitPartChange() {
+        if (selectedCarrier.isBlank() || mold1Code.isBlank() || mold2Code.isBlank()) {
+            scope.launch {
+                snackbarHostState.showSnackbar("Please fill all required fields.")
+            }
+            return
+        }
+
+        val req = PartChangeRequest(
+            carrirer_no = selectedCarrier,
+            carrirer_name = carrierList.find { it.code_value1 == selectedCarrier }?.code_value2
+                ?: "",
+            car_code1 = carCode1,
+            car_code2 = carCode2,
+            mold_code1 = mold1Code,
+            mold_code2 = mold2Code,
+            type1 = mold1Type,
+            type2 = mold2Type
+        )
+
+        scope.launch {
+            try {
+                val ok = partRepo.postPartChange(req)
+
+                if (ok) {
+                    snackbarHostState.showSnackbar("Successfully submitted!")
+                    mold1Type = ""
+                    mold1Code = ""
+                    carCode1 = ""
+                    mold2Type = ""
+                    mold2Code = ""
+                    carCode2 = ""
+                } else {
+                    snackbarHostState.showSnackbar("Error while submitting!")
+                }
+            } catch (e: Exception) {
+                snackbarHostState.showSnackbar("API error: ${e.localizedMessage}")
+            }
+        }
+    }
+
+
     // Load carriers
     LaunchedEffect(Unit) {
         try {
@@ -59,149 +105,152 @@ fun PartChangeScreen(onBack: () -> Unit) {
     }
 
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colors.background)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Title
-        Text(
-            text = stringResource(R.string.part_change_title),
-            fontSize = 26.sp,
-            fontWeight = FontWeight.Bold,
-            color = colors.primary,
-            modifier = Modifier.padding(bottom = 20.dp)
-        )
-
-        Column(
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { padding -> Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(colors.surface)
-                .padding(16.dp)
+                .fillMaxSize()
+                .background(colors.background)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Title
+            Text(
+                text = stringResource(R.string.part_change_title),
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold,
+                color = colors.primary,
+                modifier = Modifier.padding(bottom = 20.dp)
+            )
 
-            // Carrier ComboBox
-            ExposedDropdownMenuBox(
-                expanded = expandedCarrier,
-                onExpandedChange = { expandedCarrier = !expandedCarrier }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(colors.surface)
+                    .padding(16.dp)
             ) {
-                OutlinedTextField(
-                    value = selectedCarrier,
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text(stringResource(R.string.carrier_label)) },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCarrier)
-                    },
-                    modifier = Modifier
-                        .menuAnchor()   // 🔥 POVINNÉ
-                        .fillMaxWidth()
-                )
 
-                ExposedDropdownMenu(
+                // Carrier ComboBox
+                ExposedDropdownMenuBox(
                     expanded = expandedCarrier,
-                    onDismissRequest = { expandedCarrier = false }
+                    onExpandedChange = { expandedCarrier = !expandedCarrier }
                 ) {
-                    if (carrierList.isEmpty()) {
-                        DropdownMenuItem(
-                            text = { Text("No carriers loaded") },
-                            onClick = {}
-                        )
-                    } else {
-                        carrierList.forEach { carrier ->
+                    OutlinedTextField(
+                        value = selectedCarrier,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text(stringResource(R.string.carrier_label)) },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCarrier)
+                        },
+                        modifier = Modifier
+                            .menuAnchor()   // 🔥 POVINNÉ
+                            .fillMaxWidth()
+                    )
+
+                    ExposedDropdownMenu(
+                        expanded = expandedCarrier,
+                        onDismissRequest = { expandedCarrier = false }
+                    ) {
+                        if (carrierList.isEmpty()) {
                             DropdownMenuItem(
-                                text = { Text(carrier.code_value2) },
-                                onClick = {
-                                    selectedCarrier = carrier.code_value1
-                                    expandedCarrier = false
+                                text = { Text("No carriers loaded") },
+                                onClick = {}
+                            )
+                        } else {
+                            carrierList.forEach { carrier ->
+                                DropdownMenuItem(
+                                    text = { Text(carrier.code_value2) },
+                                    onClick = {
+                                        selectedCarrier = carrier.code_value1
+                                        expandedCarrier = false
 
-                                    scope.launch {
-                                        try {
-                                            mountInfo = repo.getCarrierMount(selectedCarrier)
-                                            Log.d("MOUNT_API", "Mount info: $mountInfo")
+                                        scope.launch {
+                                            try {
+                                                mountInfo = repo.getCarrierMount(selectedCarrier)
+                                                Log.d("MOUNT_API", "Mount info: $mountInfo")
 
-                                            mold1Code = mountInfo?.mold_code1 ?: ""
-                                            mold1Type = mountInfo?.mold_name1 ?: ""
-                                            carCode1 = mountInfo?.car_code1 ?: ""
+                                                mold1Code = mountInfo?.mold_code1 ?: ""
+                                                mold1Type = mountInfo?.mold_name1 ?: ""
+                                                carCode1 = mountInfo?.car_code1 ?: ""
 
-                                            mold2Code = mountInfo?.mold_code2 ?: ""
-                                            mold2Type = mountInfo?.mold_name2 ?: ""
-                                            carCode2 = mountInfo?.car_code2 ?: ""
+                                                mold2Code = mountInfo?.mold_code2 ?: ""
+                                                mold2Type = mountInfo?.mold_name2 ?: ""
+                                                carCode2 = mountInfo?.car_code2 ?: ""
 
-                                        } catch (e: Exception) {
-                                            Log.e("MOUNT_API", "Error: ${e.localizedMessage}")
+                                            } catch (e: Exception) {
+                                                Log.e("MOUNT_API", "Error: ${e.localizedMessage}")
+                                            }
                                         }
                                     }
-                                }
-                            )
+                                )
+                            }
                         }
                     }
                 }
-            }
 
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            // MOLD #1 – static / loaded
-            MoldPartChangeSection(
-                title = stringResource(R.string.mold1_title),
-                color = colors.tertiary,
-                carCode = carCode1,
-                type = mold1Type,
-                code = mold1Code,
-                readOnlyCode = true,
-                onCodeChange = { }
-            )
-
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // MOLD #2 – scanned
-            MoldPartChangeSection(
-                title = stringResource(R.string.mold2_title),
-                color = colors.error,
-                carCode = carCode2,
-                type = mold2Type,
-                code = mold2Code,
-                readOnlyCode = false,
-                onCodeChange = { mold2Code = it }
-            )
-
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // SUBMIT
-            Button(
-                onClick = { /* TODO API*/ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colors.primary,
-                    contentColor = colors.onPrimary
+                // MOLD #1 – static / loaded
+                MoldPartChangeSection(
+                    title = stringResource(R.string.mold1_title),
+                    color = colors.tertiary,
+                    carCode = carCode1,
+                    type = mold1Type,
+                    code = mold1Code,
+                    readOnlyCode = true,
+                    onCodeChange = { }
                 )
-            ) {
-                Text(
-                    text = stringResource(R.string.submit_button),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-            }
 
-            Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
-                onClick = onBack,
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colors.secondary,
-                    contentColor = colors.onSecondary
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // MOLD #2 – scanned
+                MoldPartChangeSection(
+                    title = stringResource(R.string.mold2_title),
+                    color = colors.error,
+                    carCode = carCode2,
+                    type = mold2Type,
+                    code = mold2Code,
+                    readOnlyCode = false,
+                    onCodeChange = { mold2Code = it }
                 )
-            ) {
-                Text(stringResource(R.string.back_button))
+
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // SUBMIT
+                Button(
+                    onClick = { submitPartChange() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colors.primary,
+                        contentColor = colors.onPrimary
+                    )
+                ) {
+                    Text(
+                        text = stringResource(R.string.submit_button),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = onBack,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colors.secondary,
+                        contentColor = colors.onSecondary
+                    )
+                ) {
+                    Text(stringResource(R.string.back_button))
+                }
             }
         }
     }

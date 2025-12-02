@@ -1,4 +1,4 @@
-package cz.transys.moldapp.ui.scanners
+package cz.transys.moldapp.buisines.scanners
 
 import android.content.BroadcastReceiver
 import android.content.Context

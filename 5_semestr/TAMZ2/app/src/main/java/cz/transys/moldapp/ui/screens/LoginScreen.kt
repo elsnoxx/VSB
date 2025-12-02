@@ -1,5 +1,6 @@
 package cz.transys.moldapp.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -7,7 +8,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -20,12 +20,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import cz.transys.moldapp.LocalScanner
 import cz.transys.moldapp.R
-import kotlinx.coroutines.delay
-import cz.transys.moldapp.ui.localdata.LocalStorage
+import cz.transys.moldapp.buisines.apicalls.moldapi.EmpIdResponse
+import cz.transys.moldapp.buisines.apicalls.moldapi.MoldApiRepository
+import cz.transys.moldapp.buisines.localdata.LocalStorage
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
     val colors = MaterialTheme.colorScheme
+    val repo = remember { MoldApiRepository() }
+    val logInfo = remember { mutableStateOf<EmpIdResponse?>(null) }
 
     var userId by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
@@ -60,7 +64,7 @@ fun LoginScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colors.background)      // ← použijeme theme background
+            .background(colors.background)
             .padding(32.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -69,7 +73,7 @@ fun LoginScreen(navController: NavHostController) {
             text = stringResource(R.string.moldapp_login_title),
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
-            color = colors.primary,             // ← ikonická barva theme
+            color = colors.primary,
             modifier = Modifier.padding(bottom = 32.dp)
         )
 
@@ -98,7 +102,7 @@ fun LoginScreen(navController: NavHostController) {
         if (errorMessage.isNotEmpty()) {
             Text(
                 text = errorMessage,
-                color = colors.error,            // ← chyba podle theme
+                color = colors.error,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(4.dp)
             )
@@ -110,9 +114,25 @@ fun LoginScreen(navController: NavHostController) {
             onClick = {
                 if (userId.isBlank()) {
                     errorMessage = context.getString(R.string.empty_user_id)
-                } else {
-                    storage.saveUserId(userId)
-                    navController.navigate("menu")
+                    return@Button
+                }
+
+                scope.launch {
+                    try {
+                        val response = repo.login(userId)
+                        logInfo.value = response
+                        Log.d("Login API", "Login success: $response")
+
+                        if (response.message != "issue" && response.emp_name != ""){
+                            storage.saveUserId(userId)
+                            navController.navigate("menu")
+                        }  else {
+                            errorMessage = context.getString(R.string.wrong_user_id)
+                        }
+                    } catch (e: Exception) {
+                        Log.e("Login API", "Error: ${e.localizedMessage}")
+                        errorMessage = context.getString(R.string.api_error_full)
+                    }
                 }
             },
             modifier = Modifier

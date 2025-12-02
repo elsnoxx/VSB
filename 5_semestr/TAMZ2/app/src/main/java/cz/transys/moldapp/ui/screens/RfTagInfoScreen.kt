@@ -7,7 +7,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -15,8 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cz.transys.moldapp.LocalScanner
 import cz.transys.moldapp.R
-import cz.transys.moldapp.ui.apicalls.MoldRfInfoRepository
-import cz.transys.moldapp.ui.apicalls.TagInfo
+import cz.transys.moldapp.buisines.apicalls.rfidinfo.MoldRfInfoRepository
+import cz.transys.moldapp.buisines.apicalls.rfidinfo.TagInfo
 import kotlinx.coroutines.launch
 
 @Composable
@@ -30,6 +29,8 @@ fun RfTagInfoScreen(onBack: () -> Unit) {
     var info by remember { mutableStateOf<TagInfo?>(null) }
     var loading by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
+
+
 
     fun loadData(tag: String) {
         Log.d("TAG_LOAD", "loadData() called with tag = '$tag'")

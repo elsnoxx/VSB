@@ -1,23 +1,27 @@
 package cz.transys.moldapp.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cz.transys.moldapp.R
-import cz.transys.moldapp.ui.apicalls.CarCodeList
-import cz.transys.moldapp.ui.apicalls.CarriersList
-import cz.transys.moldapp.ui.apicalls.MoldApiRepository
-import cz.transys.moldapp.ui.apicalls.MoldRepairRepository
-import cz.transys.moldapp.ui.apicalls.MoldsList
+import cz.transys.moldapp.buisines.apicalls.moldapi.CarCodeList
+import cz.transys.moldapp.buisines.apicalls.moldapi.CarriersList
+import cz.transys.moldapp.buisines.apicalls.moldapi.MoldApiRepository
+import cz.transys.moldapp.buisines.apicalls.moldapi.MoldsList
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,6 +29,7 @@ fun TagWriteScreen(onBack: () -> Unit) {
 
     val colors = MaterialTheme.colorScheme
     val moldRepo = remember { MoldApiRepository() }
+    val scope = rememberCoroutineScope()
 
     var selectedMode by remember { mutableStateOf("MOLD") }
 
@@ -41,9 +46,14 @@ fun TagWriteScreen(onBack: () -> Unit) {
 
     var carrierList by remember { mutableStateOf<List<CarriersList>>(emptyList()) }
     var selectedCarrier by remember { mutableStateOf("") }
+    var selectedCarrierNo by remember { mutableStateOf("") }
 
     var loading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<String?>(null) }
+
+    var showWriteDialog by remember { mutableStateOf(false) }
+    var writeStatus by remember { mutableStateOf("idle") }
+
 
     LaunchedEffect(Unit) {
         loading = true
@@ -118,7 +128,9 @@ fun TagWriteScreen(onBack: () -> Unit) {
                 "CARRIER" -> CarrierModeSection(
                     carrierList = carrierList,
                     selectedCarrier = selectedCarrier,
-                    onCarrierChange = { selectedCarrier = it }
+                    selectedCarrierNo = selectedCarrierNo,
+                    onCarrierChange = { selectedCarrier = it },
+                    onCarrierLabel = { selectedCarrierNo = it }
                 )
 
             }
@@ -133,7 +145,17 @@ fun TagWriteScreen(onBack: () -> Unit) {
 
                 // WRITE (big)
                 Button(
-                    onClick = {},
+                    onClick = {
+                        writeStatus = "writing"
+                        showWriteDialog = true
+
+                        scope.launch {
+                            delay(1500)
+
+                            val ok = (0..10).random() > 1
+                            writeStatus = if (ok) "success" else "error"
+                        }
+                    },
                     modifier = Modifier
                         .weight(2f)
                         .height(55.dp),
@@ -165,6 +187,16 @@ fun TagWriteScreen(onBack: () -> Unit) {
                     )
                 }
             }
+
+            WriteToRfidDialog(
+                show = showWriteDialog,
+                status = writeStatus,
+                onDismiss = {
+                    showWriteDialog = false
+                    writeStatus = "idle"
+                }
+            )
+
         }
     }
 }
@@ -181,6 +213,7 @@ fun MoldModeSection(
     side: String
 ) {
     val colors = MaterialTheme.colorScheme
+    val context = LocalContext.current
 
     // Data + loading + error
     var carList by remember { mutableStateOf<List<CarCodeList>>(emptyList()) }
@@ -195,13 +228,13 @@ fun MoldModeSection(
     var expandedCar by remember { mutableStateOf(false) }
     var expandedMold by remember { mutableStateOf(false) }
 
-    // Načtení seznamu Car (SAFE)
+    // Načtení seznamu Car
     LaunchedEffect(Unit) {
         loadingCars = true
         try {
             carList = repo.getAllCars()
         } catch (e: Exception) {
-            errorMessage = "Failed to load cars: ${e.localizedMessage}"
+            errorMessage = context.getString(R.string.api_error_full, e.localizedMessage)
             carList = emptyList()
         } finally {
             loadingCars = false
@@ -215,7 +248,7 @@ fun MoldModeSection(
             try {
                 moldList = repo.getMoldsByCarCode(selectedCar.lowercase())
             } catch (e: Exception) {
-                errorMessage = "Failed to load molds: ${e.localizedMessage}"
+                errorMessage = context.getString(R.string.api_error_full, e.localizedMessage)
                 moldList = emptyList()
             } finally {
                 loadingMolds = false
@@ -243,11 +276,11 @@ fun MoldModeSection(
             onExpandedChange = { expandedCar = !expandedCar }
         ) {
             OutlinedTextField(
-                value = if (loadingCars) "Loading..." else selectedCar,
+                value = if (loadingCars) stringResource(R.string.loading) else selectedCar,
                 onValueChange = {},
                 readOnly = true,
                 enabled = !loadingCars && carList.isNotEmpty(),
-                label = { Text("Car") },
+                label = { Text(stringResource(R.string.car_label)) },
                 trailingIcon = {
                     if (!loadingCars) {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCar)
@@ -264,7 +297,7 @@ fun MoldModeSection(
             ) {
                 if (carList.isEmpty()) {
                     DropdownMenuItem(
-                        text = { Text("No cars available") },
+                        text = { Text(stringResource(R.string.no_cars_avaliable)) },
                         onClick = {}
                     )
                 } else {
@@ -288,11 +321,11 @@ fun MoldModeSection(
             onExpandedChange = { expandedMold = !expandedMold }
         ) {
             OutlinedTextField(
-                value = if (loadingMolds) "Loading..." else selectedMold,
+                value = if (loadingMolds) stringResource(R.string.loading) else selectedMold,
                 onValueChange = {},
                 readOnly = true,
                 enabled = selectedCar.isNotEmpty() && moldList.isNotEmpty(),
-                label = { Text("Mold") },
+                label = { Text(stringResource(R.string.mold_label)) },
                 trailingIcon = {
                     if (!loadingMolds && selectedCar.isNotEmpty())
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedMold)
@@ -308,12 +341,12 @@ fun MoldModeSection(
             ) {
                 if (loadingMolds) {
                     DropdownMenuItem(
-                        text = { Text("Loading...") },
+                        text = { Text(stringResource(R.string.loading)) },
                         onClick = {}
                     )
                 } else if (moldList.isEmpty()) {
                     DropdownMenuItem(
-                        text = { Text("No molds available") },
+                        text = { Text(stringResource(R.string.no_mold_avaliable)) },
                         onClick = {}
                     )
                 } else {
@@ -330,10 +363,10 @@ fun MoldModeSection(
             }
         }
 
-        // 🟩 TYPE + SIDE (read-only)
+        // TYPE + SIDE (read-only)
         if (selectedMold.isNotEmpty()) {
-            ReadOnlyField("Type", type)
-            ReadOnlyField("Side", side)
+            ReadOnlyField(stringResource(R.string.type_label), type)
+            ReadOnlyField(stringResource(R.string.side_label), side)
         }
     }
 }
@@ -345,7 +378,9 @@ fun MoldModeSection(
 fun CarrierModeSection(
     carrierList: List<CarriersList>,
     selectedCarrier: String,
-    onCarrierChange: (String) -> Unit
+    selectedCarrierNo: String,
+    onCarrierChange: (String) -> Unit,
+    onCarrierLabel: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -359,7 +394,7 @@ fun CarrierModeSection(
                 value = selectedCarrier,
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Carrier") },
+                label = { Text(stringResource(R.string.carrier_label)) },
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                 },
@@ -376,7 +411,8 @@ fun CarrierModeSection(
                     DropdownMenuItem(
                         text = { Text(carrier.code_value1) },
                         onClick = {
-                            onCarrierChange(carrier.code_value2)
+                            onCarrierChange(carrier.code_value1)
+                            onCarrierLabel(carrier.code_value2)
                             expanded = false
                         }
                     )
@@ -384,8 +420,8 @@ fun CarrierModeSection(
             }
         }
 
-        if (selectedCarrier.isNotEmpty()) {
-            ReadOnlyField("Selected Carrier", selectedCarrier)
+        if (selectedCarrierNo.isNotEmpty()) {
+            ReadOnlyField(stringResource(R.string.selected_carrier), selectedCarrierNo)
         }
     }
 }
@@ -412,4 +448,62 @@ fun ModeButton(text: String, selected: Boolean, onClick: () -> Unit) {
             fontSize = 16.sp
         )
     }
+}
+
+
+@Composable
+fun WriteToRfidDialog(
+    show: Boolean,
+    status: String,
+    onDismiss: () -> Unit
+) {
+    if (!show) return
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(stringResource(R.string.dialog_tag_write_title))
+        },
+        text = {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+                when (status) {
+                    "writing" -> {
+                        CircularProgressIndicator()
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(stringResource(R.string.dialog_tag_write_text))
+                    }
+
+                    "success" -> {
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            tint = Color(0xFF43A047),
+                            modifier = Modifier.size(48.dp)
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(stringResource(R.string.dialog_tag_write_text_succes))
+                    }
+
+                    "error" -> {
+                        Icon(
+                            imageVector = Icons.Default.Warning,
+                            contentDescription = null,
+                            tint = Color.Red,
+                            modifier = Modifier.size(48.dp)
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(stringResource(R.string.dialog_tag_write_text_fail))
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            if (status != "writing") {
+                TextButton(onClick = onDismiss) {
+                    Text(stringResource(R.string.dialog_tag_write_button))
+                }
+            }
+        }
+    )
 }

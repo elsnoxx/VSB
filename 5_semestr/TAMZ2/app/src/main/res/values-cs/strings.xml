@@ -1,0 +1,99 @@
+<resources>
+
+    <!--    General screen    -->
+    <string name="type_label">Typ</string>
+    <string name="back_button">Zpět</string>
+    <string name="carrier_label">Carrier</string>
+    <string name="car_label">Auto</string>
+    <string name="mold1_title">Forma #1</string>
+    <string name="mold2_title">Forma #2</string>
+    <string name="type_placeholder">např. NX4E FC LH - 08</string>
+    <string name="type2_placeholder">např. NX4E FC RH - 08</string>
+    <string name="mold_id_label">ID Formy</string>
+    <string name="mold_id_placeholder">např. M88150N7001-08</string>
+    <string name="mold2_id_placeholder">např. M88250N7001-08</string>
+    <string name="error_missing_fields">Vyplňte prosím formu a typ opravy.</string>
+    <string name="no_connection">Žádné připojení</string>
+    <string name="no_connection_text">Momentálně nejste připojeni k internetu.</string>
+    <string name="no_connection_to_server">"Server není dostupný"</string>
+    <string name="no_connection_text_to_server">API server neodpovídá nebo je mimo provoz.</string>
+    <string name="loading">Načítání...</string>
+
+
+    <!--    Mold Repair screen    -->
+    <string name="app_name">MoldApp</string>
+    <string name="mold_repair_title">Oprava Formy</string>
+    <string name="mold_label">Forma</string>
+    <string name="out_date_label">Datum výměny</string>
+    <string name="repairer_label">Opravář</string>
+    <string name="repair_button">Opravit</string>
+    <string name="success_sent">Úspěšně odesláno</string>
+    <string name="api_error">Chyba API</string>
+    <string name="api_error_full">Chyba API: %1$s</string>
+    <string name="mold_not_found">Forma nenalezena</string>
+
+    <!--    Login screen    -->
+    <string name="moldapp_login_title">Přihlášení do MoldApp</string>
+    <string name="user_id">Uživatelské ID</string>
+    <string name="user_id_placeholder">Zadejte své ID</string>
+    <string name="continue_button">Pokračovat</string>
+    <string name="invalid_user_id">Načtený kód není platné uživatelské ID (pouze čísla)</string>
+    <string name="empty_user_id">Zadejte prosím své uživatelské ID</string>
+    <string name="wrong_user_id">Nemáte oprávnění se přihlásit.</string>
+
+    <!--    Menu screen    -->
+    <string name="menu_tag_write">Zápis Tagu</string>
+    <string name="menu_mold_repair">Oprava Formy</string>
+    <string name="menu_part_change">Výměna Dílu</string>
+    <string name="menu_mold_mount">Nasazení Formy</string>
+    <string name="menu_rf_tag_info">RF-Tag Info</string>
+    <string name="menu_test_reading">Test Skenování</string>
+
+    <!--    Mold Mount screen    -->
+    <string name="mold_mount_title">Nasazení Formy</string>
+    <string name="mount_button">NASADIT</string>
+    <string name="dialog_mold_mount_title">Duplicitní sken</string>
+    <string name="dialog_mold_mount_text">Tento RFID tag už byl naskenován.</string>
+    <string name="dialog_mold_mount_button">OK</string>
+
+    <!--    Mold Part Change screen    -->
+    <string name="part_change_title">Výměna Dílu</string>
+    <string name="submit_button">ODESLAT</string>
+    <string name="mold_code">Kód Formy</string>
+
+    <!--    Tag Write screen    -->
+    <string name="tag_write_title">Zápis RF-Tagu</string>
+    <string name="mode_mold">FORMA</string>
+    <string name="mode_carrier">CARRIER</string>
+    <string name="side_label">Strana</string>
+    <string name="write_button">ZAPSAT</string>
+    <string name="read_button">NAČÍST</string>
+    <string name="selected_carrier">Vybraný Carrier</string>
+    <string name="no_cars_avaliable">Žádné dostupné auta</string>
+    <string name="no_mold_avaliable">Žádné dostupné formy</string>
+    <string name="dialog_tag_write_title">RFID Write Simulation</string>
+    <string name="dialog_tag_write_text">Writing data to RFID tag...</string>
+    <string name="dialog_tag_write_text_succes">Write completed successfully!</string>
+    <string name="dialog_tag_write_text_fail">Failed to write RFID tag!</string>
+    <string name="dialog_tag_write_button">OK</string>
+
+    <!--    RF Tag screen    -->
+    <string name="rf_tag_info_title">Informace o RF-Tagu</string>
+    <string name="rf_tag_label">RF-TAG</string>
+    <string name="rf_tag_placeholder">Naskenujte nebo zadejte kód</string>
+    <string name="error_tag_not_found">RF-TAG nebyl v systému nalezen</string>
+    <string name="error_api">Chyba API: %1$s</string>
+    <string name="field_mold_id">ID Formy</string>
+    <string name="field_part_type">Typ Dílu</string>
+    <string name="field_car">Auto</string>
+    <string name="field_status">Status</string>
+    <string name="field_total_cycles">Celkový počet cyklů</string>
+    <string name="load_data_button">NAČÍST DATA</string>
+
+    <!--    Test Reading screen    -->
+    <string name="test_reading_title">Testovací Čtečka</string>
+    <string name="scanned_count">Načtených položek: %1$d</string>
+    <string name="no_scans_yet">Zatím žádné skeny</string>
+    <string name="clear_list_button">Vymazat seznam</string>
+
+</resources>

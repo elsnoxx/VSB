@@ -12,6 +12,11 @@
     <string name="mold_id_placeholder">e.g. M88150N7001-08</string>
     <string name="mold2_id_placeholder">e.g. M88250N7001-08</string>
     <string name="error_missing_fields">Please fill in the mold and type of repair.</string>
+    <string name="no_connection">No connection</string>
+    <string name="no_connection_text">You are currently not connected to the internet.</string>
+    <string name="no_connection_to_server">Server není dostupný</string>
+    <string name="no_connection_text_to_server">API server neodpovídá nebo je mimo provoz.</string>
+    <string name="loading">Loading...</string>
 
 
     <!--    Mold Repair screen    -->
@@ -33,6 +38,7 @@
     <string name="continue_button">Continue</string>
     <string name="invalid_user_id">Scanned code is not a valid User ID (digits only)</string>
     <string name="empty_user_id">Please enter your User ID</string>
+    <string name="wrong_user_id">You do not have right to login.</string>
 
     <!--    Menu screen    -->
     <string name="menu_tag_write">Tag Write</string>
@@ -45,6 +51,10 @@
     <!--    Mold Mount screen    -->
     <string name="mold_mount_title">MOLD Mount</string>
     <string name="mount_button">MOUNT</string>
+    <string name="dialog_mold_mount_title">Duplicate Scan</string>
+    <string name="dialog_mold_mount_text">This RFID tag has already been scanned.</string>
+    <string name="dialog_mold_mount_button">OK</string>
+
 
     <!--    Mold Part Change screen    -->
     <string name="part_change_title">Part Change</string>
@@ -58,6 +68,16 @@
     <string name="side_label">Side</string>
     <string name="write_button">WRITE</string>
     <string name="read_button">READ</string>
+    <string name="selected_carrier">Selected Carrier</string>
+    <string name="no_cars_avaliable">No cars available</string>
+    <string name="no_mold_avaliable">No molds available</string>
+    <string name="dialog_tag_write_title">Simulace zápisu RFID</string>
+    <string name="dialog_tag_write_text">Probíhá zápis dat na RFID tag...</string>
+    <string name="dialog_tag_write_text_succes">Zápis byl úspěšně dokončen!</string>
+    <string name="dialog_tag_write_text_fail">Zápis na RFID tag se nezdařil!</string>
+    <string name="dialog_tag_write_button">OK</string>
+
+
 
     <!--    RF Tag screen    -->
     <string name="rf_tag_info_title">RF-Tag Information</string>

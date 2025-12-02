@@ -1,4 +1,6 @@
-package cz.transys.moldapp.ui.apicalls
+package cz.transys.moldapp.buisines.apicalls.rfidinfo
+
+import cz.transys.moldapp.buisines.apicalls.ApiClient
 
 class MoldRfInfoRepository {
     suspend fun getTagInfo(tag: String): TagInfo? {
@@ -9,12 +11,5 @@ class MoldRfInfoRepository {
         }
     }
 }
-
-data class TagInfo(
-    val mold_code: String,
-    val mold_name: String,
-    val car_code: String,
-    val code_value1: String
-)
 
 

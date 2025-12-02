@@ -1,4 +1,4 @@
-package cz.transys.moldapp.ui.apicalls
+package cz.transys.moldapp.buisines.apicalls
 
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
