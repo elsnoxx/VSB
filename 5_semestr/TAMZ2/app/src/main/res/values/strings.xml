@@ -14,8 +14,8 @@
     <string name="error_missing_fields">Please fill in the mold and type of repair.</string>
     <string name="no_connection">No connection</string>
     <string name="no_connection_text">You are currently not connected to the internet.</string>
-    <string name="no_connection_to_server">Server není dostupný</string>
-    <string name="no_connection_text_to_server">API server neodpovídá nebo je mimo provoz.</string>
+    <string name="no_connection_to_server">Server is not available</string>
+    <string name="no_connection_text_to_server">The API server is not responding or is currently offline.</string>
     <string name="loading">Loading...</string>
 
 
@@ -54,6 +54,7 @@
     <string name="dialog_mold_mount_title">Duplicate Scan</string>
     <string name="dialog_mold_mount_text">This RFID tag has already been scanned.</string>
     <string name="dialog_mold_mount_button">OK</string>
+    <string name="dialog_mold_mount_text_succes">Mold mounted successfully</string>
 
 
     <!--    Mold Part Change screen    -->

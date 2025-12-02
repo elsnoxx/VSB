@@ -106,14 +106,25 @@ fun AppRoot() {
     }
 
     LaunchedEffect(status.apiAvailable) {
+        if (!status.internet) {
+            showInternetDialog = true
+            return@LaunchedEffect
+        }
+
         if (!status.apiAvailable) {
             showApiDialog = true
+            return@LaunchedEffect
+        }
+
+        try {
             carrierList = repo.getAllCarriers(forceRefresh = true)
             typeList = repairRepo.getAllRepairTypes(forceRefresh = true)
             carList = repo.getAllCars(forceRefresh = true)
+        } catch (e: Exception) {
+            showApiDialog = true
         }
-
     }
+
 
 //    if (!status.internet) showInternetDialog = true
 //    if (!status.apiAvailable) showApiDialog = true
