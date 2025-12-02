@@ -60,3 +60,26 @@ Ukažte z Úkol 5:
 CHECK_GUEST_FOR_LOOP; -- Kurzor FOR LOOP
 ```
 
+Demonstrovat
+
+Triger insted of
+
+
+package pretezovani funkci = pry jednum ěx poslat text
+begin
+    DBMS_OUTPUT.PUT_LINE('1 params: "' || string_pkg.reverse_concat('A') || '"');
+    DBMS_OUTPUT.PUT_LINE('2 params: "' || string_pkg.reverse_concat('Hello', 'World') || '"');
+    DBMS_OUTPUT.PUT_LINE('3 params: "' || string_pkg.reverse_concat('A', 'B', 'C') || '"');
+end;
+
+dynamicke sql
+DECLARE
+    my_input_param NUMBER := 42;
+    my_output_param NUMBER;
+BEGIN
+    execute_dynamic_sql('SELECT :input_param * 2 FROM DUAL', my_input_param, my_output_param);
+    DBMS_OUTPUT.PUT_LINE('Result: ' || my_output_param);
+END;
+
+cursor = loop, for
+

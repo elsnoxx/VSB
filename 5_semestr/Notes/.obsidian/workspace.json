@@ -64,6 +64,34 @@
             }
           },
           {
+            "id": "7feacadce6375ccd",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Task.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Task"
+            }
+          },
+          {
+            "id": "3eef0d537f42fe72",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Task.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Task"
+            }
+          },
+          {
             "id": "5f34cfde32632ebd",
             "type": "leaf",
             "state": {
@@ -92,7 +120,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 5
       }
     ],
     "direction": "vertical"
@@ -237,14 +265,15 @@
       "bases:Create new base": false
     }
   },
-  "active": "eff41a9948d78485",
+  "active": "3eef0d537f42fe72",
   "lastOpenFiles": [
+    "Tasks.md",
+    "ZPG/Lekce 2.md",
+    "Task.md",
     "VIS.md",
     "ZSU.md",
-    "Tasks.md",
     "TAMZ2.md",
     "ZPG/Lekce 3.md",
-    "ZPG/Lekce 2.md",
     "ZPG"
   ]
 }
