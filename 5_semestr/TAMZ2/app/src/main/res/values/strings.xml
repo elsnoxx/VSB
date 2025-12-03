@@ -57,10 +57,15 @@
     <string name="dialog_mold_mount_text_succes">Mold mounted successfully</string>
 
 
-    <!--    Mold Part Change screen    -->
+    <!--    Part Change screen    -->
     <string name="part_change_title">Part Change</string>
     <string name="submit_button">SUBMIT</string>
     <string name="mold_code">Mold Code</string>
+    <string name="error_fill_required">Please fill all required fields.</string>
+    <string name="submit_success">Successfully submitted!</string>
+    <string name="submit_failed">Error while submitting!</string>
+    <string name="submit_api_error">API error: %1$s</string>
+
 
     <!--    Tag Write screen    -->
     <string name="tag_write_title">RF-Tag Write</string>

@@ -6,6 +6,7 @@ import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.serialization.gson.*
+import io.ktor.http.*
 
 object ApiClient {
 
@@ -25,6 +26,7 @@ object ApiClient {
     // universal POST
     suspend inline fun <reified T> post(path: String, payload: Any): T {
         return client.post(BASE_URL + path) {
+            contentType(ContentType.Application.Json)
             setBody(payload)
         }.body()
     }

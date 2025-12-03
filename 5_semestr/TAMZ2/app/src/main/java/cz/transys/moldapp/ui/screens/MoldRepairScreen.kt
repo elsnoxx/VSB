@@ -139,7 +139,6 @@ fun MoldRepairScreen(onBack: () -> Unit) {
 
     DisposableEffect(scanner) {
         onDispose {
-            // po opuštění obrazovky zrušíme listener
             scanner?.setOnScanListener { }
         }
     }
@@ -298,7 +297,7 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
 
-                // 🔧 REPAIR button
+                // REPAIR button
                 Button(
                     onClick = {
                         scope.launch {
@@ -357,7 +356,7 @@ fun MoldRepairScreen(onBack: () -> Unit) {
                     )
                 }
 
-                // ZPĚT
+                // Back
                 Button(
                     onClick = onBack,
                     modifier = Modifier

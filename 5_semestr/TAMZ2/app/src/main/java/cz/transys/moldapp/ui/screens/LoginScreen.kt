@@ -139,8 +139,8 @@ fun LoginScreen(navController: NavHostController) {
                 .fillMaxWidth()
                 .height(60.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = colors.primary,          // ← theme primary
-                contentColor = colors.onPrimary           // ← text kontrast
+                containerColor = colors.primary,
+                contentColor = colors.onPrimary
             )
         ) {
             Text(

@@ -1,5 +1,7 @@
 package cz.transys.moldapp.buisines.apicalls.partchange
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PartChangeRequest(
     val carrirer_no: String,
     val carrirer_name: String,

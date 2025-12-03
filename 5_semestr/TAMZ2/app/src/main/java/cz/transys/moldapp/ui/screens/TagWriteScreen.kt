@@ -32,40 +32,17 @@ fun TagWriteScreen(onBack: () -> Unit) {
     val scope = rememberCoroutineScope()
 
     var selectedMode by remember { mutableStateOf("MOLD") }
-
-    var expandedCar by remember { mutableStateOf(false) }
     var selectedCar by remember { mutableStateOf("") }
-    var carList by remember { mutableStateOf<List<CarCodeList>>(emptyList()) }
-
-    var expandedMold by remember { mutableStateOf(false) }
     var selectedMold by remember { mutableStateOf("") }
-    val moldList = listOf("M88150N7001-08", "M88250N7001-08", "M88300N7010-09")
 
     var type by remember { mutableStateOf("FC LH 08") }
     var side by remember { mutableStateOf("LH") }
 
-    var carrierList by remember { mutableStateOf<List<CarriersList>>(emptyList()) }
     var selectedCarrier by remember { mutableStateOf("") }
     var selectedCarrierNo by remember { mutableStateOf("") }
 
-    var loading by remember { mutableStateOf(true) }
-    var error by remember { mutableStateOf<String?>(null) }
-
     var showWriteDialog by remember { mutableStateOf(false) }
     var writeStatus by remember { mutableStateOf("idle") }
-
-
-    LaunchedEffect(Unit) {
-        loading = true
-        try {
-            carList = moldRepo.getAllCars()
-            carrierList = moldRepo.getAllCarriers()
-        } catch (e: Exception) {
-            error = e.localizedMessage
-        } finally {
-            loading = false
-        }
-    }
 
     Column(
         modifier = Modifier
@@ -90,7 +67,7 @@ fun TagWriteScreen(onBack: () -> Unit) {
                 .padding(16.dp)
         ) {
 
-            // --- Toggle buttons ---
+            // Toggle buttons
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
@@ -112,7 +89,7 @@ fun TagWriteScreen(onBack: () -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
 
 
-            // --- Dynamic UI based on mode ---
+            // Dynamic UI based on mode
             when (selectedMode) {
                 "MOLD" -> MoldModeSection(
                     repo = moldRepo,
@@ -126,7 +103,7 @@ fun TagWriteScreen(onBack: () -> Unit) {
 
 
                 "CARRIER" -> CarrierModeSection(
-                    carrierList = carrierList,
+                    repo = moldRepo,
                     selectedCarrier = selectedCarrier,
                     selectedCarrierNo = selectedCarrierNo,
                     onCarrierChange = { selectedCarrier = it },
@@ -137,13 +114,13 @@ fun TagWriteScreen(onBack: () -> Unit) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // --- Buttons ---
+            // Buttons
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
 
-                // WRITE (big)
+                // WRITE
                 Button(
                     onClick = {
                         writeStatus = "writing"
@@ -228,7 +205,7 @@ fun MoldModeSection(
     var expandedCar by remember { mutableStateOf(false) }
     var expandedMold by remember { mutableStateOf(false) }
 
-    // Načtení seznamu Car
+    // Loading Car list
     LaunchedEffect(Unit) {
         loadingCars = true
         try {
@@ -241,7 +218,7 @@ fun MoldModeSection(
         }
     }
 
-    // Po výběru Car → načti Molds
+    // After Car list load molds
     LaunchedEffect(selectedCar) {
         if (selectedCar.isNotEmpty()) {
             loadingMolds = true
@@ -376,13 +353,31 @@ fun MoldModeSection(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CarrierModeSection(
-    carrierList: List<CarriersList>,
+    repo: MoldApiRepository,
     selectedCarrier: String,
     selectedCarrierNo: String,
     onCarrierChange: (String) -> Unit,
     onCarrierLabel: (String) -> Unit
 ) {
+    val colors = MaterialTheme.colorScheme
+    val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
+    var carrierList by remember { mutableStateOf<List<CarriersList>>(emptyList()) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var loadingCarrirers by remember { mutableStateOf(true) }
+
+    // Loading Car list
+    LaunchedEffect(Unit) {
+        loadingCarrirers = true
+        try {
+            carrierList = repo.getAllCarriers()
+        } catch (e: Exception) {
+            errorMessage = context.getString(R.string.api_error_full, e.localizedMessage)
+            carrierList = emptyList()
+        } finally {
+            loadingCarrirers = false
+        }
+    }
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
 

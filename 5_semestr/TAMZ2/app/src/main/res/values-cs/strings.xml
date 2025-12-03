@@ -56,10 +56,15 @@
     <string name="dialog_mold_mount_text">Tento RFID tag už byl naskenován.</string>
     <string name="dialog_mold_mount_button">OK</string>
 
-    <!--    Mold Part Change screen    -->
+    <!--    Part Change screen    -->
     <string name="part_change_title">Výměna Dílu</string>
     <string name="submit_button">ODESLAT</string>
     <string name="mold_code">Kód Formy</string>
+    <string name="error_fill_required">Vyplňte prosím všechny povinné údaje.</string>
+    <string name="submit_success">Úspěšně odesláno!</string>
+    <string name="submit_failed">Chyba při odesílání!</string>
+    <string name="submit_api_error">Chyba API: %1$s</string>
+
 
     <!--    Tag Write screen    -->
     <string name="tag_write_title">Zápis RF-Tagu</string>

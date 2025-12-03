@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -42,6 +43,8 @@ fun MoldMountScreen(onBack: () -> Unit) {
     var showDuplicateDialog by remember { mutableStateOf(false) }
 
     val scanner = LocalScanner.current
+    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
     // Carrier dropdown
     var expandedCarrier by remember { mutableStateOf(false) }
@@ -86,11 +89,12 @@ fun MoldMountScreen(onBack: () -> Unit) {
 
         scope.launch {
             try {
-                val success = mountRepo.postMoldMount(request)
-
-                if (success) {
-                    showSuccessDialog = true
-
+                val res = mountRepo.postMoldMount(request)
+                Log.d("Mount API", "${res}")
+                if (res.message == "Success") {
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.submit_success)
+                    )
                     // Reset po úspěchu
                     mold1Code = ""
                     mold1Type = ""
@@ -101,42 +105,17 @@ fun MoldMountScreen(onBack: () -> Unit) {
                     carCode2 = ""
 
                 } else {
-                    errorMessage = "Server returned error"
-                    showErrorDialog = true
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.submit_failed), res.message
+                    )
                 }
             } catch (e: Exception) {
-                errorMessage = e.localizedMessage ?: "Unknown error"
-                showErrorDialog = true
+                snackbarHostState.showSnackbar(
+                    context.getString(R.string.submit_api_error, e.localizedMessage ?: "Unknown")
+                )
             }
         }
     }
-
-    if (showSuccessDialog) {
-        AlertDialog(
-            onDismissRequest = { showSuccessDialog = false },
-            title = { Text(stringResource(R.string.success_sent)) },
-            text = { Text(stringResource(R.string.dialog_mold_mount_text_succes)) },
-            confirmButton = {
-                TextButton(onClick = { showSuccessDialog = false }) {
-                    Text(stringResource(R.string.dialog_mold_mount_button))
-                }
-            }
-        )
-    }
-
-    if (showErrorDialog) {
-        AlertDialog(
-            onDismissRequest = { showErrorDialog = false },
-            title = { Text("Error") },
-            text = { Text(errorMessage) },
-            confirmButton = {
-                TextButton(onClick = { showErrorDialog = false }) {
-                    Text(stringResource(R.string.dialog_mold_mount_button))
-                }
-            }
-        )
-    }
-
 
 
     LaunchedEffect(scanner, selectedCarrier) {
@@ -144,7 +123,6 @@ fun MoldMountScreen(onBack: () -> Unit) {
 
             val tag = scannedTag.trim()
 
-            // NESMÍ být prázdný
             if (tag.isBlank()) return@setOnScanListener
 
             if (tag == mold1Code || tag == mold2Code) {
@@ -198,150 +176,154 @@ fun MoldMountScreen(onBack: () -> Unit) {
         } catch (_: Exception) {}
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colors.background)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        if (showDuplicateDialog) {
-            AlertDialog(
-                onDismissRequest = { showDuplicateDialog = false },
-                title = { Text(stringResource(R.string.dialog_mold_mount_title)) },
-                text = { Text(stringResource(R.string.dialog_mold_mount_text)) },
-                confirmButton = {
-                    TextButton(onClick = { showDuplicateDialog = false }) {
-                        Text(stringResource(R.string.dialog_mold_mount_button))
-                    }
-                }
-            )
-        }
-
-        Text(
-            text = stringResource(R.string.mold_mount_title),
-            fontSize = 26.sp,
-            fontWeight = FontWeight.Bold,
-            color = colors.primary,
-            modifier = Modifier.padding(bottom = 20.dp)
-        )
-
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { padding ->
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(colors.surface)
-                .padding(16.dp)
+                .fillMaxSize()
+                .background(colors.background)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // CARRIER SELECT
-            ExposedDropdownMenuBox(
-                expanded = expandedCarrier,
-                onExpandedChange = { expandedCarrier = !expandedCarrier }
-            ) {
-                OutlinedTextField(
-                    value = selectedCarrier,
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text(stringResource(R.string.carrier_label)) },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCarrier)
-                    },
-                    modifier = Modifier
-                        .menuAnchor()
-                        .fillMaxWidth()
+            if (showDuplicateDialog) {
+                AlertDialog(
+                    onDismissRequest = { showDuplicateDialog = false },
+                    title = { Text(stringResource(R.string.dialog_mold_mount_title)) },
+                    text = { Text(stringResource(R.string.dialog_mold_mount_text)) },
+                    confirmButton = {
+                        TextButton(onClick = { showDuplicateDialog = false }) {
+                            Text(stringResource(R.string.dialog_mold_mount_button))
+                        }
+                    }
                 )
+            }
 
-                ExposedDropdownMenu(
+            Text(
+                text = stringResource(R.string.mold_mount_title),
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold,
+                color = colors.primary,
+                modifier = Modifier.padding(bottom = 20.dp)
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(colors.surface)
+                    .padding(16.dp)
+            ) {
+
+                // CARRIER SELECT
+                ExposedDropdownMenuBox(
                     expanded = expandedCarrier,
-                    onDismissRequest = { expandedCarrier = false }
+                    onExpandedChange = { expandedCarrier = !expandedCarrier }
                 ) {
-                    if (carrierList.isEmpty()) {
-                        DropdownMenuItem(
-                            text = { Text("No carriers loaded") },
-                            onClick = {}
-                        )
-                    } else {
-                        carrierList.forEach { carrier ->
+                    OutlinedTextField(
+                        value = selectedCarrier,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text(stringResource(R.string.carrier_label)) },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCarrier)
+                        },
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth()
+                    )
+
+                    ExposedDropdownMenu(
+                        expanded = expandedCarrier,
+                        onDismissRequest = { expandedCarrier = false }
+                    ) {
+                        if (carrierList.isEmpty()) {
                             DropdownMenuItem(
-                                text = { Text(carrier.code_value2) },
-                                onClick = {
-                                    selectedCarrier = carrier.code_value1
-                                    expandedCarrier = false
-                                }
+                                text = { Text("No carriers loaded") },
+                                onClick = {}
                             )
+                        } else {
+                            carrierList.forEach { carrier ->
+                                DropdownMenuItem(
+                                    text = { Text(carrier.code_value2) },
+                                    onClick = {
+                                        selectedCarrier = carrier.code_value1
+                                        expandedCarrier = false
+                                    }
+                                )
+                            }
                         }
                     }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            // MOLD #1 – read only
-            MoldMountSection(
-                title = stringResource(R.string.mold1_title),
-                color = colors.tertiary,
-                carCode = carCode1,
-                type = mold1Type,
-                code = mold1Code,
-                readOnlyCode = true,
-                onCodeChange = {},
-                onClear = {
-                    mold1Code = ""
-                    mold1Type = ""
-                    carCode1 = ""
+                // MOLD #1
+                MoldMountSection(
+                    title = stringResource(R.string.mold1_title),
+                    color = colors.tertiary,
+                    carCode = carCode1,
+                    type = mold1Type,
+                    code = mold1Code,
+                    readOnlyCode = true,
+                    onCodeChange = {},
+                    onClear = {
+                        mold1Code = ""
+                        mold1Type = ""
+                        carCode1 = ""
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // MOLD #2
+                MoldMountSection(
+                    title = stringResource(R.string.mold2_title),
+                    color = colors.error,
+                    carCode = carCode2,
+                    type = mold2Type,
+                    code = mold2Code,
+                    readOnlyCode = false,
+                    onCodeChange = { mold2Code = it }, onClear = {
+                        mold2Code = ""
+                        mold2Type = ""
+                        carCode2 = ""
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Button(
+                    onClick = { sendMountRequest() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colors.primary,
+                        contentColor = colors.onPrimary
+                    )
+                ) {
+                    Text(
+                        text = stringResource(R.string.mount_button),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
                 }
-            )
 
-            Spacer(modifier = Modifier.height(12.dp))
 
-            // MOLD #2 – editable (new mold to mount)
-            MoldMountSection(
-                title = stringResource(R.string.mold2_title),
-                color = colors.error,
-                carCode = carCode2,
-                type = mold2Type,
-                code = mold2Code,
-                readOnlyCode = false,
-                onCodeChange = { mold2Code = it },onClear = {
-                    mold2Code = ""
-                    mold2Type = ""
-                    carCode2 = ""
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = onBack,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colors.secondary,
+                        contentColor = colors.onSecondary
+                    )
+                ) {
+                    Text(stringResource(R.string.back_button))
                 }
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(
-                onClick = { sendMountRequest() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colors.primary,
-                    contentColor = colors.onPrimary
-                )
-            ) {
-                Text(
-                    text = stringResource(R.string.mount_button),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-            }
-
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = onBack,
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colors.secondary,
-                    contentColor = colors.onSecondary
-                )
-            ) {
-                Text(stringResource(R.string.back_button))
             }
         }
     }
@@ -356,7 +338,7 @@ fun MoldMountSection(
     code: String,
     readOnlyCode: Boolean,
     onCodeChange: (String) -> Unit,
-    onClear: () -> Unit // <-- přidané
+    onClear: () -> Unit
 ) {
 
     Column(

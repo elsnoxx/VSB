@@ -1,5 +1,9 @@
 package cz.transys.moldapp.buisines.apicalls.moldmount
 
+import kotlinx.serialization.Serializable
+
+
+@Serializable
 data class MoldMountResquest(
     val carrirer_no: String,
     val carrirer_name: String,

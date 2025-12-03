@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
 fun PartChangeScreen(onBack: () -> Unit) {
     val colors = MaterialTheme.colorScheme
     val scope = rememberCoroutineScope()
-
+    val context = LocalContext.current
 
     val repo = remember { MoldApiRepository() }
     val partRepo = remember { PartChangeRepository() }
@@ -55,15 +56,16 @@ fun PartChangeScreen(onBack: () -> Unit) {
     fun submitPartChange() {
         if (selectedCarrier.isBlank() || mold1Code.isBlank() || mold2Code.isBlank()) {
             scope.launch {
-                snackbarHostState.showSnackbar("Please fill all required fields.")
+                snackbarHostState.showSnackbar(
+                    context.getString(R.string.error_fill_required)
+                )
             }
             return
         }
 
         val req = PartChangeRequest(
             carrirer_no = selectedCarrier,
-            carrirer_name = carrierList.find { it.code_value1 == selectedCarrier }?.code_value2
-                ?: "",
+            carrirer_name = carrierList.find { it.code_value1 == selectedCarrier }?.code_value2 ?: "",
             car_code1 = carCode1,
             car_code2 = carCode2,
             mold_code1 = mold1Code,
@@ -74,10 +76,12 @@ fun PartChangeScreen(onBack: () -> Unit) {
 
         scope.launch {
             try {
-                val ok = partRepo.postPartChange(req)
+                val res = partRepo.postPartChange(req)
 
-                if (ok) {
-                    snackbarHostState.showSnackbar("Successfully submitted!")
+                if (res.message == "Success") {
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.submit_success)
+                    )
                     mold1Type = ""
                     mold1Code = ""
                     carCode1 = ""
@@ -85,13 +89,18 @@ fun PartChangeScreen(onBack: () -> Unit) {
                     mold2Code = ""
                     carCode2 = ""
                 } else {
-                    snackbarHostState.showSnackbar("Error while submitting!")
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.submit_failed), res.message
+                    )
                 }
             } catch (e: Exception) {
-                snackbarHostState.showSnackbar("API error: ${e.localizedMessage}")
+                snackbarHostState.showSnackbar(
+                    context.getString(R.string.submit_api_error, e.localizedMessage ?: "Unknown")
+                )
             }
         }
     }
+
 
 
     // Load carriers
@@ -145,7 +154,7 @@ fun PartChangeScreen(onBack: () -> Unit) {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedCarrier)
                         },
                         modifier = Modifier
-                            .menuAnchor()   // 🔥 POVINNÉ
+                            .menuAnchor()
                             .fillMaxWidth()
                     )
 
@@ -193,7 +202,7 @@ fun PartChangeScreen(onBack: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // MOLD #1 – static / loaded
+                // MOLD #1
                 MoldPartChangeSection(
                     title = stringResource(R.string.mold1_title),
                     color = colors.tertiary,
@@ -207,7 +216,7 @@ fun PartChangeScreen(onBack: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // MOLD #2 – scanned
+                // MOLD #2
                 MoldPartChangeSection(
                     title = stringResource(R.string.mold2_title),
                     color = colors.error,
