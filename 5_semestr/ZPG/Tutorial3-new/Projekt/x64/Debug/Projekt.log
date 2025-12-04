@@ -1,0 +1,57 @@
+﻿  Application.cpp
+C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Application.h(3,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  (compiling source file 'Application.cpp')
+  
+  Callbacks.cpp
+C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Application.h(3,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  (compiling source file 'Callbacks.cpp')
+  
+  DrawableObject.cpp
+C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Model.h(2,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  (compiling source file 'DrawableObject.cpp')
+  
+  Model.cpp
+C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Model.h(2,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  (compiling source file 'Model.cpp')
+  
+  Scene.cpp
+C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Model.h(2,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  (compiling source file 'Scene/Scene.cpp')
+  
+  Rotation.cpp
+C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Transform\AbstractTransform.h(2,10): error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
+  (compiling source file 'Transform/Rotation.cpp')
+  
+  Scale.cpp
+C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Transform\AbstractTransform.h(2,10): error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
+  (compiling source file 'Transform/Scale.cpp')
+  
+  FragmentShader.cpp
+C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Shader\Shader.h(2,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  (compiling source file 'Shader/FragmentShader.cpp')
+  
+  Projekt.cpp
+C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Application.h(3,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  (compiling source file 'Projekt.cpp')
+  
+  ShaderProgram.cpp
+C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Shader\ShaderProgram.h(2,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  (compiling source file 'Shader/ShaderProgram.cpp')
+  
+  Shader.cpp
+C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Shader\Shader.h(2,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  (compiling source file 'Shader/Shader.cpp')
+  
+  VertexShader.cpp
+C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Shader\Shader.h(2,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  (compiling source file 'Shader/VertexShader.cpp')
+  
+  Transform.cpp
+C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Transform\AbstractTransform.h(2,10): error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
+  (compiling source file 'Transform/Transform.cpp')
+  
+  Translation.cpp
+C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Transform\AbstractTransform.h(2,10): error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
+  (compiling source file 'Transform/Translation.cpp')
+  
+  Generating Code...

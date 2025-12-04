@@ -55,6 +55,7 @@
     <string name="dialog_mold_mount_title">Duplicitní sken</string>
     <string name="dialog_mold_mount_text">Tento RFID tag už byl naskenován.</string>
     <string name="dialog_mold_mount_button">OK</string>
+    <string name="dialog_mold_mount_text_succes">Forma úspěšně namontována</string>
 
     <!--    Part Change screen    -->
     <string name="part_change_title">Výměna Dílu</string>
