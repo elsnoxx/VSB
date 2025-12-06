@@ -1,20 +1,19 @@
 #pragma once
 #include <vector>
 #include "Observer.h"
+#include "ObservableSubjects.h"
 
-class Subject {
-public:
-    void addObserver(Observer* observer) {
-        observers.push_back(observer);
-    }
-
+class Subject
+{
 protected:
-    void notify(const Camera& cam) {
-        for (auto obs : observers) {
-            obs->onCameraChanged(cam);
-        }
-    }
+	std::vector<Observer*> observers;
 
-private:
-    std::vector<Observer*> observers;
+public:
+	Subject() = default;
+
+	virtual ~Subject() = default;
+
+	void notify(ObservableSubjects subject);
+	void attach(Observer* observer);
+	void detach(Observer* observer);
 };

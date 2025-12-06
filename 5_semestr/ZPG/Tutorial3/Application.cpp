@@ -4,26 +4,6 @@
 #include "Transform/Translation.h"
 #include "Scene/SceneFactory.h"
 
-const char* vertex_shader =
-"#version 330\n"
-"layout(location=0) in vec3 vp;"
-"layout(location=1) in vec3 vc;"
-"uniform mat4 modelMatrix;"
-"out vec3 color;"
-"void main () {"
-"     color = vc;"
-//"     gl_Position = vec4 (vp, 1.0);"
-"     gl_Position = modelMatrix * vec4(vp, 1.0);"
-"}";
-
-const char* fragment_shader =
-"#version 330\n"
-"out vec4 frag_colour;"
-"in vec3 color;"
-"void main () {"
-"     frag_colour = vec4 (color, 1.0);"
-"}";
-
 void Application::printVersionInfo() {
     // version info
     printf("--------------------------------------------------------------------------------\n");

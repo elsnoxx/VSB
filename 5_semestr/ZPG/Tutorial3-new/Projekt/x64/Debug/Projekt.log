@@ -1,57 +1,218 @@
 ﻿  Application.cpp
-C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Application.h(3,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
-  (compiling source file 'Application.cpp')
-  
   Callbacks.cpp
-C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Application.h(3,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
-  (compiling source file 'Callbacks.cpp')
+  InputManager.cpp
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Projekt\lib\glew-2.1.0-win32\glew-2.1.0\include\GL\glew.h(85,1): error C1189: #error:  gl.h included before glew.h
+  (compiling source file 'Input/InputManager.cpp')
   
-  DrawableObject.cpp
-C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Model.h(2,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
-  (compiling source file 'DrawableObject.cpp')
+  SceneFactory.cpp
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(14,38): error C2065: 'Scene': undeclared identifier
+  (compiling source file 'Scene/SceneFactory.cpp')
   
-  Model.cpp
-C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Model.h(2,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
-  (compiling source file 'Model.cpp')
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(14,44): error C2059: syntax error: '>'
+  (compiling source file 'Scene/SceneFactory.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(14,20): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'Scene/SceneFactory.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(14,26): error C2144: syntax error: '<error type>' should be preceded by ')'
+  (compiling source file 'Scene/SceneFactory.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(14,26): error C2144: syntax error: '<error type>' should be preceded by ';'
+  (compiling source file 'Scene/SceneFactory.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(14,53): error C2059: syntax error: ')'
+  (compiling source file 'Scene/SceneFactory.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(17,10): error C2143: syntax error: missing ';' before '*'
+  (compiling source file 'Scene/SceneFactory.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(17,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'Scene/SceneFactory.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(17,35): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'Scene/SceneFactory.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(19,27): error C2061: syntax error: identifier 'InputManager'
+  (compiling source file 'Scene/SceneFactory.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(24,17): error C2065: 'Scene': undeclared identifier
+  (compiling source file 'Scene/SceneFactory.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(24,23): error C2059: syntax error: '>'
+  (compiling source file 'Scene/SceneFactory.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(24,25): error C2040: 'ScreenManager::scenes': '<error type>' differs in levels of indirection from '<error type> &'
+  (compiling source file 'Scene/SceneFactory.cpp')
   
   Scene.cpp
-C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Model.h(2,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(21,24): error C2065: 'Scene': undeclared identifier
   (compiling source file 'Scene/Scene.cpp')
   
-  Rotation.cpp
-C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Transform\AbstractTransform.h(2,10): error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
-  (compiling source file 'Transform/Rotation.cpp')
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(21,30): error C2059: syntax error: '>'
+  (compiling source file 'Scene/Scene.cpp')
   
-  Scale.cpp
-C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Transform\AbstractTransform.h(2,10): error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
-  (compiling source file 'Transform/Scale.cpp')
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(21,12): error C2062: type '<error type>' unexpected
+  (compiling source file 'Scene/Scene.cpp')
   
-  FragmentShader.cpp
-C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Shader\Shader.h(2,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
-  (compiling source file 'Shader/FragmentShader.cpp')
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(21,49): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'Scene/Scene.cpp')
   
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(25,17): error C2143: syntax error: missing ';' before '*'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(25,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(25,33): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(26,17): error C2143: syntax error: missing ';' before '*'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(26,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(26,12): error C2086: 'int SceneFactory::Scene': redefinition
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(26,33): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(27,17): error C2143: syntax error: missing ';' before '*'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(27,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(27,12): error C2086: 'int SceneFactory::Scene': redefinition
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(27,33): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(28,17): error C2143: syntax error: missing ';' before '*'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(28,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(28,12): error C2086: 'int SceneFactory::Scene': redefinition
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(28,33): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(29,17): error C2143: syntax error: missing ';' before '*'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(29,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(29,12): error C2086: 'int SceneFactory::Scene': redefinition
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(29,33): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(32,17): error C2143: syntax error: missing ';' before '*'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(32,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(32,12): error C2086: 'int SceneFactory::Scene': redefinition
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(32,44): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(33,17): error C2143: syntax error: missing ';' before '*'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(33,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(33,12): error C2086: 'int SceneFactory::Scene': redefinition
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(33,46): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(34,17): error C2143: syntax error: missing ';' before '*'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(34,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(34,12): error C2086: 'int SceneFactory::Scene': redefinition
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(34,38): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(37,17): error C2143: syntax error: missing ';' before '*'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(37,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(37,12): error C2086: 'int SceneFactory::Scene': redefinition
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(37,43): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(38,17): error C2143: syntax error: missing ';' before '*'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(38,12): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(38,12): error C2086: 'int SceneFactory::Scene': redefinition
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.h(38,40): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(14,38): error C2065: 'Scene': undeclared identifier
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(14,44): error C2059: syntax error: '>'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(14,20): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(14,26): error C2144: syntax error: '<error type>' should be preceded by ')'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(14,26): error C2144: syntax error: '<error type>' should be preceded by ';'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(14,53): error C2059: syntax error: ')'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(17,10): error C2143: syntax error: missing ';' before '*'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(17,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(17,35): error C2238: unexpected token(s) preceding ';'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(19,27): error C2061: syntax error: identifier 'InputManager'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(24,17): error C2065: 'Scene': undeclared identifier
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(24,23): error C2059: syntax error: '>'
+  (compiling source file 'Scene/Scene.cpp')
+  
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(24,25): error C2040: 'ScreenManager::scenes': '<error type>' differs in levels of indirection from '<error type> &'
+  (compiling source file 'Scene/Scene.cpp')
+  
+  ScreenManager.cpp
   Projekt.cpp
-C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Application.h(3,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
-  (compiling source file 'Projekt.cpp')
-  
-  ShaderProgram.cpp
-C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Shader\ShaderProgram.h(2,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
-  (compiling source file 'Shader/ShaderProgram.cpp')
-  
-  Shader.cpp
-C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Shader\Shader.h(2,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
-  (compiling source file 'Shader/Shader.cpp')
-  
-  VertexShader.cpp
-C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Shader\Shader.h(2,10): error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
-  (compiling source file 'Shader/VertexShader.cpp')
-  
-  Transform.cpp
-C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Transform\AbstractTransform.h(2,10): error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
-  (compiling source file 'Transform/Transform.cpp')
-  
-  Translation.cpp
-C:\Users\admin\Documents\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Transform\AbstractTransform.h(2,10): error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
-  (compiling source file 'Transform/Translation.cpp')
-  
   Generating Code...

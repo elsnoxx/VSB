@@ -7,7 +7,7 @@ DrawableObject::DrawableObject(Model* m, ShaderType shaderType) {
 
 void DrawableObject::draw() {
     if (!shaderProgram) {
-        std::cerr << "DrawableObject::draw() ERROR — Shader not set!\n";
+        std::cerr << "DrawableObject::draw() ERROR Shader not set!\n";
         return;
     }
 

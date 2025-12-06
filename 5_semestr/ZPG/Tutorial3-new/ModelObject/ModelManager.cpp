@@ -57,16 +57,16 @@ Model* ModelManager::createModel(ModelType type) {
         modelPtr = std::unique_ptr<Model>(new Model(gift, sizeof(gift), countVertices(sizeof(gift))));
         break;
     case ModelType::House:
-        modelPtr = std::unique_ptr<Model>(new Model("assets/house.obj"));
+        modelPtr = std::unique_ptr<Model>(new Model("house.obj"));
         break;
     case ModelType::Formula1:
-        modelPtr = std::unique_ptr<Model>(new Model("assets/formula1.obj"));
+        modelPtr = std::unique_ptr<Model>(new Model("formula1.obj"));
         break;
     case ModelType::Cube:
-        modelPtr = std::unique_ptr<Model>(new Model("assets/cube.obj"));
+        modelPtr = std::unique_ptr<Model>(new Model("cube.obj"));
         break;
     case ModelType::Square:
-        modelPtr = std::unique_ptr<Model>(new Model("assets/square.obj"));
+        modelPtr = std::unique_ptr<Model>(new Model("square.obj"));
         break;
     default:
         std::cerr << "[ModelManager] createModel: unknown ModelType\n";

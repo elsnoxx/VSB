@@ -5,11 +5,12 @@
 #include <GLFW/glfw3.h> 
 
 #include <vector>
+#include <random>
+#include <chrono>
+
 #include "Scene.h"
 #include "../Shader/ShaderProgram.h"
 #include "../ModelObject/Model.h"
-
-// sem include modelov�ch dat
 #include "../Transform/Translation.h"
 #include "../Transform/Rotation.h"
 #include "../Transform/Scale.h"
@@ -20,12 +21,21 @@ public:
     static std::vector<Scene*> createAllScenes();
 
 private:
+    //Tutorila 1
     static Scene* createScene1();
     static Scene* createScene2();
     static Scene* createScene3();
     static Scene* createScene4();
     static Scene* createScene5();
-    static Scene* createSceneSphereLights();
+
+    //Tutorila 3
+    static Scene* createSceneSphereLights();    
+    static Scene* createSceneDifferentModes();
+    static Scene* createForestScene();
+
+    //Tutorial 4
+    static Scene* createSceneTinyObjects();
+    static Scene* createSceneFormula1();
 
 	
 };

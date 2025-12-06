@@ -1,10 +1,10 @@
 #pragma once
-#pragma once
+#include "ObservableSubjects.h"
 
-class Camera;
-
-class Observer {
+class Observer
+{
 public:
-    virtual void onCameraChanged(const Camera& camera) = 0;
-    virtual ~Observer() = default;
+	virtual void update(ObservableSubjects Subject) = 0;
 };
+
+

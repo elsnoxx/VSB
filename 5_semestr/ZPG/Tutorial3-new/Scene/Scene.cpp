@@ -1,4 +1,7 @@
 #include "Scene.h"
+#include "../ModelObject/ModelManager.h"
+#include "../Transform/Scale.h"
+#include "../Transform/Translation.h"
 
 Camera* Scene::getCamera() {
 	return camera;
@@ -15,6 +18,7 @@ void Scene::addObject(DrawableObject* obj) {
 }
 
 void Scene::draw() {
+    bindCameraAndLightToUsedShaders();
     for (auto& obj : objects) {
         obj->draw();
     }
@@ -50,7 +54,7 @@ void Scene::update(float dt, InputManager& input)
     }
 
 
-    // rotace my��
+    // rotace my��
     glm::vec2 delta = input.getMouseDeltaAndReset(dt);
     if (delta.x != 0.0f || delta.y != 0.0f) {
         cam->updateOrientation(delta, dt);
@@ -59,6 +63,17 @@ void Scene::update(float dt, InputManager& input)
 
 void Scene::bindCameraAndLightToUsedShaders()
 {
+    // pokud žádné světlo → použij default
+    glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 1.5f);
+    glm::vec3 lightCol = glm::vec3(1.0f);
+    float lightIntensity = 1.0f;
+
+    if (!lights.empty()) {
+        lightPos = lights[0].position;
+        lightCol = lights[0].color;
+        lightIntensity = lights[0].intensity;
+    }
+
     for (auto* obj : objects)
     {
         ShaderProgram* shader = obj->getShader();
@@ -66,9 +81,24 @@ void Scene::bindCameraAndLightToUsedShaders()
 
         camera->attach(shader);
         shader->use();
-        shader->setUniform("lightPosition", glm::vec3(10.0f, 10.0f, 10.0f));
-        shader->setUniform("viewPosition", camera->getPosition());
-        shader->setUniform("shininess", 32.0f);
 
+        shader->setUniform("lightPosition", lightPos);
+        shader->setUniform("viewPosition", camera->getPosition());
+        shader->setUniform("shininess", 64.0f);
+        shader->setUniform("ambientStrength", 0.15f);
     }
+}
+
+
+void Scene::spawnTree(const glm::vec3& pos)
+{
+    Model* treeModel = ModelManager::instance().get(ModelType::Tree);
+    DrawableObject* obj = new DrawableObject(treeModel, ShaderType::Basic);
+
+    Transform t;
+    t.addTransform(std::make_shared<Scale>(glm::vec3(0.2f)));
+    t.addTransform(std::make_shared<Translation>(pos));
+
+    obj->setTransform(t);
+    Scene::addObject(obj);
 }

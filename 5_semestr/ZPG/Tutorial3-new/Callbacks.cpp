@@ -42,8 +42,15 @@ void callbackKey(GLFWwindow* window, int key, int scancode, int action, int mods
 
 
 void callbackButton(GLFWwindow* window, int t_button, int t_action, int t_mode) {
-	if (t_action == GLFW_PRESS)
-		printf("<callback> button : button %d, action %d, mode %d\n", t_button, t_action, t_mode);
+    Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+    if (!app) return;
+
+    if (t_action == GLFW_PRESS) {
+        double x, y;
+        glfwGetCursorPos(window, &x, &y);            // skutečná pozice kurzoru (v pixelech okna)
+        printf("<callback> button : button %d, action %d, mode %d, cursor %f %f\n", t_button, t_action, t_mode, x, y);
+        app->input.OnMouseClick(x, y);               // předáme cursor do InputManageru
+    }
 }
 
 void callbackCursor(GLFWwindow* window, double x, double y) {

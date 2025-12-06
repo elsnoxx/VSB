@@ -81,9 +81,11 @@ void Application::initialization() {
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
+ 
 
 	// screen init
     screenManager.init();
+    input.setScreenManager(&screenManager);
 
     // Nastaven� callback�
     glfwSetKeyCallback(window, callbackKey);

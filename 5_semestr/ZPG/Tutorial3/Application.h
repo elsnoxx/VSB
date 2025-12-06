@@ -12,13 +12,12 @@
 #include "./Shader/VertexShader.h"
 #include "./Shader/FragmentShader.h"
 #include "./Shader/ShaderProgram.h"
-#include "Model.h"
-#include "DrawableObject.h"
+#include "../Model/Model.h"
+#include "../Model/DrawableObject.h"
 #include "./Transform/Transform.h"
 #include "./Transform/Rotation.h"
 #include "./Transform/Scale.h"
-#include "./Scene/Scene.h"
-#include "./Scene/Camera.h"
+#include "./Scene/SceneFactory.h"
 
 class Application {
 	public:

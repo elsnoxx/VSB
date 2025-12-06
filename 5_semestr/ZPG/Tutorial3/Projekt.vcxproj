@@ -128,9 +128,11 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Callbacks.cpp" />
-    <ClCompile Include="Scene\Camera.cpp" />
-    <ClCompile Include="DrawableObject.cpp" />
-    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Observer\Subject.cpp" />
+    <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Model\DrawableObject.cpp" />
+    <ClCompile Include="Model\Model.cpp" />
     <ClCompile Include="Scene\SceneFactory.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Transform\Rotation.cpp" />
@@ -144,16 +146,18 @@
     <ClCompile Include="Transform\Translation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="Observer\Observer.h" />
     <ClInclude Include="Observer\Subject.h" />
-    <ClInclude Include="Scene\Camera.h" />
+    <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Observer\ObservableSubjects.h" />
     <ClInclude Include="Scene\SceneFactory.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Transform\AbstractTransform.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Callbacks.h" />
-    <ClInclude Include="DrawableObject.h" />
-    <ClInclude Include="Model.h" />
+    <ClInclude Include="Model\DrawableObject.h" />
+    <ClInclude Include="Model\Model.h" />
     <ClInclude Include="Transform\Rotation.h" />
     <ClInclude Include="Transform\Scale.h" />
     <ClInclude Include="Shader\FragmentShader.h" />

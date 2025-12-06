@@ -6,7 +6,7 @@
 #include "VertexShader.h"
 #include "FragmentShader.h"
 #include "../Observer/Observer.h"
-#include "../Scene/Camera.h"
+#include "../Camera/Camera.h"
 
 
 

@@ -34,9 +34,16 @@ void ShaderProgram::update(ObservableSubjects subject)
     use();
 
     if (subject == ObservableSubjects::SCamera) {
-        setUniform("viewMatrix", camera->getViewMatrix());
-        setUniform("projectionMatrix", camera->getProjectionMatrix());
+        if (camera) {
+            setUniform("viewMatrix", camera->getViewMatrix());
+            setUniform("projectionMatrix", camera->getProjectionMatrix());
+            setUniform("viewPos", camera->getPosition());
+        }
+        else {
+            std::cerr << "ShaderProgram::update() WARNING: camera is null\n";
+        }
     }
+
 
     glUseProgram(0);
 }

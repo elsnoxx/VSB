@@ -12,7 +12,7 @@ const char* Config::Title = "ZPG";
 
 
 //Movement settings
-const float Config::MouseSensitivity = 10.0f;
+const float Config::MouseSensitivity = 5.0f;
 const float Config::MovementSpeed = 1.0f;
 const float Config::TWO_PI = glm::radians(360.0f);
 const float Config::PI = glm::radians(180.0f);
