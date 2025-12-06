@@ -13,6 +13,7 @@
 #include "./Input/InputManager.h"
 #include "Config.h"
 #include "Callbacks.h"
+#include "./ModelObject/ModelManager.h"
 
 
 
@@ -23,7 +24,7 @@ class Application {
 		void initialization();
 
 		void printVersionInfo();
-		void updateViewport();
+		void updateViewport(double x, double y);
 		void switchScene(int index);
 
 		void run();

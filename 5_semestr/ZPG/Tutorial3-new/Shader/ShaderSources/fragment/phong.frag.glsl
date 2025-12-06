@@ -16,7 +16,6 @@ void main()
     vec3 L = normalize(lightPosition - worldPosition);
     float diff = max(dot(N, L), 0.0);
 
-    // Blinn-Phong nebo Phong - tady klasický Phong
     vec3 V = normalize(viewPosition - worldPosition);
     vec3 R = reflect(-L, N);
     float spec = 0.0;

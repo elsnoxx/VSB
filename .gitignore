@@ -187,6 +187,8 @@
 /.idea
 /.idea
 /5_semestr/ZPG/Tutorial3-new/.vs
-/5_semestr/ZPG/Tutorial3-new/lib
 /5_semestr/ZPG/Tutorial3-new/Projekt/x64/Release
 /5_semestr/ZPG/Tutorial3-new/x64
+/5_semestr/ZPG/Tutorial3-new/lib/glew-2.1.0-win32
+/5_semestr/ZPG/Tutorial3-new/lib/glfw-3.4.bin.WIN64
+/5_semestr/ZPG/Tutorial3-new/lib/glm-master

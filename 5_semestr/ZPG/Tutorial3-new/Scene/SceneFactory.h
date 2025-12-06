@@ -10,13 +10,6 @@
 #include "../ModelObject/Model.h"
 
 // sem include modelov�ch dat
-#include "../Models/sphere.h"
-#include "../Models/tree.h"
-#include "../Models/bushes.h"
-#include "../Models/gift.h"
-#include "../Models/suzi_flat.h"
-#include "../Models/suzi_smooth.h"
-#include "../Models/plain.h"
 #include "../Transform/Translation.h"
 #include "../Transform/Rotation.h"
 #include "../Transform/Scale.h"

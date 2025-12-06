@@ -4,16 +4,29 @@ std::unordered_map<ShaderType, ShaderProgram*> ShaderFactory::cache;
 
 std::string LoadFile(const std::string& path)
 {
-    std::ifstream f(path);
+    std::ifstream f(path, std::ios::binary);
     if (!f.is_open()) {
         std::cerr << "[ShaderFactory] ERROR: Cannot open " << path << "\n";
+        return "";
     }
     std::stringstream buffer;
     buffer << f.rdbuf();
     std::string content = buffer.str();
 
+    // Remove UTF-8 BOM if present (0xEF,0xBB,0xBF)
+    if (content.size() >= 3
+        && static_cast<unsigned char>(content[0]) == 0xEF
+        && static_cast<unsigned char>(content[1]) == 0xBB
+        && static_cast<unsigned char>(content[2]) == 0xBF) {
+        content.erase(0, 3);
+		std::cout << "[ShaderFactory] Removed UTF-8 BOM from " << path << "\n";
+    }
+
     if (content.empty()) {
         std::cerr << "[ShaderFactory] ERROR: File EMPTY: " << path << "\n";
+    }
+    else {
+        std::cerr << "[ShaderFactory] Loaded '" << path << "' (" << content.size() << " bytes)\n";
     }
     return content;
 }

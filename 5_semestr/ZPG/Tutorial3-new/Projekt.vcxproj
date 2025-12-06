@@ -119,7 +119,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\glm-master\glm;$(SolutionDir)lib\glew-2.1.0-win32\glew-2.1.0\include;$(SolutionDir)lib\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\glm-master\glm;$(SolutionDir)lib\glew-2.1.0-win32\glew-2.1.0\include;$(SolutionDir)lib\glfw-3.4.bin.WIN64\glfw-3.4.bin.WIN64\include;$(SolutionDir)lib\tiny_object;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,6 +137,7 @@ glfw3.lib
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Input\InputManager.cpp" />
+    <ClCompile Include="ModelObject\ModelManager.cpp" />
     <ClCompile Include="ModelObject\DrawableObject.cpp" />
     <ClCompile Include="ModelObject\Model.cpp" />
     <ClCompile Include="Scene\SceneFactory.cpp" />
@@ -158,6 +159,8 @@ glfw3.lib
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Input\InputManager.h" />
+    <ClInclude Include="ModelObject\ModelManager.h" />
+    <ClInclude Include="ModelObject\ModelType.h" />
     <ClInclude Include="Observer\ObservableSubjects.h" />
     <ClInclude Include="Observer\Observer.h" />
     <ClInclude Include="Scene\SceneFactory.h" />
@@ -174,8 +177,8 @@ glfw3.lib
     <ClInclude Include="Transform\Rotation.h" />
     <ClInclude Include="Transform\Scale.h" />
     <ClInclude Include="Shader\FragmentShader.h" />
-    <ClInclude Include="Models\bushes.h" />
-    <ClInclude Include="Models\gift.h" />
+    <ClInclude Include="ModelObject\Models\bushes.h" />
+    <ClInclude Include="ModelObject\Models\gift.h" />
     <ClInclude Include="Models\Models\bushes.h" />
     <ClInclude Include="Models\Models\gift.h" />
     <ClInclude Include="Models\Models\plain.h" />
@@ -183,11 +186,11 @@ glfw3.lib
     <ClInclude Include="Models\Models\suzi_flat.h" />
     <ClInclude Include="Models\Models\suzi_smooth.h" />
     <ClInclude Include="Models\Models\tree.h" />
-    <ClInclude Include="Models\plain.h" />
-    <ClInclude Include="Models\sphere.h" />
-    <ClInclude Include="Models\suzi_flat.h" />
-    <ClInclude Include="Models\suzi_smooth.h" />
-    <ClInclude Include="Models\tree.h" />
+    <ClInclude Include="ModelObject\Models\plain.h" />
+    <ClInclude Include="ModelObject\Models\sphere.h" />
+    <ClInclude Include="ModelObject\Models\suzi_flat.h" />
+    <ClInclude Include="ModelObject\Models\suzi_smooth.h" />
+    <ClInclude Include="ModelObject\Models\tree.h" />
     <ClInclude Include="Shader\ShaderProgram.h" />
     <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="Shader\VertexShader.h" />

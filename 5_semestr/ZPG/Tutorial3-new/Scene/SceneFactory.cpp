@@ -1,4 +1,5 @@
 ﻿#include "SceneFactory.h"
+#include "../ModelObject/ModelManager.h"
 
 
 std::vector<Scene*> SceneFactory::createAllScenes() {
@@ -19,7 +20,7 @@ Scene* SceneFactory::createSceneSphereLights() {
     Scene* scene = new Scene();
 
     // sdílený model pro všechny koule
-    Model* sphereModel = new Model(sphere, sizeof(sphere), sizeof(sphere) / (6 * sizeof(float)));
+    Model* sphereModel = ModelManager::instance().get(ModelType::Sphere);
     float offset = 3.0f;
 
     // pozice pro 4 koule
@@ -56,7 +57,7 @@ Scene* SceneFactory::createSceneSphereLights() {
 Scene* SceneFactory::createScene1() {
     Scene* scene = new Scene();
 
-    Model* sphereModel = new Model(sphere, sizeof(sphere), sizeof(sphere) / (6 * sizeof(float)));
+    Model* sphereModel = ModelManager::instance().get(ModelType::Sphere);
     DrawableObject* obj = new DrawableObject(sphereModel, ShaderType::Basic);
 
     Transform t;
@@ -70,7 +71,7 @@ Scene* SceneFactory::createScene1() {
 Scene* SceneFactory::createScene2() {
     Scene* scene = new Scene();
 
-    Model* treeModel = new Model(tree, sizeof(tree), sizeof(tree) / (6 * sizeof(float)));
+    Model* treeModel = ModelManager::instance().get(ModelType::Tree);
     DrawableObject* obj = new DrawableObject(treeModel, ShaderType::Basic);
 
     Transform t;
@@ -111,7 +112,7 @@ Scene* SceneFactory::createScene3() {
 Scene* SceneFactory::createScene4() {
     Scene* scene = new Scene();
 
-    Model* sphereModel = new Model(sphere, sizeof(sphere), sizeof(sphere) / (6 * sizeof(float)));
+    Model* sphereModel = ModelManager::instance().get(ModelType::Sphere);
     float offset = 3.0f;
 
     std::vector<glm::vec3> positions = {

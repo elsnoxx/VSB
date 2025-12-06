@@ -50,5 +50,5 @@ void callbackCursor(GLFWwindow* window, double x, double y) {
     Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
     if (!app) return;
 
-    app->input.onMouseMove(x, y);
+	app->updateViewport(x, y);
 }

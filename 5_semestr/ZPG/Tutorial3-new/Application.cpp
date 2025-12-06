@@ -16,10 +16,17 @@ void Application::printVersionInfo() {
     printf("--------------------------------------------------------------------------------\n");
 }
 
-void Application::updateViewport() {
+void Application::updateViewport(double x, double y) {
     glfwGetFramebufferSize(window, &width, &height);
     float ratio = width / (float)height;
     glViewport(0, 0, width, height);
+
+    Scene* cur = screenManager.getCurrentScene();
+    if (cur) {
+        cur->getCamera()->updateScreenSize(width, height);
+        cur->bindCameraAndLightToUsedShaders();
+        input.onMouseMove(x, y);
+    }
 }
 
 void Application::switchScene(int index) {
@@ -51,7 +58,7 @@ void Application::initialization() {
         exit(EXIT_FAILURE);
     }
 
-    // Volitelné: nastavení verze OpenGL
+    // Volitelnï¿½: nastavenï¿½ verze OpenGL
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -75,9 +82,10 @@ void Application::initialization() {
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
 
+	// screen init
     screenManager.init();
 
-    // Nastavení callbackù
+    // Nastavenï¿½ callbackï¿½
     glfwSetKeyCallback(window, callbackKey);
     glfwSetCursorPosCallback(window, callbackCursor);
     glfwSetMouseButtonCallback(window, callbackButton);
@@ -86,5 +94,5 @@ void Application::initialization() {
     glfwSetWindowSizeCallback(window, callbackWindowSize);
 
     printVersionInfo();
-    updateViewport();
+    updateViewport(0,0);
 }

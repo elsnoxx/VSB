@@ -22,4 +22,4 @@ const float Config::MinFOV = 50.0f;
 const float Config::MaxFOV = 80.0f;
 const float Config::UsedFOV = glm::radians(60.0f);
 const glm::vec3 Config::upVector = glm::vec3(0.f, 1.f, 0.f);
-const glm::vec3 Config::defaultCameraPosition = glm::vec3(0.0f, 0.0f, 1.0f);
+const glm::vec3 Config::defaultCameraPosition = glm::vec3(0.0f, 0.0f, -1.0f);

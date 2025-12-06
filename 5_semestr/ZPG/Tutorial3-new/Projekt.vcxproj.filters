@@ -78,6 +78,9 @@
     <ClCompile Include="Observer\Subject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ModelObject\ModelManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -107,25 +110,25 @@
     <ClInclude Include="Models\Models\tree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Models\bushes.h">
+    <ClInclude Include="ModelObject\Models\bushes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Models\gift.h">
+    <ClInclude Include="ModelObject\Models\gift.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Models\plain.h">
+    <ClInclude Include="ModelObject\Models\plain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Models\sphere.h">
+    <ClInclude Include="ModelObject\Models\sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Models\suzi_flat.h">
+    <ClInclude Include="ModelObject\Models\suzi_flat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Models\suzi_smooth.h">
+    <ClInclude Include="ModelObject\Models\suzi_smooth.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Models\tree.h">
+    <ClInclude Include="ModelObject\Models\tree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Shader\Shader.h">
@@ -192,6 +195,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Observer\Subject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelObject\ModelType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelObject\ModelManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
