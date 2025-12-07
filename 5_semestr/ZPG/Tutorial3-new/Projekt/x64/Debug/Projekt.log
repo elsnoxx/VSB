@@ -1,5 +1,8 @@
 ﻿  Application.cpp
-  Callbacks.cpp
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Application.cpp(67,10): error C2039: 'setFOV': is not a member of 'Camera'
+      C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Camera\Camera.h(18,7):
+      see declaration of 'Camera'
+  
   InputManager.cpp
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Projekt\lib\glew-2.1.0-win32\glew-2.1.0\include\GL\glew.h(85,1): error C1189: #error:  gl.h included before glew.h
   (compiling source file 'Input/InputManager.cpp')
@@ -213,6 +216,4 @@ C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\S
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.h(24,25): error C2040: 'ScreenManager::scenes': '<error type>' differs in levels of indirection from '<error type> &'
   (compiling source file 'Scene/Scene.cpp')
   
-  ScreenManager.cpp
-  Projekt.cpp
   Generating Code...

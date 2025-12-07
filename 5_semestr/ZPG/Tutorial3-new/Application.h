@@ -25,7 +25,9 @@ class Application {
 
 		void printVersionInfo();
 		void updateViewport(double x, double y);
+		
 		void switchScene(int index);
+		void toggleFOV();
 
 		void run();
 

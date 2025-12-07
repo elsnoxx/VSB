@@ -16,6 +16,20 @@ void ScreenManager::switchTo(int index) {
     currentIndex = index;
 }
 
+void ScreenManager::toggleFOV() {
+    if (currentFovIndex < 3)
+    {
+        currentFovIndex++;
+    }
+    else
+    {
+        currentFovIndex = 0;
+    }
+
+    auto curretnScean = getCurrentScene();
+    curretnScean.UpdateFOV(fovDegrees[currentFovIndex]);
+}
+
 Scene* ScreenManager::getCurrentScene() const {
     if (scenes.empty()) return nullptr;
     return scenes[currentIndex];

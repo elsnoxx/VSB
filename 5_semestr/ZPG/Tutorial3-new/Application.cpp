@@ -33,6 +33,10 @@ void Application::switchScene(int index) {
     screenManager.switchTo(index);
 }
 
+void Application::toggleFOV() {
+    screenManager.toggleFOV();
+}
+
 void Application::run() {
     glEnable(GL_DEPTH_TEST);
     while (!glfwWindowShouldClose(window)) {

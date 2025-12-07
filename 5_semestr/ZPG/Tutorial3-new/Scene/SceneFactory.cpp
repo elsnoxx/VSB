@@ -78,8 +78,8 @@ Scene* SceneFactory::createForestScene() {
         };
 
     // 50 stromů a 50 keřů
-    placeObjects(treeModel, 50, true);
-    placeObjects(bushModel, 50, false);
+    placeObjects(treeModel, 10, true);
+    placeObjects(bushModel, 10, false);
 
     // přidej jedno sluneční/centrální světlo nahoře (posílat do shaderů)
     Light sun;

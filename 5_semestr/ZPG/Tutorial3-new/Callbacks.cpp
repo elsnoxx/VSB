@@ -33,6 +33,11 @@ void callbackKey(GLFWwindow* window, int key, int scancode, int action, int mods
             int index = key - GLFW_KEY_1;
             app->switchScene(index);
         }
+        
+        if (key == GLFW_KEY_T) {
+            app->toggleFOV();
+            return;
+        }
     }
 
 

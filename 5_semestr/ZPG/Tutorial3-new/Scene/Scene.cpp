@@ -1,7 +1,7 @@
 #include "Scene.h"
-#include "../ModelObject/ModelManager.h"
-#include "../Transform/Scale.h"
-#include "../Transform/Translation.h"
+//#include "../ModelObject/ModelManager.h"
+//#include "../Transform/Scale.h"
+//#include "../Transform/Translation.h"
 
 Camera* Scene::getCamera() {
 	return camera;
@@ -54,7 +54,7 @@ void Scene::update(float dt, InputManager& input)
     }
 
 
-    // rotace my��
+    // rmouse rotate
     glm::vec2 delta = input.getMouseDeltaAndReset(dt);
     if (delta.x != 0.0f || delta.y != 0.0f) {
         cam->updateOrientation(delta, dt);
@@ -63,7 +63,7 @@ void Scene::update(float dt, InputManager& input)
 
 void Scene::bindCameraAndLightToUsedShaders()
 {
-    // pokud žádné světlo → použij default
+    // defalut light
     glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 1.5f);
     glm::vec3 lightCol = glm::vec3(1.0f);
     float lightIntensity = 1.0f;
@@ -90,15 +90,15 @@ void Scene::bindCameraAndLightToUsedShaders()
 }
 
 
-void Scene::spawnTree(const glm::vec3& pos)
-{
-    Model* treeModel = ModelManager::instance().get(ModelType::Tree);
-    DrawableObject* obj = new DrawableObject(treeModel, ShaderType::Basic);
-
-    Transform t;
-    t.addTransform(std::make_shared<Scale>(glm::vec3(0.2f)));
-    t.addTransform(std::make_shared<Translation>(pos));
-
-    obj->setTransform(t);
-    Scene::addObject(obj);
-}
+//void Scene::spawnTree(const glm::vec3& pos)
+//{
+//    Model* treeModel = ModelManager::instance().get(ModelType::Tree);
+//    DrawableObject* obj = new DrawableObject(treeModel, ShaderType::Basic);
+//
+//    Transform t;
+//    t.addTransform(std::make_shared<Scale>(glm::vec3(0.2f)));
+//    t.addTransform(std::make_shared<Translation>(pos));
+//
+//    obj->setTransform(t);
+//    Scene::addObject(obj);
+//}
