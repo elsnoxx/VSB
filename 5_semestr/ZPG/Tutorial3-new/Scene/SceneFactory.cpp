@@ -11,7 +11,7 @@ std::vector<Scene*> SceneFactory::createAllScenes() {
         //createScene3(),
         //createScene4(),
         //createScene5(),
-        
+
         // Tutorial 3
         //createSceneSphereLights(),
         //createSceneDifferentModes(),
@@ -19,12 +19,68 @@ std::vector<Scene*> SceneFactory::createAllScenes() {
 
         //createSceneTinyObjects(),
         //createSceneFormula1(),
-        
 
-        
-        createForestScene(),
+
+
+        //createForestScene(),
+
+        //Tutorial 5
+        createSceneShrekFamily()
         
     };
+}
+
+Scene* SceneFactory::createSceneShrekFamily() {
+    Scene* scene = new Scene();
+
+    // získat modely z ModelManageru (uprav jména ModelType podle tvého enumu)
+    Model* shrekModel = ModelManager::instance().get(ModelType::Shrek);
+    Model* fionaModel = ModelManager::instance().get(ModelType::Fiona);
+    Model* toiletModel = ModelManager::instance().get(ModelType::Toilet);
+    Model* plainModel = ModelManager::instance().get(ModelType::Plain);
+
+    // zkontroluj, že modely obsahují texture coords (UV) - jinak shader Textured nic nezobrazí
+    if (shrekModel) {
+        DrawableObject* shrek = new DrawableObject(shrekModel, ShaderType::Textured);
+        Transform ts;
+        ts.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+        ts.addTransform(std::make_shared<Translation>(glm::vec3(-2.0f, 0.0f, 0.0f)));
+        shrek->setTransform(ts);
+        scene->addObject(shrek);
+    }
+
+    if (fionaModel) {
+        DrawableObject* fiona = new DrawableObject(fionaModel, ShaderType::Textured);
+        Transform tf;
+        tf.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+        tf.addTransform(std::make_shared<Translation>(glm::vec3(2.0f, 0.0f, 0.0f)));
+        fiona->setTransform(tf);
+        scene->addObject(fiona);
+    }
+
+    if (toiletModel) {
+        DrawableObject* toilet = new DrawableObject(toiletModel, ShaderType::Textured);
+        Transform tt;
+        tt.addTransform(std::make_shared<Scale>(glm::vec3(0.7f)));
+        tt.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, -1.5f)));
+        toilet->setTransform(tt);
+        scene->addObject(toilet);
+    }
+
+    if (plainModel) {
+        DrawableObject* ground = new DrawableObject(plainModel, ShaderType::Basic);
+        Transform tg;
+        tg.addTransform(std::make_shared<Scale>(glm::vec3(50.0f, 1.0f, 50.0f)));
+        tg.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, 0.0f)));
+        ground->setTransform(tg);
+        scene->addObject(ground);
+    }
+
+    // přidej jednoduché světlo, aby textury byly viditelné
+    PointLight* sunLight = new PointLight(glm::vec3(0.0f, 30.0f, 0.0f), glm::vec3(1.0f, 0.95f, 0.9f), 1.5f);
+    scene->addLight(sunLight);
+
+    return scene;
 }
 
 Scene* SceneFactory::createSceneSolarSystem() {

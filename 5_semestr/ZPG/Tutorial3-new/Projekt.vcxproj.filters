@@ -248,6 +248,9 @@
     <ClInclude Include="ModelObject\TextureLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ModelObject\TextureType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\ShaderSources\fragment\normals.frag.glsl" />

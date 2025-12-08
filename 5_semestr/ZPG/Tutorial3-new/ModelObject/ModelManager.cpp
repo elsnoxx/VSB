@@ -9,6 +9,7 @@
 #include "./Models/suzi_smooth.h"
 #include "./Models/plain.h"
 #include "./Models/gift.h"
+#include "./Models/skycube.h"
 
 namespace {
     inline int countVertices(size_t bytes) {
@@ -56,6 +57,9 @@ Model* ModelManager::createModel(ModelType type) {
     case ModelType::Gift:
         modelPtr = std::unique_ptr<Model>(new Model(gift, sizeof(gift), countVertices(sizeof(gift))));
         break;
+    case ModelType::Skycube:
+        modelPtr = std::unique_ptr<Model>(new Model(skycube, sizeof(skycube), countVertices(sizeof(skycube))));
+        break;
     case ModelType::House:
         modelPtr = std::unique_ptr<Model>(new Model("house.obj"));
         break;
@@ -67,6 +71,15 @@ Model* ModelManager::createModel(ModelType type) {
         break;
     case ModelType::Square:
         modelPtr = std::unique_ptr<Model>(new Model("square.obj"));
+        break;
+    case ModelType::Toilet:
+        modelPtr = std::unique_ptr<Model>(new Model("toiled.obj"));
+        break;
+    case ModelType::Fiona:
+        modelPtr = std::unique_ptr<Model>(new Model("fiona.obj"));
+        break;
+    case ModelType::Shrek:
+        modelPtr = std::unique_ptr<Model>(new Model("shrek.obj"));
         break;
     default:
         std::cerr << "[ModelManager] createModel: unknown ModelType\n";

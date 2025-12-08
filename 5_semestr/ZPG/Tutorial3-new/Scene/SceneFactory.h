@@ -38,5 +38,7 @@ private:
     static Scene* createSceneFormula1();
     static Scene* createSceneSolarSystem();
 
+    // Tutorial 5
+    static Scene* createSceneShrekFamily();
 	
 };

@@ -8,9 +8,13 @@ enum class ModelType {
     SuziSmooth,
     Plain,
     Gift,
+    Skycube,
     // obj modely
     House,
     Formula1,
     Cube,
-    Square
+    Square,
+    Shrek,
+    Fiona,
+    Toilet
 };

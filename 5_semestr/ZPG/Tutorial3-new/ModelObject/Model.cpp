@@ -14,12 +14,28 @@ Model::Model(const float* data, size_t size, int count)
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
-    glEnableVertexAttribArray(0); // pozice
-    glEnableVertexAttribArray(1); // barva
-
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (GLvoid*)0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (GLvoid*)(3 * sizeof(float)));
+
+    // spočítat, kolik floatů má každý vertex
+    int floatsPerVertex = 0;
+    if (count > 0) floatsPerVertex = static_cast<int>(size / sizeof(float) / count);
+    GLsizei stride = floatsPerVertex * sizeof(float);
+
+    // position (vec3) vždy na location 0
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)0);
+
+    // normal (vec3) na location 1 pokud jsou přítomny (minimálně 6 floatů)
+    if (floatsPerVertex >= 6) {
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)(3 * sizeof(float)));
+    }
+
+    // texcoord (vec2) na location 2 pokud jsou přítomny (minimálně 8 floatů)
+    if (floatsPerVertex >= 8) {
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (GLvoid*)(6 * sizeof(float)));
+    }
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);

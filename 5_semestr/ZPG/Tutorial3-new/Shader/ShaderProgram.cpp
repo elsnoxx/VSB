@@ -18,6 +18,7 @@ ShaderProgram::ShaderProgram(const char* vertexSrc, const char* fragmentSrc) {
     // 5. Link
     glLinkProgram(id);
 
+
     // 6. Kontrola chyb
     GLint success;
     glGetProgramiv(id, GL_LINK_STATUS, &success);
@@ -27,6 +28,10 @@ ShaderProgram::ShaderProgram(const char* vertexSrc, const char* fragmentSrc) {
         glGetProgramInfoLog(id, 512, nullptr, log);
         std::cerr << "ShaderProgram linking error:\n" << log << std::endl;
     }
+
+    use();
+    setUniform("textureUnitID", 0);
+    glUseProgram(0);
 }
 
 void ShaderProgram::update(ObservableSubjects subject)

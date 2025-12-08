@@ -7,10 +7,13 @@ uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 
-out vec3 color;
+out vec3 normalVS;
 
 void main()
 {
-    color = vc;
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vp, 1.0);
+
+    mat3 normalMatrix = transpose(inverse(mat3(modelMatrix)));
+    vec3 normalWS = normalize(normalMatrix * vc);
+    normalVS = normalize(mat3(viewMatrix) * normalWS);
 }
