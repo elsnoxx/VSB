@@ -27,17 +27,29 @@ void callbackKey(GLFWwindow* window, int key, int scancode, int action, int mods
 
     app->input.onKey(key, action);
 
-    // Přepínání scén
     if (action == GLFW_PRESS) {
-        if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9) {
+        if (key >= GLFW_KEY_1 && key <= GLFW_KEY_9 ) {
             int index = key - GLFW_KEY_1;
             app->switchScene(index);
+            
+        }
+        // FOV => F1 = 45°, F2 = 90°, F3 = 130°
+            if (key == GLFW_KEY_F1) {
+            app->updateFOV(glm::radians(45.0f));
+            printf("[FOV] Set to 45 degrees\n");
+            
+        }
+        else if (key == GLFW_KEY_F2) {
+            app->updateFOV(glm::radians(90.0f));
+            printf("[FOV] Set to 90 degrees\n");
+            
+        }
+        else if (key == GLFW_KEY_F3) {
+            app->updateFOV(glm::radians(130.0f));
+            printf("[FOV] Set to 130 degrees\n");
+            
         }
         
-        if (key == GLFW_KEY_T) {
-            app->toggleFOV();
-            return;
-        }
     }
 
 
@@ -54,7 +66,6 @@ void callbackButton(GLFWwindow* window, int t_button, int t_action, int t_mode) 
         double x, y;
         glfwGetCursorPos(window, &x, &y);            // skutečná pozice kurzoru (v pixelech okna)
         printf("<callback> button : button %d, action %d, mode %d, cursor %f %f\n", t_button, t_action, t_mode, x, y);
-        app->input.OnMouseClick(x, y);               // předáme cursor do InputManageru
     }
 }
 

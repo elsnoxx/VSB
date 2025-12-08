@@ -15,10 +15,14 @@ public:
 
     void draw();
 
+    void setTexture(GLuint tex) { textureID = tex; }
+    bool hasTexture() const { return textureID != 0; }
+
 protected:
 	ShaderProgram* shaderProgram = nullptr;
     Model* model = nullptr;
     Transform transform;
+    GLuint textureID = 0;
 
 };
 

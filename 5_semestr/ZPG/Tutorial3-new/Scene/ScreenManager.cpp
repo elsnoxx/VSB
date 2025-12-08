@@ -16,18 +16,15 @@ void ScreenManager::switchTo(int index) {
     currentIndex = index;
 }
 
-void ScreenManager::toggleFOV() {
-    if (currentFovIndex < 3)
-    {
-        currentFovIndex++;
-    }
-    else
-    {
-        currentFovIndex = 0;
-    }
-
-    auto curretnScean = getCurrentScene();
-    curretnScean.UpdateFOV(fovDegrees[currentFovIndex]);
+void ScreenManager::changeFOV(float radians) {
+    Scene * cur = getCurrentScene();
+    if (!cur) return;
+    Camera * cam = cur->getCamera();
+    if (!cam) return;
+    cam->setFOV(radians);
+        // uložit index nebo logovat dle potřeby
+        printf("[ScreenManager] Changed FOV of scene %d to %f radians\n", currentIndex, radians);
+    
 }
 
 Scene* ScreenManager::getCurrentScene() const {

@@ -42,6 +42,8 @@ public:
 	glm::vec3 getTarget();
 	void updateScreenSize(int width, int height);
 
+	void setFOV(float radians);
+
 	// update angle based on mouse orientation
 	void updateOrientation(glm::vec2 mouseOffset, float deltaTime);
 

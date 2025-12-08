@@ -20,10 +20,13 @@ Model::Model(const float* data, size_t size, int count)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (GLvoid*)0);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (GLvoid*)(3 * sizeof(float)));
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
 Model::Model(const char* name) {
-    std::string inputfile = std::string("ModelObject/assets/") + name; // upravte když máte jiné umístění
+    std::string inputfile = std::string("ModelObject/assets/") + name;
 
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;

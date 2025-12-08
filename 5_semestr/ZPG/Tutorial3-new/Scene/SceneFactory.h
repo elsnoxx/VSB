@@ -36,6 +36,7 @@ private:
     //Tutorial 4
     static Scene* createSceneTinyObjects();
     static Scene* createSceneFormula1();
+    static Scene* createSceneSolarSystem();
 
 	
 };

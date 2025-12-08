@@ -34,5 +34,8 @@ public:
 	static const float UsedFOV;
 	static const glm::vec3 upVector;
 	static const glm::vec3 defaultCameraPosition;
+
+	// Camera settings
+	const float fovDegrees[3];
 };
 

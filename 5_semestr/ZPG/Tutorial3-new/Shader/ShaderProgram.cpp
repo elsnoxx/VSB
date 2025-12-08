@@ -45,7 +45,7 @@ void ShaderProgram::update(ObservableSubjects subject)
     }
 
 
-    glUseProgram(0);
+    glUseProgram(id);
 }
 
 void ShaderProgram::attachCamera(Camera* cam)

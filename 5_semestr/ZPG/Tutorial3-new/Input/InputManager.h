@@ -5,9 +5,9 @@
 
 #include "../Config.h"
 
-#include "../Scene/ScreenManager.h"
+//#include "../Scene/ScreenManager.h"
 
-class ScreenManager;
+//class ScreenManager;
 
 
 class InputManager {
@@ -16,19 +16,17 @@ public:
     void onMouseMove(double x, double y);
     glm::vec2 getMouseDeltaAndReset(float dt);
 
-    void OnMouseClick(double x, double y);
-
     bool isKeyDown(int key) const;
+    bool isKeyPressed(int key);
 
     glm::vec2 getMouseDelta();
     void endFrame();
 
-    void setScreenManager(ScreenManager* sm);
 
 private:
     std::unordered_map<int, bool> keyStates;
+    std::unordered_map<int, bool> keyPressedEvents;
     
-    ScreenManager* screenManager = nullptr;
 
     glm::vec2 lastMousePos = { 0,0 };
     glm::vec2 mouseDelta = { 0,0 };

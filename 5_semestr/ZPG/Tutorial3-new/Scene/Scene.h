@@ -1,31 +1,41 @@
-#pragma once
+﻿#pragma once
 #include <vector>
 #include "../ModelObject/DrawableObject.h"
 #include "../Shader/ShaderProgram.h"
 #include "../Camera/Camera.h"
 #include "../Input/InputManager.h"
 #include "../Light/Light.h"
+#include "../Light/LightManager.h"
+#include "../Light/HeadLight.h"
 
 class Scene {
 public:
     Camera* getCamera();
 
-    Scene() = default;
+    Scene();
+    ~Scene();
 
     void addObject(DrawableObject* obj);
     void update(float dt, InputManager& input);
     void draw();
 
-    void addLight(const Light& l) { lights.push_back(l); }
+    // přidá světlo do per-scene manageru (vrací předané pointer, nebo nullptr)
+    Light* addLight(Light* light);
 
     void bindCameraAndLightToUsedShaders();
 
-    void spawnTree(const glm::vec3& pos);
+    // přepne headlight (pokud existuje)
+    void switchHeadLight();
 
 private:
     std::vector<DrawableObject*> objects;
-    std::vector<Light> lights;
+
+    // per-scene manager (Scene vlastní manager)
+    LightManager* lightManager = nullptr;
+
+    // headlight je vlastněné Scene (uložený i v manageru)
+    HeadLight* headLight = nullptr;
 
 protected:
-	Camera* camera = new Camera(glm::vec3(0.f, 1.f, 5.f));
+    Camera* camera = nullptr;
 };

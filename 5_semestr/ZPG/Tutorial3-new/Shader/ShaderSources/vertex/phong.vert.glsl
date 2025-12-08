@@ -1,4 +1,4 @@
-#version 330 core
+#version 450 core
 layout(location = 0) in vec3 vp;
 layout(location = 1) in vec3 vn;
 layout(location = 2) in vec3 vc;
@@ -15,7 +15,7 @@ void main()
 {
     vec4 worldPos4 = modelMatrix * vec4(vp, 1.0);
     worldPosition = worldPos4.xyz;
-    worldNormal = normalize(mat3(transpose(inverse(modelMatrix))) * vn);
+    worldNormal = normalize(transpose(inverse(mat3(modelMatrix))) * vn);
     albedo = vc;
     gl_Position = projectionMatrix * viewMatrix * worldPos4;
 }

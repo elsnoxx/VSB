@@ -1,31 +1,16 @@
 ﻿#include "InputManager.h"
+#include <iostream>
 
 
-void InputManager::setScreenManager(ScreenManager* sm) {
-    screenManager = sm;
-}
-
-void InputManager::OnMouseClick(double x, double y) {
-    if (!screenManager) return;
-    Scene* cur = screenManager->getCurrentScene();
-    if (!cur) return;
-
-    Camera* cam = cur->getCamera();
-    if (cam) {
-        glm::vec3 spawn = cam->getPosition() + cam->getPosition() * 5.0f + glm::vec3(0.0f, -1.0f, 0.0f);
-        cur->spawnTree(spawn);
-        return;
-    }
-
-    // fallback: použít původní chování (pokud žádná kamera)
-    cur->spawnTree(glm::vec3((float)x, 0.0f, (float)y));
-}
 
 void InputManager::onKey(int key, int action) {
-    if (action == GLFW_PRESS)
+    if (action == GLFW_PRESS) {
         keyStates[key] = true;
-    else if (action == GLFW_RELEASE)
+        keyPressedEvents[key] = true;
+    }
+    else if (action == GLFW_RELEASE) {
         keyStates[key] = false;
+    }
 }
 
 bool InputManager::isKeyDown(int key) const {
@@ -33,6 +18,14 @@ bool InputManager::isKeyDown(int key) const {
     return it != keyStates.end() && it->second;
 }
 
+bool InputManager::isKeyPressed(int key) {
+    auto it = keyPressedEvents.find(key);
+    if (it != keyPressedEvents.end() && it->second) {
+        it->second = false; // vyzvednuto — zabráníme opětovnému vrácení true, dokud nebude nový press
+        return true;
+    }
+    return false;
+}
 
 void InputManager::onMouseMove(double x, double y) {
     // if (firstMouse) {

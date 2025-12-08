@@ -85,3 +85,8 @@ void Camera::right(float deltaTime) {
     this->eye += glm::normalize(glm::cross(glm::vec3(this->target), glm::vec3(this->up))) * Config::MovementSpeed * deltaTime;
     notify(ObservableSubjects::SCamera);
 }
+
+void Camera::setFOV(float radians) {
+    fov = radians;
+    notify(ObservableSubjects::SCamera);
+}

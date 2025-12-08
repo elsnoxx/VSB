@@ -33,9 +33,10 @@ void Application::switchScene(int index) {
     screenManager.switchTo(index);
 }
 
-void Application::toggleFOV() {
-    screenManager.toggleFOV();
+void Application::updateFOV(float radians) {
+    screenManager.changeFOV(radians);
 }
+
 
 void Application::run() {
     glEnable(GL_DEPTH_TEST);
@@ -89,7 +90,6 @@ void Application::initialization() {
 
 	// screen init
     screenManager.init();
-    input.setScreenManager(&screenManager);
 
     // Nastaven� callback�
     glfwSetKeyCallback(window, callbackKey);

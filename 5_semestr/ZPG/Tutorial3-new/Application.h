@@ -27,7 +27,7 @@ class Application {
 		void updateViewport(double x, double y);
 		
 		void switchScene(int index);
-		void toggleFOV();
+		void updateFOV(float radians);
 
 		void run();
 

@@ -14,10 +14,12 @@ public:
     void setScenes(const std::vector<Scene*>& scenes);
 
     void switchTo(int index);
-    void toggleFOV();
+
     Scene* getCurrentScene() const;
 
     void update(float dt, InputManager& input);
+
+    void changeFOV(float radians);
 
     void draw();
 
@@ -27,5 +29,4 @@ private:
 
     // FOV
     int currentFovIndex = 0;
-    const float fovDegrees[3] = { 45.0f, 90.0f, 130.0f };
 };

@@ -1,28 +1,108 @@
 ﻿#include "SceneFactory.h"
 #include "../ModelObject/ModelManager.h"
+#include "../Light/PointLight.h"
 
 
 std::vector<Scene*> SceneFactory::createAllScenes() {
     return {
         // Tutorial 2
-       /* createScene1(),
-        createScene2(),
-        createScene3(),
-        createScene4(),
-        createScene5(),
+        //createScene1(),
+        //createScene2(),
+        //createScene3(),
+        //createScene4(),
+        //createScene5(),
         
         // Tutorial 3
-        createSceneSphereLights(),
-        createSceneDifferentModes(),
+        //createSceneSphereLights(),
+        //createSceneDifferentModes(),
+        //createSceneSolarSystem(),
 
-        createSceneTinyObjects(),
-        createSceneFormula1(),
-        */
+        //createSceneTinyObjects(),
+        //createSceneFormula1(),
+        
 
         
-        createForestScene()
+        createForestScene(),
+        
     };
 }
+
+Scene* SceneFactory::createSceneSolarSystem() {
+    Scene* scene = new Scene();
+
+    Model* sphereModel = ModelManager::instance().get(ModelType::Sphere);
+    if (!sphereModel) return scene;
+
+    // SUN
+    DrawableObject* sun = new DrawableObject(sphereModel, ShaderType::Phong);
+    {
+        Transform ts;
+        ts.addTransform(std::make_shared<Scale>(glm::vec3(2.5f))); // větší
+        sun->setTransform(ts);
+    }
+    scene->addObject(sun);
+
+    // světlo u Slunce
+    PointLight* sunLight = new PointLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.95f, 0.9f), 3.0f);
+    scene->addLight(sunLight);
+
+
+    // parametry oběhů (v sekundách)
+    const float earthOrbitPeriod = 20.0f;
+    const float earthSelfRotatePeriod = 2.0f;
+    const float moonOrbitPeriod = 5.0f;
+    const float earthOrbitRadius = 6.0f;
+    const float moonOrbitRadius = 1.6f;
+
+    // lambda pro úhel orbity Země (v stupních) - sdílená pro Zemi i Měsíc (aby Měsíc následoval Zemi)
+    auto earthOrbitAngle = [earthOrbitPeriod]() -> float {
+        return static_cast<float>(glfwGetTime()) * (360.0f / earthOrbitPeriod);
+    };
+
+    // EARTH (orbituje kolem Slunce)
+    DrawableObject* earth = new DrawableObject(sphereModel, ShaderType::Phong);
+    {
+        Transform te;
+        // 1) orbitální rotace kolem Y (posune místní osu, následná translace je kolem středu světa)
+        te.addTransform(std::make_shared<Rotation>(earthOrbitAngle, glm::vec3(0,1,0)));
+        // 2) translace od středu (umístí Zemi na orbitu)
+        te.addTransform(std::make_shared<Translation>(glm::vec3(earthOrbitRadius, 0.0f, 0.0f)));
+        // 3) vlastní rotace Země kolem své osy (vizuální efekt)
+        te.addTransform(std::make_shared<Rotation>([]() {
+            return static_cast<float>(glfwGetTime()) * (360.0f / 2.0f);
+        }, glm::vec3(0,1,0)));
+        // 4) měřítko Země
+        te.addTransform(std::make_shared<Scale>(glm::vec3(0.6f)));
+        earth->setTransform(te);
+    }
+    scene->addObject(earth);
+
+    // MOON (orbita kolem Země; konstrukce zajistí, že následuje zemní orbitu)
+    DrawableObject* moon = new DrawableObject(sphereModel, ShaderType::Phong);
+    {
+        Transform tm;
+        // 1) stejná orbitální rotace kolem Slunce jako Země (díky tomu je Měsíc relativně k Zemi)
+        tm.addTransform(std::make_shared<Rotation>(earthOrbitAngle, glm::vec3(0,1,0)));
+        // 2) translace na pozici Země (earthOrbitRadius od středu)
+        tm.addTransform(std::make_shared<Translation>(glm::vec3(earthOrbitRadius, 0.0f, 0.0f)));
+        // 3) rotace Měsíce kolem Země (lokální orbitální rotace)
+        tm.addTransform(std::make_shared<Rotation>([]() {
+            return static_cast<float>(glfwGetTime()) * (360.0f / 5.0f);
+        }, glm::vec3(0,1,0)));
+        // 4) translace na vzdálenost od Země
+        tm.addTransform(std::make_shared<Translation>(glm::vec3(moonOrbitRadius, 0.0f, 0.0f)));
+        // 5) měřítko Měsíce
+        tm.addTransform(std::make_shared<Scale>(glm::vec3(0.2f)));
+        moon->setTransform(tm);
+    }
+    scene->addObject(moon);
+
+    // volitelně: malá Zemská atmosféra / indikátor (jiný materiál by bylo potřeba)
+    // volitelně: přidejte více planet, upravte periody/radii, nebo přidejte orbitální stopy
+
+    return scene;
+}
+
 
 Scene* SceneFactory::createForestScene() {
     Scene* scene = new Scene();
@@ -31,13 +111,15 @@ Scene* SceneFactory::createForestScene() {
     Model* treeModel = ModelManager::instance().get(ModelType::Tree);
     Model* bushModel = ModelManager::instance().get(ModelType::Bushes);
     Model* plainModel = ModelManager::instance().get(ModelType::Plain);
+    Model* sphereModel = ModelManager::instance().get(ModelType::Sphere);
+
 
     // přidej terén (velký plane)
     if (plainModel) {
         DrawableObject* ground = new DrawableObject(plainModel, ShaderType::Basic);
         Transform tg;
         tg.addTransform(std::make_shared<Scale>(glm::vec3(50.0f, 1.0f, 50.0f)));
-        tg.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, -0.5f, 0.0f)));
+        tg.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, 0.0f)));
         ground->setTransform(tg);
         scene->addObject(ground);
     }
@@ -64,7 +146,7 @@ Scene* SceneFactory::createForestScene() {
             placed.push_back(p);
             ++i;
 
-            DrawableObject* obj = new DrawableObject(model, ShaderType::Phong); // vyber shader podle potřeby
+            DrawableObject* obj = new DrawableObject(model, ShaderType::Phong);
             Transform t;
             float scale = isTree ? distTreeScale(rng) : distBushScale(rng);
             t.addTransform(std::make_shared<Scale>(glm::vec3(scale)));
@@ -77,16 +159,44 @@ Scene* SceneFactory::createForestScene() {
         }
         };
 
-    // 50 stromů a 50 keřů
-    placeObjects(treeModel, 10, true);
-    placeObjects(bushModel, 10, false);
+    // 50 tree a 50 bushes
+    placeObjects(treeModel, 50, true);
+    placeObjects(bushModel, 50, false);
 
-    // přidej jedno sluneční/centrální světlo nahoře (posílat do shaderů)
-    Light sun;
-    sun.position = glm::vec3(0.0f, 30.0f, 0.0f); // vysoko nad scénou
-    sun.color = glm::vec3(1.0f, 0.95f, 0.9f);
-    sun.intensity = 1.5f;
-    scene->addLight(sun);
+    auto addFireflies = [&](int count) {
+        if (!sphereModel) return;
+
+        std::uniform_real_distribution<float> distHeight(1.0f, 5.0f);
+        std::uniform_real_distribution<float> distRange(-30.0f, 30.0f);
+
+        for (int i = 0; i < count; i++) {
+            glm::vec3 pos(distRange(rng), distHeight(rng), distRange(rng));
+
+            // vizuální glow koule
+            DrawableObject* firefly = new DrawableObject(sphereModel, ShaderType::Phong);
+            Transform tf;
+            tf.addTransform(std::make_shared<Scale>(glm::vec3(0.1f)));  // malinká koule
+            tf.addTransform(std::make_shared<Translation>(pos));
+            firefly->setTransform(tf);
+            scene->addObject(firefly);
+
+            // světlo -> dělá glow efekt do okolí
+            PointLight* fl = new PointLight(
+                pos,
+                glm::vec3(1.0f, 0.9f, 0.3f),  // barva světlušky
+                1.0f, 0.35f, 0.44f            // rychle klesající světlo
+            );
+
+            fl->intensity = 2.0f;             // slabé ale jasné světlo
+            scene->addLight(fl);
+        }
+        };
+
+
+    PointLight* sunLight = new PointLight(glm::vec3(0.0f, 30.0f, 0.0f), glm::vec3(1.0f, 0.95f, 0.9f), 1.5f);
+    scene->addLight(sunLight);
+    addFireflies(20);
+
 
     return scene;
 }
@@ -115,11 +225,7 @@ Scene* SceneFactory::createSceneSphereLights() {
         scene->addObject(obj);
     }
 
-    // JEDNO centrální světlo (world space) — uprav Z podle polohy kamery
-    Light center;
-    center.position = glm::vec3(0.0f, 0.0f, 0.0f);
-    center.color = glm::vec3(1.0f, 1.0f, 1.0f);
-    center.intensity = 6.0f;
+    PointLight* center = new PointLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 6.0f);
     scene->addLight(center);
 
     return scene;
@@ -159,10 +265,7 @@ Scene* SceneFactory::createSceneDifferentModes() {
     }
 
     // jedno centrální světlo uprostřed (world space)
-    Light center;
-    center.position = glm::vec3(0.0f, 0.0f, 1.5f); // nastav podle kamery
-    center.color = glm::vec3(1.0f);
-    center.intensity = 6.0f;
+    PointLight* center = new PointLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 6.0f);
     scene->addLight(center);
 
     return scene;

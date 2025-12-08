@@ -14,7 +14,16 @@ void DrawableObject::draw() {
     shaderProgram->use();
     glm::mat4 modelMatrix = transform.getMatrix();
     shaderProgram->setUniform("modelMatrix", transform.getMatrix());
+
+    if (textureID != 0) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        shaderProgram->setUniform("textureUnitID", 0);
+    }
+
     model->draw();
+
+    glUseProgram(0);
 
     GLenum err = glGetError();
     if (err != GL_NO_ERROR) {
