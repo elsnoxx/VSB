@@ -145,6 +145,7 @@ glfw3.lib
     <ClCompile Include="ModelObject\DrawableObject.cpp" />
     <ClCompile Include="ModelObject\Model.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
+    <ClCompile Include="ModelObject\Texture.cpp" />
     <ClCompile Include="Scene\SceneFactory.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\ScreenManager.cpp" />

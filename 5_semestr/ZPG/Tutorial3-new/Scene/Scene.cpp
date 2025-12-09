@@ -112,6 +112,8 @@ void Scene::plantObjectAtWorldPos(const glm::vec3& worldPos, ModelType type, Sha
     t.addTransform(std::make_shared<Scale>(glm::vec3(1.0f)));
     t.addTransform(std::make_shared<Translation>(worldPos));
     obj->setTransform(t);
+	obj->addTexture(TextureManager::instance().get(TextureType::WoodenFence));
+	obj->addTexture(TextureManager::instance().get(TextureType::Teren));
     this->addObject(obj);
 }
 

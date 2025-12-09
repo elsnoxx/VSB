@@ -7,7 +7,7 @@ std::vector<Scene*> SceneFactory::createAllScenes() {
     return {
         // Tutorial 2
         //createScene1(),
-        //createScene2(),
+        createScene2(),
         //createScene3(),
         //createScene4(),
         //createScene5(),
@@ -25,7 +25,7 @@ std::vector<Scene*> SceneFactory::createAllScenes() {
         //createForestScene(),
 
         //Tutorial 5
-         createSceneShrekFamily(),
+         //createSceneShrekFamily(),
         
     };
 }
@@ -371,6 +371,7 @@ Scene* SceneFactory::createScene1() {
     Transform t;
     t.addTransform(std::make_shared<Translation>(glm::vec3(0, 0, 0)));
     obj->setTransform(t);
+	obj->addTexture(TextureManager::instance().get(TextureType::Earth));
 
     scene->addObject(obj);
     return scene;
@@ -379,13 +380,15 @@ Scene* SceneFactory::createScene1() {
 Scene* SceneFactory::createScene2() {
     Scene* scene = new Scene();
 
-    DrawableObject* obj = new DrawableObject(ModelType::Tree, ShaderType::Basic);
+    DrawableObject* obj = new DrawableObject(ModelType::Tree, ShaderType::Textured);
 
     Transform t;
     t.addTransform(std::make_shared<Scale>(glm::vec3(0.15f)));
     t.addTransform(std::make_shared<Translation>(glm::vec3(-0.5f, -1.5f, 0.0f)));
 
     obj->setTransform(t);
+	obj->addTexture(TextureManager::instance().get(TextureType::WoodenFence));
+	obj->addTexture(TextureManager::instance().get(TextureType::Grass));
     scene->addObject(obj);
 
     return scene;

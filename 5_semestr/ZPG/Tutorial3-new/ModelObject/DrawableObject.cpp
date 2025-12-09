@@ -2,23 +2,31 @@
 #include <iostream>
 #include <GL/glew.h>
 
-
-
 // back-compat konstruktor: přijme raw Model* a zabalí ho jako non-owning shared_ptr
-DrawableObject::DrawableObject(ModelType modelType, ShaderType shaderType, TextureType textureType)
+DrawableObject::DrawableObject(ModelType modelType, ShaderType shaderType)
 {
     // vytvoříme non-owning shared_ptr s no-op deleter — ModelManager stále vlastní model
     model = ModelManager::instance().get(modelType);
     shaderProgram = ShaderFactory::Get(shaderType);
-    texture = TextureManager::instance().get(textureType);
 }
+
+// nový konstruktor, který zároveň načte texturu z TextureType
+DrawableObject::DrawableObject(ModelType modelType, ShaderType shaderType, TextureType texType)
+    : DrawableObject(modelType, shaderType)
+{
+    if (texType != TextureType::Empty) {
+        auto tex = TextureManager::instance().get(texType);
+        if (tex) textures.push_back(tex);
+    }
+}
+
 
 void DrawableObject::draw() {
     if (!shaderProgram) {
         std::cerr << "DrawableObject::draw() ERROR Shader not set!\n";
         return;
     }
-    
+
     glm::mat4 modelMat = this->getTransform().getMatrix();
     shaderProgram->use();
 
@@ -28,22 +36,27 @@ void DrawableObject::draw() {
     glm::mat3 normalMat = glm::transpose(glm::inverse(glm::mat3(modelMat)));
     shaderProgram->setUniform("normalMatrix", normalMat);
 
-    // Pokud máme texturu, bindneme ji a nastavíme sampler uniformu na texture unit 0
-    if (texture && texture->getID() != 0u) {
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture->getID());
-        shaderProgram->setUniform("textureUnitID", 0);
+    // pokud jsou nějaké textury, bindneme je do jednotek 0..N-1 a nastavíme sampler-uniformy
+    for (size_t i = 0; i < textures.size(); ++i) {
+        if (!textures[i] || textures[i]->getID() == 0u) continue;
+        glActiveTexture(GL_TEXTURE0 + static_cast<GLenum>(i));
+        glBindTexture(GL_TEXTURE_2D, textures[i]->getID());
+        // uniform jméno: texture0, texture1, ...
+        std::string uname = "texture" + std::to_string(i);
+        shaderProgram->setUniform(uname.c_str(), static_cast<int>(i));
     }
-    else {
-        // volitelně: nastavit sampler na 0 i bez textury (bezpečnost)
-        shaderProgram->setUniform("textureUnitID", 0);
+
+    // zabezpečení: pokud žádná textura, pošleme texture0=0 (většinou již nastaveno někde jinde)
+    if (textures.empty()) {
+        shaderProgram->setUniform("texture0", 0);
     }
 
     // vykresli model
     if (model) model->draw();
 
-    // unbind texture a program
-    if (texture && texture->getID() != 0u) {
+    // unbind textures (lepší čistota stavu)
+    for (size_t i = 0; i < textures.size(); ++i) {
+        glActiveTexture(GL_TEXTURE0 + static_cast<GLenum>(i));
         glBindTexture(GL_TEXTURE_2D, 0);
     }
     glUseProgram(0);

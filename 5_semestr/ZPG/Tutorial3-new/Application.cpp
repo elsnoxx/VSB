@@ -67,7 +67,7 @@ void Application::handleMouseClick(double x, double y, int button) {
         printf("[App] picked object index %d at world [%f,%f,%f]\n", picked, worldPos.x, worldPos.y, worldPos.z);
         // example: left click = plant a tree at clicked world position
         if (button == GLFW_MOUSE_BUTTON_LEFT) {
-            cur->plantObjectAtWorldPos(worldPos, ModelType::Tree, ShaderType::Phong);
+            cur->plantObjectAtWorldPos(worldPos, ModelType::Tree, ShaderType::Textured);
         }
         // example: right click = select object
         else if (button == GLFW_MOUSE_BUTTON_RIGHT) {

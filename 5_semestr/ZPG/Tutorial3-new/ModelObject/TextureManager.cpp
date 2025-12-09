@@ -3,35 +3,41 @@
 #include "../lib/std_image/stb-image-header.h"
 #include <iostream>
 
+// instance() u� bylo OK
 TextureManager& TextureManager::instance() {
     static TextureManager inst;
     return inst;
 }
 
+// implementace get(TextureType) -- u� v souboru m�l k�d, ��dn� zm�ny pot�eba,
+// ale ujist�me se, �e signatury odpov�daj� hlavi�ce:
 std::shared_ptr<Texture> TextureManager::get(TextureType t) {
     auto it = cacheByType.find(t);
     if (it != cacheByType.end()) return it->second;
 
     std::string path;
     switch (t) {
-    case TextureType::Fiona: 
-        path = "ModelObject/textures/fiona.png"; 
+    case TextureType::Fiona:
+        path = "ModelObject/textures/fiona.png";
         break;
-    case TextureType::Shrek: 
-        path = "ModelObject/textures/shrek.png"; 
+    case TextureType::Shrek:
+        path = "ModelObject/textures/shrek.png";
         break;
-    case TextureType::Toilet: 
-        path = "ModelObject/textures/toiled.jpg"; 
+    case TextureType::Toilet:
+        path = "ModelObject/textures/toiled.jpg";
         break;
-    case TextureType::Teren: 
-        path = "ModelObject/textures/grass.png"; 
+    case TextureType::Teren:
+        path = "ModelObject/textures/grass.png";
         break;
     case TextureType::WoodenFence:
         path = "ModelObject/textures/wooden_fence.png";
         break;
-	case TextureType::Venus:
+    case TextureType::Grass:
+        path = "ModelObject/textures/grass.png";
+        break;
+    case TextureType::Venus:
         path = "ModelObject/assets/solarSystem/venus/Textures/Atmosphere_2K.png";
-		break;
+        break;
     case TextureType::Moon:
         path = "ModelObject/assets/solarSystem/moon/Textures/Bump_2K.png";
         break;
@@ -62,8 +68,8 @@ std::shared_ptr<Texture> TextureManager::get(TextureType t) {
     case TextureType::Saturn:
         path = "ModelObject/assets/solarSystem/saturn/2k_saturn.jpg";
         break;
-    default: 
-        path = ""; 
+    default:
+        path = "";
         break;
     }
 

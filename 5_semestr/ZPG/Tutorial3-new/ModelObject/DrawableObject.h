@@ -13,7 +13,9 @@
 class DrawableObject {
 public:
 
-    DrawableObject(ModelType modelType, ShaderType shaderType, TextureType textureType = TextureType::Empty);
+    DrawableObject(ModelType modelType, ShaderType shaderType);
+    // back-compat constructor that accepts TextureType
+    DrawableObject(ModelType modelType, ShaderType shaderType, TextureType texType);
 
     void setID(unsigned int id) { id_ = id; }
     unsigned int getID() const { return id_; }
@@ -21,12 +23,15 @@ public:
     Transform& getTransform() { return transform; }
     ShaderProgram* getShader() const { return shaderProgram; }
 
+    void addTexture(const std::shared_ptr<Texture>& tex) { if (tex) textures.push_back(tex); }
+    void clearTextures() { textures.clear(); }
+
     void draw();
 
 private:
     unsigned int id_ = 0;
     std::shared_ptr<Model> model;
     ShaderProgram* shaderProgram = nullptr;
-    std::shared_ptr<Texture> texture; // RAII wrapper
+    std::vector<std::shared_ptr<Texture>> textures;
     Transform transform;
 };

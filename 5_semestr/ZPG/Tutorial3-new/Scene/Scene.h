@@ -28,7 +28,7 @@ public:
     void switchHeadLight();
 
     int pickAtCursor(double x, double y, glm::vec3* outWorld = nullptr);
-    void plantObjectAtWorldPos(const glm::vec3& worldPos, ModelType type = ModelType::Tree, ShaderType shader = ShaderType::Phong);
+    void plantObjectAtWorldPos(const glm::vec3& worldPos, ModelType type = ModelType::Tree, ShaderType shader = ShaderType::Textured);
 
     // selection / deletion
     int getSelectedIndex() const { return selectedIndex; }
