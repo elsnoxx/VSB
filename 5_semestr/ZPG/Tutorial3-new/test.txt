@@ -1,0 +1,118 @@
+Scene* SceneFactory::createForestScene() {
+    Scene* scene = new Scene();
+
+    // vytváříme hlavní objekty přímo přes ModelType
+    DrawableObject* shrek = new DrawableObject(ModelType::Shrek, ShaderType::Textured, TextureType::Shrek);
+    {
+        Transform ts;
+        ts.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+        ts.addTransform(std::make_shared<Translation>(glm::vec3(-2.0f, 0.0f, 0.0f)));
+        shrek->setTransform(ts);
+        scene->addObject(shrek);
+    }
+
+    DrawableObject* fiona = new DrawableObject(ModelType::Fiona, ShaderType::Textured, TextureType::Fiona);
+    {
+        Transform tf;
+        tf.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+        tf.addTransform(std::make_shared<Translation>(glm::vec3(2.0f, 0.0f, 0.0f)));
+        fiona->setTransform(tf);
+        scene->addObject(fiona);
+    }
+
+    DrawableObject* toilet = new DrawableObject(ModelType::Toilet, ShaderType::Textured, TextureType::Toilet);
+    {
+        Transform tt;
+        tt.addTransform(std::make_shared<Scale>(glm::vec3(0.7f)));
+        tt.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, -1.5f)));
+        toilet->setTransform(tt);
+        scene->addObject(toilet);
+    }
+
+    DrawableObject* ground = new DrawableObject(ModelType::Plain, ShaderType::Textured, TextureType::Teren);
+    {
+        Transform tg;
+        tg.addTransform(std::make_shared<Scale>(glm::vec3(50.0f, 1.0f, 50.0f)));
+        tg.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, 0.0f)));
+        ground->setTransform(tg);
+        scene->addObject(ground);
+    }
+
+    // náhodný generátor
+    std::mt19937 rng((unsigned)std::chrono::high_resolution_clock::now().time_since_epoch().count());
+    std::uniform_real_distribution<float> distPos(-40.0f, 40.0f);
+    std::uniform_real_distribution<float> distTreeScale(0.8f, 1.6f);
+    std::uniform_real_distribution<float> distBushScale(0.3f, 0.9f);
+    std::uniform_real_distribution<float> distRot(0.0f, 360.0f);
+
+    // placeObjects nyní přijímá ModelType místo Model* a kontroluje dostupnost modelu v ModelManageru
+    auto placeObjects = [&](ModelType modelType, int count, bool isTree) {
+        // zkontroluj, že model existuje v manageru (lazy-loaded)
+        if (!ModelManager::instance().get(modelType)) return;
+
+        const float minDist = isTree ? 2.0f : 1.0f;
+        std::vector<glm::vec2> placed;
+        int attempts = 0;
+        for (int i = 0; i < count && attempts < count * 50; ++attempts) {
+            glm::vec2 p(distPos(rng), distPos(rng));
+            bool ok = true;
+            for (auto& q : placed) {
+                if (glm::length(p - q) < minDist) { ok = false; break; }
+            }
+            if (!ok) continue;
+            placed.push_back(p);
+            ++i;
+
+            // vytvoříme objekt přes ModelType - DrawableObject si v konstruktoru získá model z ModelManageru
+            DrawableObject* obj = new DrawableObject(modelType, ShaderType::Phong);
+            Transform t;
+            float scale = isTree ? distTreeScale(rng) : distBushScale(rng);
+            t.addTransform(std::make_shared<Scale>(glm::vec3(scale)));
+            t.addTransform(std::make_shared<Translation>(glm::vec3(p.x, 0.0f, p.y)));
+            float angle = distRot(rng);
+            t.addTransform(std::make_shared<Rotation>([angle]() { return angle; }, glm::vec3(0, 1, 0)));
+            obj->setTransform(t);
+            scene->addObject(obj);
+        }
+    };
+
+    // 50 tree a 50 bushes (použijeme enumy místo surových pointerů)
+    placeObjects(ModelType::Tree, 50, true);
+    placeObjects(ModelType::Bushes, 50, false);
+
+    auto addFireflies = [&](int count) {
+        // zkontroluj dostupnost koule (sphere)
+        if (!ModelManager::instance().get(ModelType::Sphere)) return;
+
+        std::uniform_real_distribution<float> distHeight(1.0f, 5.0f);
+        std::uniform_real_distribution<float> distRange(-30.0f, 30.0f);
+
+        for (int i = 0; i < count; i++) {
+            glm::vec3 pos(distRange(rng), distHeight(rng), distRange(rng));
+
+            // vizuální glow koule
+            DrawableObject* firefly = new DrawableObject(ModelType::Sphere, ShaderType::Phong);
+            Transform tf;
+            tf.addTransform(std::make_shared<Scale>(glm::vec3(0.1f)));  // malinká koule
+            tf.addTransform(std::make_shared<Translation>(pos));
+            firefly->setTransform(tf);
+            scene->addObject(firefly);
+
+            // světlo -> dělá glow efekt do okolí
+            PointLight* fl = new PointLight(
+                pos,
+                glm::vec3(1.0f, 0.9f, 0.3f),  // barva světlušky
+                1.0f, 0.35f, 0.44f            // rychle klesající světlo
+            );
+
+            fl->intensity = 2.0f;             // slabé ale jasné světlo
+            scene->addLight(fl);
+        }
+    };
+
+    PointLight* sunLight = new PointLight(glm::vec3(0.0f, 30.0f, 0.0f), glm::vec3(1.0f, 0.95f, 0.9f), 1.5f);
+    scene->addLight(sunLight);
+    addFireflies(20);
+
+    return scene;
+}
