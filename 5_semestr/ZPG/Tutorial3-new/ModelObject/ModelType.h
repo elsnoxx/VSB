@@ -1,6 +1,7 @@
 #pragma once
 
 enum class ModelType {
+    // základní tvary
     Sphere,
     Triangle,
     Tree,
@@ -10,6 +11,7 @@ enum class ModelType {
     Plain,
     Gift,
     Skycube,
+
     // obj modely
     House,
     Formula1,
@@ -19,4 +21,17 @@ enum class ModelType {
     Fiona,
     Toilet,
     Teren,
+
+    // --- SOLAR SYSTEM PLANETS ---
+    Mercury,
+    Venus,
+    Earth,
+    Moon,
+    Mars,
+    Jupiter,
+    Saturn,
+    Uranus,
+    Neptune,
+    Pluto,
+    Sun,
 };

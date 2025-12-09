@@ -25,7 +25,7 @@ std::vector<Scene*> SceneFactory::createAllScenes() {
         createForestScene(),
 
         //Tutorial 5
-        //createSceneShrekFamily()
+        // createSceneShrekFamily(),
         
     };
 }
@@ -34,7 +34,6 @@ Scene* SceneFactory::createSceneShrekFamily() {
     Scene* scene = new Scene();
 
     // zkontroluj, že modely obsahují texture coords (UV) - jinak shader Textured nic nezobrazí
-    
     DrawableObject* shrek = new DrawableObject(ModelType::Shrek, ShaderType::Textured, TextureType::Shrek);
     Transform ts;
     ts.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
@@ -74,113 +73,108 @@ Scene* SceneFactory::createSceneShrekFamily() {
 Scene* SceneFactory::createSceneSolarSystem() {
     Scene* scene = new Scene();
 
-    Model* sphereModel = ModelManager::instance().get(ModelType::Sphere);
-    if (!sphereModel) return scene;
-
-    // SUN
-    DrawableObject* sun = new DrawableObject(sphereModel, ShaderType::Phong);
+    // ===== SUN =====
+    DrawableObject* sun = new DrawableObject(ModelType::Sun, ShaderType::Textured, TextureType::Sun);
     {
-        Transform ts;
-        ts.addTransform(std::make_shared<Scale>(glm::vec3(2.5f))); // větší
-        sun->setTransform(ts);
+        Transform t;
+        t.addTransform(std::make_shared<Scale>(glm::vec3(0.5f)));
+        sun->setTransform(t);
     }
     scene->addObject(sun);
 
-    // světlo u Slunce
-    PointLight* sunLight = new PointLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.95f, 0.9f), 3.0f);
-    scene->addLight(sunLight);
+    // Real light
+    scene->addLight(new PointLight(glm::vec3(0, 0, 0), glm::vec3(1.0f, 0.95f, 0.8f), 10.0f));
 
-
-    // parametry oběhů (v sekundách)
-    const float earthOrbitPeriod = 20.0f;
-    const float earthSelfRotatePeriod = 2.0f;
-    const float moonOrbitPeriod = 5.0f;
-    const float earthOrbitRadius = 6.0f;
-    const float moonOrbitRadius = 1.6f;
-
-    // lambda pro úhel orbity Země (v stupních) - sdílená pro Zemi i Měsíc (aby Měsíc následoval Zemi)
-    auto earthOrbitAngle = [earthOrbitPeriod]() -> float {
-        return static_cast<float>(glfwGetTime()) * (360.0f / earthOrbitPeriod);
+    // ===== PLANETS =====
+    struct PlanetDef {
+        ModelType type;
+        TextureType texture;
+        float orbitRadius;
+        float orbitPeriod;
+        float rotate;
+        float scale;
     };
 
-    // EARTH (orbituje kolem Slunce)
-    DrawableObject* earth = new DrawableObject(sphereModel, ShaderType::Phong);
-    {
-        Transform te;
-        // 1) orbitální rotace kolem Y (posune místní osu, následná translace je kolem středu světa)
-        te.addTransform(std::make_shared<Rotation>(earthOrbitAngle, glm::vec3(0,1,0)));
-        // 2) translace od středu (umístí Zemi na orbitu)
-        te.addTransform(std::make_shared<Translation>(glm::vec3(earthOrbitRadius, 0.0f, 0.0f)));
-        // 3) vlastní rotace Země kolem své osy (vizuální efekt)
-        te.addTransform(std::make_shared<Rotation>([]() {
-            return static_cast<float>(glfwGetTime()) * (360.0f / 2.0f);
-        }, glm::vec3(0,1,0)));
-        // 4) měřítko Země
-        te.addTransform(std::make_shared<Scale>(glm::vec3(0.6f)));
-        earth->setTransform(te);
-    }
-    scene->addObject(earth);
+    /*std::vector<PlanetDef> planets = {
+        { ModelType::Mercury, TextureType::Mars,    2.0f,   12.0f, 10.0f, 0.15f },
+        { ModelType::Venus,   TextureType::Mars,    3.0f,   20.0f, 30.0f, 0.20f },
+        { ModelType::Earth,   TextureType::Mars,    4.0f,   24.0f,  2.0f, 0.22f },
+        { ModelType::Mars,    TextureType::Mars,    5.0f,   32.0f,  3.0f, 0.18f },
+        { ModelType::Jupiter, TextureType::Mars,    7.0f,   60.0f, 20.0f, 0.30f },
+        { ModelType::Saturn,  TextureType::Mars,    9.0f,   80.0f, 18.0f, 0.55f },
+        { ModelType::Uranus,  TextureType::Mars,    11.0f,  110.0f, 25.0f, 0.45f },
+        { ModelType::Neptune, TextureType::Mars,    13.0f,  140.0f, 28.0f, 0.40f },
+        { ModelType::Pluto,   TextureType::Mars,    15.0f,  200.0f, 35.0f, 0.12f }
+    };*/
+    std::vector<PlanetDef> planets = {
+        { ModelType::Saturn,  TextureType::Mars,    9.0f,   80.0f, 18.0f, 0.55f },
+        { ModelType::Uranus,  TextureType::Mars,    11.0f,  110.0f, 25.0f, 0.45f },
+        { ModelType::Neptune, TextureType::Mars,    13.0f,  140.0f, 28.0f, 0.40f },
+        { ModelType::Pluto,   TextureType::Mars,    15.0f,  200.0f, 35.0f, 0.12f },
+        
+    }; 
 
-    // MOON (orbita kolem Země; konstrukce zajistí, že následuje zemní orbitu)
-    DrawableObject* moon = new DrawableObject(sphereModel, ShaderType::Phong);
-    {
-        Transform tm;
-        // 1) stejná orbitální rotace kolem Slunce jako Země (díky tomu je Měsíc relativně k Zemi)
-        tm.addTransform(std::make_shared<Rotation>(earthOrbitAngle, glm::vec3(0,1,0)));
-        // 2) translace na pozici Země (earthOrbitRadius od středu)
-        tm.addTransform(std::make_shared<Translation>(glm::vec3(earthOrbitRadius, 0.0f, 0.0f)));
-        // 3) rotace Měsíce kolem Země (lokální orbitální rotace)
-        tm.addTransform(std::make_shared<Rotation>([]() {
-            return static_cast<float>(glfwGetTime()) * (360.0f / 5.0f);
-        }, glm::vec3(0,1,0)));
-        // 4) translace na vzdálenost od Země
-        tm.addTransform(std::make_shared<Translation>(glm::vec3(moonOrbitRadius, 0.0f, 0.0f)));
-        // 5) měřítko Měsíce
-        tm.addTransform(std::make_shared<Scale>(glm::vec3(0.2f)));
-        moon->setTransform(tm);
-    }
-    scene->addObject(moon);
+    auto orbitAngle = [](float p) {
+        return [p]() { return glfwGetTime() * (360.0 / p); };
+        };
 
-    // volitelně: malá Zemská atmosféra / indikátor (jiný materiál by bylo potřeba)
-    // volitelně: přidejte více planet, upravte periody/radii, nebo přidejte orbitální stopy
+    for (auto& p : planets) {
+        DrawableObject* obj = new DrawableObject(p.type, ShaderType::Textured, p.texture);
+
+        Transform t;
+        t.addTransform(std::make_shared<Rotation>(orbitAngle(p.orbitPeriod), glm::vec3(0, 1, 0)));
+        t.addTransform(std::make_shared<Translation>(glm::vec3(p.orbitRadius, 0, 0)));
+        t.addTransform(std::make_shared<Rotation>([p]() { return glfwGetTime() * (360.0 / p.rotate); }, glm::vec3(0, 1, 0)));
+        t.addTransform(std::make_shared<Scale>(glm::vec3(p.scale)));
+
+        obj->setTransform(t);
+        scene->addObject(obj);
+    }
 
     return scene;
 }
 
 
+
 Scene* SceneFactory::createForestScene() {
     Scene* scene = new Scene();
 
-
-
+    // vytváříme hlavní objekty přímo přes ModelType
     DrawableObject* shrek = new DrawableObject(ModelType::Shrek, ShaderType::Textured, TextureType::Shrek);
-    Transform ts;
-    ts.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
-    ts.addTransform(std::make_shared<Translation>(glm::vec3(-2.0f, 0.0f, 0.0f)));
-    shrek->setTransform(ts);
-    scene->addObject(shrek);
+    {
+        Transform ts;
+        ts.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+        ts.addTransform(std::make_shared<Translation>(glm::vec3(-2.0f, 0.0f, 0.0f)));
+        shrek->setTransform(ts);
+        scene->addObject(shrek);
+    }
 
     DrawableObject* fiona = new DrawableObject(ModelType::Fiona, ShaderType::Textured, TextureType::Fiona);
-    Transform tf;
-    tf.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
-    tf.addTransform(std::make_shared<Translation>(glm::vec3(2.0f, 0.0f, 0.0f)));
-    fiona->setTransform(tf);
-    scene->addObject(fiona);
+    {
+        Transform tf;
+        tf.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+        tf.addTransform(std::make_shared<Translation>(glm::vec3(2.0f, 0.0f, 0.0f)));
+        fiona->setTransform(tf);
+        scene->addObject(fiona);
+    }
 
     DrawableObject* toilet = new DrawableObject(ModelType::Toilet, ShaderType::Textured, TextureType::Toilet);
-    Transform tt;
-    tt.addTransform(std::make_shared<Scale>(glm::vec3(0.7f)));
-    tt.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, -1.5f)));
-    toilet->setTransform(tt);
-    scene->addObject(toilet);
+    {
+        Transform tt;
+        tt.addTransform(std::make_shared<Scale>(glm::vec3(0.7f)));
+        tt.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, -1.5f)));
+        toilet->setTransform(tt);
+        scene->addObject(toilet);
+    }
 
     DrawableObject* ground = new DrawableObject(ModelType::Plain, ShaderType::Textured, TextureType::Teren);
-    Transform tg;
-    tg.addTransform(std::make_shared<Scale>(glm::vec3(50.0f, 1.0f, 50.0f)));
-    tg.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, 0.0f)));
-    ground->setTransform(tg);
-    scene->addObject(ground);
-
+    {
+        Transform tg;
+        tg.addTransform(std::make_shared<Scale>(glm::vec3(50.0f, 1.0f, 50.0f)));
+        tg.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, 0.0f)));
+        ground->setTransform(tg);
+        scene->addObject(ground);
+    }
 
     // náhodný generátor
     std::mt19937 rng((unsigned)std::chrono::high_resolution_clock::now().time_since_epoch().count());
@@ -189,8 +183,11 @@ Scene* SceneFactory::createForestScene() {
     std::uniform_real_distribution<float> distBushScale(0.3f, 0.9f);
     std::uniform_real_distribution<float> distRot(0.0f, 360.0f);
 
-    auto placeObjects = [&](Model* model, int count, bool isTree) {
-        if (!model) return;
+    // placeObjects nyní přijímá ModelType místo Model* a kontroluje dostupnost modelu v ModelManageru
+    auto placeObjects = [&](ModelType modelType, int count, bool isTree) {
+        // zkontroluj, že model existuje v manageru (lazy-loaded)
+        if (!ModelManager::instance().get(modelType)) return;
+
         const float minDist = isTree ? 2.0f : 1.0f;
         std::vector<glm::vec2> placed;
         int attempts = 0;
@@ -204,12 +201,12 @@ Scene* SceneFactory::createForestScene() {
             placed.push_back(p);
             ++i;
 
-            DrawableObject* obj = new DrawableObject(model, ShaderType::Phong);
+            // vytvoříme objekt přes ModelType - DrawableObject si v konstruktoru získá model z ModelManageru
+            DrawableObject* obj = new DrawableObject(modelType, ShaderType::Phong);
             Transform t;
             float scale = isTree ? distTreeScale(rng) : distBushScale(rng);
             t.addTransform(std::make_shared<Scale>(glm::vec3(scale)));
             t.addTransform(std::make_shared<Translation>(glm::vec3(p.x, 0.0f, p.y)));
-            // rotace kolem Y
             float angle = distRot(rng);
             t.addTransform(std::make_shared<Rotation>([angle]() { return angle; }, glm::vec3(0, 1, 0)));
             obj->setTransform(t);
@@ -217,12 +214,13 @@ Scene* SceneFactory::createForestScene() {
         }
         };
 
-    // 50 tree a 50 bushes
-    placeObjects(treeModel, 50, true);
-    placeObjects(bushModel, 50, false);
+    // 50 tree a 50 bushes (použijeme enumy místo surových pointerů)
+    placeObjects(ModelType::Tree, 50, true);
+    placeObjects(ModelType::Bushes, 50, false);
 
     auto addFireflies = [&](int count) {
-        if (!sphereModel) return;
+        // zkontroluj dostupnost koule (sphere)
+        if (!ModelManager::instance().get(ModelType::Sphere)) return;
 
         std::uniform_real_distribution<float> distHeight(1.0f, 5.0f);
         std::uniform_real_distribution<float> distRange(-30.0f, 30.0f);
@@ -231,7 +229,7 @@ Scene* SceneFactory::createForestScene() {
             glm::vec3 pos(distRange(rng), distHeight(rng), distRange(rng));
 
             // vizuální glow koule
-            DrawableObject* firefly = new DrawableObject(sphereModel, ShaderType::Phong);
+            DrawableObject* firefly = new DrawableObject(ModelType::Sphere, ShaderType::Phong);
             Transform tf;
             tf.addTransform(std::make_shared<Scale>(glm::vec3(0.1f)));  // malinká koule
             tf.addTransform(std::make_shared<Translation>(pos));
@@ -250,11 +248,9 @@ Scene* SceneFactory::createForestScene() {
         }
         };
 
-
     PointLight* sunLight = new PointLight(glm::vec3(0.0f, 30.0f, 0.0f), glm::vec3(1.0f, 0.95f, 0.9f), 1.5f);
     scene->addLight(sunLight);
     addFireflies(20);
-
 
     return scene;
 }

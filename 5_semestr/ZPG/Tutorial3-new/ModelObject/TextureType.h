@@ -6,4 +6,16 @@ enum class TextureType {
     Toilet,
     Teren,
     WoodenFence,
+    // solar system
+    Mercury,
+    Venus,
+    Earth,
+    Moon,
+    Mars,
+    Jupiter,
+    Saturn,
+    Uranus,
+    Neptune,
+    Pluto,
+    Sun,
 };

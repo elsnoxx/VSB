@@ -48,8 +48,9 @@ Model::Model(const char* name) {
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
     std::string warn, err;
+    std::string baseDir = inputfile.substr(0, inputfile.find_last_of("/\\") + 1);
 
-    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, inputfile.c_str(), "ModelObject/assets/");
+    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, inputfile.c_str(), baseDir.c_str());
 
     if (!warn.empty()) std::cout << "tinyobj warn: " << warn << std::endl;
     if (!err.empty()) std::cerr << "tinyobj err: " << err << std::endl;

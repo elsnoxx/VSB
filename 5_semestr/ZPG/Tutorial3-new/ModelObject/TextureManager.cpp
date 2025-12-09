@@ -29,6 +29,39 @@ std::shared_ptr<Texture> TextureManager::get(TextureType t) {
     case TextureType::WoodenFence:
         path = "ModelObject/textures/wooden_fence.png";
         break;
+	case TextureType::Venus:
+        path = "ModelObject/assets/solarSystem/venus/Textures/Atmosphere_2K.png";
+		break;
+    case TextureType::Moon:
+        path = "ModelObject/assets/solarSystem/moon/Textures/Bump_2K.png";
+        break;
+    case TextureType::Mercury:
+        path = "ModelObject/assets/solarSystem/mercury/Textures/Bump_1K.png";
+        break;
+    case TextureType::Earth:
+        path = "ModelObject/assets/solarSystem/earth/Textures/Diffuse_2K.png";
+        break;
+    case TextureType::Mars:
+        path = "ModelObject/assets/solarSystem/mars/Textures/Diffuse_2K.png";
+        break;
+    case TextureType::Uranus:
+        path = "ModelObject/assets/solarSystem/urano/2k_uranus.jpg";
+        break;
+    case TextureType::Pluto:
+        path = "ModelObject/assets/solarSystem/pluto/pluto.PNG";
+        break;
+    case TextureType::Sun:
+        path = "ModelObject/assets/solarSystem/sun/2k_sun.jpg";
+        break;
+    case TextureType::Jupiter:
+        path = "ModelObject/assets/solarSystem/jupiter/textures/descarga.jpeg";
+        break;
+    case TextureType::Neptune:
+        path = "ModelObject/assets/solarSystem/neptune/2k_neptune.jpg";
+        break;
+    case TextureType::Saturn:
+        path = "ModelObject/assets/solarSystem/saturn/2k_saturn.jpg";
+        break;
     default: 
         path = ""; 
         break;

@@ -18,11 +18,15 @@ void DrawableObject::draw() {
         std::cerr << "DrawableObject::draw() ERROR Shader not set!\n";
         return;
     }
-
+    
+    glm::mat4 modelMat = this->getTransform().getMatrix();
     shaderProgram->use();
 
     // pošli transform do shaderu (předpokládáme že shaderProgram má setUniform pro mat4)
-    shaderProgram->setUniform("modelMatrix", transform.getMatrix());
+    shaderProgram->setUniform("modelMatrix", modelMat);
+
+    glm::mat3 normalMat = glm::transpose(glm::inverse(glm::mat3(modelMat)));
+    shaderProgram->setUniform("normalMatrix", normalMat);
 
     // Pokud máme texturu, bindneme ji a nastavíme sampler uniformu na texture unit 0
     if (texture && texture->getID() != 0u) {

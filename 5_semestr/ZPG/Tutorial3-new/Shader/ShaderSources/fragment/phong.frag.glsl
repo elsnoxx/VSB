@@ -69,7 +69,7 @@ void main()
 
             if (lightTypes[i] == 2) { // SPOT
                 vec3 spotDir = normalize(lightDirections[i]);
-                float theta = dot(L, spotDir);
+                float theta = dot(-L, spotDir);
                 float inner = lightCutOffs[i];
                 float outer = lightOuterCutOffs[i];
                 float epsilon = max(inner - outer, 0.0001);

@@ -34,7 +34,7 @@ std::shared_ptr<Model> ModelManager::createModel(ModelType type) {
 
     switch (type) {
     case ModelType::Triangle:
-        modelPtr = std::make_shared<Model>(tri, sizeof(sphere), countVertices(sizeof(sphere)));
+        modelPtr = std::make_shared<Model>(triangle, sizeof(sphere), countVertices(sizeof(sphere)));
         break;
     case ModelType::Sphere:
         modelPtr = std::make_shared<Model>(sphere, sizeof(sphere), countVertices(sizeof(sphere)));
@@ -84,14 +84,46 @@ std::shared_ptr<Model> ModelManager::createModel(ModelType type) {
     case ModelType::Teren:
         modelPtr = std::make_shared<Model>("teren.obj");
         break;
+    case ModelType::Venus:
+        modelPtr = std::make_shared<Model>("solarSystem/venus/Venus_1K.obj");
+        break;
+    case ModelType::Earth:
+        modelPtr = std::make_shared<Model>("solarSystem/earth/Earth 2K.obj");
+        break;
+    case ModelType::Mercury:
+        modelPtr = std::make_shared<Model>("solarSystem/mercury/Mercury1K.obj");
+        break;
+    case ModelType::Moon:
+        modelPtr = std::make_shared<Model>("solarSystem/moon/Moon 2K.obj");
+        break;
+    case ModelType::Mars:
+        modelPtr = std::make_shared<Model>("solarSystem/mars/Mars 2K.obj");
+        break;
+    case ModelType::Uranus:
+        modelPtr = std::make_shared<Model>("solarSystem/urano/urano.obj");
+        break;
+    case ModelType::Pluto:
+        modelPtr = std::make_shared<Model>("solarSystem/pluto/pluto.obj");
+        break;
+    case ModelType::Sun:
+        modelPtr = std::make_shared<Model>("solarSystem/sun/sol.obj");
+        break;
+    case ModelType::Jupiter:
+        modelPtr = std::make_shared<Model>("solarSystem/jupiter/jupiter.obj");
+        break;
+    case ModelType::Neptune:
+        modelPtr = std::make_shared<Model>("solarSystem/neptune/neptuno.obj");
+        break;
+    case ModelType::Saturn:
+        modelPtr = std::make_shared<Model>("solarSystem/saturn/saturno.obj");
+        break;
     default:
         std::cerr << "[ModelManager] createModel: unknown ModelType\n";
         return nullptr;
     }
 
     if (!modelPtr) return nullptr;
-    Model* ptr = modelPtr.get();
     cache[type] = std::move(modelPtr);
     std::cerr << "[ModelManager] created model for type " << static_cast<int>(type) << "\n";
-    return ptr;
+    return cache[type]; 
 }

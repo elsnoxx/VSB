@@ -10,6 +10,7 @@ Scene::Scene() {
 
     headLight = new HeadLight(camera);
     headLight->intensity = 5.0f;
+	headLight->cutOff = glm::cos(glm::radians(12.5f));
     lightManager->addLight(headLight);
 }
 
@@ -95,6 +96,7 @@ void Scene::bindCameraAndLightToUsedShaders()
     std::vector<float> cutOffs;
     std::vector<float> outerCutOffs;
     std::vector<int> types;
+    std::vector<int> isOn;
 
     positions.reserve(n); colors.reserve(n); intensities.reserve(n);
     directions.reserve(n); cutOffs.reserve(n); outerCutOffs.reserve(n); types.reserve(n);
@@ -108,11 +110,12 @@ void Scene::bindCameraAndLightToUsedShaders()
             directions.push_back(glm::vec3(0.0f));
             cutOffs.push_back(0.0f);
             outerCutOffs.push_back(0.0f);
-            types.push_back(1); // treat missing as point with zero intensity
+            types.push_back(1);
             continue;
         }
 
         colors.push_back(L->color);
+        isOn.push_back(L->isOn ? 1 : 0);
         // respect on/off
         intensities.push_back(L->isOn ? L->intensity : 0.0f);
         types.push_back(static_cast<int>(L->type));
@@ -162,6 +165,7 @@ void Scene::bindCameraAndLightToUsedShaders()
             shader->setUniform(("lightIntensities[" + std::to_string(i) + "]").c_str(), intensities[i]);
             shader->setUniform(("lightCutOffs[" + std::to_string(i) + "]").c_str(), cutOffs[i]);
             shader->setUniform(("lightOuterCutOffs[" + std::to_string(i) + "]").c_str(), outerCutOffs[i]);
+            shader->setUniform(("lightIsOn[" + std::to_string(i) + "]").c_str(), isOn[i]);
         }
 
         shader->setUniform("viewPosition", camera->getPosition());
@@ -178,10 +182,10 @@ void Scene::switchHeadLight() {
     headLight->isOn = !headLight->isOn;
 
     if (headLight->isOn) {
-        std::cout << "Headlight turned ON\n";
+        std::cout << "Headlight turned ON " << headLight->isOn << "\n";
     }
     else {
-        std::cout << "Headlight turned OFF\n";
+        std::cout << "Headlight turned OFF " << headLight->isOn << "\n";
     }
 
     headLight->notify(ObservableSubjects::SLight);
