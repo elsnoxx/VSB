@@ -22,10 +22,10 @@ std::vector<Scene*> SceneFactory::createAllScenes() {
 
 
 
-        //createForestScene(),
+        createForestScene(),
 
         //Tutorial 5
-        createSceneShrekFamily()
+        //createSceneShrekFamily()
         
     };
 }
@@ -33,48 +33,36 @@ std::vector<Scene*> SceneFactory::createAllScenes() {
 Scene* SceneFactory::createSceneShrekFamily() {
     Scene* scene = new Scene();
 
-    // získat modely z ModelManageru (uprav jména ModelType podle tvého enumu)
-    Model* shrekModel = ModelManager::instance().get(ModelType::Shrek);
-    Model* fionaModel = ModelManager::instance().get(ModelType::Fiona);
-    Model* toiletModel = ModelManager::instance().get(ModelType::Toilet);
-    Model* plainModel = ModelManager::instance().get(ModelType::Plain);
-
     // zkontroluj, že modely obsahují texture coords (UV) - jinak shader Textured nic nezobrazí
-    if (shrekModel) {
-        DrawableObject* shrek = new DrawableObject(shrekModel, ShaderType::Textured);
-        Transform ts;
-        ts.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
-        ts.addTransform(std::make_shared<Translation>(glm::vec3(-2.0f, 0.0f, 0.0f)));
-        shrek->setTransform(ts);
-        scene->addObject(shrek);
-    }
+    
+    DrawableObject* shrek = new DrawableObject(ModelType::Shrek, ShaderType::Textured, TextureType::Shrek);
+    Transform ts;
+    ts.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+    ts.addTransform(std::make_shared<Translation>(glm::vec3(-2.0f, 0.0f, 0.0f)));
+    shrek->setTransform(ts);
+    scene->addObject(shrek);
 
-    if (fionaModel) {
-        DrawableObject* fiona = new DrawableObject(fionaModel, ShaderType::Textured);
-        Transform tf;
-        tf.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
-        tf.addTransform(std::make_shared<Translation>(glm::vec3(2.0f, 0.0f, 0.0f)));
-        fiona->setTransform(tf);
-        scene->addObject(fiona);
-    }
+    DrawableObject* fiona = new DrawableObject(ModelType::Fiona, ShaderType::Textured, TextureType::Fiona);
+    Transform tf;
+    tf.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+    tf.addTransform(std::make_shared<Translation>(glm::vec3(2.0f, 0.0f, 0.0f)));
+    fiona->setTransform(tf);
+    scene->addObject(fiona);
 
-    if (toiletModel) {
-        DrawableObject* toilet = new DrawableObject(toiletModel, ShaderType::Textured);
-        Transform tt;
-        tt.addTransform(std::make_shared<Scale>(glm::vec3(0.7f)));
-        tt.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, -1.5f)));
-        toilet->setTransform(tt);
-        scene->addObject(toilet);
-    }
+    DrawableObject* toilet = new DrawableObject(ModelType::Toilet, ShaderType::Textured, TextureType::Toilet);
+    Transform tt;
+    tt.addTransform(std::make_shared<Scale>(glm::vec3(0.7f)));
+    tt.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, -1.5f)));
+    toilet->setTransform(tt);
+    scene->addObject(toilet);
 
-    if (plainModel) {
-        DrawableObject* ground = new DrawableObject(plainModel, ShaderType::Basic);
-        Transform tg;
-        tg.addTransform(std::make_shared<Scale>(glm::vec3(50.0f, 1.0f, 50.0f)));
-        tg.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, 0.0f)));
-        ground->setTransform(tg);
-        scene->addObject(ground);
-    }
+    DrawableObject* ground = new DrawableObject(ModelType::Plain, ShaderType::Basic);
+    Transform tg;
+    tg.addTransform(std::make_shared<Scale>(glm::vec3(50.0f, 1.0f, 50.0f)));
+    tg.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, 0.0f)));
+    ground->setTransform(tg);
+    scene->addObject(ground);
+
 
     // přidej jednoduché světlo, aby textury byly viditelné
     PointLight* sunLight = new PointLight(glm::vec3(0.0f, 30.0f, 0.0f), glm::vec3(1.0f, 0.95f, 0.9f), 1.5f);
@@ -163,22 +151,36 @@ Scene* SceneFactory::createSceneSolarSystem() {
 Scene* SceneFactory::createForestScene() {
     Scene* scene = new Scene();
 
-    // modely
-    Model* treeModel = ModelManager::instance().get(ModelType::Tree);
-    Model* bushModel = ModelManager::instance().get(ModelType::Bushes);
-    Model* plainModel = ModelManager::instance().get(ModelType::Plain);
-    Model* sphereModel = ModelManager::instance().get(ModelType::Sphere);
 
 
-    // přidej terén (velký plane)
-    if (plainModel) {
-        DrawableObject* ground = new DrawableObject(plainModel, ShaderType::Basic);
-        Transform tg;
-        tg.addTransform(std::make_shared<Scale>(glm::vec3(50.0f, 1.0f, 50.0f)));
-        tg.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, 0.0f)));
-        ground->setTransform(tg);
-        scene->addObject(ground);
-    }
+    DrawableObject* shrek = new DrawableObject(ModelType::Shrek, ShaderType::Textured, TextureType::Shrek);
+    Transform ts;
+    ts.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+    ts.addTransform(std::make_shared<Translation>(glm::vec3(-2.0f, 0.0f, 0.0f)));
+    shrek->setTransform(ts);
+    scene->addObject(shrek);
+
+    DrawableObject* fiona = new DrawableObject(ModelType::Fiona, ShaderType::Textured, TextureType::Fiona);
+    Transform tf;
+    tf.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+    tf.addTransform(std::make_shared<Translation>(glm::vec3(2.0f, 0.0f, 0.0f)));
+    fiona->setTransform(tf);
+    scene->addObject(fiona);
+
+    DrawableObject* toilet = new DrawableObject(ModelType::Toilet, ShaderType::Textured, TextureType::Toilet);
+    Transform tt;
+    tt.addTransform(std::make_shared<Scale>(glm::vec3(0.7f)));
+    tt.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, -1.5f)));
+    toilet->setTransform(tt);
+    scene->addObject(toilet);
+
+    DrawableObject* ground = new DrawableObject(ModelType::Plain, ShaderType::Textured, TextureType::Teren);
+    Transform tg;
+    tg.addTransform(std::make_shared<Scale>(glm::vec3(50.0f, 1.0f, 50.0f)));
+    tg.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, 0.0f)));
+    ground->setTransform(tg);
+    scene->addObject(ground);
+
 
     // náhodný generátor
     std::mt19937 rng((unsigned)std::chrono::high_resolution_clock::now().time_since_epoch().count());
@@ -261,7 +263,6 @@ Scene* SceneFactory::createForestScene() {
 Scene* SceneFactory::createSceneSphereLights() {
     Scene* scene = new Scene();
 
-    Model* sphereModel = ModelManager::instance().get(ModelType::Sphere);
     float offset = 2.5f;
 
     std::vector<glm::vec3> positions = {
@@ -272,7 +273,7 @@ Scene* SceneFactory::createSceneSphereLights() {
     };
 
     for (size_t i = 0; i < positions.size(); ++i) {
-        DrawableObject* obj = new DrawableObject(sphereModel, ShaderType::Phong);
+        DrawableObject* obj = new DrawableObject(ModelType::Sphere, ShaderType::Phong);
 
         Transform t;
         t.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
@@ -290,7 +291,6 @@ Scene* SceneFactory::createSceneSphereLights() {
 Scene* SceneFactory::createSceneDifferentModes() {
     Scene* scene = new Scene();
 
-    Model* sphereModel = ModelManager::instance().get(ModelType::Sphere);
     float offset = 2.5f;
 
     std::vector<glm::vec3> positions = {
@@ -310,7 +310,7 @@ Scene* SceneFactory::createSceneDifferentModes() {
 
     for (size_t i = 0; i < positions.size(); ++i) {
         ShaderType st = shaders[i % shaders.size()];
-        DrawableObject* obj = new DrawableObject(sphereModel, st);
+        DrawableObject* obj = new DrawableObject(ModelType::Sphere, st);
 
         Transform t;
         t.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
@@ -330,11 +330,9 @@ Scene* SceneFactory::createSceneDifferentModes() {
 Scene* SceneFactory::createSceneFormula1() {
     Scene* scene = new Scene();
 
-    // načtení shared OBJ modelu (tinyobjloader)
-    Model* cubeModel = ModelManager::instance().get(ModelType::Formula1);
 
     // vytvoříme jeden objekt s Phong shaderem
-    DrawableObject* obj = new DrawableObject(cubeModel, ShaderType::Phong);
+    DrawableObject* obj = new DrawableObject(ModelType::Formula1, ShaderType::Phong);
 
     Transform t;
     t.addTransform(std::make_shared<Scale>(glm::vec3(0.7f)));
@@ -349,11 +347,9 @@ Scene* SceneFactory::createSceneFormula1() {
 Scene* SceneFactory::createSceneTinyObjects() {
     Scene* scene = new Scene();
 
-    // načtení shared OBJ modelu (tinyobjloader)
-    Model* cubeModel = ModelManager::instance().get(ModelType::Cube);
 
     // vytvoříme jeden objekt s Phong shaderem
-    DrawableObject* obj = new DrawableObject(cubeModel, ShaderType::Phong);
+    DrawableObject* obj = new DrawableObject(ModelType::Cube, ShaderType::Phong);
 
     Transform t;
     t.addTransform(std::make_shared<Scale>(glm::vec3(0.7f)));
@@ -374,8 +370,7 @@ Scene* SceneFactory::createSceneTinyObjects() {
 Scene* SceneFactory::createScene1() {
     Scene* scene = new Scene();
 
-    Model* sphereModel = ModelManager::instance().get(ModelType::Sphere);
-    DrawableObject* obj = new DrawableObject(sphereModel, ShaderType::Basic);
+    DrawableObject* obj = new DrawableObject(ModelType::Sphere, ShaderType::Basic);
 
     Transform t;
     t.addTransform(std::make_shared<Translation>(glm::vec3(0, 0, 0)));
@@ -388,8 +383,7 @@ Scene* SceneFactory::createScene1() {
 Scene* SceneFactory::createScene2() {
     Scene* scene = new Scene();
 
-    Model* treeModel = ModelManager::instance().get(ModelType::Tree);
-    DrawableObject* obj = new DrawableObject(treeModel, ShaderType::Basic);
+    DrawableObject* obj = new DrawableObject(ModelType::Tree, ShaderType::Basic);
 
     Transform t;
     t.addTransform(std::make_shared<Scale>(glm::vec3(0.15f)));
@@ -404,14 +398,7 @@ Scene* SceneFactory::createScene2() {
 Scene* SceneFactory::createScene3() {
     Scene* scene = new Scene();
 
-    float triangle[] = {
-         0.0f,  0.5f, 0.0f, 1, 0, 0,
-         0.5f, -0.5f, 0.0f, 0, 1, 0,
-        -0.5f, -0.5f, 0.0f, 0, 0, 1
-    };
-
-    Model* model = new Model(triangle, sizeof(triangle), sizeof(triangle) / (6 * sizeof(float)));
-    DrawableObject* obj = new DrawableObject(model, ShaderType::Basic);
+    DrawableObject* obj = new DrawableObject(ModelType::Triangle, ShaderType::Basic);
 
     Transform t;
     t.addTransform(std::make_shared<Translation>(glm::vec3(-0.25f, 0.17f, 0.0f)));
@@ -429,7 +416,6 @@ Scene* SceneFactory::createScene3() {
 Scene* SceneFactory::createScene4() {
     Scene* scene = new Scene();
 
-    Model* sphereModel = ModelManager::instance().get(ModelType::Sphere);
     float offset = 3.0f;
 
     std::vector<glm::vec3> positions = {
@@ -437,7 +423,7 @@ Scene* SceneFactory::createScene4() {
     };
 
     for (auto& pos : positions) {
-        DrawableObject* obj = new DrawableObject(sphereModel, ShaderType::Basic);
+        DrawableObject* obj = new DrawableObject(ModelType::Sphere, ShaderType::Basic);
 
         Transform t;
         t.addTransform(std::make_shared<Scale>(glm::vec3(0.2f)));

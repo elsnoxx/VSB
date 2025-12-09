@@ -1,38 +1,17 @@
-#include "DrawableObject.h"
-#include "TextureLoader.h"
+﻿#include "DrawableObject.h"
 #include <iostream>
 #include <GL/glew.h>
 
-// helper: load texture according to global TextureType enum (TextureType.h)
-static GLuint loadTextureForType(TextureType tt) {
-    switch (tt) {
-    case TextureType::Empty:  return 0u;
-    case TextureType::Shrek:  return LoadTexture("ModelObject/textures/shrek.png");
-    case TextureType::Fiona:  return LoadTexture("ModelObject/textures/fiona.png");
-    case TextureType::Toilet: return LoadTexture("ModelObject/textures/toilet.png");
-    default: return 0u;
-    }
-}
 
-DrawableObject::DrawableObject(Model* m, ShaderType shaderType, TextureType textureType) {
+
+// back-compat konstruktor: přijme raw Model* a zabalí ho jako non-owning shared_ptr
+DrawableObject::DrawableObject(ModelType modelType, ShaderType shaderType, TextureType textureType)
+{
+    // vytvoříme non-owning shared_ptr s no-op deleter — ModelManager stále vlastní model
+    model = ModelManager::instance().get(modelType);
     shaderProgram = ShaderFactory::Get(shaderType);
-    model = m;
-    textureID = loadTextureForType(textureType);
-    this->textureType = textureType;
+    texture = TextureManager::instance().get(textureType);
 }
-
-void DrawableObject::setTextureID(GLuint id) { textureID = id; }
-
-GLuint DrawableObject::getTextureID() const { return textureID; }
-
-void DrawableObject::setTextureType(TextureType t) {
-    if (textureType == t) return;
-    textureType = t;
-    // pokud loader m� free, uvolni starou texturu zde
-    textureID = loadTextureForType(t);
-}
-
-TextureType DrawableObject::getTextureType() const { return textureType; }
 
 void DrawableObject::draw() {
     if (!shaderProgram) {
@@ -41,19 +20,26 @@ void DrawableObject::draw() {
     }
 
     shaderProgram->use();
-    
+
+    // pošli transform do shaderu (předpokládáme že shaderProgram má setUniform pro mat4)
     shaderProgram->setUniform("modelMatrix", transform.getMatrix());
 
-    if (textureID != 0u) {
+    // Pokud máme texturu, bindneme ji a nastavíme sampler uniformu na texture unit 0
+    if (texture && texture->getID() != 0u) {
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, textureID);
+        glBindTexture(GL_TEXTURE_2D, texture->getID());
+        shaderProgram->setUniform("textureUnitID", 0);
+    }
+    else {
+        // volitelně: nastavit sampler na 0 i bez textury (bezpečnost)
         shaderProgram->setUniform("textureUnitID", 0);
     }
 
+    // vykresli model
     if (model) model->draw();
 
-    // cleanup
-    if (textureID != 0u) {
+    // unbind texture a program
+    if (texture && texture->getID() != 0u) {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
     glUseProgram(0);

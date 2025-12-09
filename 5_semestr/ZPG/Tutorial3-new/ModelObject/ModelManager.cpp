@@ -10,6 +10,7 @@
 #include "./Models/plain.h"
 #include "./Models/gift.h"
 #include "./Models/skycube.h"
+#include "./Models/triangle.h"
 
 namespace {
     inline int countVertices(size_t bytes) {
@@ -22,64 +23,66 @@ ModelManager& ModelManager::instance() {
     return inst;
 }
 
-Model* ModelManager::get(ModelType type) {
+std::shared_ptr<Model> ModelManager::get(ModelType type) {
     auto it = cache.find(type);
-    if (it != cache.end()) {
-        return it->second.get();
-    }
-
-    // lazy create
+    if (it != cache.end()) return it->second;
     return createModel(type);
 }
 
-Model* ModelManager::createModel(ModelType type) {
-    std::unique_ptr<Model> modelPtr;
+std::shared_ptr<Model> ModelManager::createModel(ModelType type) {
+    std::shared_ptr<Model> modelPtr;
 
     switch (type) {
+    case ModelType::Triangle:
+        modelPtr = std::make_shared<Model>(tri, sizeof(sphere), countVertices(sizeof(sphere)));
+        break;
     case ModelType::Sphere:
-        modelPtr = std::unique_ptr<Model>(new Model(sphere, sizeof(sphere), countVertices(sizeof(sphere))));
+        modelPtr = std::make_shared<Model>(sphere, sizeof(sphere), countVertices(sizeof(sphere)));
         break;
     case ModelType::Tree:
-        modelPtr = std::unique_ptr<Model>(new Model(tree, sizeof(tree), countVertices(sizeof(tree))));
+        modelPtr = std::make_shared<Model>(tree, sizeof(tree), countVertices(sizeof(tree)));
         break;
     case ModelType::Bushes:
-        modelPtr = std::unique_ptr<Model>(new Model(bushes, sizeof(bushes), countVertices(sizeof(bushes))));
+        modelPtr = std::make_shared<Model>(bushes, sizeof(bushes), countVertices(sizeof(bushes)));
         break;
     case ModelType::SuziFlat:
-        modelPtr = std::unique_ptr<Model>(new Model(suziFlat, sizeof(suziFlat), countVertices(sizeof(suziFlat))));
+        modelPtr = std::make_shared<Model>(suziFlat, sizeof(suziFlat), countVertices(sizeof(suziFlat)));
         break;
     case ModelType::SuziSmooth:
-        modelPtr = std::unique_ptr<Model>(new Model(suziSmooth, sizeof(suziSmooth), countVertices(sizeof(suziSmooth))));
+        modelPtr = std::make_shared<Model>(suziSmooth, sizeof(suziSmooth), countVertices(sizeof(suziSmooth)));
         break;
     case ModelType::Plain:
-        modelPtr = std::unique_ptr<Model>(new Model(plain, sizeof(plain), countVertices(sizeof(plain))));
+        modelPtr = std::make_shared<Model>(plain, sizeof(plain), countVertices(sizeof(plain)));
         break;
     case ModelType::Gift:
-        modelPtr = std::unique_ptr<Model>(new Model(gift, sizeof(gift), countVertices(sizeof(gift))));
+        modelPtr = std::make_shared<Model>(gift, sizeof(gift), countVertices(sizeof(gift)));
         break;
     case ModelType::Skycube:
-        modelPtr = std::unique_ptr<Model>(new Model(skycube, sizeof(skycube), countVertices(sizeof(skycube))));
+        modelPtr = std::make_shared<Model>(skycube, sizeof(skycube), countVertices(sizeof(skycube)));
         break;
     case ModelType::House:
-        modelPtr = std::unique_ptr<Model>(new Model("house.obj"));
+        modelPtr = std::make_shared<Model>("house.obj");
         break;
     case ModelType::Formula1:
-        modelPtr = std::unique_ptr<Model>(new Model("formula1.obj"));
+        modelPtr = std::make_shared<Model>("formula1.obj");
         break;
     case ModelType::Cube:
-        modelPtr = std::unique_ptr<Model>(new Model("cube.obj"));
+        modelPtr = std::make_shared<Model>("cube.obj");
         break;
     case ModelType::Square:
-        modelPtr = std::unique_ptr<Model>(new Model("square.obj"));
+        modelPtr = std::make_shared<Model>("square.obj");
         break;
     case ModelType::Toilet:
-        modelPtr = std::unique_ptr<Model>(new Model("toiled.obj"));
+        modelPtr = std::make_shared<Model>("toiled.obj");
         break;
     case ModelType::Fiona:
-        modelPtr = std::unique_ptr<Model>(new Model("fiona.obj"));
+        modelPtr = std::make_shared<Model>("fiona.obj");
         break;
     case ModelType::Shrek:
-        modelPtr = std::unique_ptr<Model>(new Model("shrek.obj"));
+        modelPtr = std::make_shared<Model>("shrek.obj");
+        break;
+    case ModelType::Teren:
+        modelPtr = std::make_shared<Model>("teren.obj");
         break;
     default:
         std::cerr << "[ModelManager] createModel: unknown ModelType\n";

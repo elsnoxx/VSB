@@ -59,6 +59,8 @@ Model::Model(const char* name) {
     std::vector<float> vertices;
     vertices.reserve(attrib.vertices.size() / 3 * 8);
 
+    bool hasTex = false;
+
     for (const auto& shape : shapes) {
         for (const auto& idx : shape.mesh.indices) {
             // position
@@ -82,12 +84,20 @@ Model::Model(const char* name) {
             if (idx.texcoord_index >= 0) {
                 vertices.push_back(attrib.texcoords[2 * idx.texcoord_index + 0]);
                 vertices.push_back(attrib.texcoords[2 * idx.texcoord_index + 1]);
+                hasTex = true;
             }
             else {
                 vertices.push_back(0.0f);
                 vertices.push_back(0.0f);
             }
         }
+    }
+
+    if (!hasTex) {
+        std::cerr << "[Model] Warning: model '" << name << "' has NO texcoords. Textured shader will sample (0,0).\n";
+    }
+    else {
+        std::cerr << "[Model] Info: model '" << name << "' contains texcoords.\n";
     }
 
     // upload

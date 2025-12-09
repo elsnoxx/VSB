@@ -2,6 +2,7 @@
 
 enum class ModelType {
     Sphere,
+    Triangle,
     Tree,
     Bushes,
     SuziFlat,
@@ -16,5 +17,6 @@ enum class ModelType {
     Square,
     Shrek,
     Fiona,
-    Toilet
+    Toilet,
+    Teren,
 };

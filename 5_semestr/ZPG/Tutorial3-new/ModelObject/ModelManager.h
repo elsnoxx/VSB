@@ -9,7 +9,7 @@ public:
     static ModelManager& instance();
 
     // lazy-loading:
-    Model* get(ModelType type);
+    std::shared_ptr<Model> get(ModelType type);
 
     ModelManager(const ModelManager&) = delete;
     ModelManager& operator=(const ModelManager&) = delete;
@@ -19,7 +19,7 @@ private:
     ~ModelManager() = default;
 
 
-    Model* createModel(ModelType type);
+    std::shared_ptr<Model> createModel(ModelType type);
 
-    std::unordered_map<ModelType, std::unique_ptr<Model>> cache;
+    std::unordered_map<ModelType, std::shared_ptr<Model>> cache;
 };

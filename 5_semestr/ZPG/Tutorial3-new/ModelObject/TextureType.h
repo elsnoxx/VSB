@@ -4,4 +4,6 @@ enum class TextureType {
     Shrek,
     Fiona,
     Toilet,
+    Teren,
+    WoodenFence,
 };

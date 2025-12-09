@@ -145,13 +145,13 @@ glfw3.lib
     <ClCompile Include="ModelObject\DrawableObject.cpp" />
     <ClCompile Include="ModelObject\Model.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
-    <ClCompile Include="ModelObject\TextureLoader.cpp" />
     <ClCompile Include="Scene\SceneFactory.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\ScreenManager.cpp" />
     <ClCompile Include="Shader\ShaderFactory.cpp" />
     <ClCompile Include="Observer\Subject.cpp" />
     <ClCompile Include="Light\SpotLight.cpp" />
+    <ClCompile Include="ModelObject\TextureManager.cpp" />
     <ClCompile Include="Transform\Rotation.cpp" />
     <ClCompile Include="Transform\Scale.cpp" />
     <ClCompile Include="Shader\FragmentShader.cpp" />
@@ -172,8 +172,9 @@ glfw3.lib
     <ClInclude Include="Light\Light.h" />
     <ClInclude Include="Light\LightType.h" />
     <ClInclude Include="ModelObject\ModelManager.h" />
+    <ClInclude Include="ModelObject\Models\triangle.h" />
     <ClInclude Include="ModelObject\ModelType.h" />
-    <ClInclude Include="ModelObject\TextureLoader.h" />
+    <ClInclude Include="ModelObject\Texture.h" />
     <ClInclude Include="ModelObject\TextureType.h" />
     <ClInclude Include="Observer\ObservableSubjects.h" />
     <ClInclude Include="Observer\Observer.h" />
@@ -185,6 +186,7 @@ glfw3.lib
     <ClInclude Include="Shader\ShaderType.h" />
     <ClInclude Include="Observer\Subject.h" />
     <ClInclude Include="Light\SpotLight.h" />
+    <ClInclude Include="ModelObject\TextureManager.h" />
     <ClInclude Include="Transform\AbstractTransform.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Callbacks.h" />

@@ -99,7 +99,7 @@
     <ClCompile Include="Light\LightManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ModelObject\TextureLoader.cpp">
+    <ClCompile Include="ModelObject\TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -245,10 +245,16 @@
     <ClInclude Include="Light\LightManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModelObject\TextureLoader.h">
+    <ClInclude Include="ModelObject\TextureType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModelObject\TextureType.h">
+    <ClInclude Include="ModelObject\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelObject\TextureManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelObject\Models\triangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
