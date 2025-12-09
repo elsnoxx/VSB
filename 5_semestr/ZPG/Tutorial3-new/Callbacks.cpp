@@ -64,8 +64,9 @@ void callbackButton(GLFWwindow* window, int t_button, int t_action, int t_mode) 
 
     if (t_action == GLFW_PRESS) {
         double x, y;
-        glfwGetCursorPos(window, &x, &y);            // skutečná pozice kurzoru (v pixelech okna)
+        glfwGetCursorPos(window, &x, &y);
         printf("<callback> button : button %d, action %d, mode %d, cursor %f %f\n", t_button, t_action, t_mode, x, y);
+        app->handleMouseClick(x, y, t_button);
     }
 }
 

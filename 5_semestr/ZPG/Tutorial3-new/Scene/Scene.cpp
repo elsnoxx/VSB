@@ -3,6 +3,8 @@
 #include "../Light/SpotLight.h"
 #include "../Light/DirectionalLight.h"
 #include <unordered_set>
+#include "../Transform/Scale.h"
+#include "../Transform/Translation.h"
 
 Scene::Scene() {
     camera = new Camera(glm::vec3(0.f, 1.f, 5.f));
@@ -41,10 +43,90 @@ Light* Scene::addLight(Light* light) {
 
 void Scene::draw() {
     bindCameraAndLightToUsedShaders();
+
+    // enable stencil for picking: we will write object IDs into stencil buffer
+    glEnable(GL_STENCIL_TEST);
+    glStencilMask(0xFF); // enable writing to all bits
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+    unsigned int id = 1;
     for (auto& obj : objects) {
+        unsigned int writeId = (id <= 255) ? id : 255;
+        obj->setID(writeId);
+        glStencilFunc(GL_ALWAYS, writeId, 0xFF);
         obj->draw();
+        ++id;
     }
+
+    glStencilMask(0x00);
+    glDisable(GL_STENCIL_TEST);
 }
+
+int Scene::pickAtCursor(double x, double y, glm::vec3* outWorld) {
+    // get framebuffer size and convert mouse y
+    GLFWwindow* win = glfwGetCurrentContext();
+    if (!win) return -1;
+    int fbw, fbh;
+    glfwGetFramebufferSize(win, &fbw, &fbh);
+    GLint ix = static_cast<GLint>(x);
+    GLint iy = static_cast<GLint>(y);
+    GLint newy = fbh - iy;
+
+    // read stencil
+    GLuint stencilIndex = 0;
+    glReadPixels(ix, newy, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &stencilIndex);
+
+    // read depth
+    GLfloat depth = 1.0f;
+    glReadPixels(ix, newy, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+
+    // optional: read color (not required)
+    GLubyte color[4] = { 0,0,0,0 };
+    glReadPixels(ix, newy, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
+
+    printf("[Picking] cursor %d,%d -> stencil %u depth %f color %02x%02x%02x%02x\n",
+        ix, iy, stencilIndex, depth, color[0], color[1], color[2], color[3]);
+
+    if (stencilIndex == 0) {
+        selectedIndex = -1;
+        return -1;
+    }
+
+    // compute world position via unProject
+    glm::vec3 screenPos((float)ix, (float)newy, depth);
+    glm::mat4 view = camera->getViewMatrix();           // adjust if different name
+    glm::mat4 proj = camera->getProjectionMatrix();     // adjust if different name
+    glm::vec4 viewport(0.f, 0.f, (float)fbw, (float)fbh);
+    glm::vec3 world = glm::unProject(screenPos, view, proj, viewport);
+
+    if (outWorld) *outWorld = world;
+
+    // scene-local index (ids were written as 1..)
+    selectedIndex = static_cast<int>(stencilIndex) - 1;
+    return selectedIndex;
+}
+
+void Scene::plantObjectAtWorldPos(const glm::vec3& worldPos, ModelType type, ShaderType shader) {
+    DrawableObject* obj = new DrawableObject(type, shader);
+    Transform t;
+    t.addTransform(std::make_shared<Scale>(glm::vec3(1.0f)));
+    t.addTransform(std::make_shared<Translation>(worldPos));
+    obj->setTransform(t);
+    this->addObject(obj);
+}
+
+bool Scene::removeObjectAt(int idx) {
+    if (idx < 0 || idx >= static_cast<int>(objects.size())) return false;
+    DrawableObject* obj = objects[idx];
+    // erase from vector and delete object
+    objects.erase(objects.begin() + idx);
+    delete obj;
+    // reset selection if needed
+    if (selectedIndex == idx) selectedIndex = -1;
+    else if (selectedIndex > idx) --selectedIndex; // shift selection index
+    return true;
+}
+
 
 void Scene::update(float dt, InputManager& input)
 {

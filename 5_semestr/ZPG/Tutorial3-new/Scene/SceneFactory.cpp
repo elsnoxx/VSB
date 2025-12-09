@@ -22,10 +22,10 @@ std::vector<Scene*> SceneFactory::createAllScenes() {
 
 
 
-        createForestScene(),
+        //createForestScene(),
 
         //Tutorial 5
-        // createSceneShrekFamily(),
+         createSceneShrekFamily(),
         
     };
 }
