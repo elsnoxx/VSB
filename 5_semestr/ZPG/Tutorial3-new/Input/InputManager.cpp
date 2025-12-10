@@ -1,7 +1,22 @@
 ﻿#include "InputManager.h"
 #include <iostream>
 
+InputManager& InputManager::instance() {
+    static InputManager inst;
+    return inst;
+}
 
+void InputManager::bindCamera(Camera* cam) {
+    m_boundCamera = cam;
+    // pokud máte jinou interní proměnnou/kód, synchronizujte ji zde
+}
+
+void InputManager::resetState() {
+    // vyčistit interní stavy (příklady, upravte podle skutečných členů)
+    // pressedKeys.clear();
+    mouseDelta = glm::vec2(0.0f);
+    lastMousePos = glm::vec2(0.0f); // Reset lastMousePos to initial state
+}
 
 void InputManager::onKey(int key, int action) {
     if (action == GLFW_PRESS) {

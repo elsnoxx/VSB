@@ -26,8 +26,15 @@ void DrawableObject::draw() {
         std::cerr << "DrawableObject::draw() ERROR Shader not set!\n";
         return;
     }
+    
 
     glm::mat4 modelMat = this->getTransform().getMatrix();
+    if (m_transformNode) {
+        modelMat = m_transformNode->computeWorldMatrix();
+    }
+    else {
+        modelMat = transform.getMatrix();
+    }
     shaderProgram->use();
 
     // pošli transform do shaderu (předpokládáme že shaderProgram má setUniform pro mat4)
@@ -36,29 +43,24 @@ void DrawableObject::draw() {
     glm::mat3 normalMat = glm::transpose(glm::inverse(glm::mat3(modelMat)));
     shaderProgram->setUniform("normalMatrix", normalMat);
 
-    // pokud jsou nějaké textury, bindneme je do jednotek 0..N-1 a nastavíme sampler-uniformy
-    for (size_t i = 0; i < textures.size(); ++i) {
-        if (!textures[i] || textures[i]->getID() == 0u) continue;
-        glActiveTexture(GL_TEXTURE0 + static_cast<GLenum>(i));
-        glBindTexture(GL_TEXTURE_2D, textures[i]->getID());
-        // uniform jméno: texture0, texture1, ...
-        std::string uname = "texture" + std::to_string(i);
-        shaderProgram->setUniform(uname.c_str(), static_cast<int>(i));
+    // bind exactly ONE texture into texture unit 0 and set sampler uniform "textureUnitID"
+    if (textures.size() > 0 && textures[0]) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textures[0]->getID());
     }
 
-    // zabezpečení: pokud žádná textura, pošleme texture0=0 (většinou již nastaveno někde jinde)
-    if (textures.empty()) {
-        shaderProgram->setUniform("texture0", 0);
+    // bind second texture into texture unit 1
+    if (textures.size() > 1 && textures[1]) {
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, textures[1]->getID());
     }
 
     // vykresli model
     if (model) model->draw();
 
     // unbind textures (lepší čistota stavu)
-    for (size_t i = 0; i < textures.size(); ++i) {
-        glActiveTexture(GL_TEXTURE0 + static_cast<GLenum>(i));
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, 0);
     glUseProgram(0);
 
     GLenum err = glGetError();

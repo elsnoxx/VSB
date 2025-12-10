@@ -29,6 +29,12 @@ public:
 
     int pickAtCursor(double x, double y, glm::vec3* outWorld = nullptr);
     void plantObjectAtWorldPos(const glm::vec3& worldPos, ModelType type = ModelType::Tree, ShaderType shader = ShaderType::Textured);
+    void buildBezierFromControlPoints(float speed = 0.25f, bool loop = true);
+
+    void addControlPoint(const glm::vec3& p);
+    void clearControlPoints();
+    const std::vector<glm::vec3>& getControlPoints() const;
+
 
     // selection / deletion
     int getSelectedIndex() const { return selectedIndex; }
@@ -44,7 +50,7 @@ private:
 
     // headlight je vlastněné Scene (uložený i v manageru)
     HeadLight* headLight = nullptr;
-
+    std::vector<glm::vec3> controlPoints;
     int selectedIndex = -1;
 
 protected:

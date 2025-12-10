@@ -100,7 +100,7 @@ std::shared_ptr<Model> ModelManager::createModel(ModelType type) {
         modelPtr = std::make_shared<Model>("solarSystem/mars/Mars 2K.obj");
         break;
     case ModelType::Uranus:
-        modelPtr = std::make_shared<Model>("solarSystem/urano/urano.obj");
+        modelPtr = std::make_shared<Model>("solarSystem/urano/13907_Uranus_v2_l3.obj");
         break;
     case ModelType::Pluto:
         modelPtr = std::make_shared<Model>("solarSystem/pluto/pluto.obj");
@@ -116,6 +116,9 @@ std::shared_ptr<Model> ModelManager::createModel(ModelType type) {
         break;
     case ModelType::Saturn:
         modelPtr = std::make_shared<Model>("solarSystem/saturn/saturno.obj");
+        break;
+    case ModelType::Login:
+        modelPtr = std::make_shared<Model>("login.obj");
         break;
     default:
         std::cerr << "[ModelManager] createModel: unknown ModelType\n";

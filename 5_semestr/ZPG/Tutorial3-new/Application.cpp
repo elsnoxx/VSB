@@ -56,6 +56,7 @@ void Application::run() {
     }
 }
 
+// ...existing code...
 void Application::handleMouseClick(double x, double y, int button) {
     Scene* cur = screenManager.getCurrentScene();
     if (!cur) return;
@@ -65,22 +66,30 @@ void Application::handleMouseClick(double x, double y, int button) {
 
     if (picked >= 0) {
         printf("[App] picked object index %d at world [%f,%f,%f]\n", picked, worldPos.x, worldPos.y, worldPos.z);
-        // example: left click = plant a tree at clicked world position
         if (button == GLFW_MOUSE_BUTTON_LEFT) {
             cur->plantObjectAtWorldPos(worldPos, ModelType::Tree, ShaderType::Textured);
         }
-        // example: right click = select object
         else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
             bool ok = cur->removeObjectAt(picked);
             printf("[App] removeObjectAt(%d) -> %s\n", picked, ok ? "ok" : "failed");
         }
+        else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
+            // add control point on clicked surface
+            cur->addControlPoint(worldPos);
+            printf("[App] added control point [%f,%f,%f] (total %zu)\n", worldPos.x, worldPos.y, worldPos.z, cur->getControlPoints().size());
+
+            // when we have 4,8,12... points -> build segments (adjust condition if you want sliding window)
+            const auto& pts = cur->getControlPoints();
+            if (pts.size() >= 4 && (pts.size() % 4) == 0) {
+                cur->buildBezierFromControlPoints(0.25f, true);
+                printf("[App] built Bezier segment(s) from control points\n");
+            }
+        }
     }
     else {
         printf("[App] clicked empty space\n");
-        // if left click on empty space, you can unproject and plant on plane y=0:
+        // left click on empty space -> plant on y=0 plane (existing behavior)
         if (button == GLFW_MOUSE_BUTTON_LEFT) {
-            // if depth read was 1.0 (far), compute ray and intersect y=0 plane
-            // reuse cur->pickAtCursor without hit: compute ray manually
             int fbw, fbh; glfwGetFramebufferSize(glfwGetCurrentContext(), &fbw, &fbh);
             glm::vec3 nearP((float)x, (float)(fbh - y), 0.0f);
             glm::vec3 farP((float)x, (float)(fbh - y), 1.0f);
@@ -98,8 +107,34 @@ void Application::handleMouseClick(double x, double y, int button) {
                 }
             }
         }
+        // middle click on empty space -> place control point on plane y=0
+        else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
+            int fbw, fbh; glfwGetFramebufferSize(glfwGetCurrentContext(), &fbw, &fbh);
+            glm::vec3 nearP((float)x, (float)(fbh - y), 0.0f);
+            glm::vec3 farP((float)x, (float)(fbh - y), 1.0f);
+            glm::mat4 view = cur->getCamera()->getViewMatrix();
+            glm::mat4 proj = cur->getCamera()->getProjectionMatrix();
+            glm::vec4 vp(0, 0, (float)fbw, (float)fbh);
+            glm::vec3 n = glm::unProject(nearP, view, proj, vp);
+            glm::vec3 f = glm::unProject(farP, view, proj, vp);
+            glm::vec3 dir = glm::normalize(f - n);
+            if (fabs(dir.y) > 1e-6f) {
+                float t = -n.y / dir.y;
+                if (t > 0.0f) {
+                    glm::vec3 planePos = n + dir * t;
+                    cur->addControlPoint(planePos);
+                    printf("[App] added control point on plane [%f,%f,%f] (total %zu)\n", planePos.x, planePos.y, planePos.z, cur->getControlPoints().size());
+                    const auto& pts = cur->getControlPoints();
+                    if (pts.size() >= 4 && (pts.size() % 4) == 0) {
+                        cur->buildBezierFromControlPoints(0.25f, true);
+                        printf("[App] built Bezier segment(s) from control points\n");
+                    }
+                }
+            }
+        }
     }
 }
+// ...existing code...
 
 void Application::initialization() {
     glfwSetErrorCallback(callbackError);

@@ -133,6 +133,7 @@ glfw3.lib
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Transform\Bezier.cpp" />
     <ClCompile Include="Callbacks.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Config.cpp" />
@@ -161,9 +162,11 @@ glfw3.lib
     <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="Shader\VertexShader.cpp" />
     <ClCompile Include="Transform\Transform.cpp" />
+    <ClCompile Include="Transform\TransformNode.cpp" />
     <ClCompile Include="Transform\Translation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Transform\Bezier.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Light\LightManager.h" />

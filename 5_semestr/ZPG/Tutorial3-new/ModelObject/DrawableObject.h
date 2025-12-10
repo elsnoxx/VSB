@@ -9,6 +9,7 @@
 #include "ModelManager.h"
 #include "TextureManager.h"
 #include "../Transform/Transform.h"
+#include "../Transform/TransformNode.cpp"
 
 class DrawableObject {
 public:
@@ -26,6 +27,12 @@ public:
     void addTexture(const std::shared_ptr<Texture>& tex) { if (tex) textures.push_back(tex); }
     void clearTextures() { textures.clear(); }
 
+    // new API: set shared transform node (composite)
+    void setTransformNode(const std::shared_ptr<TransformNode>& node) {
+        m_transformNode = node;
+    }
+
+
     void draw();
 
 private:
@@ -34,4 +41,5 @@ private:
     ShaderProgram* shaderProgram = nullptr;
     std::vector<std::shared_ptr<Texture>> textures;
     Transform transform;
+    std::shared_ptr<TransformNode> m_transformNode;
 };

@@ -1,13 +1,14 @@
 ﻿#include "SceneFactory.h"
 #include "../ModelObject/ModelManager.h"
 #include "../Light/PointLight.h"
+#include "../Transform/Bezier.h"
 
 
 std::vector<Scene*> SceneFactory::createAllScenes() {
     return {
         // Tutorial 2
         //createScene1(),
-        createScene2(),
+        //createScene2(),
         //createScene3(),
         //createScene4(),
         //createScene5(),
@@ -17,122 +18,100 @@ std::vector<Scene*> SceneFactory::createAllScenes() {
         //createSceneDifferentModes(),
         //createSceneSolarSystem(),
 
-        //createSceneTinyObjects(),
-        //createSceneFormula1(),
+        createSceneFormula1(),
 
 
 
         //createForestScene(),
-
-        //Tutorial 5
-         //createSceneShrekFamily(),
         
     };
 }
 
-Scene* SceneFactory::createSceneShrekFamily() {
+Scene* SceneFactory::createSceneSolarSystem()
+{
     Scene* scene = new Scene();
 
-    // zkontroluj, že modely obsahují texture coords (UV) - jinak shader Textured nic nezobrazí
-    DrawableObject* shrek = new DrawableObject(ModelType::Shrek, ShaderType::Textured, TextureType::Shrek);
-    Transform ts;
-    ts.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
-    ts.addTransform(std::make_shared<Translation>(glm::vec3(-2.0f, 0.0f, 0.0f)));
-    shrek->setTransform(ts);
-    scene->addObject(shrek);
+    // =========================
+    //  SUN (root object)
+    // =========================
+    auto sunNode = std::make_shared<TransformNode>();
+    sunNode->addTransform(std::make_shared<Scale>(glm::vec3(1.0f)));
 
-    DrawableObject* fiona = new DrawableObject(ModelType::Fiona, ShaderType::Textured, TextureType::Fiona);
-    Transform tf;
-    tf.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
-    tf.addTransform(std::make_shared<Translation>(glm::vec3(2.0f, 0.0f, 0.0f)));
-    fiona->setTransform(tf);
-    scene->addObject(fiona);
-
-    DrawableObject* toilet = new DrawableObject(ModelType::Toilet, ShaderType::Textured, TextureType::Toilet);
-    Transform tt;
-    tt.addTransform(std::make_shared<Scale>(glm::vec3(0.7f)));
-    tt.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, -1.5f)));
-    toilet->setTransform(tt);
-    scene->addObject(toilet);
-
-    DrawableObject* ground = new DrawableObject(ModelType::Plain, ShaderType::Basic);
-    Transform tg;
-    tg.addTransform(std::make_shared<Scale>(glm::vec3(50.0f, 1.0f, 50.0f)));
-    tg.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, 0.0f)));
-    ground->setTransform(tg);
-    scene->addObject(ground);
-
-
-    // přidej jednoduché světlo, aby textury byly viditelné
-    PointLight* sunLight = new PointLight(glm::vec3(0.0f, 30.0f, 0.0f), glm::vec3(1.0f, 0.95f, 0.9f), 1.5f);
-    scene->addLight(sunLight);
-
-    return scene;
-}
-
-Scene* SceneFactory::createSceneSolarSystem() {
-    Scene* scene = new Scene();
-
-    // ===== SUN =====
-    DrawableObject* sun = new DrawableObject(ModelType::Sun, ShaderType::Textured, TextureType::Sun);
-    {
-        Transform t;
-        t.addTransform(std::make_shared<Scale>(glm::vec3(0.5f)));
-        sun->setTransform(t);
-    }
+    DrawableObject* sun = new DrawableObject(ModelType::Sphere, ShaderType::Textured, TextureType::Sun);
+    sun->setTransformNode(sunNode);   // use shared_ptr API
     scene->addObject(sun);
 
-    // Real light
-    scene->addLight(new PointLight(glm::vec3(0, 0, 0), glm::vec3(1.0f, 0.95f, 0.8f), 10.0f));
+    scene->addLight(new PointLight(glm::vec3(0, 0, 0), glm::vec3(1.0f, 0.95f, 0.8f), 25.0f));
 
-    // ===== PLANETS =====
-    struct PlanetDef {
-        ModelType type;
-        TextureType texture;
-        float orbitRadius;
-        float orbitPeriod;
-        float rotate;
-        float scale;
+
+    // =========================
+    //  EARTH
+    // =========================
+    auto earthNode = std::make_shared<TransformNode>();
+
+    // Orbit Earth around Sun
+    earthNode->addTransform(std::make_shared<Rotation>([]() { return glfwGetTime() * 8.0f; }, glm::vec3(0, 1, 0)));
+    earthNode->addTransform(std::make_shared<Translation>(glm::vec3(2.5f, 0, 0)));
+    earthNode->addTransform(std::make_shared<Rotation>([]() { return glfwGetTime() * 40.0f; }, glm::vec3(0, 1, 0)));
+    earthNode->addTransform(std::make_shared<Scale>(glm::vec3(0.10f)));
+
+    sunNode->addChild(earthNode); // Earth is child of Sun
+
+    DrawableObject* earth = new DrawableObject(ModelType::Sphere, ShaderType::Textured, TextureType::Earth);
+    earth->setTransformNode(earthNode);
+    scene->addObject(earth);
+
+
+    // =========================
+    //  MOON (child of Earth)
+    // =========================
+    auto moonNode = std::make_shared<TransformNode>();
+    moonNode->addTransform(std::make_shared<Rotation>([]() { return glfwGetTime() * 25.0f; }, glm::vec3(0, 1, 0)));
+    moonNode->addTransform(std::make_shared<Translation>(glm::vec3(0.6f, 0, 0)));
+    moonNode->addTransform(std::make_shared<Scale>(glm::vec3(0.03f)));
+
+    earthNode->addChild(moonNode); // Attach moon to earth
+
+    DrawableObject* moon = new DrawableObject(ModelType::Sphere, ShaderType::Textured, TextureType::Moon);
+    moon->setTransformNode(moonNode);
+    scene->addObject(moon);
+
+
+    // =========================
+    //  OTHER PLANETS (simple)
+    // =========================
+    struct PlanetDef { TextureType texture; float orbitRadius, orbitSpeed, selfRotate, scale; };
+
+    std::vector<PlanetDef> planets = {
+        { TextureType::Mercury, 1.5f, 15.0f, 20.0f, 0.05f },
+        { TextureType::Venus,   2.0f, 10.0f, 15.0f, 0.09f },
+        { TextureType::Mars,    3.2f,  7.0f, 18.0f, 0.07f },
+        { TextureType::Jupiter, 5.0f,  4.0f, 25.0f, 0.25f },
+        { TextureType::Saturn,  6.0f,  3.0f, 22.0f, 0.22f },
+        { TextureType::Uranus,  7.5f,  2.0f, 20.0f, 0.18f },
+        { TextureType::Neptune, 8.7f,  1.7f, 18.0f, 0.17f },
+        { TextureType::Pluto,  10.0f,  1.0f, 13.0f, 0.03f }
     };
 
-    /*std::vector<PlanetDef> planets = {
-        { ModelType::Mercury, TextureType::Mars,    2.0f,   12.0f, 10.0f, 0.15f },
-        { ModelType::Venus,   TextureType::Mars,    3.0f,   20.0f, 30.0f, 0.20f },
-        { ModelType::Earth,   TextureType::Mars,    4.0f,   24.0f,  2.0f, 0.22f },
-        { ModelType::Mars,    TextureType::Mars,    5.0f,   32.0f,  3.0f, 0.18f },
-        { ModelType::Jupiter, TextureType::Mars,    7.0f,   60.0f, 20.0f, 0.30f },
-        { ModelType::Saturn,  TextureType::Mars,    9.0f,   80.0f, 18.0f, 0.55f },
-        { ModelType::Uranus,  TextureType::Mars,    11.0f,  110.0f, 25.0f, 0.45f },
-        { ModelType::Neptune, TextureType::Mars,    13.0f,  140.0f, 28.0f, 0.40f },
-        { ModelType::Pluto,   TextureType::Mars,    15.0f,  200.0f, 35.0f, 0.12f }
-    };*/
-    std::vector<PlanetDef> planets = {
-        { ModelType::Saturn,  TextureType::Mars,    9.0f,   80.0f, 18.0f, 0.55f },
-        { ModelType::Uranus,  TextureType::Mars,    11.0f,  110.0f, 25.0f, 0.45f },
-        { ModelType::Neptune, TextureType::Mars,    13.0f,  140.0f, 28.0f, 0.40f },
-        { ModelType::Pluto,   TextureType::Mars,    15.0f,  200.0f, 35.0f, 0.12f },
-        
-    }; 
+    for (auto& p : planets)
+    {
+        auto node = std::make_shared<TransformNode>();
+        node->addTransform(std::make_shared<Rotation>([p]() { return glfwGetTime() * p.orbitSpeed; }, glm::vec3(0, 1, 0)));
+        node->addTransform(std::make_shared<Translation>(glm::vec3(p.orbitRadius, 0, 0)));
+        node->addTransform(std::make_shared<Rotation>([p]() { return glfwGetTime() * p.selfRotate; }, glm::vec3(0, 1, 0)));
+        node->addTransform(std::make_shared<Scale>(glm::vec3(p.scale)));
 
-    auto orbitAngle = [](float p) {
-        return [p]() { return glfwGetTime() * (360.0 / p); };
-        };
+        sunNode->addChild(node);
 
-    for (auto& p : planets) {
-        DrawableObject* obj = new DrawableObject(p.type, ShaderType::Textured, p.texture);
-
-        Transform t;
-        t.addTransform(std::make_shared<Rotation>(orbitAngle(p.orbitPeriod), glm::vec3(0, 1, 0)));
-        t.addTransform(std::make_shared<Translation>(glm::vec3(p.orbitRadius, 0, 0)));
-        t.addTransform(std::make_shared<Rotation>([p]() { return glfwGetTime() * (360.0 / p.rotate); }, glm::vec3(0, 1, 0)));
-        t.addTransform(std::make_shared<Scale>(glm::vec3(p.scale)));
-
-        obj->setTransform(t);
-        scene->addObject(obj);
+        DrawableObject* planet = new DrawableObject(ModelType::Sphere, ShaderType::Textured, p.texture);
+        planet->setTransformNode(node);
+        scene->addObject(planet);
     }
 
     return scene;
 }
+
+
 
 
 
@@ -175,6 +154,27 @@ Scene* SceneFactory::createForestScene() {
         ground->setTransform(tg);
         scene->addObject(ground);
     }
+
+    DrawableObject* login = new DrawableObject(ModelType::Login, ShaderType::Textured, TextureType::WoodenFence);
+    {
+        static float angle = 0.0f;
+        Transform tl;
+        tl.addTransform(std::make_shared<Scale>(glm::vec3(1.0f)));
+        tl.addTransform(std::make_shared<Rotation>(
+            []() {
+                static float rot = 0.0f;
+                rot += 1.0f;
+                return rot;
+            },
+            glm::vec3(0, 1, 0)
+        ));
+
+        tl.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 3.0f, 0.0f)));
+
+        login->setTransform(tl);
+        scene->addObject(login);
+    }
+
 
     // náhodný generátor
     std::mt19937 rng((unsigned)std::chrono::high_resolution_clock::now().time_since_epoch().count());
@@ -326,41 +326,51 @@ Scene* SceneFactory::createSceneDifferentModes() {
 Scene* SceneFactory::createSceneFormula1() {
     Scene* scene = new Scene();
 
+    DrawableObject* ground = new DrawableObject(ModelType::Plain, ShaderType::Textured, TextureType::Teren);
+    {
+        Transform tg;
+        tg.addTransform(std::make_shared<Scale>(glm::vec3(50.0f, 1.0f, 50.0f)));
+        tg.addTransform(std::make_shared<Translation>(glm::vec3(0.0f, 0.0f, 0.0f)));
+        ground->setTransform(tg);
+        scene->addObject(ground);
+    }
 
-    // vytvoříme jeden objekt s Phong shaderem
-    DrawableObject* obj = new DrawableObject(ModelType::Formula1, ShaderType::Phong);
+    //// pohybující se model Formula1
+    //DrawableObject* obj = new DrawableObject(ModelType::Formula1, ShaderType::Phong);
 
-    Transform t;
-    t.addTransform(std::make_shared<Scale>(glm::vec3(0.7f)));
-    t.addTransform(std::make_shared<Translation>(glm::vec3(-2.0f, 0.0f, 0.0f)));
-    
-    obj->setTransform(t);
-    scene->addObject(obj);
+    //Transform t;
+    //t.addTransform(std::make_shared<Scale>(glm::vec3(0.05f)));
+
+    //// nové, plynulejší kontrolní body
+    //std::vector<glm::vec3> ctrl = {
+    //    { -4.0f, 0.0f, -1.0f },
+    //    { -1.5f, 0.0f,  1.5f },
+    //    {  1.5f, 0.0f,  1.5f },
+    //    {  4.0f, 0.0f, -1.0f }
+    //};
+
+    //// smoother curve speed & loop
+    //t.addTransform(std::make_shared<Bezier>(ctrl, 0.18f, true));
+
+    //obj->setTransform(t);
+    //scene->addObject(obj);
+
+    //// vizualizace křivky - více vzorků = hladší křivka
+    //const int samples = 80;
+    //for (int i = 0; i <= samples; ++i) {
+    //    float s = i / float(samples);
+    //    glm::vec3 p = Bezier::evalCubic(ctrl[0], ctrl[1], ctrl[2], ctrl[3], s);
+
+    //    DrawableObject* marker = new DrawableObject(ModelType::Sphere, ShaderType::Phong);
+    //    Transform mt;
+    //    mt.addTransform(std::make_shared<Translation>(p));
+    //    mt.addTransform(std::make_shared<Scale>(glm::vec3(0.05f)));
+    //    marker->setTransform(mt);
+    //    scene->addObject(marker);
+    //}
 
     return scene;
 }
-
-Scene* SceneFactory::createSceneTinyObjects() {
-    Scene* scene = new Scene();
-
-
-    // vytvoříme jeden objekt s Phong shaderem
-    DrawableObject* obj = new DrawableObject(ModelType::Cube, ShaderType::Phong);
-
-    Transform t;
-    t.addTransform(std::make_shared<Scale>(glm::vec3(0.7f)));
-    t.addTransform(std::make_shared<Translation>(glm::vec3(-2.0f, 0.0f, 0.0f)));
-    // jednoduchá rotace bez závislosti na neexistujícím 'i'
-    t.addTransform(std::make_shared<Rotation>([]() {
-        return (float)glfwGetTime() * 20.0f;
-        }, glm::vec3(0, 1, 0)));
-
-    obj->setTransform(t);
-    scene->addObject(obj);
-
-    return scene;
-}
-
 
 
 Scene* SceneFactory::createScene1() {
@@ -380,16 +390,16 @@ Scene* SceneFactory::createScene1() {
 Scene* SceneFactory::createScene2() {
     Scene* scene = new Scene();
 
-    DrawableObject* obj = new DrawableObject(ModelType::Tree, ShaderType::Textured);
+    // objekt s wooden fence
+    DrawableObject* fence = new DrawableObject(ModelType::Login, ShaderType::Textured);
+    Transform tf1;
+    tf1.addTransform(std::make_shared<Scale>(glm::vec3(0.15f)));
+    tf1.addTransform(std::make_shared<Translation>(glm::vec3(-0.8f, -1.5f, 0.0f)));
+    fence->setTransform(tf1);
+    fence->addTexture(TextureManager::instance().get(TextureType::WoodenFence));
+    fence->addTexture(TextureManager::instance().get(TextureType::Grass));
+    scene->addObject(fence);
 
-    Transform t;
-    t.addTransform(std::make_shared<Scale>(glm::vec3(0.15f)));
-    t.addTransform(std::make_shared<Translation>(glm::vec3(-0.5f, -1.5f, 0.0f)));
-
-    obj->setTransform(t);
-	obj->addTexture(TextureManager::instance().get(TextureType::WoodenFence));
-	obj->addTexture(TextureManager::instance().get(TextureType::Grass));
-    scene->addObject(obj);
 
     return scene;
 }

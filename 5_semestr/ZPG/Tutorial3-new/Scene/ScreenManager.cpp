@@ -14,7 +14,14 @@ void ScreenManager::switchTo(int index) {
 
     printf("Switching to scene %d\n", index);
     currentIndex = index;
+
+    // bind camera of new scene and reset input state
+    Scene* scene = getCurrentScene();
+    if (scene) {
+        scene->bindCameraAndLightToUsedShaders();
+    }
 }
+
 
 void ScreenManager::changeFOV(float radians) {
     Scene * cur = getCurrentScene();
@@ -23,7 +30,7 @@ void ScreenManager::changeFOV(float radians) {
     if (!cam) return;
     cam->setFOV(radians);
         // uložit index nebo logovat dle potřeby
-        printf("[ScreenManager] Changed FOV of scene %d to %f radians\n", currentIndex, radians);
+    printf("[ScreenManager] Changed FOV of scene %d to %f radians\n", currentIndex, radians);
     
 }
 
@@ -45,6 +52,15 @@ void ScreenManager::draw() {
 void ScreenManager::init() {
     scenes = SceneFactory::createAllScenes();
     currentIndex = 0;
+
+    // bind initial scene camera
+    Scene* scene = getCurrentScene();
+    if (scene) {
+        Camera* cam = scene->getCamera();
+        if (cam) {
+            InputManager::instance().bindCamera(cam);
+        }
+    }
 }
 
 

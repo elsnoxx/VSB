@@ -34,4 +34,6 @@ enum class ModelType {
     Neptune,
     Pluto,
     Sun,
+    // others
+    Login,
 };

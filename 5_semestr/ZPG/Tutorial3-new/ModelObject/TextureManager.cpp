@@ -51,7 +51,7 @@ std::shared_ptr<Texture> TextureManager::get(TextureType t) {
         path = "ModelObject/assets/solarSystem/mars/Textures/Diffuse_2K.png";
         break;
     case TextureType::Uranus:
-        path = "ModelObject/assets/solarSystem/urano/2k_uranus.jpg";
+        path = "ModelObject/assets/solarSystem/urano/13907_Uranus_planet_diff.jpg";
         break;
     case TextureType::Pluto:
         path = "ModelObject/assets/solarSystem/pluto/pluto.PNG";

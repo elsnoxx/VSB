@@ -7,7 +7,7 @@ void Transform::addTransform(std::shared_ptr<AbstractTransform> t) {
 glm::mat4 Transform::getMatrix() const {
     glm::mat4 result(1.0f);
     for (auto& t : transforms) {
-        result = result * t->getMatrix(); // poøadí je dùležité!
+        result = result * t->getMatrix();
     }
     return result;
 }
