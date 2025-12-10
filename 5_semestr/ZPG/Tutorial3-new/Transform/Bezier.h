@@ -1,24 +1,45 @@
+// ...existing code...
 #pragma once
 #include "AbstractTransform.h"
 #include <vector>
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
-// jednoduchı Bezier transform: pás po kubickıch segmentech (4 control points na segment)
+// jednoduchÃ½ Bezier transform: pÃ¡s po kubickÃ½ch segmentech (4 control points na segment)
 class Bezier : public AbstractTransform {
 public:
-    // controlPoints: musí obsahovat 4 + 3*k prvkù (tj. sousední segmenty sdílejí body)
-    Bezier(const std::vector<glm::vec3>& controlPoints, float speed = 1.0f, bool loop = true);
+    // controlPoints: musÃ­ obsahovat 4 + 3*k prvkÅ¯ (tj. sousednÃ­ segmenty sdÃ­lejÃ­ body)
+    // durationSeconds = how many seconds to travel the entire spline (all segments)
+    // orient = pokud true, transformuje takÃ© orientaci podle tangenty (forward = smÄ›rovÃ½ vektor)
+    // upVec = referenÄnÃ­ up v world space (Äasto {0,1,0})
+    // pivotOffset = lokÃ¡lnÃ­ posun modelu (korekce pivotu)
+    Bezier(const std::vector<glm::vec3>& controlPoints,
+           float durationSeconds = 6.0f,
+           bool loop = true,
+           bool orient = false,
+           const glm::vec3& upVec = glm::vec3(0.0f, 1.0f, 0.0f),
+           const glm::vec3& pivotOffset = glm::vec3(0.0f));
 
-    // vrací matici transformace pro aktuální èas
+    // vracÃ­ matici transformace pro aktuÃ¡lnÃ­ Äas
     glm::mat4 getMatrix() const override;
 
-    // helper: vyhodnotí jeden kubickı segment (p0..p3) pro lokální t in [0,1]
-    static glm::vec3 evalCubic(const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3, float t);
+    // helper: vyhodnotÃ­ jeden kubickÃ½ segment (p0..p3) pro lokÃ¡lnÃ­ t in [0,1]
+    static glm::vec3 evalCubic(const glm::vec3& p0,
+                               const glm::vec3& p1,
+                               const glm::vec3& p2,
+                               const glm::vec3& p3,
+                               float t);
 
 private:
+    // numerickÃ¡ derivace (malÃ½ epsilon)
+    static glm::vec3 evalDerivativeNumeric(const std::vector<glm::vec3>& pts, int base, float t);
+
     std::vector<glm::vec3> pts;
-    float speed;
+    float duration; // seconds for whole spline
     bool loop;
+    bool orientToTangent;
+    glm::vec3 up;
+    glm::vec3 pivotOffset;
     double startTime;
 };
+// ...existing code...

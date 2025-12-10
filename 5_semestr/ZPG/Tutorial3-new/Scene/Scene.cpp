@@ -149,11 +149,26 @@ void Scene::buildBezierFromControlPoints(float speed, bool loop)
                   << "P2(" << segment[2].x << "," << segment[2].y << "," << segment[2].z << "), "
 			<< "P3(" << segment[3].x << "," << segment[3].y << "," << segment[3].z << ")\n";
         // vytvoříme nový objekt, který pojede po tomto segmentu
+
+        const int samples = 24;
+        for (int s = 0; s <= samples; ++s) {
+            float tt = s / (float)samples;
+            glm::vec3 p = Bezier::evalCubic(segment[0], segment[1], segment[2], segment[3], tt);
+            DrawableObject* marker = new DrawableObject(ModelType::Sphere, ShaderType::Phong);
+            Transform mt;
+            mt.addTransform(std::make_shared<Translation>(p));
+            mt.addTransform(std::make_shared<Scale>(glm::vec3(0.04f)));
+            marker->setTransform(mt);
+            addObject(marker);
+        }
+
         DrawableObject* mover = new DrawableObject(ModelType::Formula1, ShaderType::Phong);
 
         Transform t;
-        t.addTransform(std::make_shared<Scale>(glm::vec3(0.05f)));
-        t.addTransform(std::make_shared<Bezier>(segment, speed, loop));
+        // nejprve Bezier (world-space translation/orientace), pak škálování modelu
+        // použij zde duration (v sekundách) místo "speed" — např. 6.0f pro plynulý průjezd
+        t.addTransform(std::make_shared<Bezier>(segment, 6.0f, true /*loop*/, true /*orient*/, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, -0.25f, 0.0f)));
+        t.addTransform(std::make_shared<Scale>(glm::vec3(0.05f))); // případně Scale(1.0f) během ladění
 
         mover->setTransform(t);
         addObject(mover);

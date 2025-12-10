@@ -81,7 +81,7 @@ void Application::handleMouseClick(double x, double y, int button) {
             // when we have 4,8,12... points -> build segments (adjust condition if you want sliding window)
             const auto& pts = cur->getControlPoints();
             if (pts.size() >= 4 && (pts.size() % 4) == 0) {
-                cur->buildBezierFromControlPoints(0.25f, true);
+                cur->buildBezierFromControlPoints(6.0f, true);
                 printf("[App] built Bezier segment(s) from control points\n");
             }
         }
