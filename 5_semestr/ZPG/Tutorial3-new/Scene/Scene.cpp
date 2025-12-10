@@ -114,7 +114,7 @@ void Scene::plantObjectAtWorldPos(const glm::vec3& worldPos, ModelType type, Sha
     t.addTransform(std::make_shared<Translation>(worldPos));
     obj->setTransform(t);
 	obj->addTexture(TextureManager::instance().get(TextureType::WoodenFence));
-	//obj->addTexture(TextureManager::instance().get(TextureType::Teren));
+	obj->addTexture(TextureManager::instance().get(TextureType::Teren));
     this->addObject(obj);
 }
 
@@ -154,7 +154,7 @@ void Scene::buildBezierFromControlPoints(float speed, bool loop)
         for (int s = 0; s <= samples; ++s) {
             float tt = s / (float)samples;
             glm::vec3 p = Bezier::evalCubic(segment[0], segment[1], segment[2], segment[3], tt);
-            DrawableObject* marker = new DrawableObject(ModelType::Sphere, ShaderType::Phong);
+            DrawableObject* marker = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Sun);
             Transform mt;
             mt.addTransform(std::make_shared<Translation>(p));
             mt.addTransform(std::make_shared<Scale>(glm::vec3(0.04f)));
@@ -162,14 +162,13 @@ void Scene::buildBezierFromControlPoints(float speed, bool loop)
             addObject(marker);
         }
 
-        DrawableObject* mover = new DrawableObject(ModelType::Formula1, ShaderType::Phong);
-
+        DrawableObject* mover = new DrawableObject(ModelType::Formula1, ShaderType::Phong, TextureType::WoodenFence);
         Transform t;
         // nejprve Bezier (world-space translation/orientace), pak škálování modelu
         // použij zde duration (v sekundách) místo "speed" — např. 6.0f pro plynulý průjezd
         t.addTransform(std::make_shared<Bezier>(segment, 6.0f, true /*loop*/, true /*orient*/, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, -0.25f, 0.0f)));
         t.addTransform(std::make_shared<Scale>(glm::vec3(0.05f))); // případně Scale(1.0f) během ladění
-
+       
         mover->setTransform(t);
         addObject(mover);
     }

@@ -2,6 +2,42 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../lib/std_image/stb-image-header.h"
 #include <iostream>
+#include <algorithm> 
+
+GLuint TextureManager::CreateColorTexture(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+    unsigned char pixel[4] = { r, g, b, a };
+    GLuint tex = 0;
+    glGenTextures(1, &tex);
+    if (tex == 0) return 0;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    return tex;
+}
+
+std::shared_ptr<Texture> TextureManager::getColored(TextureType t, float r, float g, float b) {
+    auto it = cacheByType.find(t);
+    if (it != cacheByType.end()) return it->second;
+
+    // clamp and convert to 0-255
+    auto clamp01 = [](float v)->unsigned char {
+        float c = v;
+        if (c < 0.0f) c = 0.0f;
+        if (c > 1.0f) c = 1.0f;
+        return static_cast<unsigned char>(c * 255.0f);
+    };
+    unsigned char rc = clamp01(r);
+    unsigned char gc = clamp01(g);
+    unsigned char bc = clamp01(b);
+
+    GLuint id = CreateColorTexture(rc, gc, bc, 255);
+    if (!id) return nullptr;
+    auto tex = std::make_shared<Texture>(id);
+    cacheByType[t] = tex;
+    return tex;
+}
 
 // instance() u� bylo OK
 TextureManager& TextureManager::instance() {
@@ -68,6 +104,14 @@ std::shared_ptr<Texture> TextureManager::get(TextureType t) {
     case TextureType::Saturn:
         path = "ModelObject/assets/solarSystem/saturn/2k_saturn.jpg";
         break;
+    case TextureType::Red:
+        return getColored(t, 1.0f, 0.0f, 0.0f);
+    case TextureType::Yellow:
+        return getColored(t, 1.0f, 1.0f, 0.0f);
+    case TextureType::Green:
+        return getColored(t, 0.0f, 1.0f, 0.0f);
+    case TextureType::Blue:
+        return getColored(t, 0.0f, 0.0f, 1.0f);
     default:
         path = "";
         break;

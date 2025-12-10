@@ -4,6 +4,7 @@
 HeadLight::HeadLight(Camera* camera) : SpotLight(camera->getPosition(), camera->getTarget(), glm::vec3(1.0f, 1.0f, 1.0f), 12.5f, 17.5f), camera(camera)
 {
 	camera->attach(this);
+	isOn = false;
 }
 
 void HeadLight::update(ObservableSubjects subject)

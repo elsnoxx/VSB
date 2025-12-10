@@ -2,6 +2,7 @@
 #include "../ModelObject/ModelManager.h"
 #include "../Light/PointLight.h"
 #include "../Transform/Bezier.h"
+#include "../Light/DirectionalLight.h"
 
 
 std::vector<Scene*> SceneFactory::createAllScenes() {
@@ -15,14 +16,14 @@ std::vector<Scene*> SceneFactory::createAllScenes() {
 
         // Tutorial 3
         //createSceneSphereLights(),
+
         //createSceneDifferentModes(),
+
         //createSceneSolarSystem(),
 
-        createSceneFormula1(),
+        //createSceneFormula1(),
 
-
-
-        //createForestScene(),
+        createForestScene(),
         
     };
 }
@@ -119,7 +120,7 @@ Scene* SceneFactory::createForestScene() {
     Scene* scene = new Scene();
 
     // vytváříme hlavní objekty přímo přes ModelType
-    DrawableObject* shrek = new DrawableObject(ModelType::Shrek, ShaderType::Textured, TextureType::Shrek);
+    DrawableObject* shrek = new DrawableObject(ModelType::Shrek, ShaderType::Phong, TextureType::Shrek);
     {
         Transform ts;
         ts.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
@@ -128,7 +129,7 @@ Scene* SceneFactory::createForestScene() {
         scene->addObject(shrek);
     }
 
-    DrawableObject* fiona = new DrawableObject(ModelType::Fiona, ShaderType::Textured, TextureType::Fiona);
+    DrawableObject* fiona = new DrawableObject(ModelType::Fiona, ShaderType::Phong, TextureType::Fiona);
     {
         Transform tf;
         tf.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
@@ -137,7 +138,7 @@ Scene* SceneFactory::createForestScene() {
         scene->addObject(fiona);
     }
 
-    DrawableObject* toilet = new DrawableObject(ModelType::Toilet, ShaderType::Textured, TextureType::Toilet);
+    DrawableObject* toilet = new DrawableObject(ModelType::Toilet, ShaderType::Phong, TextureType::Toilet);
     {
         Transform tt;
         tt.addTransform(std::make_shared<Scale>(glm::vec3(0.7f)));
@@ -146,7 +147,7 @@ Scene* SceneFactory::createForestScene() {
         scene->addObject(toilet);
     }
 
-    DrawableObject* ground = new DrawableObject(ModelType::Plain, ShaderType::Textured, TextureType::Teren);
+    DrawableObject* ground = new DrawableObject(ModelType::Plain, ShaderType::Phong, TextureType::Teren);
     {
         Transform tg;
         tg.addTransform(std::make_shared<Scale>(glm::vec3(50.0f, 1.0f, 50.0f)));
@@ -155,7 +156,7 @@ Scene* SceneFactory::createForestScene() {
         scene->addObject(ground);
     }
 
-    DrawableObject* login = new DrawableObject(ModelType::Login, ShaderType::Textured, TextureType::WoodenFence);
+    DrawableObject* login = new DrawableObject(ModelType::Login, ShaderType::Phong, TextureType::WoodenFence);
     {
         static float angle = 0.0f;
         Transform tl;
@@ -202,7 +203,7 @@ Scene* SceneFactory::createForestScene() {
             ++i;
 
             // vytvoříme objekt přes ModelType - DrawableObject si v konstruktoru získá model z ModelManageru
-            DrawableObject* obj = new DrawableObject(modelType, ShaderType::Phong);
+            DrawableObject* obj = new DrawableObject(modelType, ShaderType::Phong, TextureType::Grass);
             Transform t;
             float scale = isTree ? distTreeScale(rng) : distBushScale(rng);
             t.addTransform(std::make_shared<Scale>(glm::vec3(scale)));
@@ -224,33 +225,95 @@ Scene* SceneFactory::createForestScene() {
 
         std::uniform_real_distribution<float> distHeight(1.0f, 5.0f);
         std::uniform_real_distribution<float> distRange(-30.0f, 30.0f);
+        std::uniform_real_distribution<float> distRadius(0.2f, 2.0f);
+        std::uniform_real_distribution<float> distSpeed(0.5f, 2.5f);
+        std::uniform_real_distribution<float> distPhase(0.0f, 6.28318530718f);
 
         for (int i = 0; i < count; i++) {
-            glm::vec3 pos(distRange(rng), distHeight(rng), distRange(rng));
+            glm::vec3 basePos(distRange(rng), distHeight(rng), distRange(rng));
 
-            // vizuální glow koule
-            DrawableObject* firefly = new DrawableObject(ModelType::Sphere, ShaderType::Phong);
-            Transform tf;
-            tf.addTransform(std::make_shared<Scale>(glm::vec3(0.1f)));  // malinká koule
-            tf.addTransform(std::make_shared<Translation>(pos));
-            firefly->setTransform(tf);
-            scene->addObject(firefly);
+            // vizuální glow koule - menší a s jednoduchou barevnou texturou
+            DrawableObject* firefly = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Yellow);
+            {
+                // náhodné parametry pohybu
+                float radius = distRadius(rng);
+                float speed = distSpeed(rng);
+                float phase = distPhase(rng);
+                float bobAmp = 0.25f + (radius * 0.1f);
 
-            // světlo -> dělá glow efekt do okolí
+                Transform tf;
+                // velmi malá koule
+                tf.addTransform(std::make_shared<Scale>(glm::vec3(0.03f)));
+
+                firefly->setTransform(tf);
+                scene->addObject(firefly);
+            }
+
+            // světlo -> menší dosah, nižší intensity (rychle klesající)
             PointLight* fl = new PointLight(
-                pos,
-                glm::vec3(1.0f, 0.9f, 0.3f),  // barva světlušky
-                1.0f, 0.35f, 0.44f            // rychle klesající světlo
+                basePos,
+                glm::vec3(1.0f, 0.95f, 0.6f),  // barva světlušky
+                1.0f,   // constant
+                1.5f,   // linear (větší hodnota = rychlejší útlum)
+                2.5f    // quadratic (větší = ještě rychlejší útlum)
             );
 
-            fl->intensity = 2.0f;             // slabé ale jasné světlo
+            fl->intensity = 0.8f;      // celkově slabší světlo
             scene->addLight(fl);
         }
         };
 
-    PointLight* sunLight = new PointLight(glm::vec3(0.0f, 30.0f, 0.0f), glm::vec3(1.0f, 0.95f, 0.9f), 1.5f);
-    scene->addLight(sunLight);
+    // 1) Directional light (sun) - rovnoměrné světlo směrem dolů
+    DirectionalLight* sunDirectional = new DirectionalLight(
+        glm::normalize(glm::vec3(-0.3f, -1.0f, -0.2f)),   // direction
+        glm::vec3(1.0f, 0.95f, 0.9f)                      // color
+    );
+    sunDirectional->intensity = 0.9f; // nastav intenzitu zvlášť
+    scene->addLight(sunDirectional);
+
+    // 2) Main point light (dálkový "sun glow") - krátký dosah, vyšší pozice
+    PointLight* sunPoint = new PointLight(
+        glm::vec3(0.0f, 25.0f, 0.0f),  // position
+        glm::vec3(1.0f, 0.95f, 0.9f),  // color
+        1.0f,  // constant
+        0.022f, // linear
+        0.0019f // quadratic (pomalejší útlum než fireflies)
+    );
+    sunPoint->intensity = 1.2f;
+    scene->addLight(sunPoint);
+
+    // příklad: pokud SpotLight má signaturu (pos, dir, innerCos, outerCos, color, constant, linear, quadratic)
+    SpotLight* searchLight = new SpotLight(
+        glm::vec3(10.0f, 8.0f, 10.0f),                       // position
+        glm::normalize(glm::vec3(-1.0f, -0.6f, -1.0f)),      // direction
+        glm::vec3(1.0f, 0.0f, 0.0f),                         // color = red
+        12.5f,                                               // inner cut angle in degrees
+        20.0f                                                // outer cut angle in degrees
+    );
+    searchLight->intensity = 2.0f; // nastavit sílu (pokud Light má public member intensity)
+    scene->addLight(searchLight);
+
+
+    // 5) Fireflies (point lights s malým dosahem) - už tam máte funkci, voláme ji
     addFireflies(20);
+
+    // optionally: menší ukázkové bodové světlo v blízkosti postavy
+    glm::vec3 lanternPos(2.0f, 1.0f, 0.5f);
+
+    // 1) samotné světlo (green)
+    PointLight* lantern = new PointLight(lanternPos, glm::vec3(0.0f, 1.0f, 0.0f), 1.0f, 0.14f, 0.07f);
+    lantern->intensity = 1.0f;
+    scene->addLight(lantern);
+
+    // 2) vizuální marker pro světlo (malá koule s barevnou texturou)
+    DrawableObject* lanternVis = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Green);
+    {
+        Transform lt;
+        lt.addTransform(std::make_shared<Scale>(glm::vec3(0.06f)));   // velikost markeru
+        lt.addTransform(std::make_shared<Translation>(lanternPos));   // umístění přesně na světlo
+        lanternVis->setTransform(lt);
+        scene->addObject(lanternVis);
+    }
 
     return scene;
 }
@@ -334,6 +397,9 @@ Scene* SceneFactory::createSceneFormula1() {
         ground->setTransform(tg);
         scene->addObject(ground);
     }
+
+    PointLight* center = new PointLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 6.0f);
+    scene->addLight(center);
 
     //// pohybující se model Formula1
     //DrawableObject* obj = new DrawableObject(ModelType::Formula1, ShaderType::Phong);

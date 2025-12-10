@@ -11,7 +11,7 @@ public:
     LightType type;
     glm::vec3 color;
     float intensity;
-    bool isOn = false;
+    bool isOn = true;
 
     Light(LightType type, const glm::vec3& color, float intensity = 1.0f);
     virtual ~Light();

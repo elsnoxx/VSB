@@ -100,7 +100,7 @@ glm::mat4 Bezier::getMatrix() const
 
     // optionally apply small correction if model is rotated in model space
     // e.g. if model forward is -X, rotate R by 90 deg around Y:
-     R = R * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0,1,0));
+    R = R * glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0,1,0));
     // final transform: translate then rotate
     return T * R;
 }

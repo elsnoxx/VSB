@@ -45,14 +45,21 @@ void DrawableObject::draw() {
 
     // bind exactly ONE texture into texture unit 0 and set sampler uniform "textureUnitID"
     if (textures.size() > 0 && textures[0]) {
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, textures[0]->getID());
+        auto tex = textures[0];
+        GLuint tid = tex->getId(); // adjust if your API uses different getter
+        if (glIsTexture(tid)) {
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, tid);
+            shaderProgram->setUniform("textureUnitID", 0); // set INT = texture unit
+            shaderProgram->setUniform("useTexture", 1);
+        }
+        else {
+            shaderProgram->setUniform("useTexture", 0);
+            printf("[Drawable] texture id invalid: %u\n", tid);
+        }
     }
-
-    // bind second texture into texture unit 1
-    if (textures.size() > 1 && textures[1]) {
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, textures[1]->getID());
+    else {
+        shaderProgram->setUniform("useTexture", 0);
     }
 
     // vykresli model

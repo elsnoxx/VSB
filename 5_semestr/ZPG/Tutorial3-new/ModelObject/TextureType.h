@@ -19,4 +19,9 @@ enum class TextureType {
     Neptune,
     Pluto,
     Sun,
+    // Colors
+    Red,
+    Yellow,
+    Blue,
+    Green,
 };
