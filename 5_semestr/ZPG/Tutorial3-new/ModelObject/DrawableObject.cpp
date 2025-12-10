@@ -2,15 +2,15 @@
 #include <iostream>
 #include <GL/glew.h>
 
-// back-compat konstruktor: přijme raw Model* a zabalí ho jako non-owning shared_ptr
+// back-compat constructor: accepts raw Model* and wraps it as a non-owning shared_ptr
 DrawableObject::DrawableObject(ModelType modelType, ShaderType shaderType)
 {
-    // vytvoříme non-owning shared_ptr s no-op deleter — ModelManager stále vlastní model
+    // create a non-owning shared_ptr with a no-op deleter — ModelManager still owns the model
     model = ModelManager::instance().get(modelType);
     shaderProgram = ShaderFactory::Get(shaderType);
 }
 
-// nový konstruktor, který zároveň načte texturu z TextureType
+// new constructor that also loads a texture from TextureType
 DrawableObject::DrawableObject(ModelType modelType, ShaderType shaderType, TextureType texType)
     : DrawableObject(modelType, shaderType)
 {
@@ -36,36 +36,45 @@ void DrawableObject::draw() {
         modelMat = transform.getMatrix();
     }
     shaderProgram->use();
-
-    // pošli transform do shaderu (předpokládáme že shaderProgram má setUniform pro mat4)
+    // send transform to the shader (assuming shaderProgram has setUniform for mat4)
     shaderProgram->setUniform("modelMatrix", modelMat);
 
     glm::mat3 normalMat = glm::transpose(glm::inverse(glm::mat3(modelMat)));
     shaderProgram->setUniform("normalMatrix", normalMat);
 
+    // If an optional material is assigned, upload material properties to the shader.
+    // Shaders are expected to use uniforms: material.ambient, material.diffuse, material.specular, material.shininess
+    if (material) {
+        shaderProgram->setUniform("materialDiffuse", material->diffuse);
+        shaderProgram->setUniform("materialSpecular", material->specular);
+        shaderProgram->setUniform("shininess", material->shininess);
+        shaderProgram->setUniform("ambientStrength", 0.1f);
+        shaderProgram->setUniform("useMaterial", 1);
+    }
+    else {
+        shaderProgram->setUniform("useMaterial", 0);
+    }
+
     // bind exactly ONE texture into texture unit 0 and set sampler uniform "textureUnitID"
     if (textures.size() > 0 && textures[0]) {
         auto tex = textures[0];
-        GLuint tid = tex->getId(); // adjust if your API uses different getter
+        GLuint tid = tex->getId();
+
         if (glIsTexture(tid)) {
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, tid);
-            shaderProgram->setUniform("textureUnitID", 0); // set INT = texture unit
+            shaderProgram->setUniform("textureUnitID", 0); // sampler2D
             shaderProgram->setUniform("useTexture", 1);
-        }
-        else {
-            shaderProgram->setUniform("useTexture", 0);
-            printf("[Drawable] texture id invalid: %u\n", tid);
         }
     }
     else {
         shaderProgram->setUniform("useTexture", 0);
     }
 
-    // vykresli model
+    // draw the model
     if (model) model->draw();
 
-    // unbind textures (lepší čistota stavu)
+    // unbind textures (better state cleanliness)
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, 0);
     glUseProgram(0);

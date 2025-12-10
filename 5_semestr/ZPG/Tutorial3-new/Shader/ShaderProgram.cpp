@@ -2,24 +2,25 @@
 
 
 ShaderProgram::ShaderProgram(const char* vertexSrc, const char* fragmentSrc) {
-    // 1. Zkompilujeme vertex shader
+    // 1. Compile the vertex shader
     VertexShader vertex(vertexSrc);
 
     // 2. Zkompilujeme fragment shader
+    // 2. Compile the fragment shader
     FragmentShader fragment(fragmentSrc);
 
-    // 3. Vytvoříme program
+    // 3. Create program
     id = glCreateProgram();
 
-    // 4. Napojíme shadery
+    // 4. Attach shaders
     glAttachShader(id, vertex.getId());
     glAttachShader(id, fragment.getId());
 
-    // 5. Link
+    // 5. Link program
     glLinkProgram(id);
 
 
-    // 6. Kontrola chyb
+    // 6. Error checking
     GLint success;
     glGetProgramiv(id, GL_LINK_STATUS, &success);
 

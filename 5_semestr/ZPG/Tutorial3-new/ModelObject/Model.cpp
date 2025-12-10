@@ -16,22 +16,22 @@ Model::Model(const float* data, size_t size, int count)
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    // spočítat, kolik floatů má každý vertex
+    // compute how many floats each vertex contains
     int floatsPerVertex = 0;
     if (count > 0) floatsPerVertex = static_cast<int>(size / sizeof(float) / count);
     GLsizei stride = floatsPerVertex * sizeof(float);
 
-    // position (vec3) vždy na location 0
+    // position (vec3) always at location 0
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)0);
 
-    // normal (vec3) na location 1 pokud jsou přítomny (minimálně 6 floatů)
+    // normal (vec3) at location 1 if present (at least 6 floats)
     if (floatsPerVertex >= 6) {
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)(3 * sizeof(float)));
     }
 
-    // texcoord (vec2) na location 2 pokud jsou přítomny (minimálně 8 floatů)
+    // texcoord (vec2) at location 2 if present (at least 8 floats)
     if (floatsPerVertex >= 8) {
         glEnableVertexAttribArray(2);
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (GLvoid*)(6 * sizeof(float)));

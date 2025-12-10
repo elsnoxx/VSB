@@ -13,7 +13,7 @@ uniform int useTexture;
 // LIGHTS
 uniform int numLights;
 uniform bool lightIsOn[16];
-uniform int lightTypes[16];
+uniform int lightTypes[16];           // 0 = directional, 1 = point, 2 = spot
 uniform vec3 lightPositions[16];
 uniform vec3 lightDirections[16];
 uniform vec3 lightColors[16];
@@ -48,17 +48,27 @@ void main()
     {
         if (!lightIsOn[i]) continue;
 
-        vec3 Lvec = lightPositions[i] - worldPosition;
-        float dist = length(Lvec);
-        vec3 L = normalize(Lvec);
+        vec3 L;
+        float attenuation = 1.0;
+        float dist = 0.0;
+
+        if (lightTypes[i] == 0) {
+            // Directional light -> direction provided (no attenuation)
+            L = normalize(-lightDirections[i]); // lightDirections points from light -> scene
+        } else {
+            // Point or Spot -> compute vector to light and attenuation by distance
+            vec3 Lvec = lightPositions[i] - worldPosition;
+            dist = length(Lvec);
+            L = normalize(Lvec);
+            // basic distance attenuation (can be replaced by per-light constants if available)
+            attenuation = 1.0 / (1.0 + 0.09 * dist + 0.032 * dist * dist);
+        }
 
         float diff = max(dot(N, L), 0.0);
         vec3 R = reflect(-L, N);
         float spec = (diff > 0.0) ? pow(max(dot(V, R), 0.0), shininess) : 0.0;
 
-        float attenuation = 1.0 / (1.0 + 0.09 * dist + 0.032 * dist * dist);
-
-        // SPOT
+        // SPOT-specific falloff
         float spotEffect = 1.0;
         if (lightTypes[i] == 2)
         {

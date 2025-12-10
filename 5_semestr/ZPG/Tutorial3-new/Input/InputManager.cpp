@@ -8,11 +8,11 @@ InputManager& InputManager::instance() {
 
 void InputManager::bindCamera(Camera* cam) {
     m_boundCamera = cam;
-    // pokud máte jinou interní proměnnou/kód, synchronizujte ji zde
+    // if you have another internal variable/code, synchronize it here
 }
 
 void InputManager::resetState() {
-    // vyčistit interní stavy (příklady, upravte podle skutečných členů)
+    // clear internal states (examples, adapt to actual members)
     // pressedKeys.clear();
     mouseDelta = glm::vec2(0.0f);
     lastMousePos = glm::vec2(0.0f); // Reset lastMousePos to initial state
@@ -36,7 +36,7 @@ bool InputManager::isKeyDown(int key) const {
 bool InputManager::isKeyPressed(int key) {
     auto it = keyPressedEvents.find(key);
     if (it != keyPressedEvents.end() && it->second) {
-        it->second = false; // vyzvednuto — zabráníme opětovnému vrácení true, dokud nebude nový press
+        it->second = false; // consumed — prevent returning true again until a new press occurs
         return true;
     }
     return false;

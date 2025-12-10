@@ -132,7 +132,7 @@ bool Scene::removeObjectAt(int idx) {
 
 void Scene::buildBezierFromControlPoints(float speed, bool loop)
 {
-    // vytvoří Bezier segmenty z každých 4 bodů (nepřekrývající se)
+    // create Bezier segments from every 4 control points (non-overlapping)
     size_t count = controlPoints.size();
     if (count < 4) return;
 
@@ -148,7 +148,7 @@ void Scene::buildBezierFromControlPoints(float speed, bool loop)
                   << "P1(" << segment[1].x << "," << segment[1].y << "," << segment[1].z << "), "
                   << "P2(" << segment[2].x << "," << segment[2].y << "," << segment[2].z << "), "
 			<< "P3(" << segment[3].x << "," << segment[3].y << "," << segment[3].z << ")\n";
-        // vytvoříme nový objekt, který pojede po tomto segmentu
+        // create a new object that will follow this segment
 
         const int samples = 24;
         for (int s = 0; s <= samples; ++s) {
@@ -164,16 +164,16 @@ void Scene::buildBezierFromControlPoints(float speed, bool loop)
 
         DrawableObject* mover = new DrawableObject(ModelType::Formula1, ShaderType::Phong, TextureType::WoodenFence);
         Transform t;
-        // nejprve Bezier (world-space translation/orientace), pak škálování modelu
-        // použij zde duration (v sekundách) místo "speed" — např. 6.0f pro plynulý průjezd
+        // first Bezier (world-space translation/orientation), then scale the model
+        // use duration (in seconds) instead of "speed" — e.g. 6.0f for a smooth traversal
         t.addTransform(std::make_shared<Bezier>(segment, 6.0f, true /*loop*/, true /*orient*/, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, -0.25f, 0.0f)));
-        t.addTransform(std::make_shared<Scale>(glm::vec3(0.05f))); // případně Scale(1.0f) během ladění
+        t.addTransform(std::make_shared<Scale>(glm::vec3(0.05f))); // optionally Scale(1.0f) during debugging
        
         mover->setTransform(t);
         addObject(mover);
     }
 
-    // po zpracování smažeme body (pokud chcete je nechat, odstraňte tento clear)
+    // after processing, remove the points (remove this clear if you want to keep them)
     controlPoints.erase(controlPoints.begin(), controlPoints.begin() + (count / 4) * 4);
 }
 
@@ -181,7 +181,7 @@ void Scene::addControlPoint(const glm::vec3& p)
 {
     controlPoints.push_back(p);
 
-    // vytvoříme malý marker pro vizualizaci kliknutí
+    // create a small marker to visualize the click
     DrawableObject* marker = new DrawableObject(ModelType::Sphere, ShaderType::Phong);
     Transform mt;
     mt.addTransform(std::make_shared<Translation>(p));
@@ -195,7 +195,7 @@ void Scene::clearControlPoints()
     controlPoints.clear();
 }
 
-// vrátí referenci (pouze čtení)
+// returns reference (read-only)
 const std::vector<glm::vec3>& Scene::getControlPoints() const
 {
     return controlPoints;
@@ -206,7 +206,7 @@ void Scene::update(float dt, InputManager& input)
     float camSpeed = 5.0f * dt;
     auto cam = getCamera();
 
-    // WSAD pohyb
+    // WSAD movement
     if (input.isKeyDown(GLFW_KEY_W)) { 
 		std::cout << "Moving forward W\n";
         cam->forward(camSpeed); 
@@ -229,7 +229,7 @@ void Scene::update(float dt, InputManager& input)
         switchHeadLight();
     }
 
-    // rmouse rotate
+    // right-mouse rotate
     glm::vec2 delta = input.getMouseDeltaAndReset(dt);
     if (delta.x != 0.0f || delta.y != 0.0f) {
         cam->updateOrientation(delta, dt);

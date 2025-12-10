@@ -143,7 +143,7 @@ void Application::initialization() {
         exit(EXIT_FAILURE);
     }
 
-    // Voliteln�: nastaven� verze OpenGL
+    // Optional: set OpenGL version
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -163,6 +163,7 @@ void Application::initialization() {
     glewExperimental = GL_TRUE;
     glewInit();
 
+    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
@@ -171,7 +172,7 @@ void Application::initialization() {
 	// screen init
     screenManager.init();
 
-    // Nastaven� callback�
+    // Set callbacks
     glfwSetKeyCallback(window, callbackKey);
     glfwSetCursorPosCallback(window, callbackCursor);
     glfwSetMouseButtonCallback(window, callbackButton);

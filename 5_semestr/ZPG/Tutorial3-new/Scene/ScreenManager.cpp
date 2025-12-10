@@ -29,7 +29,7 @@ void ScreenManager::changeFOV(float radians) {
     Camera * cam = cur->getCamera();
     if (!cam) return;
     cam->setFOV(radians);
-        // uložit index nebo logovat dle potřeby
+        // save index or log if needed
     printf("[ScreenManager] Changed FOV of scene %d to %f radians\n", currentIndex, radians);
     
 }

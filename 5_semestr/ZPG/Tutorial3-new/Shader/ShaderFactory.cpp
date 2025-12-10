@@ -33,11 +33,11 @@ std::string LoadFile(const std::string& path)
 
 
 ShaderProgram* ShaderFactory::Get(ShaderType type) {
-    // Pokud už shader v cache existuje → vrátíme ho
+    // If the shader is already in the cache -> return it
     if (cache.count(type))
         return cache[type];
 
-    // Pokud neexistuje → načteme
+    // If it doesn't exist -> load it
     ShaderProgram* shader = LoadShader(type);
     cache[type] = shader;
     return shader;
@@ -66,6 +66,10 @@ ShaderProgram* ShaderFactory::LoadShader(ShaderType type) {
     case ShaderType::Textured:
         vertexSrc = LoadFile(Config::VertexShadersPath + "textured.vert.glsl");
         fragmentSrc = LoadFile(Config::FragmentShadersPath + "textured.frag.glsl");
+        break;
+    case ShaderType::Skybox:
+        vertexSrc = LoadFile(Config::VertexShadersPath + "skybox.vert.glsl");
+        fragmentSrc = LoadFile(Config::FragmentShadersPath + "skybox.frag.glsl");
         break;
     }
 

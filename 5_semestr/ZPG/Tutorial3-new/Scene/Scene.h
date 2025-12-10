@@ -19,12 +19,12 @@ public:
     void update(float dt, InputManager& input);
     void draw();
 
-    // přidá světlo do per-scene manageru (vrací předané pointer, nebo nullptr)
+    // add a light to the per-scene manager (returns the passed pointer or nullptr)
     Light* addLight(Light* light);
 
     void bindCameraAndLightToUsedShaders();
 
-    // přepne headlight (pokud existuje)
+    // toggle headlight (if present)
     void switchHeadLight();
 
     int pickAtCursor(double x, double y, glm::vec3* outWorld = nullptr);
@@ -45,10 +45,10 @@ public:
 private:
     std::vector<DrawableObject*> objects;
 
-    // per-scene manager (Scene vlastní manager)
+    // per-scene manager (Scene owns the manager)
     LightManager* lightManager = nullptr;
 
-    // headlight je vlastněné Scene (uložený i v manageru)
+    // headlight is owned by the Scene (also stored in the manager)
     HeadLight* headLight = nullptr;
     std::vector<glm::vec3> controlPoints;
     int selectedIndex = -1;

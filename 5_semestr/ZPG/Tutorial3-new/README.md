@@ -1,6 +1,6 @@
 **Project Overview**
-- **Purpose:**: Malá OpenGL aplikace (studentský projekt) pro vykreslování 3D scén, správu shaderů, modelů a osvětlení.
-- **Language / Tools:**: C++17, OpenGL (GLFW + GLEW), GLM pro matematiku.
+- **Purpose:**: Small OpenGL application (student project) for rendering 3D scenes and managing shaders, models, and lighting.
+- **Language / Tools:**: C++17, OpenGL (GLFW + GLEW), GLM for mathematics.
 
 **Build & Run (high level)**
 - **Open in:**: Visual Studio (s řešením `Projekt.sln`).

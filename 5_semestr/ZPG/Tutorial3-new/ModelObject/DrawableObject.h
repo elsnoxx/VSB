@@ -10,6 +10,9 @@
 #include "TextureManager.h"
 #include "../Transform/Transform.h"
 #include "../Transform/TransformNode.cpp"
+#include "MaterialType.h"
+#include "MaterialManager.h"
+#include "MaterialData.h"
 
 class DrawableObject {
 public:
@@ -27,6 +30,10 @@ public:
     void addTexture(const std::shared_ptr<Texture>& tex) { if (tex) textures.push_back(tex); }
     void clearTextures() { textures.clear(); }
 
+    // Optional material: set or clear. If set, material uniforms will be uploaded to shaders.
+    void setMaterial(MaterialType mt) { material = MaterialManager::instance().get(mt); }
+    void clearMaterial() { material = nullptr; }
+
     // new API: set shared transform node (composite)
     void setTransformNode(const std::shared_ptr<TransformNode>& node) {
         m_transformNode = node;
@@ -42,4 +49,5 @@ private:
     std::vector<std::shared_ptr<Texture>> textures;
     Transform transform;
     std::shared_ptr<TransformNode> m_transformNode;
+    const MaterialData* material = nullptr; // optional, not owned
 };

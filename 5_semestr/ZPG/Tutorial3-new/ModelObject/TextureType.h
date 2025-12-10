@@ -24,4 +24,6 @@ enum class TextureType {
     Yellow,
     Blue,
     Green,
+    //SkyCube
+    SkyboxDay,
 };
