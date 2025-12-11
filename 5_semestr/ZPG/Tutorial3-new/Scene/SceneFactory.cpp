@@ -15,15 +15,15 @@ std::vector<Scene*> SceneFactory::createAllScenes() {
         //createScene4(),
 
         // Tutorial 3
-        //createSceneSphereLights(),
+        createSceneSphereLights(),
 
-        //createSceneDifferentModes(),
+        createSceneDifferentModes(),
 
-        //createSceneSolarSystem(),
+        createSceneSolarSystem(),
 
         createSceneFormula1(),
 
-        //createForestScene(),
+        createForestScene(),
         
     };
 }
@@ -38,7 +38,7 @@ Scene* SceneFactory::createSceneSolarSystem()
     auto sunNode = std::make_shared<TransformNode>();
     sunNode->addTransform(std::make_shared<Scale>(glm::vec3(1.0f)));
 
-    DrawableObject* sun = new DrawableObject(ModelType::Sphere, ShaderType::Textured, TextureType::Sun);
+    DrawableObject* sun = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Sun);
     sun->setTransformNode(sunNode);   // use shared_ptr API
     scene->addObject(sun);
 
@@ -58,7 +58,7 @@ Scene* SceneFactory::createSceneSolarSystem()
 
     sunNode->addChild(earthNode); // Earth is child of Sun
 
-    DrawableObject* earth = new DrawableObject(ModelType::Sphere, ShaderType::Textured, TextureType::Earth);
+    DrawableObject* earth = new DrawableObject(ModelType::Earth, ShaderType::Phong, TextureType::Earth);
     earth->setTransformNode(earthNode);
     scene->addObject(earth);
 
@@ -73,7 +73,7 @@ Scene* SceneFactory::createSceneSolarSystem()
 
     earthNode->addChild(moonNode); // Attach moon to earth
 
-    DrawableObject* moon = new DrawableObject(ModelType::Sphere, ShaderType::Textured, TextureType::Moon);
+    DrawableObject* moon = new DrawableObject(ModelType::Moon, ShaderType::Phong, TextureType::Moon);
     moon->setTransformNode(moonNode);
     scene->addObject(moon);
 
@@ -81,17 +81,17 @@ Scene* SceneFactory::createSceneSolarSystem()
     // =========================
     //  OTHER PLANETS (simple)
     // =========================
-    struct PlanetDef { TextureType texture; float orbitRadius, orbitSpeed, selfRotate, scale; };
+    struct PlanetDef { ModelType model; TextureType texture; float orbitRadius, orbitSpeed, selfRotate, scale; };
 
     std::vector<PlanetDef> planets = {
-        { TextureType::Mercury, 1.5f, 15.0f, 20.0f, 0.05f },
-        { TextureType::Venus,   2.0f, 10.0f, 15.0f, 0.09f },
-        { TextureType::Mars,    3.2f,  7.0f, 18.0f, 0.07f },
-        { TextureType::Jupiter, 5.0f,  4.0f, 25.0f, 0.25f },
-        { TextureType::Saturn,  6.0f,  3.0f, 22.0f, 0.22f },
-        { TextureType::Uranus,  7.5f,  2.0f, 20.0f, 0.18f },
-        { TextureType::Neptune, 8.7f,  1.7f, 18.0f, 0.17f },
-        { TextureType::Pluto,  10.0f,  1.0f, 13.0f, 0.03f }
+        { ModelType::Mercury,   TextureType::Mercury, 1.5f, 15.0f, 20.0f, 0.05f },
+        { ModelType::Venus,     TextureType::Venus,   2.0f, 10.0f, 15.0f, 0.09f },
+        { ModelType::Mars,      TextureType::Mars,    3.2f,  7.0f, 18.0f, 0.07f },
+        { ModelType::Jupiter,   TextureType::Jupiter, 5.0f,  4.0f, 25.0f, 0.05f },
+        { ModelType::Sphere,    TextureType::Saturn,  6.0f,  3.0f, 22.0f, 0.25f },
+        { ModelType::Sphere,    TextureType::Uranus, 7.5f,  2.0f, 20.0f, 0.18f },
+        { ModelType::Sphere,    TextureType::Neptune, 8.7f,  1.7f, 18.0f, 0.17f },
+        { ModelType::Sphere,    TextureType::Pluto,10.0f,  1.0f, 13.0f, 0.03f }
     };
 
     for (auto& p : planets)
@@ -104,7 +104,7 @@ Scene* SceneFactory::createSceneSolarSystem()
 
         sunNode->addChild(node);
 
-        DrawableObject* planet = new DrawableObject(ModelType::Sphere, ShaderType::Textured, p.texture);
+        DrawableObject* planet = new DrawableObject(p.model, ShaderType::Phong, p.texture);
         planet->setTransformNode(node);
         scene->addObject(planet);
     }
@@ -264,23 +264,23 @@ Scene* SceneFactory::createForestScene() {
         };
 
     // 1) Directional light (sun) - uniform light pointing downward
-    DirectionalLight* sunDirectional = new DirectionalLight(
-        glm::normalize(glm::vec3(-0.3f, -1.0f, -0.2f)),   // direction
-        glm::vec3(1.0f, 0.95f, 0.9f)                      // color
-    );
-    sunDirectional->intensity = 0.9f; // set intensity separately
-    scene->addLight(sunDirectional);
+    //DirectionalLight* sunDirectional = new DirectionalLight(
+    //    glm::normalize(glm::vec3(-0.3f, -1.0f, -0.2f)),   // direction
+    //    glm::vec3(1.0f, 0.95f, 0.9f)                      // color
+    //);
+    //sunDirectional->intensity = 0.9f; // set intensity separately
+    //scene->addLight(sunDirectional);
 
-    // 2) Main point light (distant "sun glow") - short range, higher position
-    PointLight* sunPoint = new PointLight(
-        glm::vec3(0.0f, 25.0f, 0.0f),  // position
-        glm::vec3(1.0f, 0.95f, 0.9f),  // color
-        1.0f,  // constant
-        0.022f, // linear
-        0.0019f // quadratic (slower attenuation than fireflies)
-    );
-    sunPoint->intensity = 1.2f;
-    scene->addLight(sunPoint);
+    //// 2) Main point light (distant "sun glow") - short range, higher position
+    //PointLight* sunPoint = new PointLight(
+    //    glm::vec3(0.0f, 25.0f, 0.0f),  // position
+    //    glm::vec3(1.0f, 0.95f, 0.9f),  // color
+    //    1.0f,  // constant
+    //    0.022f, // linear
+    //    0.0019f // quadratic (slower attenuation than fireflies)
+    //);
+    //sunPoint->intensity = 1.2f;
+    //scene->addLight(sunPoint);
 
     // example: if SpotLight has signature (pos, dir, innerCos, outerCos, color, constant, linear, quadratic)
     SpotLight* searchLight = new SpotLight(
@@ -295,7 +295,7 @@ Scene* SceneFactory::createForestScene() {
 
 
     // 5) Fireflies (point lights with small range) - there is already a helper function, call it
-    addFireflies(20);
+    addFireflies(5);
 
     // optionally: small example point light near the character
     glm::vec3 lanternPos(2.0f, 1.0f, 0.5f);
@@ -315,6 +315,36 @@ Scene* SceneFactory::createForestScene() {
         scene->addObject(lanternVis);
     }
 
+    // --- Reflector (spotlight) for Fiona ---
+    // Fiona's translation in this scene is (2.0f, 0.0f, 0.0f)
+    glm::vec3 fionaPos(2.0f, 0.0f, 0.0f);
+
+    // place the reflector slightly above and in front of Fiona
+    glm::vec3 reflectorPos = fionaPos + glm::vec3(0.0f, 3.5f, 0.5f);
+    glm::vec3 reflectorDir = glm::normalize(fionaPos - reflectorPos);
+
+    // Create spotlight aimed at Fiona:
+    // constructor: (pos, dir, color, innerAngleDeg, outerAngleDeg)
+    SpotLight* fionaReflector = new SpotLight(
+        reflectorPos,
+        reflectorDir,
+        glm::vec3(1.0f, 0.0f, 0.0f), // warm white color
+        14.0f,  // inner cone angle (deg)
+        25.0f   // outer cone angle (deg)
+    );
+    fionaReflector->intensity = 2.2f; // brighten a bit
+    scene->addLight(fionaReflector);
+
+    // optional: small visual marker for the reflector (small sphere)
+    DrawableObject* reflectorVis = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Yellow);
+    {
+        Transform tr;
+        tr.addTransform(std::make_shared<Scale>(glm::vec3(0.05f)));
+        tr.addTransform(std::make_shared<Translation>(reflectorPos));
+        reflectorVis->setTransform(tr);
+        scene->addObject(reflectorVis);
+    }
+
     return scene;
 }
 
@@ -332,7 +362,7 @@ Scene* SceneFactory::createSceneSphereLights() {
     };
 
     for (size_t i = 0; i < positions.size(); ++i) {
-        DrawableObject* obj = new DrawableObject(ModelType::Sphere, ShaderType::Phong);
+        DrawableObject* obj = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Red);
 
         Transform t;
         t.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
@@ -369,7 +399,7 @@ Scene* SceneFactory::createSceneDifferentModes() {
 
     for (size_t i = 0; i < positions.size(); ++i) {
         ShaderType st = shaders[i % shaders.size()];
-        DrawableObject* obj = new DrawableObject(ModelType::Sphere, st);
+        DrawableObject* obj = new DrawableObject(ModelType::Sphere, st, TextureType::Red);
 
         Transform t;
         t.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));

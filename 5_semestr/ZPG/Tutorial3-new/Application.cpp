@@ -67,7 +67,7 @@ void Application::handleMouseClick(double x, double y, int button) {
     if (picked >= 0) {
         printf("[App] picked object index %d at world [%f,%f,%f]\n", picked, worldPos.x, worldPos.y, worldPos.z);
         if (button == GLFW_MOUSE_BUTTON_LEFT) {
-            cur->plantObjectAtWorldPos(worldPos, ModelType::Tree, ShaderType::Textured);
+            cur->plantObjectAtWorldPos(worldPos, ModelType::Tree, ShaderType::Phong);
         }
         else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
             bool ok = cur->removeObjectAt(picked);

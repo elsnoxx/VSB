@@ -1,0 +1,27 @@
+Orientace objektu
+
+Cíl: objekt (model) má v každém bodě trajektorie kromě pozice i správnou orientaci podle směru pohybu (tangent).
+Postup: získat tangentní vektor B'(t), normalizovat ho → to bude lokální „forward“.
+Analytická derivace kubické Bézierovy křivky: pro segment s body p0,p1,p2,p3 platí
+B(t) = p0*(1−t)^3 + 3 p1 t (1−t)^2 + 3 p2 t^2 (1−t) + p3*t^3
+analytická derivace:
+B'(t) = 3 * ( (p1 - p0)*(1-t)^2 + 2*(p2 - p1)*(1-t)*t + (p3 - p2)*t^2 )
+výhoda analytiky: přesnost a rychlost oproti numerickému rozdílu.
+Z konstrukce orientace:
+forward = normalize(B'(t))
+right = normalize(cross(up, forward)) — up je světový referenční vektor (např. (0,1,0)).
+pokud jsou forward a up skoro paralelní (délka cross ~ 0), zvolíme alternativní referenční vektor (např. (1,0,0)).
+up2 = cross(forward, right)
+složíme rotační matici R, kde sloupce (nebo řádky podle konvence) jsou right, up2, forward; výsledný modelMatrix = translate * R * modelSpaceCorrection.
+Poznámky k model-space: pokud model „směřuje“ osou X nebo -Z, musíš upravit R (flip/rotační korekce).
+Fallback: pokud |B'(t)| ≈ 0 vrátit jen translaci (bez rotace).
+
+
+Spline (více segmentů)
+
+Počet segmentů: segmentCount = (pts.size() - 1) / 3 — každé další 3 body přidávají segment (sdílené body mezi segmenty).
+Mapování globálního parametru t∈[0,1] na segment:
+segF = t_global * segmentCount
+segIndex = floor(segF) (oříznout na [0, segmentCount-1])
+localT = segF - segIndex — lokální parametr pro evalCubic(p0..p3, localT).
+Parametrizace podle času: pro konstantní rychlost je potřeba reparametrizovat podle délky křivky (náročnější). Pro studenti stačí lineární mapování času → t.
