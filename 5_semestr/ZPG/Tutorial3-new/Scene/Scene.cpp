@@ -48,6 +48,7 @@ void Scene::addObject(DrawableObject* obj) {
 
     if (shader) {
         shader->attachCamera(camera);
+        printf("[Scene] addObject(): attached shader program to camera %p\n", (void*)camera);
     }
 }
 
@@ -324,6 +325,13 @@ void Scene::bindCameraAndLightToUsedShaders()
         processed.insert(shader);
 
         shader->use();
+        // Ensure camera matrices are up-to-date on the shader (avoid stale matrices after switches)
+        if (camera) {
+            shader->setUniform("viewMatrix", camera->getViewMatrix());
+            shader->setUniform("projectionMatrix", camera->getProjectionMatrix());
+            // also ensure view position is present early for lighting calculations
+            shader->setUniform("viewPosition", camera->getPosition());
+        }
         shader->setUniform("numLights", n);
 
         for (int i = 0; i < n; ++i) {
@@ -340,6 +348,10 @@ void Scene::bindCameraAndLightToUsedShaders()
         shader->setUniform("viewPosition", camera->getPosition());
         shader->setUniform("shininess", 64.0f);
         shader->setUniform("ambientStrength", 0.15f);
+        // Backwards-compatibility: some older shaders expect a single `lightPosition` uniform.
+        if (!positions.empty()) {
+            shader->setUniform("lightPosition", positions[0]);
+        }
 
         glUseProgram(0);
     }

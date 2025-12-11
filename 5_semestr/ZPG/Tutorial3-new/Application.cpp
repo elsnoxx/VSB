@@ -34,9 +34,20 @@ void Application::switchScene(int index) {
 
     // Ensure input is initialized for the newly switched scene so the camera
     // doesn't require an extra click or mouse move to start responding.
+    // Process pending events and focus window so cursor queries are reliable.
+    if (window) {
+        glfwPollEvents();
+        glfwFocusWindow(window);
+    }
+
     // Sample current cursor position and prime the InputManager's lastMousePos.
     double cx = 0.0, cy = 0.0;
-    if (window) glfwGetCursorPos(window, &cx, &cy);
+    if (window) {
+        glfwGetCursorPos(window, &cx, &cy);
+        // Ensure GLFW internal cursor position is set consistently
+        glfwSetCursorPos(window, cx, cy);
+    }
+
     // Reset internal input state (clears accumulators) and set the last mouse
     // position to current cursor so next movement produces a proper delta.
     input.resetState();
@@ -113,7 +124,20 @@ void Application::initialization() {
     glfwSetWindowFocusCallback(window, callbackWindowFocus);
     glfwSetWindowIconifyCallback(window, callbackWindowIconify);
     glfwSetWindowSizeCallback(window, callbackWindowSize);
-
     printVersionInfo();
-    updateViewport(0,0);
+
+    // Make sure events are processed and the window is focused before priming
+    // input state so the first scene reacts without an extra click.
+    glfwPollEvents();
+    if (window) glfwFocusWindow(window);
+
+    // Prime input with current cursor position
+    double cx = 0.0, cy = 0.0;
+    if (window) {
+        glfwGetCursorPos(window, &cx, &cy);
+        glfwSetCursorPos(window, cx, cy);
+    }
+    input.resetState();
+    input.onMouseMove(cx, cy);
+    updateViewport(cx, cy);
 }

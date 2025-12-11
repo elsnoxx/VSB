@@ -180,6 +180,7 @@ bool InputManager::isKeyPressed(int key) {
 void InputManager::onMouseMove(double x, double y) {
     // Handle the first mouse callback specially to avoid huge initial delta.
     if (firstMouse) {
+        printf("[InputManager] onMouseMove() firstMouse init pos=(%f,%f)\n", x, y);
         lastMousePos = { (float)x, (float)y };
         firstMouse = false;
         mouseDelta = { 0.0f, 0.0f };
@@ -194,6 +195,9 @@ void InputManager::onMouseMove(double x, double y) {
     // Store delta in pixels (accumulated until getMouseDeltaAndReset or endFrame).
     mouseDelta += delta;
 
+    if (delta.x != 0.0f || delta.y != 0.0f) {
+        printf("[InputManager] onMouseMove() delta=(%f,%f) last=(%f,%f)\n", delta.x, delta.y, lastMousePos.x, lastMousePos.y);
+    }
     // Update last position
     lastMousePos = current;
 }

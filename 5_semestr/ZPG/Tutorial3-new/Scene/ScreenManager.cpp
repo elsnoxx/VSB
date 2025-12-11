@@ -29,6 +29,8 @@ void ScreenManager::switchTo(int index) {
             input->bindCamera(cam);
             input->resetState(); // ensure firstMouse and lastMouse don't cause jumps
             input->bindScene(scene);
+            scene->bindCameraAndLightToUsedShaders();
+            printf("[ScreenManager] switchTo(): input bound to camera %p for scene %d\n", (void*)cam, index);
         }
     }
 
