@@ -69,6 +69,15 @@ public:
     // This updates internal yaw (alpha) and pitch (fi) and recomputes the target vector.
     void updateOrientation(glm::vec2 mouseOffset, float deltaTime);
 
+    // set camera world position directly
+    void setPosition(const glm::vec3& pos);
+
+    // set camera target direction (unit vector) and update internal yaw/pitch
+    void setTargetDirection(const glm::vec3& dir);
+
+    // convenience: reset camera orientation/position to given eye and direction
+    void reset(const glm::vec3& eyePos, const glm::vec3& targetDir);
+
     // Movement helpers: move camera in local forward/back/left/right directions.
     // deltaTime scales movement by frame time and Config::MovementSpeed.
     void forward(float deltaTime);

@@ -28,7 +28,6 @@ class Application {
 		
 		void switchScene(int index);
 		void updateFOV(float radians);
-		void handleMouseClick(double x, double y, int button);
 
 		void run();
 

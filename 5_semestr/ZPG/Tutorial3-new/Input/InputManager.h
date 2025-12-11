@@ -5,6 +5,8 @@
 #include <GLFW/glfw3.h>
 
 #include "../Config.h"
+#include "../ModelObject/ModelType.h"
+#include "../Shader/ShaderType.h"
 
 // InputManager is a simple singleton that collects keyboard and mouse events,
 // exposes polling helpers and forwards mouse orientation to a bound Camera.
@@ -52,6 +54,22 @@ public:
     // Note: InputManager does not take ownership of the Camera pointer.
     void bindCamera(Camera* cam);
 
+    // Bind the active Scene so input manager can operate on scene-level actions
+    // (object placement, picking, etc). Non-owning pointer.
+    void bindScene(class Scene* scene);
+
+    // Placement API: start placing objects of given model type using given shader.
+    // While placement mode is active, mouse click will plant objects in the bound scene.
+    void startPlacement(ModelType model, ShaderType shader);
+    void stopPlacement();
+
+    // Handle mouse button click from application (x,y in window coordinates).
+    // This forwards to placement/picking logic when appropriate.
+    void onMouseButton(double x, double y, int button);
+
+    // Query placement mode
+    bool isPlacing() const { return placing; }
+
     // Reset internal state (clear key states, mouse deltas, pressed events).
     // Useful when switching scenes or when focus is lost.
     void resetState();
@@ -66,6 +84,14 @@ private:
 
     // Pointer to camera controlled by input (non-owning).
     Camera* m_boundCamera = nullptr;
+
+    // Pointer to bound scene for placement/picking actions.
+    class Scene* m_boundScene = nullptr;
+
+    // Placement state
+    bool placing = false;
+    ModelType placementModel = ModelType::Tree;
+    ShaderType placementShader = ShaderType::Phong;
 
     // Mouse tracking:
     // - lastMousePos: last absolute mouse position seen (window coords).

@@ -11,6 +11,9 @@ Scene::Scene() {
     camera = new Camera(glm::vec3(0.f, 1.f, 5.f));
     lightManager = new LightManager();
 
+    initialCameraEye = camera->getPosition();
+    initialCameraTarget = camera->getTarget();
+
     headLight = new HeadLight(camera);
     headLight->intensity = 5.0f;
 	headLight->cutOff = glm::cos(glm::radians(12.5f));
@@ -25,6 +28,17 @@ Scene::~Scene() {
 
 Camera* Scene::getCamera() {
     return camera;
+}
+
+void Scene::reset() {
+    if (!camera) return;
+    camera->setPosition(initialCameraEye);
+    camera->setTargetDirection(initialCameraTarget);
+
+
+    // Optionally: reset other scene-specific state here (selectedIndex, controlPoints etc.)
+    selectedIndex = -1;
+    controlPoints.clear();
 }
 
 void Scene::addObject(DrawableObject* obj) {

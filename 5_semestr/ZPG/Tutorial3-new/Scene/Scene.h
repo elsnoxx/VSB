@@ -41,6 +41,8 @@ public:
     void setSelectedIndex(int idx) { selectedIndex = idx; }
     // remove object by scene-local index (0..objects.size()-1). returns true if removed.
     bool removeObjectAt(int idx);
+    // Reset scene camera to initial state (as created)
+    void reset();
 
 private:
     std::vector<DrawableObject*> objects;
@@ -52,6 +54,8 @@ private:
     HeadLight* headLight = nullptr;
     std::vector<glm::vec3> controlPoints;
     int selectedIndex = -1;
+    glm::vec3 initialCameraEye;
+    glm::vec3 initialCameraTarget;
 
 protected:
     Camera* camera = nullptr;

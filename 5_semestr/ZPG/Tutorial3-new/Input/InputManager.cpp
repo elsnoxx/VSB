@@ -1,5 +1,8 @@
 ﻿#include "InputManager.h"
 #include <iostream>
+#include "../Scene/Scene.h"
+#include "../ModelObject/ModelType.h"
+#include "../Shader/ShaderType.h"
 
 // Singleton accessor
 InputManager& InputManager::instance() {
@@ -11,6 +14,124 @@ InputManager& InputManager::instance() {
 void InputManager::bindCamera(Camera* cam) {
     m_boundCamera = cam;
     // If additional synchronization is needed (e.g. resetting mouse state), do it here.
+}
+
+// Bind a Scene pointer (non-owning). Used for placement/picking.
+void InputManager::bindScene(Scene* scene) {
+    m_boundScene = scene;
+}
+
+// Start placing objects of given model and shader type.
+void InputManager::startPlacement(ModelType model, ShaderType shader) {
+    placing = true;
+    placementModel = model;
+    placementShader = shader;
+}
+
+void InputManager::stopPlacement() {
+    placing = false;
+}
+
+// Handle mouse button - called from GLFW mouse button callback.
+void InputManager::onMouseButton(double x, double y, int button) {
+    // need scene + camera bound to do picking/placement
+    if (!m_boundScene || !m_boundCamera) return;
+
+    glm::vec3 worldPos;
+    int picked = m_boundScene->pickAtCursor(x, y, &worldPos);
+
+    if (picked >= 0) {
+        printf("[InputManager] picked object index %d at world [%f,%f,%f]\n", picked, worldPos.x, worldPos.y, worldPos.z);
+
+        if (placing) {
+            // placement-specific behavior: plant selected model / remove / add control point
+            if (button == GLFW_MOUSE_BUTTON_LEFT) {
+                m_boundScene->plantObjectAtWorldPos(worldPos, placementModel, placementShader);
+            }
+            else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+                bool ok = m_boundScene->removeObjectAt(picked);
+                printf("[InputManager] removeObjectAt(%d) -> %s\n", picked, ok ? "ok" : "failed");
+            }
+            else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
+                m_boundScene->addControlPoint(worldPos);
+                printf("[InputManager] added control point [%f,%f,%f] (total %zu)\n", worldPos.x, worldPos.y, worldPos.z, m_boundScene->getControlPoints().size());
+                const auto& pts = m_boundScene->getControlPoints();
+                if (pts.size() >= 4 && (pts.size() % 4) == 0) {
+                    m_boundScene->buildBezierFromControlPoints(6.0f, true);
+                    printf("[InputManager] built Bezier segment(s) from control points\n");
+                }
+            }
+        }
+        else {
+            // non-placement (default app behavior) — replicate former Application::handleMouseClick actions
+            if (button == GLFW_MOUSE_BUTTON_LEFT) {
+                m_boundScene->plantObjectAtWorldPos(worldPos, ModelType::Tree, ShaderType::Phong);
+            }
+            else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+                bool ok = m_boundScene->removeObjectAt(picked);
+                printf("[InputManager] removeObjectAt(%d) -> %s\n", picked, ok ? "ok" : "failed");
+            }
+            else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
+                m_boundScene->addControlPoint(worldPos);
+                printf("[InputManager] added control point [%f,%f,%f] (total %zu)\n", worldPos.x, worldPos.y, worldPos.z, m_boundScene->getControlPoints().size());
+                const auto& pts = m_boundScene->getControlPoints();
+                if (pts.size() >= 4 && (pts.size() % 4) == 0) {
+                    m_boundScene->buildBezierFromControlPoints(6.0f, true);
+                    printf("[InputManager] built Bezier segment(s) from control points\n");
+                }
+            }
+        }
+    }
+    else {
+        // Clicked empty space -> intersect with y=0 plane, behave similarly for placing/non-placing
+        if (button == GLFW_MOUSE_BUTTON_LEFT) {
+            int fbw, fbh; glfwGetFramebufferSize(glfwGetCurrentContext(), &fbw, &fbh);
+            glm::vec3 nearP((float)x, (float)(fbh - y), 0.0f);
+            glm::vec3 farP((float)x, (float)(fbh - y), 1.0f);
+            glm::mat4 view = m_boundScene->getCamera()->getViewMatrix();
+            glm::mat4 proj = m_boundScene->getCamera()->getProjectionMatrix();
+            glm::vec4 vp(0, 0, (float)fbw, (float)fbh);
+            glm::vec3 n = glm::unProject(nearP, view, proj, vp);
+            glm::vec3 f = glm::unProject(farP, view, proj, vp);
+            glm::vec3 dir = glm::normalize(f - n);
+            if (fabs(dir.y) > 1e-6f) {
+                float t = -n.y / dir.y;
+                if (t > 0.0f) {
+                    glm::vec3 planePos = n + dir * t;
+                    if (placing) {
+                        m_boundScene->plantObjectAtWorldPos(planePos, placementModel, placementShader);
+                    }
+                    else {
+                        m_boundScene->plantObjectAtWorldPos(planePos, ModelType::Tree, ShaderType::Phong);
+                    }
+                }
+            }
+        }
+        else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
+            int fbw, fbh; glfwGetFramebufferSize(glfwGetCurrentContext(), &fbw, &fbh);
+            glm::vec3 nearP((float)x, (float)(fbh - y), 0.0f);
+            glm::vec3 farP((float)x, (float)(fbh - y), 1.0f);
+            glm::mat4 view = m_boundScene->getCamera()->getViewMatrix();
+            glm::mat4 proj = m_boundScene->getCamera()->getProjectionMatrix();
+            glm::vec4 vp(0, 0, (float)fbw, (float)fbh);
+            glm::vec3 n = glm::unProject(nearP, view, proj, vp);
+            glm::vec3 f = glm::unProject(farP, view, proj, vp);
+            glm::vec3 dir = glm::normalize(f - n);
+            if (fabs(dir.y) > 1e-6f) {
+                float t = -n.y / dir.y;
+                if (t > 0.0f) {
+                    glm::vec3 planePos = n + dir * t;
+                    m_boundScene->addControlPoint(planePos);
+                    printf("[InputManager] added control point on plane [%f,%f,%f] (total %zu)\n", planePos.x, planePos.y, planePos.z, m_boundScene->getControlPoints().size());
+                    const auto& pts = m_boundScene->getControlPoints();
+                    if (pts.size() >= 4 && (pts.size() % 4) == 0) {
+                        m_boundScene->buildBezierFromControlPoints(0.25f, true);
+                        printf("[InputManager] built Bezier segment(s) from control points\n");
+                    }
+                }
+            }
+        }
+    }
 }
 
 // Reset internal input state (useful when switching scenes or losing focus).
@@ -44,7 +165,6 @@ bool InputManager::isKeyDown(int key) const {
 }
 
 // Edge-triggered pressed query: returns true only once per physical press.
-// After returning true the event is consumed and won't fire again until the next press.
 bool InputManager::isKeyPressed(int key) {
     auto it = keyPressedEvents.find(key);
     if (it != keyPressedEvents.end() && it->second) {
@@ -85,12 +205,10 @@ glm::vec2 InputManager::getMouseDelta() {
 }
 
 // Return scaled mouse delta and reset accumulator.
-// - dt: frame delta time in seconds. We apply Config::MouseSensitivity and scale by dt here,
-//   so callers receive a delta ready to multiply into rotation/speed calculations.
-glm::vec2 InputManager::getMouseDeltaAndReset(float dt) {
+// - dt: frame delta time in seconds. We apply Config::MouseSensitivity here but do NOT
+//   scale by dt; callers (Camera::updateOrientation) should apply dt to rotate consistently.
+glm::vec2 InputManager::getMouseDeltaAndReset(float /*dt*/) {
     glm::vec2 delta = mouseDelta * Config::MouseSensitivity;
-    // Scale by dt to produce per-frame, time-corrected displacement
-    delta *= dt;
     // reset accumulator
     mouseDelta = { 0.0f, 0.0f };
     return delta;

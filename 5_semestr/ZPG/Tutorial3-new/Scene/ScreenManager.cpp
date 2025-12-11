@@ -15,11 +15,25 @@ void ScreenManager::switchTo(int index) {
     printf("Switching to scene %d\n", index);
     currentIndex = index;
 
-    // bind camera of new scene and reset input state
+    // get new scene
     Scene* scene = getCurrentScene();
-    if (scene) {
-        scene->bindCameraAndLightToUsedShaders();
+    if (!scene) return;
+
+    // Reset scene internals so it behaves like freshly created
+    scene->reset();
+
+    // If an external InputManager was bound to this ScreenManager, attach it.
+    if (input) {
+        Camera* cam = scene->getCamera();
+        if (cam) {
+            input->bindCamera(cam);
+            input->resetState(); // ensure firstMouse and lastMouse don't cause jumps
+            input->bindScene(scene);
+        }
     }
+
+    // Update shaders with camera/light uniforms for the newly active scene
+    scene->bindCameraAndLightToUsedShaders();
 }
 
 
@@ -57,8 +71,10 @@ void ScreenManager::init() {
     Scene* scene = getCurrentScene();
     if (scene) {
         Camera* cam = scene->getCamera();
-        if (cam) {
-            InputManager::instance().bindCamera(cam);
+        if (cam && input) {
+            input->bindCamera(cam);
+            input->bindScene(scene);
+            input->resetState();
         }
     }
 }

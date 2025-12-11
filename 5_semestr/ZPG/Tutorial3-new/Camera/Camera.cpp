@@ -14,6 +14,30 @@ Camera::Camera(const glm::vec3& eye)
     viewMatrix = glm::lookAt(eye, eye + target, up);
 }
 
+void Camera::setPosition(const glm::vec3& pos) {
+    eye = pos;
+    notify(ObservableSubjects::SCamera);
+}
+
+void Camera::setTargetDirection(const glm::vec3& dir) {
+    if (glm::length(dir) < 1e-6f) return;
+    target = glm::normalize(dir);
+    // recompute spherical angles from direction
+    fi = glm::asin(glm::clamp(target.y, -1.0f, 1.0f)); // pitch
+    // alpha such that direction.x = cos(fi)*sin(alpha), direction.z = -cos(fi)*cos(alpha)
+    alpha = std::atan2(target.x, -target.z);
+    // normalize alpha to [0, 2PI)
+    alpha = std::fmod(alpha, Config::TWO_PI);
+    if (alpha < 0.0f) alpha += Config::TWO_PI;
+    notify(ObservableSubjects::SCamera);
+}
+
+void Camera::reset(const glm::vec3& eyePos, const glm::vec3& targetDir) {
+    eye = eyePos;
+    setTargetDirection(targetDir);
+    notify(ObservableSubjects::SCamera);
+}
+
 glm::mat4 Camera::getViewMatrix() {
     // Recompute and return the view matrix based on current eye/target/up.
     // Uses glm::lookAt(eye, eye+target, up) where target is a direction vector.
