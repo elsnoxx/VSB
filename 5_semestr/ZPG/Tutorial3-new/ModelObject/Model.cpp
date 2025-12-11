@@ -4,6 +4,13 @@
 #include "../lib/tiny_object/tiny_obj_loader.h"
 
 
+// Construct a Model from raw interleaved vertex data.
+// Parameters:
+//  - data: pointer to float array containing interleaved vertex attributes
+//  - size: size in bytes of the data buffer
+//  - count: number of vertices
+// The constructor creates a VBO, uploads the data, creates a VAO and
+// sets attribute pointers. The layout is inferred from `count` and `size`.
 Model::Model(const float* data, size_t size, int count)
     : vertexCount(count)
 {
@@ -41,6 +48,10 @@ Model::Model(const float* data, size_t size, int count)
     glBindVertexArray(0);
 }
 
+// Construct a Model by loading an OBJ file (tinyobjloader).
+// The OBJ is parsed and converted to an interleaved float buffer with the
+// layout: position(3), normal(3), texcoord(2). Missing normals/texcoords are
+// replaced with zeros. The resulting buffer is uploaded to a VBO/VAO.
 Model::Model(const char* name) {
     std::string inputfile = std::string("ModelObject/assets/") + name;
 
@@ -58,6 +69,7 @@ Model::Model(const char* name) {
         std::cerr << "[Model] Failed to load/parse .obj file: " << inputfile << "\n";
         return;
     }
+    // Log basic info about loaded shapes/materials
     printf("[Model] load request filename='%s' base_dir='%s' -> shapes=%zu materials=%zu\n", inputfile.c_str(), baseDir.c_str(), shapes.size(), materials.size());
     for (size_t i = 0; i < materials.size(); ++i) {
         printf("[Model] material[%zu] name='%s' diffuseTex='%s'\n", i, materials[i].name.c_str(), materials[i].diffuse_texname.c_str());
@@ -135,11 +147,13 @@ Model::Model(const char* name) {
 }
 
 Model::~Model() {
+    // Delete GL objects (VBO and VAO)
     glDeleteBuffers(1, &VBO);
     glDeleteVertexArrays(1, &VAO);
 }
 
 void Model::draw() const {
+    // Bind VAO and issue draw call. Model uses non-indexed triangles.
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 }

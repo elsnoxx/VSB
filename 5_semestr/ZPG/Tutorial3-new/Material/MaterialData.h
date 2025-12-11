@@ -1,7 +1,9 @@
 #pragma once
 #include <glm/glm.hpp>
 
-// Jednoduch� struktura popisuj�c� materi�l (ambient, diffuse, specular, shininess)
+// Simple structure describing a material (ambient, diffuse, specular, shininess)
+// `emissive` is optional and defaults to zero; non-zero emissive makes the
+// material appear self-lit (adds light independent of scene lights).
 struct MaterialData {
     glm::vec3 ambient;
     glm::vec3 diffuse;

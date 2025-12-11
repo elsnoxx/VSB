@@ -24,6 +24,12 @@ Bezier::Bezier(const std::vector<glm::vec3>& controlPoints,
 glm::vec3 Bezier::evalCubic(const glm::vec3& p0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3, float t)
 {
     float u = 1.0f - t;
+    // Cubic Bezier basis (Bernstein polynomials of degree 3):
+    // B0 = (1-t)^3
+    // B1 = 3*(1-t)^2 * t
+    // B2 = 3*(1-t) * t^2
+    // B3 = t^3
+    // Point on curve: P(t) = p0*B0 + p1*B1 + p2*B2 + p3*B3
     float b0 = u * u * u;
     float b1 = 3.0f * u * u * t;
     float b2 = 3.0f * u * t * t;
@@ -38,6 +44,9 @@ glm::vec3 Bezier::evalDerivativeNumeric(const std::vector<glm::vec3>& pts, int b
     float t1 = glm::clamp(t + eps, 0.0f, 1.0f);
     glm::vec3 p0 = evalCubic(pts[base], pts[base+1], pts[base+2], pts[base+3], t0);
     glm::vec3 p1 = evalCubic(pts[base], pts[base+1], pts[base+2], pts[base+3], t1);
+    // Numeric derivative (central difference approximation):
+    // P'(t) ≈ (P(t+eps) - P(t-eps)) / (2*eps)  (here eps is clamped at boundaries)
+    // This gives the tangent vector direction along the curve at parameter t.
     return (p1 - p0) / (t1 - t0);
 }
 
@@ -63,7 +72,8 @@ glm::mat4 Bezier::getMatrix() const
     float localT = segF - segIndex;
     int base = segIndex * 3;
 
-    // position on curve
+    // position on curve (evaluate cubic Bezier for this segment)
+    // P = p0*B0 + p1*B1 + p2*B2 + p3*B3 (see evalCubic)
     glm::vec3 p = evalCubic(pts[base + 0], pts[base + 1], pts[base + 2], pts[base + 3], localT);
 
     // base translation (apply pivot offset here if needed)
@@ -73,7 +83,10 @@ glm::mat4 Bezier::getMatrix() const
         return T;
     }
 
-    // tangent (direction) - numeric derivative
+    // tangent (direction) - numeric derivative of the Bezier curve at localT
+    // The derivative gives the velocity vector P'(t) which we use as the forward direction
+    // for orienting the transform along the path. Here we compute it numerically
+    // using a small offset (central difference) in evalDerivativeNumeric().
     glm::vec3 deriv = evalDerivativeNumeric(pts, base, localT);
     if (glm::length(deriv) < 1e-10f) {
         return T; // degenerate derivative, return translation only

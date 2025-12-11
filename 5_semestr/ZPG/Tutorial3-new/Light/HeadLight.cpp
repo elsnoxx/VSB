@@ -1,8 +1,10 @@
 #include "HeadLight.h"
 #include <iostream>
 
-// Create a HeadLight that follows the camera.
-// We use SpotLight constructor with camera position and target as initial values.
+// HeadLight: a spotlight that follows the camera. It observes the camera and
+// updates its world-space `position` and `direction` whenever the camera moves.
+// The constructor initializes the spot parameters (color and cone angles) and
+// attaches this HeadLight to the camera observer list.
 HeadLight::HeadLight(Camera* camera)
     : SpotLight(camera->getPosition(), camera->getTarget(), glm::vec3(1.0f,1.0f,1.0f), 12.5f, 17.5f),
       camera(camera)
@@ -14,7 +16,9 @@ HeadLight::HeadLight(Camera* camera)
     isOn = false;
 }
 
-// Observer update: when camera notifies, update the headlight position/direction.
+// Observer callback: called when observed subjects notify. We expect the camera
+// to send `ObservableSubjects::SCamera` when its transform changed, so update
+// the headlight origin and forward direction accordingly.
 void HeadLight::update(ObservableSubjects subject)
 {
     if (subject == ObservableSubjects::SCamera)

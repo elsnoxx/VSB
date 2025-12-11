@@ -1,7 +1,14 @@
 ﻿#include "ModelManager.h"
 #include <iostream>
 
-// include model data (cesty relativni k ModelManager.cpp v ModelObject/)
+// ModelManager: lazy-loads and caches `Model` instances for the application.
+// - Provides a singleton `instance()` accessor.
+// - `get(type)` returns a shared_ptr to a cached Model or creates it on demand.
+// - `createModel(type)` constructs the Model from either embedded vertex arrays
+//   (compiled-in models under ./Models/) or by loading an OBJ file for larger
+//   assets. The created `Model` is stored in `cache` and shared with callers.
+
+// include compiled-in model arrays (paths relative to this file)
 #include "./Models/sphere.h"
 #include "./Models/tree.h"
 #include "./Models/bushes.h"
@@ -14,6 +21,9 @@
 
 namespace {
     inline int countVertices(size_t bytes) {
+        // Helper: calculate vertex count from byte size. The embedded model
+        // arrays are stored as floats with (position+normal) = 6 floats per vertex
+        // for these simple compiled models.
         return static_cast<int>(bytes / (6 * sizeof(float)));
     }
 }
@@ -26,6 +36,7 @@ ModelManager& ModelManager::instance() {
 std::shared_ptr<Model> ModelManager::get(ModelType type) {
     auto it = cache.find(type);
     if (it != cache.end()) return it->second;
+    // Not found in cache -> create, cache and return.
     return createModel(type);
 }
 
@@ -126,7 +137,8 @@ std::shared_ptr<Model> ModelManager::createModel(ModelType type) {
     }
 
     if (!modelPtr) return nullptr;
+    // Store created model in cache and return shared_ptr to it.
     cache[type] = std::move(modelPtr);
     std::cerr << "[ModelManager] created model for type " << static_cast<int>(type) << "\n";
-    return cache[type]; 
+    return cache[type];
 }

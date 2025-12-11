@@ -9,7 +9,9 @@ public:
         return inst;
     }
 
-    // Vrací ukazatel na MaterialData (ne-vlastnìný). Implementace mùže volat stávající getMaterial() z Materials.cpp
+    // Return pointer to MaterialData (non-owning). Implementation may call an
+    // existing free function `getMaterial()` from Materials.cpp or use the
+    // internal predefined materials provided by MaterialManager.
     const MaterialData* get(MaterialType mt) const;
 
 private:

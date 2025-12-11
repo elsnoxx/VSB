@@ -7,16 +7,25 @@
 #include "../Transform/Translation.h"
 #include "../Transform/Bezier.h"
 
+// Scene: owns camera and a list of drawable objects and lights. Responsible for
+// updating scene state, drawing objects (including writing IDs for picking),
+// and binding camera/light data into shaders used by objects.
 Scene::Scene() {
+    // create camera with a default eye position
     camera = new Camera(glm::vec3(0.f, 1.f, 5.f));
+
+    // create light manager (stores raw Light* pointers)
     lightManager = new LightManager();
 
+    // remember initial camera pose for reset()
     initialCameraEye = camera->getPosition();
     initialCameraTarget = camera->getTarget();
 
+    // create a headlight attached to the camera (spotlight mounted on the camera)
     headLight = new HeadLight(camera);
     headLight->intensity = 5.0f;
-	headLight->cutOff = glm::cos(glm::radians(12.5f));
+    // set inner cone cutoff (in radians) precomputed from degrees
+    headLight->cutOff = glm::cos(glm::radians(12.5f));
     lightManager->addLight(headLight);
 }
 
@@ -57,22 +66,27 @@ Light* Scene::addLight(Light* light) {
 }
 
 void Scene::draw() {
+    // Ensure camera/view/projection and lights are uploaded to every shader
+    // that will be used to draw objects in this scene.
     bindCameraAndLightToUsedShaders();
 
-    // enable stencil for picking: we will write object IDs into stencil buffer
+    // Enable stencil buffer writing so we can implement mouse picking. We write
+    // a small ID per object into the stencil buffer, then later read it back.
     glEnable(GL_STENCIL_TEST);
-    glStencilMask(0xFF); // enable writing to all bits
+    glStencilMask(0xFF); // allow writes to all bits of the stencil buffer
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-    unsigned int id = 1;
+    unsigned int id = 1; // start object IDs at 1 (0 = no object)
     for (auto& obj : objects) {
-        unsigned int writeId = (id <= 255) ? id : 255;
+        unsigned int writeId = (id <= 255) ? id : 255; // clamp to 8-bit
         obj->setID(writeId);
+        // always pass stencil test and replace stencil value with writeId
         glStencilFunc(GL_ALWAYS, writeId, 0xFF);
         obj->draw();
         ++id;
     }
 
+    // disable stencil writes and testing after drawing
     glStencilMask(0x00);
     glDisable(GL_STENCIL_TEST);
 }
@@ -127,8 +141,10 @@ void Scene::plantObjectAtWorldPos(const glm::vec3& worldPos, ModelType type, Sha
     t.addTransform(std::make_shared<Scale>(glm::vec3(1.0f)));
     t.addTransform(std::make_shared<Translation>(worldPos));
     obj->setTransform(t);
-	obj->addTexture(TextureManager::instance().get(TextureType::WoodenFence));
-	obj->addTexture(TextureManager::instance().get(TextureType::Teren));
+
+    // Optionally attach textures (example: add two sample textures)
+    obj->addTexture(TextureManager::instance().get(TextureType::WoodenFence));
+    obj->addTexture(TextureManager::instance().get(TextureType::Teren));
     this->addObject(obj);
 }
 
@@ -157,11 +173,12 @@ void Scene::buildBezierFromControlPoints(float speed, bool loop)
             controlPoints[i + 2],
             controlPoints[i + 3]
         };
-        std:cout << "[Scene] Building Bezier segment from control points: "
+        // Log the segment control points for debugging
+        std::cout << "[Scene] Building Bezier segment from control points: "
                   << "P0(" << segment[0].x << "," << segment[0].y << "," << segment[0].z << "), "
                   << "P1(" << segment[1].x << "," << segment[1].y << "," << segment[1].z << "), "
                   << "P2(" << segment[2].x << "," << segment[2].y << "," << segment[2].z << "), "
-			<< "P3(" << segment[3].x << "," << segment[3].y << "," << segment[3].z << ")\n";
+                  << "P3(" << segment[3].x << "," << segment[3].y << "," << segment[3].z << ")\n";
         // create a new object that will follow this segment
 
         const int samples = 24;
@@ -239,7 +256,7 @@ void Scene::update(float dt, InputManager& input)
     }
 
     if (input.isKeyPressed(GLFW_KEY_F)) {
-	    std:cout << "Toggling headlight F\n";
+    	std::cout << "Toggling headlight F\n";
         switchHeadLight();
     }
 

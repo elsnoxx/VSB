@@ -4,6 +4,15 @@
 #include <iostream>
 #include <algorithm> 
 
+// TextureManager responsibilities:
+// - Create and cache OpenGL textures from files or procedurally (solid colors).
+// - Provide a single shared instance via `instance()`.
+// - Keep two caches: `cacheByPath` (path->Texture) and `cacheByType` (TextureType->Texture).
+//
+// Notes on behavior:
+// - Loaded textures are uploaded as RGBA (4 channels) to the GPU and mipmaps are generated.
+// - The manager returns `std::shared_ptr<Texture>` so ownership is shared with callers.
+
 GLuint TextureManager::CreateColorTexture(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
     unsigned char pixel[4] = { r, g, b, a };
     GLuint tex = 0;
@@ -39,14 +48,34 @@ std::shared_ptr<Texture> TextureManager::getColored(TextureType t, float r, floa
     return tex;
 }
 
-// instance() u� bylo OK
+// Singleton accessor for the TextureManager
+// Returns a reference to a single shared manager instance used throughout the app.
+/**
+ * instance
+ * --------
+ * Return the singleton TextureManager instance. The manager holds caches
+ * and is intended to be used globally to avoid duplicate GPU textures.
+ */
 TextureManager& TextureManager::instance() {
     static TextureManager inst;
     return inst;
 }
 
-// implementace get(TextureType) -- u� v souboru m�l k�d, ��dn� zm�ny pot�eba,
-// ale ujist�me se, �e signatury odpov�daj� hlavi�ce:
+// Get texture by `TextureType` enum. If a texture is not cached yet, this
+// function determines the file path (or creates a solid-color texture) and
+// loads it, caching the resulting `Texture` object for future requests.
+/**
+ * get
+ * ---
+ * Retrieve a texture identified by the `TextureType` enum. This method:
+ * 1) Checks `cacheByType` for an existing texture.
+ * 2) If missing, maps the enum to a file path (or creates a colored texture),
+ *    loads the texture with `LoadTexture()` and caches the result.
+ * Parameters:
+ *  - t: the TextureType to retrieve
+ * Returns:
+ *  - shared_ptr to the cached or newly loaded Texture, or nullptr on failure.
+ */
 std::shared_ptr<Texture> TextureManager::get(TextureType t) {
     auto it = cacheByType.find(t);
     if (it != cacheByType.end()) return it->second;
@@ -147,17 +176,33 @@ GLuint TextureManager::LoadTexture(const std::string& path) {
     GLuint tex;
     glGenTextures(1, &tex);
     glBindTexture(GL_TEXTURE_2D, tex);
-
+    // Upload RGBA texture data to GPU and generate mipmaps.
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
         GL_RGBA, GL_UNSIGNED_BYTE, data);
 
     glGenerateMipmap(GL_TEXTURE_2D);
 
+    // Set common sampling/wrap parameters: repeat wrap and trilinear filtering.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+    // Free CPU-side image memory and return the GL texture id.
     stbi_image_free(data);
     return tex;
 }
+/**
+ * LoadTexture
+ * -----------
+ * Load an image file from disk and upload it as an RGBA OpenGL texture.
+ * Parameters:
+ *  - path: filesystem path to the image file
+ * Returns:
+ *  - GL texture id (non-zero) on success, 0 on failure.
+ * Behavior/details:
+ *  - Uses stb_image to load the file; requests 4 output channels (RGBA).
+ *  - The image is flipped vertically on load to match OpenGL texture coordinate
+ *    conventions used in the project.
+ *  - Generates mipmaps and sets default wrap/filter parameters (REPEAT, trilinear).
+ */

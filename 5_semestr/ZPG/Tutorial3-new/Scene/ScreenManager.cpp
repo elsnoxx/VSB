@@ -1,5 +1,13 @@
 ﻿#include "ScreenManager.h"
 
+// ScreenManager: manages multiple Scene instances and forwards high-level
+// operations like update/draw and input binding to the active scene.
+// Responsibilities:
+// - Hold a list of available scenes and the currently active index
+// - Switch between scenes, resetting scene state and re-binding input/camera
+// - Forward update/draw calls from the application to the active scene
+// - Change camera properties (e.g., FOV) on the active scene's camera
+
 
 void ScreenManager::setScenes(const std::vector<Scene*>& s) {
     scenes = s;
@@ -15,26 +23,30 @@ void ScreenManager::switchTo(int index) {
     printf("Switching to scene %d\n", index);
     currentIndex = index;
 
-    // get new scene
+    // Obtain the newly active scene and reset its runtime state so it
+    // behaves like freshly created (camera reset, control points cleared, etc.).
     Scene* scene = getCurrentScene();
     if (!scene) return;
 
-    // Reset scene internals so it behaves like freshly created
+    // Reset transient scene state (camera pose, selections, control points)
     scene->reset();
 
-    // If an external InputManager was bound to this ScreenManager, attach it.
+    // If an InputManager has been bound to this ScreenManager, re-bind it to
+    // the new scene's camera so input continues to control the correct camera.
     if (input) {
         Camera* cam = scene->getCamera();
         if (cam) {
             input->bindCamera(cam);
-            input->resetState(); // ensure firstMouse and lastMouse don't cause jumps
+            // clear internal input bookkeeping to avoid sudden mouse jumps
+            input->resetState();
             input->bindScene(scene);
+            // immediately push camera/light uniforms to shaders used by the scene
             scene->bindCameraAndLightToUsedShaders();
             printf("[ScreenManager] switchTo(): input bound to camera %p for scene %d\n", (void*)cam, index);
         }
     }
 
-    // Update shaders with camera/light uniforms for the newly active scene
+    // Ensure shaders are aware of the new scene's camera and lights
     scene->bindCameraAndLightToUsedShaders();
 }
 
