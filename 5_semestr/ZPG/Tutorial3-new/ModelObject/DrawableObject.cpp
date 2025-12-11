@@ -6,6 +6,7 @@
 DrawableObject::DrawableObject(ModelType modelType, ShaderType shaderType)
 {
     // create a non-owning shared_ptr with a no-op deleter — ModelManager still owns the model
+	modelType = modelType;
     model = ModelManager::instance().get(modelType);
     shaderProgram = ShaderFactory::Get(shaderType);
 }
@@ -56,8 +57,12 @@ void DrawableObject::draw() {
     }
 
     // bind exactly ONE texture into texture unit 0 and set sampler uniform "textureUnitID"
-    if (textures.size() > 0 && textures[0]) {
-        auto tex = textures[0];
+    int texIndexToUse = 0;
+    if (activeTextureIndex >= 0) texIndexToUse = activeTextureIndex;
+    else texIndexToUse = 0; // default
+
+    if (textures.size() > 0 && texIndexToUse >= 0 && texIndexToUse < (int)textures.size() && textures[texIndexToUse]) {
+        auto tex = textures[texIndexToUse];
         GLuint tid = tex->getId();
 
         if (glIsTexture(tid)) {
@@ -65,6 +70,9 @@ void DrawableObject::draw() {
             glBindTexture(GL_TEXTURE_2D, tid);
             shaderProgram->setUniform("textureUnitID", 0); // sampler2D
             shaderProgram->setUniform("useTexture", 1);
+        }
+        else {
+            shaderProgram->setUniform("useTexture", 0);
         }
     }
     else {

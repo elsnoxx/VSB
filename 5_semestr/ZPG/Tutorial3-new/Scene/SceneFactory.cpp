@@ -203,7 +203,11 @@ Scene* SceneFactory::createForestScene() {
             ++i;
 
             // create object via ModelType - DrawableObject will obtain the model from ModelManager in its constructor
-            DrawableObject* obj = new DrawableObject(modelType, ShaderType::Phong, TextureType::Grass);
+            DrawableObject* obj = new DrawableObject(modelType, ShaderType::Phong);
+			obj->addTexture(TextureManager::instance().get(TextureType::WoodenFence));
+			obj->addTexture(TextureManager::instance().get(TextureType::Teren));
+            int variant = (rng() & 1); // rychlý bitový výběr (0/1)
+            obj->setActiveTextureIndex(variant);
             Transform t;
             float scale = isTree ? distTreeScale(rng) : distBushScale(rng);
             t.addTransform(std::make_shared<Scale>(glm::vec3(scale)));

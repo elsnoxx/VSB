@@ -39,6 +39,8 @@ public:
         m_transformNode = node;
     }
 
+    void setActiveTextureIndex(int idx) { activeTextureIndex = idx; }
+    int getActiveTextureIndex() const { return activeTextureIndex; }
 
     void draw();
 
@@ -50,4 +52,6 @@ private:
     Transform transform;
     std::shared_ptr<TransformNode> m_transformNode;
     const MaterialData* material = nullptr; // optional, not owned
+    ModelType modelType;
+    int activeTextureIndex = -1;
 };
