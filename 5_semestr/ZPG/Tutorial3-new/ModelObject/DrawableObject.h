@@ -3,16 +3,16 @@
 #include <memory>
 #include "Model.h"
 #include "../Shader/ShaderFactory.h"
-#include "TextureType.h"
-#include "Texture.h"
 #include "ModelType.h"
 #include "ModelManager.h"
-#include "TextureManager.h"
 #include "../Transform/Transform.h"
 #include "../Transform/TransformNode.cpp"
-#include "MaterialType.h"
-#include "MaterialManager.h"
-#include "MaterialData.h"
+#include "../Material/MaterialType.h"
+#include "../Material/MaterialManager.h"
+#include "../Textures/Texture.h"
+#include "../Textures/TextureType.h"
+#include "../Textures/TextureManager.h"
+
 
 class DrawableObject {
 public:

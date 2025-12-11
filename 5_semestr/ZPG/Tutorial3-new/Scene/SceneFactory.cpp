@@ -3,7 +3,7 @@
 #include "../Light/PointLight.h"
 #include "../Transform/Bezier.h"
 #include "../Light/DirectionalLight.h"
-#include "../ModelObject/MaterialType.h"
+#include "../Material/MaterialType.h"
 
 
 std::vector<Scene*> SceneFactory::createAllScenes() {
@@ -35,6 +35,7 @@ Scene* SceneFactory::createSceneSolarSystem()
     // =========================
     //  SUN (root object)
     // =========================
+    // menší viditelná koule pro Slunce, vykreslená jako unlit/textured (světélko zůstane z PointLight)
     auto sunNode = std::make_shared<TransformNode>();
     sunNode->addTransform(std::make_shared<Scale>(glm::vec3(1.0f)));
 
@@ -67,13 +68,21 @@ Scene* SceneFactory::createSceneSolarSystem()
     //  MOON (child of Earth)
     // =========================
     auto moonNode = std::make_shared<TransformNode>();
+    // Kompenzujeme parent scale (earth scale = 0.10f), takže posun i scale zvětšíme ~10×
     moonNode->addTransform(std::make_shared<Rotation>([]() { return glfwGetTime() * 25.0f; }, glm::vec3(0, 1, 0)));
-    moonNode->addTransform(std::make_shared<Translation>(glm::vec3(0.6f, 0, 0)));
-    moonNode->addTransform(std::make_shared<Scale>(glm::vec3(0.03f)));
+    moonNode->addTransform(std::make_shared<Translation>(glm::vec3(6.0f, 0, 0))); // bylo 0.6f
+    moonNode->addTransform(std::make_shared<Scale>(glm::vec3(0.3f)));             // bylo 0.03f
 
     earthNode->addChild(moonNode); // Attach moon to earth
 
-    DrawableObject* moon = new DrawableObject(ModelType::Moon, ShaderType::Phong, TextureType::Moon);
+    // Prefer dedicated Moon model when available, otherwise use Sphere + Moon texture
+    DrawableObject* moon = nullptr;
+    if (ModelManager::instance().get(ModelType::Moon)) {
+        moon = new DrawableObject(ModelType::Moon, ShaderType::Phong, TextureType::Moon);
+    }
+    else {
+        moon = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Moon);
+    }
     moon->setTransformNode(moonNode);
     scene->addObject(moon);
 
@@ -247,7 +256,9 @@ Scene* SceneFactory::createForestScene() {
 
                 Transform tf;
                 // very small sphere
+				tf.addTransform(std::make_shared<Translation>(basePos));
                 tf.addTransform(std::make_shared<Scale>(glm::vec3(0.03f)));
+				firefly->setMaterial(MaterialType::Emissive);
 
                 firefly->setTransform(tf);
                 scene->addObject(firefly);
@@ -266,25 +277,6 @@ Scene* SceneFactory::createForestScene() {
             scene->addLight(fl);
         }
         };
-
-    // 1) Directional light (sun) - uniform light pointing downward
-    //DirectionalLight* sunDirectional = new DirectionalLight(
-    //    glm::normalize(glm::vec3(-0.3f, -1.0f, -0.2f)),   // direction
-    //    glm::vec3(1.0f, 0.95f, 0.9f)                      // color
-    //);
-    //sunDirectional->intensity = 0.9f; // set intensity separately
-    //scene->addLight(sunDirectional);
-
-    //// 2) Main point light (distant "sun glow") - short range, higher position
-    //PointLight* sunPoint = new PointLight(
-    //    glm::vec3(0.0f, 25.0f, 0.0f),  // position
-    //    glm::vec3(1.0f, 0.95f, 0.9f),  // color
-    //    1.0f,  // constant
-    //    0.022f, // linear
-    //    0.0019f // quadratic (slower attenuation than fireflies)
-    //);
-    //sunPoint->intensity = 1.2f;
-    //scene->addLight(sunPoint);
 
     // example: if SpotLight has signature (pos, dir, innerCos, outerCos, color, constant, linear, quadratic)
     SpotLight* searchLight = new SpotLight(

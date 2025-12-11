@@ -133,7 +133,7 @@ glfw3.lib
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
-    <ClCompile Include="ModelObject\MaterialManager.cpp" />
+    <ClCompile Include="Material\MaterialManager.cpp" />
     <ClCompile Include="Transform\Bezier.cpp" />
     <ClCompile Include="Callbacks.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
@@ -147,14 +147,14 @@ glfw3.lib
     <ClCompile Include="ModelObject\DrawableObject.cpp" />
     <ClCompile Include="ModelObject\Model.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
-    <ClCompile Include="ModelObject\Texture.cpp" />
+    <ClCompile Include="Textures\Texture.cpp" />
     <ClCompile Include="Scene\SceneFactory.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\ScreenManager.cpp" />
     <ClCompile Include="Shader\ShaderFactory.cpp" />
     <ClCompile Include="Observer\Subject.cpp" />
     <ClCompile Include="Light\SpotLight.cpp" />
-    <ClCompile Include="ModelObject\TextureManager.cpp" />
+    <ClCompile Include="Textures\TextureManager.cpp" />
     <ClCompile Include="Transform\Rotation.cpp" />
     <ClCompile Include="Transform\Scale.cpp" />
     <ClCompile Include="Shader\FragmentShader.cpp" />
@@ -167,9 +167,9 @@ glfw3.lib
     <ClCompile Include="Transform\Translation.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ModelObject\MaterialData.h" />
-    <ClInclude Include="ModelObject\MaterialManager.h" />
-    <ClInclude Include="ModelObject\MaterialType.h" />
+    <ClInclude Include="Material\MaterialData.h" />
+    <ClInclude Include="Material\MaterialManager.h" />
+    <ClInclude Include="Material\MaterialType.h" />
     <ClInclude Include="ModelObject\Models\skycube.h" />
     <ClInclude Include="Transform\Bezier.h" />
     <ClInclude Include="Camera\Camera.h" />
@@ -183,8 +183,8 @@ glfw3.lib
     <ClInclude Include="ModelObject\ModelManager.h" />
     <ClInclude Include="ModelObject\Models\triangle.h" />
     <ClInclude Include="ModelObject\ModelType.h" />
-    <ClInclude Include="ModelObject\Texture.h" />
-    <ClInclude Include="ModelObject\TextureType.h" />
+    <ClInclude Include="Textures\Texture.h" />
+    <ClInclude Include="Textures\TextureType.h" />
     <ClInclude Include="Observer\ObservableSubjects.h" />
     <ClInclude Include="Observer\Observer.h" />
     <ClInclude Include="Light\PointLight.h" />
@@ -195,7 +195,7 @@ glfw3.lib
     <ClInclude Include="Shader\ShaderType.h" />
     <ClInclude Include="Observer\Subject.h" />
     <ClInclude Include="Light\SpotLight.h" />
-    <ClInclude Include="ModelObject\TextureManager.h" />
+    <ClInclude Include="Textures\TextureManager.h" />
     <ClInclude Include="Transform\AbstractTransform.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Callbacks.h" />

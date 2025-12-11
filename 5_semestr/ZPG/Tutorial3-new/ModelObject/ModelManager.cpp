@@ -94,7 +94,7 @@ std::shared_ptr<Model> ModelManager::createModel(ModelType type) {
         modelPtr = std::make_shared<Model>("solarSystem/mercury/Mercury1K.obj");
         break;
     case ModelType::Moon:
-        modelPtr = std::make_shared<Model>("solarSystem/moon/Moon 2K.obj");
+        modelPtr = std::make_shared<Model>("solarSystem/moon/Moon2K.obj");
         break;
     case ModelType::Mars:
         modelPtr = std::make_shared<Model>("solarSystem/mars/Mars 2K.obj");

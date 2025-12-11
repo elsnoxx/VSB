@@ -26,7 +26,7 @@ std::string LoadFile(const std::string& path)
         std::cerr << "[ShaderFactory] ERROR: File EMPTY: " << path << "\n";
     }
     else {
-        std::cerr << "[ShaderFactory] Loaded '" << path << "' (" << content.size() << " bytes)\n";
+        std::cout << "[ShaderFactory] Loaded '" << path << "' (" << content.size() << " bytes)\n";
     }
     return content;
 }

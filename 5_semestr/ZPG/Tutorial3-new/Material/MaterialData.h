@@ -1,10 +1,11 @@
 #pragma once
 #include <glm/glm.hpp>
 
-// Jednoduchá struktura popisující materiál (ambient, diffuse, specular, shininess)
+// Jednoduchï¿½ struktura popisujï¿½cï¿½ materiï¿½l (ambient, diffuse, specular, shininess)
 struct MaterialData {
     glm::vec3 ambient;
     glm::vec3 diffuse;
     glm::vec3 specular;
     float shininess;
+    glm::vec3 emissive = glm::vec3(0.0f);
 };

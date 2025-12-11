@@ -26,6 +26,8 @@ uniform float shininess;
 uniform float ambientStrength;
 uniform vec3 materialDiffuse;
 uniform vec3 materialSpecular;
+uniform vec3 materialEmissive;
+uniform int useEmissive;
 
 void main()
 {
@@ -90,5 +92,12 @@ void main()
     vec3 diffuse = totalDiffuse * baseColor;
     vec3 specular = materialSpecular * totalSpec;
 
-    frag_colour = vec4(ambient + diffuse + specular, 1.0);
+    vec3 result = ambient + diffuse + specular;
+
+    // ----- ADD EMISSIVE -----
+    if (useEmissive == 1) {
+        result += materialEmissive;
+    }
+
+    frag_colour = vec4(result, 1.0);
 }

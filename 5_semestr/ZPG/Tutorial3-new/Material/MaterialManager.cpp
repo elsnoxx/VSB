@@ -11,6 +11,9 @@ const MaterialData* MaterialManager::get(MaterialType mt) const {
     static const MaterialData matMetal{ {0.25f,0.25f,0.25f},{0.4f,0.4f,0.4f},   {0.8f,0.8f,0.8f},    64.0f };
     static const MaterialData matConst{ {1.0f,1.0f,1.0f},   {1.0f,1.0f,1.0f},   {0.0f,0.0f,0.0f},    1.0f };
     static const MaterialData matSky{ {0.3f,0.35f,0.45f}, {0.3f,0.35f,0.45f}, {0.0f,0.0f,0.0f},    1.0f };
+    static const MaterialData matEmissive{ {0,0,0}, {0,0,0}, {0,0,0}, 1.0f ,{3.0f,3.0f,2.0f} };
+
+    
 
     switch (mt) {
     case MaterialType::Wood:     return &matWood;
@@ -18,6 +21,7 @@ const MaterialData* MaterialManager::get(MaterialType mt) const {
     case MaterialType::Metal:    return &matMetal;
     case MaterialType::Constant: return &matConst;
     case MaterialType::Skydome:  return &matSky;
+    case MaterialType::Emissive: return &matEmissive;
     default:                     return &matConst;
     }
 }

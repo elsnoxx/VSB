@@ -99,10 +99,10 @@
     <ClCompile Include="Light\LightManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ModelObject\TextureManager.cpp">
+    <ClCompile Include="Textures\TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ModelObject\Texture.cpp">
+    <ClCompile Include="Textures\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Transform\TransformNode.cpp">
@@ -111,7 +111,7 @@
     <ClCompile Include="Transform\Bezier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ModelObject\MaterialManager.cpp">
+    <ClCompile Include="Material\MaterialManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -257,13 +257,13 @@
     <ClInclude Include="Light\LightManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModelObject\TextureType.h">
+    <ClInclude Include="Textures\TextureType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModelObject\Texture.h">
+    <ClInclude Include="Textures\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModelObject\TextureManager.h">
+    <ClInclude Include="Textures\TextureManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ModelObject\Models\triangle.h">
@@ -275,13 +275,13 @@
     <ClInclude Include="ModelObject\Models\skycube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModelObject\MaterialManager.h">
+    <ClInclude Include="Material\MaterialManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModelObject\MaterialType.h">
+    <ClInclude Include="Material\MaterialType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModelObject\MaterialData.h">
+    <ClInclude Include="Material\MaterialData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -52,9 +52,16 @@ Model::Model(const char* name) {
 
     bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, inputfile.c_str(), baseDir.c_str());
 
-    if (!warn.empty()) std::cout << "tinyobj warn: " << warn << std::endl;
-    if (!err.empty()) std::cerr << "tinyobj err: " << err << std::endl;
-    if (!ret) throw std::runtime_error("Failed to load OBJ file!");
+    if (!warn.empty()) printf("[Model] tinyobj warning: %s\n", warn.c_str());
+    if (!err.empty())  printf("[Model] tinyobj error: %s\n", err.c_str());
+    if (!ret) {
+        std::cerr << "[Model] Failed to load/parse .obj file: " << inputfile << "\n";
+        return;
+    }
+    printf("[Model] load request filename='%s' base_dir='%s' -> shapes=%zu materials=%zu\n", inputfile.c_str(), baseDir.c_str(), shapes.size(), materials.size());
+    for (size_t i = 0; i < materials.size(); ++i) {
+        printf("[Model] material[%zu] name='%s' diffuseTex='%s'\n", i, materials[i].name.c_str(), materials[i].diffuse_texname.c_str());
+    }
 
     // interleaved: pos(3), normal(3), uv(2) => stride = 8 floats
     std::vector<float> vertices;

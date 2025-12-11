@@ -48,7 +48,6 @@ void Scene::addObject(DrawableObject* obj) {
 
     if (shader) {
         shader->attachCamera(camera);
-        printf("[Scene] addObject(): attached shader program to camera %p\n", (void*)camera);
     }
 }
 

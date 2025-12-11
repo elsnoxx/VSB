@@ -4,5 +4,6 @@ enum class MaterialType {
     Plastic,
     Metal,
     Constant,
-    Skydome
+    Skydome,
+    Emissive,
 };

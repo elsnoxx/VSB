@@ -40,7 +40,6 @@ void ShaderProgram::update(ObservableSubjects subject)
     use();
 
     if (subject == ObservableSubjects::SCamera) {
-        printf("[ShaderProgram] update(): SCamera notify for program %u\n", id);
         if (camera) {
             setUniform("viewMatrix", camera->getViewMatrix());
             setUniform("projectionMatrix", camera->getProjectionMatrix());
@@ -64,7 +63,6 @@ void ShaderProgram::attachCamera(Camera* cam)
 		camera->detach(this);
     camera = cam;
     camera->attach(this);
-    printf("[ShaderProgram] attachCamera(): program %u attached to camera %p\n", id, (void*)cam);
 	update(ObservableSubjects::SCamera);
 }
 
