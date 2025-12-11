@@ -31,6 +31,19 @@ void Application::updateViewport(double x, double y) {
 
 void Application::switchScene(int index) {
     screenManager.switchTo(index);
+
+    // Ensure input is initialized for the newly switched scene so the camera
+    // doesn't require an extra click or mouse move to start responding.
+    // Sample current cursor position and prime the InputManager's lastMousePos.
+    double cx = 0.0, cy = 0.0;
+    if (window) glfwGetCursorPos(window, &cx, &cy);
+    // Reset internal input state (clears accumulators) and set the last mouse
+    // position to current cursor so next movement produces a proper delta.
+    input.resetState();
+    input.onMouseMove(cx, cy);
+
+    // Update viewport/projection and shader bindings for the new scene now.
+    updateViewport(cx, cy);
 }
 
 void Application::updateFOV(float radians) {
