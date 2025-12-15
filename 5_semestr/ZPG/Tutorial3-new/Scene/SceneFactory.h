@@ -40,5 +40,8 @@ private:
 
     // Tutorial 5
     static Scene* createSceneShrekFamily();
+
+    // to show on konsultation
+    static Scene* createScenePhongAndBlingWithTexture();
 	
 };

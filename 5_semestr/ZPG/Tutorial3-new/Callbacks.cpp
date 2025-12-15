@@ -49,6 +49,16 @@ void callbackKey(GLFWwindow* window, int key, int scancode, int action, int mods
             printf("[FOV] Set to 130 degrees\n");
             
         }
+        else if (key == GLFW_KEY_F4)
+        {
+            if (Config::Shininess == 32.0f) {
+                Config::Shininess == 1.0f;
+            }
+            else
+            {
+                Config::Shininess == 1.0f;
+            }
+        }
         
     }
 

@@ -16,14 +16,17 @@ std::vector<Scene*> SceneFactory::createAllScenes() {
 
         // Tutorial 3
         createSceneSphereLights(),
+        createScenePhongAndBlingWithTexture(),
 
-        createSceneDifferentModes(),
+        //createSceneDifferentModes(),
 
         createSceneSolarSystem(),
 
         createSceneFormula1(),
 
         createForestScene(),
+
+        
         
     };
 }
@@ -39,7 +42,7 @@ Scene* SceneFactory::createSceneSolarSystem()
     auto sunNode = std::make_shared<TransformNode>();
     sunNode->addTransform(std::make_shared<Scale>(glm::vec3(1.0f)));
 
-    DrawableObject* sun = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Sun);
+    DrawableObject* sun = new DrawableObject(ModelType::Sphere, ShaderType::Blinn, TextureType::Sun);
     sun->setTransformNode(sunNode);   // use shared_ptr API
     scene->addObject(sun);
 
@@ -59,7 +62,7 @@ Scene* SceneFactory::createSceneSolarSystem()
 
     sunNode->addChild(earthNode); // Earth is child of Sun
 
-    DrawableObject* earth = new DrawableObject(ModelType::Earth, ShaderType::Phong, TextureType::Earth);
+    DrawableObject* earth = new DrawableObject(ModelType::Earth, ShaderType::Blinn, TextureType::Earth);
     earth->setTransformNode(earthNode);
     scene->addObject(earth);
 
@@ -78,10 +81,10 @@ Scene* SceneFactory::createSceneSolarSystem()
     // Prefer dedicated Moon model when available, otherwise use Sphere + Moon texture
     DrawableObject* moon = nullptr;
     if (ModelManager::instance().get(ModelType::Moon)) {
-        moon = new DrawableObject(ModelType::Moon, ShaderType::Phong, TextureType::Moon);
+        moon = new DrawableObject(ModelType::Moon, ShaderType::Blinn, TextureType::Moon);
     }
     else {
-        moon = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Moon);
+        moon = new DrawableObject(ModelType::Sphere, ShaderType::Blinn, TextureType::Moon);
     }
     moon->setTransformNode(moonNode);
     scene->addObject(moon);
@@ -113,7 +116,7 @@ Scene* SceneFactory::createSceneSolarSystem()
 
         sunNode->addChild(node);
 
-        DrawableObject* planet = new DrawableObject(p.model, ShaderType::Phong, p.texture);
+        DrawableObject* planet = new DrawableObject(p.model, ShaderType::Blinn, p.texture);
         planet->setTransformNode(node);
         scene->addObject(planet);
     }
@@ -129,7 +132,7 @@ Scene* SceneFactory::createForestScene() {
     Scene* scene = new Scene();
 
     // create main objects directly via ModelType
-    DrawableObject* shrek = new DrawableObject(ModelType::Shrek, ShaderType::Phong, TextureType::Shrek);
+    DrawableObject* shrek = new DrawableObject(ModelType::Shrek, ShaderType::Blinn, TextureType::Shrek);
     {
         Transform ts;
         ts.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
@@ -138,7 +141,7 @@ Scene* SceneFactory::createForestScene() {
         scene->addObject(shrek);
     }
 
-    DrawableObject* fiona = new DrawableObject(ModelType::Fiona, ShaderType::Phong, TextureType::Fiona);
+    DrawableObject* fiona = new DrawableObject(ModelType::Fiona, ShaderType::Blinn, TextureType::Fiona);
     {
         Transform tf;
         tf.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
@@ -147,7 +150,7 @@ Scene* SceneFactory::createForestScene() {
         scene->addObject(fiona);
     }
 
-    DrawableObject* toilet = new DrawableObject(ModelType::Toilet, ShaderType::Phong, TextureType::Toilet);
+    DrawableObject* toilet = new DrawableObject(ModelType::Toilet, ShaderType::Blinn, TextureType::Toilet);
     {
         Transform tt;
         tt.addTransform(std::make_shared<Scale>(glm::vec3(0.7f)));
@@ -156,7 +159,7 @@ Scene* SceneFactory::createForestScene() {
         scene->addObject(toilet);
     }
 
-    DrawableObject* ground = new DrawableObject(ModelType::Plain, ShaderType::Phong, TextureType::Teren);
+    DrawableObject* ground = new DrawableObject(ModelType::Teren, ShaderType::Blinn, TextureType::Teren);
     {
         Transform tg;
         tg.addTransform(std::make_shared<Scale>(glm::vec3(50.0f, 1.0f, 50.0f)));
@@ -165,7 +168,7 @@ Scene* SceneFactory::createForestScene() {
         scene->addObject(ground);
     }
 
-    DrawableObject* login = new DrawableObject(ModelType::Login, ShaderType::Phong, TextureType::WoodenFence);
+    DrawableObject* login = new DrawableObject(ModelType::Login, ShaderType::Blinn, TextureType::WoodenFence);
     {
         static float angle = 0.0f;
         Transform tl;
@@ -212,7 +215,7 @@ Scene* SceneFactory::createForestScene() {
             ++i;
 
             // create object via ModelType - DrawableObject will obtain the model from ModelManager in its constructor
-            DrawableObject* obj = new DrawableObject(modelType, ShaderType::Phong);
+            DrawableObject* obj = new DrawableObject(modelType, ShaderType::Blinn);
 			obj->addTexture(TextureManager::instance().get(TextureType::WoodenFence));
 			obj->addTexture(TextureManager::instance().get(TextureType::Teren));
             int variant = (rng() & 1); // rychlý bitový výběr (0/1)
@@ -226,10 +229,10 @@ Scene* SceneFactory::createForestScene() {
             obj->setTransform(t);
             scene->addObject(obj);
         }
-        };
+    };
 
     // 50 trees and 50 bushes (use enums instead of raw pointers)
-    placeObjects(ModelType::Tree, 50, true);
+    placeObjects(ModelType::Tree, 100, true);
     placeObjects(ModelType::Bushes, 50, false);
 
     auto addFireflies = [&](int count) {
@@ -243,16 +246,11 @@ Scene* SceneFactory::createForestScene() {
         std::uniform_real_distribution<float> distPhase(0.0f, 6.28318530718f);
 
         for (int i = 0; i < count; i++) {
-            glm::vec3 basePos(distRange(rng), distHeight(rng), distRange(rng));
+            glm::vec3 basePos(distRange(rng), 2, distRange(rng));
 
             // visual glow sphere - small with a simple colored texture
-            DrawableObject* firefly = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Yellow);
+            DrawableObject* firefly = new DrawableObject(ModelType::Sphere, ShaderType::Blinn, TextureType::Yellow);
             {
-                // random movement parameters
-                float radius = distRadius(rng);
-                float speed = distSpeed(rng);
-                float phase = distPhase(rng);
-                float bobAmp = 0.25f + (radius * 0.1f);
 
                 Transform tf;
                 // very small sphere
@@ -267,13 +265,13 @@ Scene* SceneFactory::createForestScene() {
             // light -> smaller range, lower intensity (quick falloff)
             PointLight* fl = new PointLight(
                 basePos,
-                glm::vec3(1.0f, 0.95f, 0.6f),  // color of the firefly
+                glm::vec3(0.0f, 0.6f, 1.0f),  // color of the firefly
                 1.0f,   // constant
                 1.5f,   // linear (higher value = faster attenuation)
                 2.5f    // quadratic (higher = even faster attenuation)
             );
 
-            fl->intensity = 0.8f;      // overall weaker light
+            fl->intensity = 1.8f;
             scene->addLight(fl);
         }
         };
@@ -291,7 +289,7 @@ Scene* SceneFactory::createForestScene() {
 
 
     // 5) Fireflies (point lights with small range) - there is already a helper function, call it
-    addFireflies(5);
+    addFireflies(10);
 
     // optionally: small example point light near the character
     glm::vec3 lanternPos(2.0f, 1.0f, 0.5f);
@@ -302,7 +300,7 @@ Scene* SceneFactory::createForestScene() {
     scene->addLight(lantern);
 
     // 2) visual marker for the light (small sphere with colored texture)
-    DrawableObject* lanternVis = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Green);
+    DrawableObject* lanternVis = new DrawableObject(ModelType::Sphere, ShaderType::Blinn, TextureType::Green);
     {
         Transform lt;
         lt.addTransform(std::make_shared<Scale>(glm::vec3(0.06f)));   // marker size
@@ -332,7 +330,7 @@ Scene* SceneFactory::createForestScene() {
     scene->addLight(fionaReflector);
 
     // optional: small visual marker for the reflector (small sphere)
-    DrawableObject* reflectorVis = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Yellow);
+    DrawableObject* reflectorVis = new DrawableObject(ModelType::Sphere, ShaderType::Blinn, TextureType::Yellow);
     {
         Transform tr;
         tr.addTransform(std::make_shared<Scale>(glm::vec3(0.05f)));
@@ -347,25 +345,58 @@ Scene* SceneFactory::createForestScene() {
 
 Scene* SceneFactory::createSceneSphereLights() {
     Scene* scene = new Scene();
-
     float offset = 2.5f;
-
     std::vector<glm::vec3> positions = {
         { offset, 0, 0 },
         {-offset, 0, 0 },
         { 0,  offset, 0 },
         { 0, -offset, 0 }
     };
+   
+    //DrawableObject* objRight = new DrawableObject(ModelType::Earth, ShaderType::Blinn, TextureType::Earth);
 
-    for (size_t i = 0; i < positions.size(); ++i) {
-        DrawableObject* obj = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Red);
+    //Transform tR;
+    //tR.addTransform(std::make_shared<Scale>(glm::vec3(0.2f)));
+    //tR.addTransform(std::make_shared<Translation>(glm::vec3(offset * 4, 0, 0)));
+    //tR.addTransform(std::make_shared<Rotation>([]() {
+    //    return (float)glfwGetTime() * 50.0f;
+    //    }, glm::vec3(0, 0, 1)));
+    //objRight->setTransform(tR);
+    //scene->addObject(objRight);
 
-        Transform t;
-        t.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
-        t.addTransform(std::make_shared<Translation>(positions[i]));
-        obj->setTransform(t);
-        scene->addObject(obj);
-    }
+    DrawableObject* objRight = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Red);
+
+    Transform tR;
+    tR.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+    tR.addTransform(std::make_shared<Translation>(positions[0]));
+    objRight->setTransform(tR);
+    scene->addObject(objRight);
+
+    DrawableObject* objLeft = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Red);
+
+    Transform tL;
+    tL.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+    tL.addTransform(std::make_shared<Translation>(positions[1]));
+    objLeft->setTransform(tL);
+    scene->addObject(objLeft);
+
+    DrawableObject* objUp = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Red);
+
+    Transform tU;
+    tU.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+    tU.addTransform(std::make_shared<Translation>(positions[2]));
+    objUp->setTransform(tU);
+    scene->addObject(objUp);
+
+    DrawableObject* objDown = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Red);
+
+    Transform tD;
+    tD.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+    tD.addTransform(std::make_shared<Translation>(positions[3]));
+    objDown->setTransform(tD);
+    scene->addObject(objDown);
+        
+    
 
     PointLight* center = new PointLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 6.0f);
     scene->addLight(center);
@@ -428,7 +459,7 @@ Scene* SceneFactory::createSceneFormula1() {
     scene->addLight(center);
 
     // moving Formula1 model
-    DrawableObject* obj = new DrawableObject(ModelType::Formula1, ShaderType::Phong, TextureType::WoodenFence);
+    DrawableObject* obj = new DrawableObject(ModelType::Formula1, ShaderType::Blinn, TextureType::WoodenFence);
     {
         //obj->addTexture(TextureManager::instance().get(TextureType::WoodenFence));
         obj->setMaterial(MaterialType::Metal);
@@ -436,10 +467,10 @@ Scene* SceneFactory::createSceneFormula1() {
         Transform t;
         // nejdřív Bezier s orientací, pak scale
         std::vector<glm::vec3> segment = {
-            { -40.0f, 0.0f, -10.0f },
+            { -20.0f, 0.0f, 10.0f },
             { -10.5f, 0.0f,  10.5f },
             {  10.5f, 0.0f,  10.5f },
-            {  40.0f, 0.0f, -10.0f }
+            {  20.0f, 0.0f, -10.0f }
         };
         t.addTransform(std::make_shared<Bezier>(segment, 6.0f, true /*loop*/, true /*orient*/, glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, -0.25f, 0.0f)));
         t.addTransform(std::make_shared<Scale>(glm::vec3(0.05f)));
@@ -521,6 +552,70 @@ Scene* SceneFactory::createScene4() {
         obj->setTransform(t);
         scene->addObject(obj);
     }
+
+    return scene;
+}
+
+
+Scene* SceneFactory::createScenePhongAndBlingWithTexture() {
+    Scene* scene = new Scene();
+    float offset = 2.5f;
+    std::vector<glm::vec3> positions = {
+        { offset, 0, 0 },
+        {-offset, 0, 0 },
+        { 0,  offset, 0 },
+        { 0, -offset, 0 }
+    };
+
+    DrawableObject* objRight = new DrawableObject(ModelType::Earth, ShaderType::Blinn, TextureType::Earth);
+
+    Transform tR;
+    tR.addTransform(std::make_shared<Scale>(glm::vec3(0.2f)));
+
+    // rotate around 
+    tR.addTransform(std::make_shared<Translation>(glm::vec3(offset * 4, 0, 0)));
+    tR.addTransform(std::make_shared<Rotation>([]() {
+        return (float)glfwGetTime() * 50.0f;
+        }, glm::vec3(0, 1, 0)));
+
+    
+
+    // rotate around center
+    //tR.addTransform(std::make_shared<Translation>(glm::vec3(0, 0, 0)));
+    //tR.addTransform(std::make_shared<Rotation>([]() { return (float)glfwGetTime() * 20.0f; }, glm::vec3(0, 0, 1)));
+    //tR.addTransform(std::make_shared<Translation>(glm::vec3(0, offset * 4, 0)));
+
+    objRight->setTransform(tR);
+    scene->addObject(objRight);
+
+    DrawableObject* objLeft = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Red);
+
+    Transform tL;
+    tL.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+    tL.addTransform(std::make_shared<Translation>(positions[1]));
+    objLeft->setTransform(tL);
+    scene->addObject(objLeft);
+
+    DrawableObject* objUp = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Red);
+
+    Transform tU;
+    tU.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+    tU.addTransform(std::make_shared<Translation>(positions[2]));
+    objUp->setTransform(tU);
+    scene->addObject(objUp);
+
+    DrawableObject* objDown = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Red);
+
+    Transform tD;
+    tD.addTransform(std::make_shared<Scale>(glm::vec3(0.8f)));
+    tD.addTransform(std::make_shared<Translation>(positions[3]));
+    objDown->setTransform(tD);
+    scene->addObject(objDown);
+
+
+
+    PointLight* center = new PointLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 6.0f);
+    scene->addLight(center);
 
     return scene;
 }

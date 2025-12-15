@@ -185,7 +185,7 @@ void Scene::buildBezierFromControlPoints(float speed, bool loop)
         for (int s = 0; s <= samples; ++s) {
             float tt = s / (float)samples;
             glm::vec3 p = Bezier::evalCubic(segment[0], segment[1], segment[2], segment[3], tt);
-            DrawableObject* marker = new DrawableObject(ModelType::Sphere, ShaderType::Phong, TextureType::Sun);
+            DrawableObject* marker = new DrawableObject(ModelType::Sphere, ShaderType::Blinn, TextureType::Sun);
             Transform mt;
             mt.addTransform(std::make_shared<Translation>(p));
             mt.addTransform(std::make_shared<Scale>(glm::vec3(0.04f)));
@@ -193,7 +193,7 @@ void Scene::buildBezierFromControlPoints(float speed, bool loop)
             addObject(marker);
         }
 
-        DrawableObject* mover = new DrawableObject(ModelType::Formula1, ShaderType::Phong, TextureType::WoodenFence);
+        DrawableObject* mover = new DrawableObject(ModelType::Formula1, ShaderType::Blinn, TextureType::WoodenFence);
         Transform t;
         // first Bezier (world-space translation/orientation), then scale the model
         // use duration (in seconds) instead of "speed" — e.g. 6.0f for a smooth traversal
@@ -213,7 +213,7 @@ void Scene::addControlPoint(const glm::vec3& p)
     controlPoints.push_back(p);
 
     // create a small marker to visualize the click
-    DrawableObject* marker = new DrawableObject(ModelType::Sphere, ShaderType::Phong);
+    DrawableObject* marker = new DrawableObject(ModelType::Sphere, ShaderType::Blinn);
     Transform mt;
     mt.addTransform(std::make_shared<Translation>(p));
     mt.addTransform(std::make_shared<Scale>(glm::vec3(0.06f)));
@@ -351,18 +351,20 @@ void Scene::bindCameraAndLightToUsedShaders()
         shader->setUniform("numLights", n);
 
         for (int i = 0; i < n; ++i) {
-            shader->setUniform(("lightTypes[" + std::to_string(i) + "]").c_str(), types[i]);
-            shader->setUniform(("lightPositions[" + std::to_string(i) + "]").c_str(), positions[i]);
-            shader->setUniform(("lightDirections[" + std::to_string(i) + "]").c_str(), directions[i]);
-            shader->setUniform(("lightColors[" + std::to_string(i) + "]").c_str(), colors[i]);
-            shader->setUniform(("lightIntensities[" + std::to_string(i) + "]").c_str(), intensities[i]);
-            shader->setUniform(("lightCutOffs[" + std::to_string(i) + "]").c_str(), cutOffs[i]);
-            shader->setUniform(("lightOuterCutOffs[" + std::to_string(i) + "]").c_str(), outerCutOffs[i]);
-            shader->setUniform(("lightIsOn[" + std::to_string(i) + "]").c_str(), isOn[i]);
+            std::string base = "lights[" + std::to_string(i) + "].";
+            shader->setUniform((base + "type").c_str(), types[i]);
+            shader->setUniform((base + "isOn").c_str(), isOn[i]);
+            shader->setUniform((base + "position").c_str(), positions[i]);
+            shader->setUniform((base + "direction").c_str(), directions[i]);
+            shader->setUniform((base + "color").c_str(), colors[i]);
+            shader->setUniform((base + "intensity").c_str(), intensities[i]);
+            shader->setUniform((base + "cutOff").c_str(), cutOffs[i]);
+            shader->setUniform((base + "outerCutOff").c_str(), outerCutOffs[i]);
         }
+        shader->setUniform("numLights", n);
 
         shader->setUniform("viewPosition", camera->getPosition());
-        shader->setUniform("shininess", 64.0f);
+        shader->setUniform("shininess", Config::Shininess);
         shader->setUniform("ambientStrength", 0.15f);
         // Backwards-compatibility: some older shaders expect a single `lightPosition` uniform.
         if (!positions.empty()) {

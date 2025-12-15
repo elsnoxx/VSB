@@ -37,5 +37,7 @@ public:
 
 	// Camera settings
 	const float fovDegrees[3];
+
+	static float Shininess;
 };
 

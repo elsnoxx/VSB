@@ -45,14 +45,23 @@ void InputManager::onMouseButton(double x, double y, int button) {
 
         if (placing) {
             // placement-specific behavior: plant selected model / remove / add control point
-            if (button == GLFW_MOUSE_BUTTON_LEFT) {
-                m_boundScene->plantObjectAtWorldPos(worldPos, placementModel, placementShader);
+            //if (button == GLFW_MOUSE_BUTTON_LEFT) {
+            if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
+                //m_boundScene->plantObjectAtWorldPos(worldPos, placementModel, placementShader);
+                m_boundScene->addControlPoint(worldPos);
+                printf("[InputManager] added control point [%f,%f,%f] (total %zu)\n", worldPos.x, worldPos.y, worldPos.z, m_boundScene->getControlPoints().size());
+                const auto& pts = m_boundScene->getControlPoints();
+                if (pts.size() >= 4 && (pts.size() % 4) == 0) {
+                    m_boundScene->buildBezierFromControlPoints(6.0f, true);
+                    printf("[InputManager] built Bezier segment(s) from control points\n");
+                }
             }
             else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
                 bool ok = m_boundScene->removeObjectAt(picked);
                 printf("[InputManager] removeObjectAt(%d) -> %s\n", picked, ok ? "ok" : "failed");
             }
-            else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
+            //else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
+            else if (button == GLFW_MOUSE_BUTTON_LEFT) {
                 m_boundScene->addControlPoint(worldPos);
                 printf("[InputManager] added control point [%f,%f,%f] (total %zu)\n", worldPos.x, worldPos.y, worldPos.z, m_boundScene->getControlPoints().size());
                 const auto& pts = m_boundScene->getControlPoints();
@@ -65,7 +74,14 @@ void InputManager::onMouseButton(double x, double y, int button) {
         else {
             // non-placement (default app behavior) — replicate former Application::handleMouseClick actions
             if (button == GLFW_MOUSE_BUTTON_LEFT) {
-                m_boundScene->plantObjectAtWorldPos(worldPos, ModelType::Tree, ShaderType::Phong);
+                //m_boundScene->plantObjectAtWorldPos(worldPos, ModelType::Tree, ShaderType::Blinn);
+                m_boundScene->addControlPoint(worldPos);
+                printf("[InputManager] added control point [%f,%f,%f] (total %zu)\n", worldPos.x, worldPos.y, worldPos.z, m_boundScene->getControlPoints().size());
+                const auto& pts = m_boundScene->getControlPoints();
+                if (pts.size() >= 4 && (pts.size() % 4) == 0) {
+                    m_boundScene->buildBezierFromControlPoints(6.0f, true);
+                    printf("[InputManager] built Bezier segment(s) from control points\n");
+                }
             }
             else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
                 bool ok = m_boundScene->removeObjectAt(picked);
@@ -102,7 +118,22 @@ void InputManager::onMouseButton(double x, double y, int button) {
                         m_boundScene->plantObjectAtWorldPos(planePos, placementModel, placementShader);
                     }
                     else {
-                        m_boundScene->plantObjectAtWorldPos(planePos, ModelType::Tree, ShaderType::Phong);
+                        m_boundScene->plantObjectAtWorldPos(planePos, ModelType::Tree, ShaderType::Blinn);
+                    }
+                }
+            }
+
+            if (fabs(dir.y) > 1e-6f) {
+                float t = -n.y / dir.y;
+                if (t > 0.0f) {
+                    glm::vec3 planePos = n + dir * t;
+                    m_boundScene->addControlPoint(planePos);
+                    printf("[InputManager] added control point on plane [%f,%f,%f] (total %zu)\n", planePos.x, planePos.y, planePos.z, m_boundScene->getControlPoints().size());
+                    const auto& pts = m_boundScene->getControlPoints();
+                    // if (pts.size() >= 4 && (pts.size() % 4) == 0) {
+                    if (pts.size() >= 4 && (pts.size() % 4) == 0) {
+                        m_boundScene->buildBezierFromControlPoints(0.25f, true);
+                        printf("[InputManager] built Bezier segment(s) from control points\n");
                     }
                 }
             }
@@ -124,6 +155,7 @@ void InputManager::onMouseButton(double x, double y, int button) {
                     m_boundScene->addControlPoint(planePos);
                     printf("[InputManager] added control point on plane [%f,%f,%f] (total %zu)\n", planePos.x, planePos.y, planePos.z, m_boundScene->getControlPoints().size());
                     const auto& pts = m_boundScene->getControlPoints();
+                    // if (pts.size() >= 4 && (pts.size() % 4) == 0) {
                     if (pts.size() >= 4 && (pts.size() % 4) == 0) {
                         m_boundScene->buildBezierFromControlPoints(0.25f, true);
                         printf("[InputManager] built Bezier segment(s) from control points\n");

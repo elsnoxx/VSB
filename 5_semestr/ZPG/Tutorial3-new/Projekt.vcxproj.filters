@@ -288,13 +288,13 @@
   <ItemGroup>
     <None Include="Shader\ShaderSources\fragment\normals.frag.glsl" />
     <None Include="Shader\ShaderSources\vertex\normals.vert.glsl" />
-    <None Include="Shader\ShaderSources\vertex\phong.vert.glsl" />
-    <None Include="Shader\ShaderSources\fragment\phong.frag.glsl" />
+    <None Include="Shader\ShaderSources\vertex\blinn.vert.glsl" />
+    <None Include="Shader\ShaderSources\fragment\blinn.frag.glsl" />
     <None Include="Shader\ShaderSources\vertex\lambert.vert.glsl" />
     <None Include="Shader\ShaderSources\fragment\lambert.frag.glsl" />
     <None Include="Shader\ShaderSources\vertex\textured.vert.glsl" />
     <None Include="Shader\ShaderSources\fragment\textured.frag.glsl" />
-    <None Include="Shader\ShaderSources\vertex\skybox.vert.glsl" />
-    <None Include="Shader\ShaderSources\fragment\skybox.frag.glsl" />
+    <None Include="Shader\ShaderSources\vertex\phong.vert.glsl" />
+    <None Include="Shader\ShaderSources\fragment\phong.frag.glsl" />
   </ItemGroup>
 </Project>

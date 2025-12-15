@@ -1,4 +1,6 @@
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Application.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\Application.obj
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Material\MaterialManager.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\MaterialManager.obj
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Transform\Bezier.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\Bezier.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Callbacks.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\Callbacks.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Camera\Camera.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\Camera.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Config.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\Config.obj
@@ -11,13 +13,14 @@ C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\ModelOb
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\ModelObject\DrawableObject.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\DrawableObject.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\ModelObject\Model.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\Model.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Light\PointLight.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\PointLight.obj
-C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\ModelObject\TextureLoader.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\TextureLoader.obj
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Textures\Texture.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\Texture.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\SceneFactory.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\SceneFactory.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\Scene.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\Scene.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Scene\ScreenManager.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\ScreenManager.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Shader\ShaderFactory.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\ShaderFactory.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Observer\Subject.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\Subject.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Light\SpotLight.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\SpotLight.obj
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Textures\TextureManager.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\TextureManager.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Transform\Rotation.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\Rotation.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Transform\Scale.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\Scale.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Shader\FragmentShader.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\FragmentShader.obj
@@ -26,4 +29,5 @@ C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Shader\
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Shader\Shader.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\Shader.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Shader\VertexShader.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\VertexShader.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Transform\Transform.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\Transform.obj
+C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Transform\TransformNode.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\TransformNode.obj
 C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Transform\Translation.cpp;C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZPG\Tutorial3-new\Projekt\x64\Debug\Translation.obj

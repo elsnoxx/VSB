@@ -67,6 +67,10 @@ ShaderProgram* ShaderFactory::LoadShader(ShaderType type) {
         vertexSrc = LoadFile(Config::VertexShadersPath + "textured.vert.glsl");
         fragmentSrc = LoadFile(Config::FragmentShadersPath + "textured.frag.glsl");
         break;
+    case ShaderType::Blinn:
+        vertexSrc = LoadFile(Config::VertexShadersPath + "blinn.vert.glsl");
+        fragmentSrc = LoadFile(Config::FragmentShadersPath + "blinn.frag.glsl");
+        break;
     case ShaderType::Skybox:
         vertexSrc = LoadFile(Config::VertexShadersPath + "skybox.vert.glsl");
         fragmentSrc = LoadFile(Config::FragmentShadersPath + "skybox.frag.glsl");

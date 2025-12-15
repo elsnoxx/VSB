@@ -5,5 +5,6 @@ enum class ShaderType {
     Phong,
     Lambert,
     Textured,
-    Skybox
+    Skybox,
+    Blinn
 };
