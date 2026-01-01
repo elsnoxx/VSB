@@ -1,0 +1,8 @@
+# Ignore the .vscode folder
+.vscode/
+
+# Ignore object files
+*.o
+
+# Ignore test files
+code/test/
