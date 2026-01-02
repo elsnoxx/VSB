@@ -1,6 +1,11 @@
 
 using WebApi.DB;
 using WebApi.Repository.Database;
+using WebApi.Repository.Database.Implementation;
+using WebApi.Repository.InMemoryDB;
+using WebApi.Repository.Unitofwork;
+using WebApi.Repository.Unitofwork.Implementation;
+using WebApi.Services;
 
 namespace WebApi
 {
@@ -10,9 +15,6 @@ namespace WebApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var connectionString = builder.Configuration.GetConnectionString("MariaDb")
-                                   ?? throw new InvalidOperationException("Missing connection string 'MariaDb'");
-
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -20,20 +22,41 @@ namespace WebApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddScoped<IDbConnectionFactory>(_ => new MariaDbConnectionFactory(connectionString));
+            // Services (Use-case layer)
+            builder.Services.AddScoped<DeviceService>();
+            builder.Services.AddScoped<LocationService>();
+
 
             var storage = builder.Configuration["Storage"] ?? "MariaDb";
 
+
             if (storage == "MariaDb")
             {
+                var connectionString = builder.Configuration.GetConnectionString("MariaDb")
+                    ?? throw new InvalidOperationException("Missing connection string 'MariaDb'");
+
+                builder.Services.AddScoped<IDbConnectionFactory>(_ => new MariaDbConnectionFactory(connectionString));
+
                 builder.Services.AddScoped<IDeviceRepository, MariaDbDeviceRepository>();
+                builder.Services.AddScoped<ILocationRepository, MariaDbLocationRepository>();
                 builder.Services.AddScoped<IUnitOfWork, MariaDbUnitOfWork>();
             }
             else if (storage == "InMemory")
             {
+                // Identity Map musí být sdílená (Singleton), jinak to není Identity Map
+                builder.Services.AddSingleton<InMemoryDbContext>(); // nebo InMemoryDbContext
+
                 builder.Services.AddSingleton<IDeviceRepository, InMemoryDeviceRepository>();
+                builder.Services.AddSingleton<ILocationRepository, InMemoryLocationRepository>();
+
                 builder.Services.AddSingleton<IUnitOfWork, NoOpUnitOfWork>();
+
             }
+            else
+            {
+                throw new InvalidOperationException($"Unknown Storage value: '{storage}'. Use 'MariaDb' or 'InMemory'.");
+            }
+
 
 
             var app = builder.Build();
