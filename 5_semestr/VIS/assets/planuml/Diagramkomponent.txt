@@ -1,0 +1,54 @@
+@startuml
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam componentStyle rectangle
+skinparam defaultFontName Arial
+
+' ======= FRONTEND =======
+rectangle "Frontend" as FE {
+  rectangle "Frontend TypeScript (React)" as FE_APP
+
+  rectangle "Service Layer" as FE_SVC {
+    rectangle "Services\n(DeviceService, LocationService)" as FE_SERVICES
+  }
+
+  rectangle "Gateway" as FE_GW {
+    rectangle "Gateways / API Client\n(devicesApi.ts, locationsApi.ts, http.ts)" as FE_GATEWAYS
+  }
+
+  FE_APP -down- FE_SERVICES
+  FE_SERVICES -down- FE_GATEWAYS
+}
+
+rectangle "API (REST)" as API
+
+FE_GATEWAYS -down- API
+
+
+' ======= BACKEND =======
+rectangle "Backend" as BE {
+  rectangle "Service Layer (Use-cases)" as BE_SVC {
+    rectangle "Services\n(DeviceService, LocationService)" as BE_SERVICES
+  }
+
+  rectangle "Domain Layer" as BE_DOMAIN {
+    rectangle "Domain Models\n(Device, Location)" as BE_DOMAINMODELS
+    rectangle "Mapping Layer\n(Data Mapper for MariaDB)\n(Identity Map + Active Record for InMemory)" as BE_MAPPING
+  }
+
+  rectangle "Data Layer" as BE_DATA {
+    database "MariaDB\n(Dapper + UnitOfWork)" as DB
+    rectangle "InMemory Storage\n(InMemoryDbContext)" as MEM
+  }
+
+  API -down- BE_SERVICES
+  BE_SERVICES -down- BE_DOMAINMODELS
+  BE_DOMAINMODELS -down- BE_MAPPING
+
+  ' to data sources
+  BE_MAPPING -down- DB
+  BE_MAPPING -down- MEM
+}
+
+@enduml

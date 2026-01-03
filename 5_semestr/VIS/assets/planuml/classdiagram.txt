@@ -1,0 +1,89 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+' =========================
+' API LAYER
+' =========================
+package "Controllers" {
+  class DevicesController
+  class LocationsController
+}
+
+' =========================
+' SERVICE LAYER
+' =========================
+package "Services" {
+  class DeviceService
+  class LocationService
+}
+
+' =========================
+' ABSTRACTIONS
+' =========================
+package "Repository Interfaces" {
+  interface IDeviceRepository
+  interface ILocationRepository
+}
+
+package "Unit of Work" {
+  interface IUnitOfWork
+  class MariaDbUnitOfWork
+  class NoOpUnitOfWork
+}
+
+package "DB" {
+  interface IDbConnectionFactory
+  class MariaDbConnectionFactory
+}
+
+' =========================
+' MARIA DB IMPLEMENTATION
+' =========================
+package "MariaDB Repositories" {
+  class MariaDbDeviceRepository
+  class MariaDbLocationRepository
+}
+
+' =========================
+' IN-MEMORY IMPLEMENTATION
+' =========================
+package "InMemory" {
+  class InMemoryDbContext
+  class InMemoryDeviceRepository
+  class InMemoryLocationRepository
+}
+
+' =========================
+' RELATIONSHIPS
+' =========================
+DevicesController --> DeviceService
+LocationsController --> LocationService
+
+DeviceService --> IDeviceRepository
+DeviceService --> ILocationRepository
+DeviceService --> IUnitOfWork
+
+LocationService --> ILocationRepository
+LocationService --> IUnitOfWork
+
+IDeviceRepository <|.. MariaDbDeviceRepository
+ILocationRepository <|.. MariaDbLocationRepository
+
+IDeviceRepository <|.. InMemoryDeviceRepository
+ILocationRepository <|.. InMemoryLocationRepository
+
+IUnitOfWork <|.. MariaDbUnitOfWork
+IUnitOfWork <|.. NoOpUnitOfWork
+
+MariaDbUnitOfWork --> IDbConnectionFactory
+IDbConnectionFactory <|.. MariaDbConnectionFactory
+
+MariaDbDeviceRepository --> IUnitOfWork
+MariaDbLocationRepository --> IUnitOfWork
+
+InMemoryDeviceRepository --> InMemoryDbContext
+InMemoryLocationRepository --> InMemoryDbContext
+
+
+@enduml

@@ -25,3 +25,7 @@ export type CreateDeviceRequest = {
   status?: string;
   currentLocationId?: string | null;
 };
+
+export type AssignDeviceLocationRequest = {
+  locationId: string | null;
+};
