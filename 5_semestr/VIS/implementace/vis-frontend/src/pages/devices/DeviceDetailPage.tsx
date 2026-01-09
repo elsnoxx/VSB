@@ -98,8 +98,10 @@ export function DeviceDetailPage() {
           <div style={{ border: "1px solid #ddd", padding: 16, maxWidth: 600 }}>
             <p><strong>Serial number:</strong> {device.serialNumber}</p>
             <p><strong>Status:</strong> {device.status}</p>
-            <p><strong>Device type:</strong> {device.deviceTypeId}</p>
-            <p><strong>Current location:</strong> {device.currentLocationId ?? "-"}</p>
+            <p><strong>Device type:</strong> {device.deviceType?.name ?? device.deviceTypeId ?? "-"}</p>
+            <p><strong>Current location:</strong> {device.currentLocationId
+              ? locations.find((l) => l.id === device.currentLocationId)?.name ?? device.currentLocationId
+              : "-"}</p>
             <p><strong>Created:</strong> {new Date(device.createdAtUtc).toLocaleString()}</p>
           </div>
 

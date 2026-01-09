@@ -19,7 +19,7 @@ namespace WebApi.Controllers
             => Ok(await _service.GetAllAsync(ct));
 
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<Device>> GetById(Guid id, CancellationToken ct)
+        public async Task<ActionResult<DeviceDetailDto>> GetById(Guid id, CancellationToken ct)
         {
             var device = await _service.GetByIdAsync(id, ct);
             return device is null ? NotFound() : Ok(device);

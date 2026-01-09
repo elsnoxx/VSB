@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getDevices, deleteDevice } from "../../api/devicesApi";
-import type { DeviceRow } from "../../api/types";
+import { getLocations } from "../../api/locationsApi";
+import type { DeviceRow, LocationRow } from "../../api/types";
 import { useNavigate } from "react-router-dom";
 
 export function DeviceListPage() {
   const [items, setItems] = useState<DeviceRow[]>([]);
+  const [locations, setLocations] = useState<LocationRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -19,8 +21,12 @@ export function DeviceListPage() {
         setLoading(true);
         setError(null);
 
-        const data = await getDevices(ac.signal);
-        setItems(data);
+        const [devicesData, locationsData] = await Promise.all([
+          getDevices(ac.signal),
+          getLocations(ac.signal),
+        ]);
+        setItems(devicesData);
+        setLocations(locationsData);
       } catch (e: unknown) {
         if (e instanceof DOMException && e.name === "AbortError") return;
         if (e instanceof Error && e.message.includes("aborted")) return;
@@ -98,7 +104,9 @@ export function DeviceListPage() {
                 <td style={{ padding: 8, borderBottom: "1px solid #eee" }}>{d.serialNumber}</td>
                 <td style={{ padding: 8, borderBottom: "1px solid #eee" }}>{d.status}</td>
                 <td style={{ padding: 8, borderBottom: "1px solid #eee" }}>
-                  {d.currentLocationId ?? "-"}
+                  {d.currentLocationId
+                    ? locations.find((l) => l.id === d.currentLocationId)?.name ?? d.currentLocationId
+                    : "-"}
                 </td>
                 <td style={{ padding: 8, borderBottom: "1px solid #eee" }}>
                   {new Date(d.createdAtUtc).toLocaleString()}

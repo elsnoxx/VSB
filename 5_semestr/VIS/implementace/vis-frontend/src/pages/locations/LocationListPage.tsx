@@ -80,7 +80,6 @@ export function LocationListPage() {
           <thead>
             <tr>
               <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Name</th>
-              <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>ParentId</th>
               <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Created</th>
               <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8, width: 120 }}>
                 Actions
@@ -92,7 +91,6 @@ export function LocationListPage() {
             {items.map((l) => (
               <tr key={l.id}>
                 <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{l.name}</td>
-                <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{l.parentId ?? "-"}</td>
                 <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>
                   {new Date(l.createdAtUtc).toLocaleString()}
                 </td>

@@ -8,9 +8,11 @@ namespace WebApi.DB
     {
         private readonly Dictionary<Guid, Device> _devices = new();
         private readonly Dictionary<Guid, Location> _locations = new();
+        private readonly Dictionary<Guid, DeviceType> _deviceTypes = new();
 
         private readonly Dictionary<string, Guid> _deviceBySerial = new(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, Guid> _locationByName = new(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, Guid> _deviceTypeByName = new(StringComparer.OrdinalIgnoreCase);
 
         // ---- Devices
         public Device? FindDevice(Guid id) => _devices.TryGetValue(id, out var d) ? d : null;
@@ -60,6 +62,33 @@ namespace WebApi.DB
                 _locationByName.Remove(old.Name);
                 _locations.Remove(id);
             }
+        }
+
+        // -- device types
+        public DeviceType? FindDeviceType(Guid id) => _deviceTypes.TryGetValue(id, out var dt) ? dt : null;
+
+        public IEnumerable<DeviceType> AllDeviceTypes() => _deviceTypes.Values.OrderBy(x => x.Name).ToList();
+
+        public bool DeviceTypeNameExists(string name)
+            => _deviceTypeByName.ContainsKey(name);
+
+        internal void Upsert(DeviceType dt)
+        {
+            if (_deviceTypes.TryGetValue(dt.Id, out var old) &&
+                !string.Equals(old.Name, dt.Name, StringComparison.OrdinalIgnoreCase))
+                _deviceTypeByName.Remove(old.Name);
+            _deviceTypes[dt.Id] = dt;
+            _deviceTypeByName[dt.Name] = dt.Id;
+        }
+
+        internal void RemoveDeviceType(Guid id)
+        {
+            if (_deviceTypes.TryGetValue(id, out var old))
+            {
+                _deviceTypeByName.Remove(old.Name);
+                _deviceTypes.Remove(id);
+            }
+
         }
     }
 }

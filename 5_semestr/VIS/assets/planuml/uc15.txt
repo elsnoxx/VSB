@@ -1,0 +1,75 @@
+@startuml
+title UC15 – Správa lokací (CRUD) (Activity diagram)
+
+skinparam shadowing false
+skinparam activity {
+  BackgroundColor white
+  BorderColor black
+  ArrowColor black
+}
+
+|Administrátor|
+start
+:Otevře "Správa lokací";
+
+|Systém|
+:Zobrazí seznam lokací;
+
+|Administrátor|
+if (Zvolená akce?) then (Nová lokace)
+  :Klikne na "Nová lokace";
+
+  |Systém|
+  :Zobrazí formulář nové lokace;
+
+  |Administrátor|
+  :Vyplní název lokace;
+  :Klikne na "Uložit";
+
+  |Systém|
+  :Ověří unikátnost názvu;
+
+  if (Název je unikátní?) then (Ano)
+    |Databáze|
+    :Vloží novou lokaci;
+
+    |Systém|
+    :Zobrazí potvrzení;
+    :Vrátí se na seznam lokací;
+    stop
+  else (Ne)
+    :Zobrazí chybu:\n"Duplicitní název lokace";
+    |Administrátor|
+    :Upraví název;
+    :Klikne na "Uložit";
+    |Systém|
+    :Ověří unikátnost názvu;
+    |Databáze|
+    :Vloží novou lokaci;
+    |Systém|
+    :Zobrazí potvrzení;
+    :Vrátí se na seznam lokací;
+    stop
+  endif
+
+else (Odstranit lokaci)
+  :Vybere lokaci a klikne na "Odstranit";
+
+  |Systém|
+  :Ověří, zda jsou na lokaci\npřiřazena aktivní zařízení;
+
+  if (Lokace má aktivní zařízení?) then (Ano)
+    :Zobrazí chybu:\n"Tuto lokaci nelze odstranit.\nNejprve přeřaďte všechna zařízení (N ks).";
+    :Nabídne zrušení akce\nnebo přeřazení zařízení (UC11);
+    stop
+  else (Ne)
+    |Databáze|
+    :Odstraní lokaci;
+    |Systém|
+    :Zobrazí potvrzení;
+    :Vrátí se na seznam lokací;
+    stop
+  endif
+endif
+
+@enduml

@@ -1,0 +1,48 @@
+@startuml
+title UC10 – Přiřazení zařízení k lokaci (Activity diagram)
+
+skinparam shadowing false
+skinparam activity {
+  BackgroundColor white
+  BorderColor black
+  ArrowColor black
+}
+
+|IT technik|
+start
+:Přejde na detail zařízení\n(např. přes vyhledávání);
+:Klikne na "Přiřadit lokaci";
+
+|Systém|
+:Zobrazí dialog pro výběr lokace\n(strom budov/kanceláří);
+
+|IT technik|
+:Vybere cílovou lokaci;
+:Klikne na "Uložit přiřazení";
+
+|Systém|
+:Ověří platnost zařízení a lokace;
+
+if (Je lokace obsazena\nnebo rezervovaná?) then (Ano)
+  :Zobrazí varování:\n"Lokace [název] je plně obsazena.\nPřejete si přesto pokračovat?";
+
+  |IT technik|
+  if (Potvrdí pokračování?) then (Ano)
+    |Systém|
+    :Pokračuje v přiřazení;
+  else (Ne)
+    |Systém|
+    :Zruší přiřazení\nbez změny dat;
+    stop
+  endif
+endif
+
+|Databáze|
+:Aktualizuje zařízení\n(ID lokace);
+
+|Systém|
+:Zobrazí potvrzení;
+:Na detailu zařízení\nzobrazí novou lokaci;
+stop
+
+@enduml

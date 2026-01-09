@@ -6,6 +6,7 @@ using WebApi.Repository.InMemoryDB;
 using WebApi.Repository.Unitofwork;
 using WebApi.Repository.Unitofwork.Implementation;
 using WebApi.Services;
+using WebApi.Services.UWO;
 
 namespace WebApi
 {
@@ -25,6 +26,7 @@ namespace WebApi
             // Services (Use-case layer)
             builder.Services.AddScoped<DeviceService>();
             builder.Services.AddScoped<LocationService>();
+            builder.Services.AddScoped<DeviceTypeService>();
 
 
             var storage = builder.Configuration["Storage"] ?? "MariaDb";
@@ -39,6 +41,9 @@ namespace WebApi
 
                 builder.Services.AddScoped<IDeviceRepository, MariaDbDeviceRepository>();
                 builder.Services.AddScoped<ILocationRepository, MariaDbLocationRepository>();
+                builder.Services.AddScoped<IDeviceTypeRepository, MariaDbDeviceTypeRepository>();
+
+
                 builder.Services.AddScoped<IUnitOfWork, MariaDbUnitOfWork>();
             }
             else if (storage == "InMemory")
@@ -48,6 +53,8 @@ namespace WebApi
 
                 builder.Services.AddSingleton<IDeviceRepository, InMemoryDeviceRepository>();
                 builder.Services.AddSingleton<ILocationRepository, InMemoryLocationRepository>();
+                builder.Services.AddSingleton<IDeviceTypeRepository, InMemoryDeviceTypeRepository>();
+
 
                 builder.Services.AddSingleton<IUnitOfWork, NoOpUnitOfWork>();
 

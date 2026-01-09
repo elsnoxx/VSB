@@ -1,0 +1,58 @@
+@startuml
+title UC7 – Přidání nového zařízení (Activity diagram)
+
+' Hezčí výchozí vzhled (můžeš smazat, když nechceš)
+skinparam shadowing false
+skinparam activity {
+  BackgroundColor white
+  BorderColor black
+  ArrowColor black
+}
+
+|IT technik|
+start
+:Otevře sekci "Správa zařízení";
+:Klikne na "Přidat nové zařízení";
+
+|Systém|
+:Zobrazí formulář pro zadání detailů zařízení;
+
+|IT technik|
+:Vyplní povinná pole\n(sériové číslo, název/model,\ntyp – UC16, stav – UC17,\ndatum pořízení);
+:Klikne na "Uložit zařízení";
+
+|Systém|
+:Provede validaci vstupních dat;
+
+if (Je sériové číslo unikátní?) then (Ano)
+  :Vygeneruje inventární číslo;
+
+  |Databáze|
+  :Uloží nové zařízení;
+
+  |Systém|
+  :Přesměruje na detail\nnově přidaného zařízení;
+  :Zobrazí zprávu o úspěšném uložení;
+  stop
+
+else (Ne)
+  :Zobrazí chybu:\n"Zařízení s tímto sériovým číslem\nje již zaevidováno (inventární číslo: [číslo]).";
+
+  |IT technik|
+  :Opraví sériové číslo;
+  :Klikne na "Uložit zařízení";
+
+  |Systém|
+  :Provede validaci vstupních dat;
+  :Vygeneruje inventární číslo;
+
+  |Databáze|
+  :Uloží nové zařízení;
+
+  |Systém|
+  :Přesměruje na detail\nnově přidaného zařízení;
+  :Zobrazí zprávu o úspěšném uložení;
+  stop
+endif
+
+@enduml

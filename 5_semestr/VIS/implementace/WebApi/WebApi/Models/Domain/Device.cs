@@ -8,6 +8,7 @@
         public string Status { get; private set; }
         public Guid? CurrentLocationId { get; private set; }
         public DateTime CreatedAtUtc { get; }
+        public DeviceType DeviceType { get; set; } = null!;
 
         public Device(Guid id, string serialNumber, Guid deviceTypeId, string status, Guid? currentLocationId, DateTime createdAtUtc)
         {

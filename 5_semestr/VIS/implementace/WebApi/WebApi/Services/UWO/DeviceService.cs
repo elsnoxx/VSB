@@ -8,14 +8,16 @@ namespace WebApi.Services
     public sealed class DeviceService
     {
         private readonly IDeviceRepository _repo;
+        private readonly IDeviceTypeRepository _deviceTypeRepo;
         private readonly IUnitOfWork _uow;
         private readonly ILocationRepository _locations;
 
-        public DeviceService(IDeviceRepository repo, ILocationRepository locations, IUnitOfWork uow)
+        public DeviceService(IDeviceRepository repo, ILocationRepository locations, IUnitOfWork uow, IDeviceTypeRepository deviceTypeRepository)
         {
             _repo = repo;
             _locations = locations;
             _uow = uow;
+            _deviceTypeRepo = deviceTypeRepository;
         }
 
         public async Task<IEnumerable<Device>> GetAllAsync(CancellationToken ct)
@@ -31,12 +33,32 @@ namespace WebApi.Services
             }
         }
 
-        public async Task<Device?> GetByIdAsync(Guid id, CancellationToken ct)
+        public async Task<DeviceDetailDto?> GetByIdAsync(Guid id, CancellationToken ct)
         {
             await _uow.OpenAsync(ct);
             try
             {
-                return await _repo.GetByIdAsync(id, ct);
+                var device = await _repo.GetByIdAsync(id, ct);
+                if (device is null) return null;
+
+                var type = await _deviceTypeRepo.GetByIdAsync(device.DeviceTypeId, ct);
+                if (type is null)
+                    throw new InvalidOperationException("DEVICE_TYPE_MISSING");
+
+                return new DeviceDetailDto
+                {
+                    Id = device.Id,
+                    SerialNumber = device.SerialNumber,
+                    Status = device.Status,
+                    CurrentLocationId = device.CurrentLocationId,
+                    CreatedAtUtc = device.CreatedAtUtc,
+                    DeviceType = new DeviceTypeDto
+                    {
+                        Id = type.Id,
+                        Name = type.Name,
+                        Description = type.Description
+                    }
+                };
             }
             finally
             {

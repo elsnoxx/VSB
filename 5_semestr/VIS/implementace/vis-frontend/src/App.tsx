@@ -9,7 +9,7 @@ import { DeviceCreatePage } from "./pages/devices/DeviceCreatePage";
 import { DeviceDetailPage } from "./pages/devices/DeviceDetailPage";
 import { LocationListPage } from "./pages/locations/LocationListPage";
 import { LocationCreatePage } from "./pages/locations/LocationCreatePage";
-
+import { DeviceTypeCreatePage } from "./pages/deviceType/DeviceTypeCreatePage";
 
 function App() {
   return (
@@ -26,6 +26,8 @@ function App() {
             <Route path="/devices/:id" element={<DeviceDetailPage />} />
             <Route path="/locations" element={<LocationListPage />} />
             <Route path="/locations/create" element={<LocationCreatePage />} />
+            <Route path="/device-types/create" element={<DeviceTypeCreatePage />} />
+            <Route path="*" element={<p>Page not found</p>} />
           </Routes>
         </main>
 
