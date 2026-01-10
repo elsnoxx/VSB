@@ -1,15 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createDevice } from "../../api/devicesApi";
+import { getDeviceTypes } from "../../api/deviceTypeApi";
+import { getLocations } from "../../api/locationsApi";
+import type { DeviceType, LocationRow } from "../../api/types";
 
 export function DeviceCreatePage() {
   const [serialNumber, setSerialNumber] = useState("");
-  const [deviceTypeId, setDeviceTypeId] = useState("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+  const [deviceTypeId, setDeviceTypeId] = useState("");
   const [status, setStatus] = useState("New");
-  const [locationId, setLocationId] = useState("");
+  // combobox input (user can pick a location by name or leave empty)
+  const [locationInput, setLocationInput] = useState("");
+
+  const [deviceTypes, setDeviceTypes] = useState<DeviceType[]>([]);
+  const [loadingTypes, setLoadingTypes] = useState(true);
+
+  const [locations, setLocations] = useState<LocationRow[]>([]);
+  const [loadingLocations, setLoadingLocations] = useState(true);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [createdId, setCreatedId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const ac = new AbortController();
+    (async () => {
+      try {
+        setLoadingTypes(true);
+        const types = await getDeviceTypes(ac.signal);
+        setDeviceTypes(types);
+        if (types.length > 0) setDeviceTypeId(types[0].id);
+      } catch (e: unknown) {
+        if (e instanceof DOMException && e.name === "AbortError") return;
+        setError(e instanceof Error ? e.message : "Unknown error");
+      } finally {
+        setLoadingTypes(false);
+      }
+    })();
+    return () => ac.abort();
+  }, []);
+
+  useEffect(() => {
+    const ac = new AbortController();
+    (async () => {
+      try {
+        setLoadingLocations(true);
+        const locs = await getLocations(ac.signal);
+        setLocations(locs);
+      } catch (e: unknown) {
+        if (e instanceof DOMException && e.name === "AbortError") return;
+        setError(e instanceof Error ? e.message : "Unknown error");
+      } finally {
+        setLoadingLocations(false);
+      }
+    })();
+    return () => ac.abort();
+  }, []);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,24 +67,40 @@ export function DeviceCreatePage() {
     }
 
     if (!deviceTypeId.trim()) {
-      setError("DeviceTypeId is required (GUID).");
+      setError("DeviceTypeId is required (select a device type).");
       return;
     }
 
     setLoading(true);
     try {
+      // determine currentLocationId to send to API:
+      // - empty input -> null
+      // - input exactly matches a location id -> use it
+      // - input matches a location name -> use that location's id
+      // - otherwise send the raw input (allows entering a GUID manually)
+      const locInput = locationInput.trim();
+      let currentLocationId: string | null = null;
+      if (locInput === "") {
+        currentLocationId = null;
+      } else if (locations.find((l) => l.id === locInput)) {
+        currentLocationId = locInput;
+      } else {
+        const byName = locations.find((l) => l.name === locInput);
+        currentLocationId = byName ? byName.id : locInput;
+      }
+
       const id = await createDevice({
         serialNumber: serialNumber.trim(),
         deviceTypeId: deviceTypeId.trim(),
         status: status.trim(),
-        currentLocationId: locationId.trim() ? locationId.trim() : null,
+        currentLocationId,
       });
 
       setCreatedId(String(id).replaceAll('"', ""));
       setSerialNumber("");
-      setDeviceTypeId("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+      setDeviceTypeId(deviceTypes.length > 0 ? deviceTypes[0].id : "");
       setStatus("New");
-      setLocationId("");
+      setLocationInput("");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Unknown error");
     } finally {
@@ -62,13 +123,23 @@ export function DeviceCreatePage() {
         </div>
 
         <div style={{ marginBottom: 12 }}>
-          <label>DeviceTypeId *</label>
-          <input
-            value={deviceTypeId}
-            onChange={(e) => setDeviceTypeId(e.target.value)}
-            placeholder="GUID"
-            style={{ width: "100%", padding: 8 }}
-          />
+          <label>Device type *</label>
+          {loadingTypes ? (
+            <div>Loading types…</div>
+          ) : (
+            <select
+              value={deviceTypeId}
+              onChange={(e) => setDeviceTypeId(e.target.value)}
+              style={{ width: "100%", padding: 8 }}
+            >
+              <option value="">-- Select device type --</option>
+              {deviceTypes.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
 
         <div style={{ marginBottom: 12 }}>
@@ -82,12 +153,27 @@ export function DeviceCreatePage() {
 
         <div style={{ marginBottom: 12 }}>
           <label>LocationId (optional)</label>
-          <input
-            value={locationId}
-            onChange={(e) => setLocationId(e.target.value)}
-            placeholder="GUID"
-            style={{ width: "100%", padding: 8 }}
-          />
+          {/* combobox: input with datalist of location names (user can leave empty) */}
+          {loadingLocations ? (
+            <div>Loading locations…</div>
+          ) : (
+            <>
+              <input
+                list="locations-list"
+                value={locationInput}
+                onChange={(e) => setLocationInput(e.target.value)}
+                placeholder="Type location name or paste GUID (optional)"
+                style={{ width: "100%", padding: 8 }}
+              />
+              <datalist id="locations-list">
+                <option value=""></option>
+                {locations.map((l) => (
+                  // show name in suggestions; matching by name will resolve to id on submit
+                  <option key={l.id} value={l.name} />
+                ))}
+              </datalist>
+            </>
+          )}
         </div>
 
         <button type="submit" disabled={loading}>

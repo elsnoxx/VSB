@@ -13,7 +13,8 @@ export type CreateLocationRequest = {
 export type DeviceRow = {
   id: string;
   serialNumber: string;
-  deviceTypeId: string;
+  deviceTypeId?: string; // keep for backward compatibility
+  deviceType?: DeviceType; // new: full object from API
   status: string;
   currentLocationId: string | null;
   createdAtUtc: string;
@@ -28,4 +29,10 @@ export type CreateDeviceRequest = {
 
 export type AssignDeviceLocationRequest = {
   locationId: string | null;
+};
+
+export type DeviceType = {
+  id: string;
+  name: string;
+  description?: string;
 };

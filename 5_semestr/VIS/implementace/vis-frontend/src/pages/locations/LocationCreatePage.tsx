@@ -51,16 +51,6 @@ export function LocationCreatePage() {
           />
         </div>
 
-        <div style={{ marginBottom: 12 }}>
-          <label style={{ display: "block", marginBottom: 4 }}>ParentId (optional)</label>
-          <input
-            value={parentId}
-            onChange={(e) => setParentId(e.target.value)}
-            style={{ width: "100%", padding: 8 }}
-            placeholder="Guid of parent location (optional)"
-          />
-        </div>
-
         <button type="submit" disabled={loading} style={{ padding: "8px 12px" }}>
           {loading ? "Saving…" : "Create"}
         </button>

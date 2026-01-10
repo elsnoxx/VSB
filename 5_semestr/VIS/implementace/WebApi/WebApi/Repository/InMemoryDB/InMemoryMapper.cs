@@ -22,5 +22,13 @@ namespace WebApi.Repository.InMemoryDB
             ParentId = l.ParentId,
             CreatedAtUtc = l.CreatedAtUtc
         };
+
+        public static DeviceTypeRow ToRow(DeviceType dt) => new()
+        {
+            Id = dt.Id,
+            Name = dt.Name,
+            Description = dt.Description,
+            CreatedAtUtc = dt.CreatedAtUtc
+        };
     }
 }
