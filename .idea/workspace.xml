@@ -5,14 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8648d058-9c76-4828-bd0e-8edc0aadbeec" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/5_semestr/ZSU/projekt2/Projekt2.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/5_semestr/Notes/Task.md" beforeDir="false" afterPath="$PROJECT_DIR$/5_semestr/Notes/Task.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/5_semestr/ZSU/projekt1/app.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/5_semestr/ZSU/projekt1/app.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Jupyter Notebook" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -38,6 +44,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\ficek\OneDrive\Dokumenty\GitHub\VSB\5_semestr\ZSU\projekt2" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
