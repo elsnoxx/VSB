@@ -35,6 +35,7 @@
 #define LOG_DEBUG   2
 
 int g_debug = LOG_INFO;
+int counter = 0;
 
 void log_msg( int t_log_level, const char *t_form, ... )
 {
@@ -70,7 +71,7 @@ void log_msg( int t_log_level, const char *t_form, ... )
 // Buffer size - maximum 100 items can be stored
 #define N 100
  // Maximum string length for each item
-#define MAX_STR 50
+#define MAX_STR 2112
 
 // Circular buffer to store strings
 char buffer[N][MAX_STR];
@@ -81,6 +82,7 @@ int in = 0, out = 0;
 sem_t empty;    // Counts empty slots (initially N)
 sem_t full;     // Counts full slots (initially 0)  
 sem_t mutex;    // Mutual exclusion for buffer access (initially 1)
+sem_t blocked;
 
 // Producer function - adds item to buffer
 // Uses semaphores to ensure thread safety and prevent buffer overflow
@@ -89,10 +91,15 @@ void put_item(const char* item)
     sem_wait(&empty);   // Wait for empty slot (decrements empty count)
     sem_wait(&mutex);   // Acquire exclusive access to buffer
 
+    char sendbuf[300];
+    snprintf(sendbuf, sizeof(sendbuf), "%d. %s\n", counter, item);
+
     // Copy item to buffer at 'in' position
-    strncpy(buffer[in], item, MAX_STR-1);
+    // strncpy(buffer[in], item, MAX_STR-1);
+    strncpy(buffer[in], sendbuf, MAX_STR-1);
     buffer[in][MAX_STR-1] = 0;  // Ensure null termination
-    in = (in + 1) % N;          // Move to next position (circular)
+    in = (in + 1) % N;        // Move to next position (circular)
+    counter++;
 
     sem_post(&mutex);   // Release exclusive access
     sem_post(&full);    // Signal that buffer has one more item
@@ -137,12 +144,26 @@ void* producer_thread(void* arg)
         buf[len] = 0;
         buf[strcspn(buf, "\r\n")] = 0;
 
-        // Add received item to shared buffer
-        put_item(buf);
         
-        // Send acknowledgment back to producer client
-        write(sock, "OK\n", 3);
-        printf("Produced: %s -> OK\n", buf);
+        // blocked sending when recieve -, ublock when +
+        if (buf[0] == '-')
+        {
+            sem_wait(&blocked);
+            printf("Blockend -> recieve %s\n", buf);
+            continue;
+        } else if (buf[0] == '+'){
+            sem_post(&blocked);
+            printf("Unblockend -> recieve %s\n", buf);
+            continue;
+        }else{
+            // Add received item to shared buffer
+            put_item(buf);
+            
+            // Send acknowledgment back to producer client
+            write(sock, "OK\n", 3);
+            printf("Produced: %s -> OK\n", buf);
+        }
+
     }
 
     // Clean up when client disconnects
@@ -167,14 +188,21 @@ void* consumer_thread(void* arg)
     // Main consumer loop - get data from buffer and send to client
     while (1)
     {
+        // blocked geting
+        sem_wait(&blocked);
+
+        
         // Get one item from shared buffer (blocks if buffer is empty)
         get_item(item);
 
+        
         // Format message with newline for transmission
         int msg_len = snprintf(sendbuf, sizeof(sendbuf), "%s\n", item);
 
         // Send complete message in single write operation
         write(sock, sendbuf, msg_len);
+
+        sem_post(&blocked);
 
         // Wait for acknowledgment from consumer client
         char okbuf[16];
@@ -240,6 +268,7 @@ int main( int t_narg, char **t_args )
     sem_init(&mutex, 0, 1);     // Binary semaphore for mutual exclusion
     sem_init(&empty, 0, N);     // Initially all N slots are empty
     sem_init(&full, 0, 0);      // Initially no items in buffer
+    sem_init(&blocked, 0, 1);   // Blocking geting item
 
     log_msg(LOG_INFO, "Server will listen on port: %d.", l_port);
 

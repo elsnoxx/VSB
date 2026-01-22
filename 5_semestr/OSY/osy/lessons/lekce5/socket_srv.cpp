@@ -79,7 +79,7 @@ void log_msg( int t_log_level, const char *t_form, ... )
 // Keep track whether this process created each IPC object so we unlink only when appropriate.
 
 #define N 100
-#define MAX_STR 50
+#define MAX_STR 8200
 
 #define SHM_NAME "/osy_hw5_shm"
 #define SEM_MUTEX_NAME "/osy_hw5_mutex"
@@ -155,7 +155,8 @@ mqd_t open_named_mq(const char* name, struct mq_attr *attr, bool &created)
 void insert_item(const char* item)
 {
     char numbered[MAX_STR];
-    snprintf(numbered, sizeof(numbered), "%d. %s", sequence_number++, item);
+    // snprintf(numbered, sizeof(numbered), "%d. %s", sequence_number++, item);
+    snprintf(numbered, sizeof(numbered), "%s", item);
         if (g_use_mq) {
         if (mq_send(g_mqd, numbered, strlen(numbered) + 1, 0) == -1) {
             log_msg(LOG_ERROR, "mq_send failed");
@@ -254,7 +255,7 @@ void handle_producer_process(int sock)
 void handle_consumer_process(int sock)
 {
     char item[MAX_STR];
-    char sendbuf[MAX_STR + 5];
+    char sendbuf[MAX_STR + 1];
     while (1)
     {
         remove_item(item);
