@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cz.transys.moldapp.LocalScanner
+import cz.transys.moldapp.buisines.scanners.RFIDHoneywellScanner
 import cz.transys.moldapp.R
 
 @Composable

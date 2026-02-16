@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.implementation
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -44,6 +42,9 @@ android {
 }
 
 dependencies {
+    val ktorVersion = "2.3.12"
+
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -55,13 +56,14 @@ dependencies {
     implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.compose.ui:ui:1.6.0")
-    implementation( files("androidscannersdk.aar"))
-    implementation("io.ktor:ktor-client-core:2.3.6")
-    implementation("io.ktor:ktor-client-okhttp:2.3.6")      // Android engine
-    implementation("io.ktor:ktor-client-content-negotiation:2.3.6")
-    implementation("io.ktor:ktor-serialization-gson:2.3.6")
+    implementation(files("libs/androidscannersdk.aar"))
+    implementation(files("libs/honeywell_rfid_sdk_v01.01.03.02.08.aar"))
+    implementation(files("libs/DataCollection.aar"))
+    implementation("io.ktor:ktor-client-core:${ktorVersion}")
+    implementation("io.ktor:ktor-client-okhttp:${ktorVersion}")
+    implementation("io.ktor:ktor-client-content-negotiation:${ktorVersion}")
+    implementation("io.ktor:ktor-serialization-gson:${ktorVersion}")
+    implementation("io.ktor:ktor-client-auth:${ktorVersion}")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
