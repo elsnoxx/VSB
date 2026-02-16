@@ -6,10 +6,10 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.lazy.layout.IntervalList
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -26,26 +26,24 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import cz.transys.moldapp.buisines.apicalls.moldapi.CarCodeList
-import cz.transys.moldapp.buisines.apicalls.moldapi.CarriersList
 import cz.transys.moldapp.buisines.apicalls.moldapi.MoldApiRepository
 import cz.transys.moldapp.buisines.apicalls.moldrepair.MoldRepairRepository
-import cz.transys.moldapp.buisines.apicalls.moldrepair.RepairTypes
 import cz.transys.moldapp.buisines.models.ConnectivityStatus
-import cz.transys.moldapp.buisines.scanners.HoneywellScanner
+import cz.transys.moldapp.buisines.scanners.RFIDHoneywellScanner
 import cz.transys.moldapp.ui.screens.*
 import cz.transys.moldapp.ui.theme.MoldAppTheme
 
 
 // shared scanner
-val LocalScanner = staticCompositionLocalOf<HoneywellScanner?> { null }
+val LocalScanner = staticCompositionLocalOf<RFIDHoneywellScanner?> { null }
 val LocalConnectivity = staticCompositionLocalOf {
     ConnectivityStatus(internet = true, apiAvailable = true)
 }
 
+
 class MainActivity : ComponentActivity() {
 
-    private lateinit var scanner: HoneywellScanner
+    private lateinit var scanner: RFIDHoneywellScanner
     private lateinit var connectivityManager: ConnectivityManager
 
 
@@ -54,29 +52,32 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        scanner = HoneywellScanner(this)
-        scanner.open()
-
-        connectivityManager =
-            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-
+        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        scanner = RFIDHoneywellScanner(this)
 
         setContent {
-            val isConnected = connectivityState(connectivityManager)
+            // otevři scanner až po renderu
+            LaunchedEffect(Unit) {
+                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    scanner.open()
+                }
+            }
 
-            isConnected.internet
+            val repo = remember { MoldApiRepository() }
+            val isConnected = connectivityState(connectivityManager, repo)
 
             CompositionLocalProvider(
                 LocalScanner provides scanner,
                 LocalConnectivity provides isConnected
             ) {
                 MoldAppTheme {
+//                    Text("UI OK")
                     AppRoot()
                 }
             }
         }
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -96,10 +97,6 @@ fun AppRoot() {
     val repo = remember { MoldApiRepository() }
     val repairRepo = remember { MoldRepairRepository() }
 
-    var carrierList by remember { mutableStateOf<List<CarriersList>>(emptyList()) }
-    var typeList by remember { mutableStateOf<List<RepairTypes>>(emptyList()) }
-    var carList by remember { mutableStateOf<List<CarCodeList>>(emptyList()) }
-
 
     LaunchedEffect(status.internet) {
         if (!status.internet) showInternetDialog = true
@@ -116,13 +113,6 @@ fun AppRoot() {
             return@LaunchedEffect
         }
 
-        try {
-            carrierList = repo.getAllCarriers(forceRefresh = true)
-            typeList = repairRepo.getAllRepairTypes(forceRefresh = true)
-            carList = repo.getAllCars(forceRefresh = true)
-        } catch (e: Exception) {
-            showApiDialog = true
-        }
     }
 
 
@@ -183,7 +173,8 @@ fun AppRoot() {
 
 @Composable
 fun connectivityState(
-    connectivityManager: ConnectivityManager
+    connectivityManager: ConnectivityManager,
+    repo: MoldApiRepository
 ): ConnectivityStatus {
 
     fun hasInternet(connectivityManager: ConnectivityManager): Boolean {
@@ -192,8 +183,6 @@ fun connectivityState(
         return caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
-
-    val repo = remember { MoldApiRepository() }
     var internet by remember { mutableStateOf(hasInternet(connectivityManager)) }
     var apiAvailable by remember { mutableStateOf(true) }
 
@@ -220,13 +209,14 @@ fun connectivityState(
             if (internet) {
                 try {
                     apiAvailable = repo.checkApiAvailable()
+                    Log.d("Avaiable" ,"Avaiable success: $apiAvailable");
                 } catch (e: Exception) {
                     apiAvailable = false
                 }
             } else {
                 apiAvailable = false
             }
-            kotlinx.coroutines.delay(5000)
+            kotlinx.coroutines.delay(60000)
         }
     }
 

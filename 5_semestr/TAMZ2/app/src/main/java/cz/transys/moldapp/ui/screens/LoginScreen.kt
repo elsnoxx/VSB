@@ -23,6 +23,7 @@ import cz.transys.moldapp.R
 import cz.transys.moldapp.buisines.apicalls.moldapi.EmpIdResponse
 import cz.transys.moldapp.buisines.apicalls.moldapi.MoldApiRepository
 import cz.transys.moldapp.buisines.localdata.LocalStorage
+import cz.transys.moldapp.buisines.models.TokenStore
 import kotlinx.coroutines.launch
 
 @Composable
@@ -124,7 +125,10 @@ fun LoginScreen(navController: NavHostController) {
                         Log.d("Login API", "Login success: $response")
 
                         if (response.message != "issue" && response.emp_name != ""){
-                            storage.saveUserId(userId)
+                            storage.saveUserId(response.emp_id)
+                            storage.saveUserName(response.emp_name)
+                            storage.saveJwtToken(response.token)
+                            TokenStore.jwt = response.token
                             navController.navigate("menu")
                         }  else {
                             errorMessage = context.getString(R.string.wrong_user_id)

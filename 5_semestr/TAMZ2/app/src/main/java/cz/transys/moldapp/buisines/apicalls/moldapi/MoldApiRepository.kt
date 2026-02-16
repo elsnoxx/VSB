@@ -1,5 +1,6 @@
 package cz.transys.moldapp.buisines.apicalls.moldapi
 
+import android.util.Log
 import cz.transys.moldapp.buisines.apicalls.ApiClient
 import cz.transys.moldapp.buisines.apicalls.moldapi.CarrierMountResponse
 import io.ktor.client.statement.HttpResponse
@@ -13,7 +14,7 @@ class MoldApiRepository {
     private var carsCache: List<CarCodeList>? = null
 
     suspend fun login(empId: String): EmpIdResponse {
-        return ApiClient.get("foampad/moldpda/login?empId=$empId")
+        return ApiClient.getPublic("foampad/moldpda/login?empId=$empId")
     }
     suspend fun getAllCars(forceRefresh: Boolean = false): List<CarCodeList> {
 
@@ -48,7 +49,7 @@ class MoldApiRepository {
     suspend fun checkApiAvailable(): Boolean {
         return withContext(Dispatchers.IO) {
             try {
-                val response: HttpResponse = ApiClient.get("health")
+                val response: HttpResponse = ApiClient.getPublic("health")
                 response.status.value in 200..299
             } catch (e: Exception) {
                 false
