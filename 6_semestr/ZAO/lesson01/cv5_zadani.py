@@ -28,16 +28,86 @@ python cv5_zadani.py --class_id 0 --color 0 0 255 --output_dir persons
 3	motocykl
 5	autobus
 """
-
+import os
+import argparse
 import cv2 as cv
 from ultralytics import YOLO
 
 # Inicializace modelu a cest
 # ...
 
+pareser = argparse.ArgumentParser(description="Detekce objektů pomocí YOLO modelu")
+pareser.add_argument("--class_id", type=int, default=2, help="ID detekované třídy")
+pareser.add_argument("--color", nargs=3, type=int, default=[0, 0, 255], help="Barva ohraničujících rámečků (B G R)")
+pareser.add_argument("--input_dir", type=str, default="bmw_100", help="Název vstupního adresáře")
+pareser.add_argument("--output_dir", type=str, default="output", help="Název výstupního adresáře")
+args = pareser.parse_args()
+
+files = []
+
+path = args.input_dir
+for file in os.listdir(path):
+    print(file)
+    files.append(os.path.join(path, file))
+
+model = YOLO("yolo26n.pt")
+
+if(os.path.exists(args.output_dir) == False):
+    os.mkdir(args.output_dir)
+
+if(os.path.exists(os.path.join(args.output_dir, "croped")) == False):
+    os.mkdir(os.path.join(args.output_dir, "croped"))
 
 # Iterace souborů a čtení obrazů
 # ...
 
+data = {}
+
+objects = []
+for file in files:
+    img = cv.imread(file)
+    prediction = model(img, device="cpu", show=False, classes=[args.class_id])
+    objectDetected = prediction[0].boxes
+    data[file] = objectDetected
+    break
+    
+test = data[files[0]]
+cnt = 0
+
+for item in data:
+    for ob in test.xyxy:
+        x1, y1, x2, y2 = ob
+        conf = ob.conf[0]            # confidence
+        cls = ob.cls[0]              # třída
+        if conf < 0.3:
+            continue
+        cropt_img = img[int(y1):int(y2), int(x1):int(x2)]
+        cv.imwrite(os.path.join(args.output_dir, "croped" ,f"{os.path.basename(item).split('.')[0]}_crop{cnt}.jpg"), cropt_img)
+        cnt += 1
+
 # Inference, extrakce ROI a zápis na disk
 # ...
+# cnt = 0 
+# img_counter = 0
+# for img in imgs:
+#     for ob in objects:
+#         cnt += 1
+#         x1, y1, x2, y2 = ob.xyxy[0]  # souřadnice
+#         conf = ob.conf[0]            # confidence
+#         cls = ob.cls[0]              # třída
+#         if conf < 0.3:
+#             continue
+
+#         cropt_img = img[int(y1):int(y2), int(x1):int(x2)]
+#         
+#         print(f"Object: x1={x1}, y1={y1}, x2={x2}, y2={y2}, confidence={conf}")
+#         cv.putText(img, f"Class: {cls}, Conf: {conf:.2f}", (int(x1), int(y1) - 10), cv.FONT_HERSHEY_SIMPLEX, 0.5, tuple(args.color), 2)
+#         cv.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), tuple(args.color), 3)
+#         print(prediction)
+#     cv.putText(img, f"Total Detected: {len(objectDetected)}", (10, img.shape[0] - 10), cv.FONT_HERSHEY_SIMPLEX, 0.7, tuple(args.color), 2)
+#     cv.imshow('Custom drawing', img)
+#     cv.imwrite(os.path.join(args.output_dir, f"{os.path.basename(files[img_counter]).split('.')[0]}_detection.jpg"), img)
+#     cv.waitKey(0)
+#     img_counter += 1
+#     break
+    
