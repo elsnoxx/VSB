@@ -47,7 +47,7 @@ files = []
 
 path = args.input_dir
 for file in os.listdir(path):
-    print(file)
+    # print(file)
     files.append(os.path.join(path, file))
 
 model = YOLO("yolo26n.pt")
@@ -69,45 +69,34 @@ for file in files:
     prediction = model(img, device="cpu", show=False, classes=[args.class_id])
     objectDetected = prediction[0].boxes
     data[file] = objectDetected
-    break
-    
-test = data[files[0]]
-cnt = 0
 
+
+
+# Inference, extrakce ROI a zápis na disk
+# ...    
+cnt = 0
+img_counter = 0
 for item in data:
-    for ob in test.xyxy:
-        x1, y1, x2, y2 = ob
-        conf = ob.conf[0]            # confidence
-        cls = ob.cls[0]              # třída
+    cnt = 0
+    boxes = data[item]
+    img = cv.imread(item)
+    # print(item)
+    for box in boxes:
+        # print(box)
+        x1, y1, x2, y2 = box.xyxy[0]
+        conf = box.conf[0]
+        cls = box.cls[0]
         if conf < 0.3:
             continue
         cropt_img = img[int(y1):int(y2), int(x1):int(x2)]
         cv.imwrite(os.path.join(args.output_dir, "croped" ,f"{os.path.basename(item).split('.')[0]}_crop{cnt}.jpg"), cropt_img)
         cnt += 1
-
-# Inference, extrakce ROI a zápis na disk
-# ...
-# cnt = 0 
-# img_counter = 0
-# for img in imgs:
-#     for ob in objects:
-#         cnt += 1
-#         x1, y1, x2, y2 = ob.xyxy[0]  # souřadnice
-#         conf = ob.conf[0]            # confidence
-#         cls = ob.cls[0]              # třída
-#         if conf < 0.3:
-#             continue
-
-#         cropt_img = img[int(y1):int(y2), int(x1):int(x2)]
-#         
-#         print(f"Object: x1={x1}, y1={y1}, x2={x2}, y2={y2}, confidence={conf}")
-#         cv.putText(img, f"Class: {cls}, Conf: {conf:.2f}", (int(x1), int(y1) - 10), cv.FONT_HERSHEY_SIMPLEX, 0.5, tuple(args.color), 2)
-#         cv.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), tuple(args.color), 3)
-#         print(prediction)
-#     cv.putText(img, f"Total Detected: {len(objectDetected)}", (10, img.shape[0] - 10), cv.FONT_HERSHEY_SIMPLEX, 0.7, tuple(args.color), 2)
-#     cv.imshow('Custom drawing', img)
-#     cv.imwrite(os.path.join(args.output_dir, f"{os.path.basename(files[img_counter]).split('.')[0]}_detection.jpg"), img)
-#     cv.waitKey(0)
-#     img_counter += 1
-#     break
+        # print(f"Object: x1={x1}, y1={y1}, x2={x2}, y2={y2}, confidence={conf}")
+        cv.putText(img, f"Class: {cls}, Conf: {conf:.2f}", (int(x1), int(y1) - 10), cv.FONT_HERSHEY_SIMPLEX, 0.5, tuple(args.color), 2)
+        cv.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), tuple(args.color), 3)
+    cv.putText(img, f"Total Detected: {len(boxes)}", (10, img.shape[0] - 10), cv.FONT_HERSHEY_SIMPLEX, 0.7, tuple(args.color), 2)
+    # cv.imshow('Custom drawing', img)
+    cv.imwrite(os.path.join(args.output_dir, f"{os.path.basename(files[img_counter]).split('.')[0]}_detection.jpg"), img)
+    # cv.waitKey(0)
+    img_counter += 1
     
