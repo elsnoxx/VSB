@@ -1,0 +1,53 @@
+fic0024@debian:~/01-task$ ls -la /; ip add
+total 64
+drwxr-xr-x  18 root root  4096 Feb 26 20:08 .
+drwxr-xr-x  18 root root  4096 Feb 26 20:08 ..
+lrwxrwxrwx   1 root root     7 Feb 26 20:03 bin -> usr/bin
+drwxr-xr-x   3 root root  4096 Feb 26 20:13 boot
+drwxr-xr-x  18 root root  3240 Feb 26 20:17 dev
+drwxr-xr-x  65 root root  4096 Feb 26 20:17 etc
+drwxr-xr-x   3 root root  4096 Feb 26 20:12 home
+lrwxrwxrwx   1 root root    35 Feb 26 20:08 initrd.img -> boot/initrd.img-6.12.73+deb13-amd64
+lrwxrwxrwx   1 root root    35 Feb 26 20:05 initrd.img.old -> boot/initrd.img-6.12.63+deb13-amd64
+lrwxrwxrwx   1 root root     7 Feb 26 20:03 lib -> usr/lib
+lrwxrwxrwx   1 root root     9 Feb 26 20:03 lib64 -> usr/lib64
+drwx------   2 root root 16384 Feb 26 20:03 lost+found
+drwxr-xr-x   3 root root  4096 Feb 26 20:03 media
+drwxr-xr-x   2 root root  4096 Feb 26 20:04 mnt
+drwxr-xr-x   2 root root  4096 Feb 26 20:04 opt
+dr-xr-xr-x 150 root root     0 Feb 26 20:17 proc
+drwx------   4 root root  4096 Feb 26 20:15 root
+drwxr-xr-x  19 root root   560 Feb 26 20:18 run
+lrwxrwxrwx   1 root root     8 Feb 26 20:03 sbin -> usr/sbin
+drwxr-xr-x   2 root root  4096 Feb 26 20:04 srv
+dr-xr-xr-x  13 root root     0 Feb 26 20:19 sys
+drwxrwxrwt   7 root root   140 Feb 26 20:17 tmp
+drwxr-xr-x  12 root root  4096 Feb 26 20:04 usr
+drwxr-xr-x  11 root root  4096 Feb 26 20:15 var
+lrwxrwxrwx   1 root root    32 Feb 26 20:08 vmlinuz -> boot/vmlinuz-6.12.73+deb13-amd64
+lrwxrwxrwx   1 root root    32 Feb 26 20:05 vmlinuz.old -> boot/vmlinuz-6.12.63+deb13-amd64
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute
+       valid_lft forever preferred_lft forever
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 08:00:27:85:ad:48 brd ff:ff:ff:ff:ff:ff
+    altname enx08002785ad48
+    inet 10.0.2.15/24 brd 10.0.2.255 scope global dynamic enp0s3
+       valid_lft 86242sec preferred_lft 86242sec
+    inet6 fd17:625c:f037:2:a00:27ff:fe85:ad48/64 scope global dynamic mngtmpaddr proto kernel_ra
+       valid_lft 86243sec preferred_lft 14243sec
+    inet6 fe80::a00:27ff:fe85:ad48/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever
+3: enp0s8: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 08:00:27:09:92:74 brd ff:ff:ff:ff:ff:ff
+    altname enx080027099274
+    inet 192.168.100.143/24 brd 192.168.100.255 scope global dynamic enp0s8
+       valid_lft 259058sec preferred_lft 259058sec
+    inet6 2a00:ca8:a16:152f:a00:27ff:fe09:9274/64 scope global dynamic mngtmpaddr proto kernel_ra
+       valid_lft forever preferred_lft forever
+    inet6 fe80::a00:27ff:fe09:9274/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever
+fic0024@debian:~/01-task$
