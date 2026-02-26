@@ -1,48 +1,31 @@
-import cv2 as cv
-import numpy as np
 import os
+import cv2 as cv
+from check_utils import desizionModel, calculateAccurency, loadFiles
 
 path = "test-images"
+path_output_red = "out-red"
+path_output_green = "out-green"
 
-if(os.path.exists("out-red") == False):
-    os.mkdir("out-red")
+if(os.path.exists(path_output_red) == False):
+    os.mkdir(path_output_red)
         
-if(os.path.exists("out-green") == False):
-    os.mkdir("out-green")
+if(os.path.exists(path_output_green) == False):
+    os.mkdir(path_output_green)
 
-files = []
-for file in os.listdir(path):
-    print(file)
-    files.append(os.path.join(path, file))
+files = loadFiles(path)
     
 result = {}
-#### 1 
 for file in files:
-    print(file)
     image = cv.imread(file)
-    image = cv.resize(image, (300, 600))
-
-    b, g, r = cv.split(image)
-
-    _, threshRed = cv.threshold(r, 100, 255, cv.THRESH_BINARY)
-    redPixels = cv.countNonZero(threshRed)
-    _, threshGreen = cv.threshold(g, 100, 255, cv.THRESH_BINARY)
-    greenPixels = cv.countNonZero(threshGreen)
-
-    print(redPixels)
-    print(greenPixels)
-
-    if(greenPixels > redPixels):
-        result[file] = "red"
+    desicion = desizionModel(image)
+    result[file] = desicion
+    
+    if (desicion == "red"):
+        cv.imwrite(os.path.join(path_output_red ,f"{os.path.basename(file)}.jpg"), image)
     else:
-        result[file] = "green"
+        cv.imwrite(os.path.join(path_output_green ,f"{os.path.basename(file)}.jpg"), image)
 
-print(result)
-# Display each channel
-# cv.imshow("Blue Channel", b)
-# cv.imshow("Green Channel", g)
-# cv.imshow("Red Channel", r)
-# cv.imshow("image", image)
-# cv.waitKey()
+calculateAccurency(result)
+
 
 
