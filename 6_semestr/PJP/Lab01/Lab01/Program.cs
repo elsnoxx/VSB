@@ -12,29 +12,14 @@ namespace Lab01
         
         static void Main(string[] args)
         {
-            string input = Console.ReadLine();
+            int n = int.Parse(Console.ReadLine());
 
-            int open = 0;
-            int close = 0;
-
-            input = input.Trim();
-            List<char> tokens = new List<char>();
-
-            for (int i = 0; i < input.Length; i++)
+            for (int i = 0; i < n; i++)
             {
-                if (!char.IsWhiteSpace(input[i]) )
-                {
-
-                    tokens.Add(input[i]);
-                }
-                else
-                {
-                    Console.WriteLine("ERROR");
-                }
-            }
-            foreach (var item in tokens)
-            {
-                Console.WriteLine(item);
+                string expression = Console.ReadLine();
+                var node = ExpressionParser.Parse(expression);
+                double result = ExpressionParser.Evaluate(node);
+                Console.WriteLine(result);
             }
         }
     }
