@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Lab01
+namespace Lab01.tree
 {
     public class ExpressionParser
     {
@@ -14,6 +14,7 @@ namespace Lab01
 
         public static Node Parse(string text)
         {
+            // remove whitespace
             text = Regex.Replace(text, @"\s+", "");
 
             if (text.Length == 0)
