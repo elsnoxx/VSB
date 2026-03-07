@@ -9,7 +9,8 @@ def click_on_target(x, y):
     print(f"Klikám... {x} a {y}")
 
 template = cv.imread('target.png', 0)
-template = cv.resize(template, (int(template.shape[1] // 4.5), int(template.shape[0] // 4.5)))
+# template = cv.resize(template, (int(template.shape[1] // 4.5), int(template.shape[0] // 4.5)))
+template = cv.resize(template, (int(template.shape[1] // 6), int(template.shape[0] // 6)))
 h, w = template.shape[:2]
 w = w // 2
 h = h // 2
@@ -31,6 +32,12 @@ with mss() as sct:
         image = np.array(sct.grab(search_area))
         width, height = image.shape[1], image.shape[0]
         image_gray = cv.cvtColor(np.array(image), cv.COLOR_RGB2GRAY)
+
+        print("Template:", template.shape)
+        print("Screen:", image_gray.shape)
+        # cv.imshow("screen", image_gray)
+        # cv.imshow("template", template)
+        # cv.waitKey(0)
 
 
         res = cv.matchTemplate(image_gray, template, cv.TM_CCOEFF_NORMED)
