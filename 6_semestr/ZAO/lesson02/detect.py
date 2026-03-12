@@ -11,7 +11,7 @@ model = YOLO('tlight-v11.pt')
 
 cv.namedWindow('frame', 0)
 
-path = "test-big-zao"
+path = "02-cv-template-v2-yolo/test-big-zao"
 
 files = loadFiles(path)
 

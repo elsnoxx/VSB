@@ -38,18 +38,8 @@ def desizionModel(img):
     isRed = 0
     isGreen = 0
     image = cv.resize(img, (300, 600))
-
-    b, g, r = cv.split(image)
-
-    _, threshRed = cv.threshold(r, 150, 255, cv.THRESH_BINARY)
-    redPixels = cv.countNonZero(threshRed)
-    _, threshGreen = cv.threshold(g, 150, 255, cv.THRESH_BINARY)
-    greenPixels = cv.countNonZero(threshGreen)
     
-    if(greenPixels > redPixels):
-        isGreen += 1
-    else:
-        isRed += 1
+    b, g, r = cv.split(image)
         
     hsv = cv.cvtColor(image, cv.COLOR_BGR2HSV)
     
@@ -61,26 +51,32 @@ def desizionModel(img):
 
     mask_red1 = cv.inRange(hsv, lower_red1, upper_red1)
     mask_red2 = cv.inRange(hsv, lower_red2, upper_red2)
-
-    mask_red = mask_red1 + mask_red2
-    count_red = cv.countNonZero(mask_red)
     
     lower_green = np.array([35, 150, 150])
     upper_green = np.array([85, 255, 255])
 
+    kernel_dilate = np.ones((7,7), np.uint8)
+    kernel_erode = np.ones((11,11), np.uint8)
+
+    mask_red = mask_red1 + mask_red2
     mask_green = cv.inRange(hsv, lower_green, upper_green)
+
+    mask_red = cv.dilate(mask_red, kernel_dilate, iterations=1)
+    mask_red = cv.erode(mask_red, kernel_erode, iterations=1)
+
+    mask_green = cv.dilate(mask_green, kernel_dilate, iterations=1)
+    mask_green = cv.erode(mask_green, kernel_erode, iterations=1)
+
+    
+    count_red = cv.countNonZero(mask_red)    
     count_green = cv.countNonZero(mask_green)
     
     
     ratio_red = count_red / (count_red + count_green + 1)
-    if ratio_red > 0.6:
-        isRed += 2
-    else:
-        isGreen += 2
-        
-
-    if(isGreen > isRed):
-        return "green"
-    else:
+    if ratio_red > 0.8:
         return "red"
+    else:
+        return "green"
+
+        
     
