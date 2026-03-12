@@ -3,9 +3,10 @@ import cv2 as cv
 import numpy as np
 import pyautogui
 import time
+import os
 
 #big screen
-scale_factor = 4.5
+scale_factor = 4.6
 # scale_factor = 6
 
 scale_factor_other = 1
@@ -49,7 +50,6 @@ mon_width = mon_width // 2
 
 search_area = {"top": 0, "left": mon_width, "width": mon_width, "height": mon_height}
 
-prev_x, prev_y = None, None
 cnt = 0
 
 with mss() as sct:
@@ -60,54 +60,71 @@ with mss() as sct:
 
         print("Template:", template.shape)
         print("Screen:", image_gray.shape)
+        
+        res = cv.matchTemplate(image_gray, template, cv.TM_CCOEFF_NORMED)
+        _, max_val, _, max_loc = cv.minMaxLoc(res)
+        
         # cv.imshow("screen", image_gray)
         # cv.imshow("template", template)
         # cv.waitKey(0)
+        time.sleep(0.1)
+        
+        image_second = np.array(sct.grab(search_area))
+        width, height = image_second.shape[1], image_second.shape[0]
+        image_second_gray = cv.cvtColor(np.array(image_second), cv.COLOR_RGB2GRAY)
 
 
-        res = cv.matchTemplate(image_gray, template, cv.TM_CCOEFF_NORMED)
-        _, max_val, _, max_loc = cv.minMaxLoc(res)
+        res_2 = cv.matchTemplate(image_second_gray, template, cv.TM_CCOEFF_NORMED)
+        _, max_val_second, _, max_loc_second = cv.minMaxLoc(res_2)
 
 
         print(f"Maximální hodnota shody: {max_val:.2f} na pozici {max_loc}.")
 
-        if max_val >= 0.8:
-            if show_img_result:
-                cv.rectangle(image, max_loc, (max_loc[0] + template.shape[1], max_loc[1] + template.shape[0]), (0, 255, 0), 2)
-            # aktuální pozice středu objektu
-            x = max_loc[0] + w + mon_width
-            y = max_loc[1] + h
+        if max_val >= 0.8 and max_val_second >= 0.8:
+            # Definuj oblast kolem prvního nálezu (např. + - 100 pixelů)
+            margin = 100
+            top = max(0, max_loc[1] - margin)
+            bottom = min(image_gray.shape[0], max_loc[1] + h*2 + margin)
+            left = max(0, max_loc[0] - margin)
+            right = min(image_gray.shape[1], max_loc[0] + w*2 + margin)
 
-            if prev_x is not None:
-                dist = np.hypot(x - prev_x, y - prev_y)
+            # Druhý grab udělej klidně celé obrazovky, ale matchuj jen v ROI
+            roi = image_second_gray[top:bottom, left:right]
+            res_2 = cv.matchTemplate(roi, template, cv.TM_CCOEFF_NORMED)
+            _, max_val_second, _, max_loc_roi = cv.minMaxLoc(res_2)
+            
+            # Přepočti souřadnice z ROI zpět na celou obrazovku
+            max_loc_second = (max_loc_roi[0] + left, max_loc_roi[1] + top)
+            
+            if max_val_second >= 0.8:
+            
+                fail_count = 0 
+                if show_img_result:
+                    cv.rectangle(image, max_loc, (max_loc[0] + template.shape[1], max_loc[1] + template.shape[0]), (0,255,0), 2)
+                    cv.rectangle(image, max_loc_second, (max_loc_second[0] + template.shape[1], max_loc_second[1] + template.shape[0]), (0,0,255), 2)
+                # 3. Přepočet souřadnic z výřezu zpět na celou plochu
+                max_loc_second = (max_loc_roi[0] + left, max_loc_roi[1] + top)
 
-                if dist > 100:   # nový target
-                    print("Nový target - reset predikce")
-                    prev_x, prev_y = None, None
-                    click_on_target(x, y)
+                # Teď už x1, y1 a x2, y2 patří stejnému terči!
+                x1, y1 = max_loc[0] + w, max_loc[1] + h
+                x2, y2 = max_loc_second[0] + w, max_loc_second[1] + h
 
-                else:
-                    vx = x - prev_x
-                    vy = y - prev_y
-
-                    pred_x = int(x + vx)
-                    pred_y = int(y + vy)
-
-                    click_on_target(pred_x, pred_y)
-
-            else:
-                # první detekce → ještě nemáme rychlost
-                click_on_target(x, y)
-
-            # uložíme aktuální pozici
-            prev_x, prev_y = x, y
+                vx, vy = x2 - x1, y2 - y1
+                
+                # Predikce (můžeš vektor i vynásobit pro větší předstih)
+                pred_x, pred_y = int(x2 + vx), int(y2 + vy)
+                
+                click_on_target(pred_x + mon_width, pred_y)
+                
+                if show_img_result:
+                    cv.circle(image, (x1, y1), 6, (0, 255, 0), -1)
+                    cv.circle(image, (x2, y2), 6, (0, 0, 255), -1)
+                    cv.circle(image, (pred_x, pred_y), 6, (255, 0, 0), -1)
         else:
             print("Nenalezen žádný target.")
             fail_count += 1
 
-        # if cv.waitKey(1) & 0xFF == ord('q'):
-        #     break
-        if fail_count >= 5:
+        if fail_count >= 10:
             fail_count = 0
             res = cv.matchTemplate(image_gray, play, cv.TM_CCOEFF_NORMED)
             _, max_val, _, max_loc = cv.minMaxLoc(res)
@@ -116,6 +133,7 @@ with mss() as sct:
             if max_val >= 0.8:
                 if show_img_result:
                     cv.rectangle(image, max_loc, (max_loc[0] + play.shape[1], max_loc[1] + play.shape[0]), (0, 255, 0), 2)
+                    cv.rectangle(image_second, max_loc_second, (max_loc_second[0] + play.shape[1], max_loc_second[1] + play.shape[0]), (255, 0, 0), 2)
                 x = max_loc[0] + play_w + mon_width
                 y = max_loc[1] + play_h
                 click_on_target(x, y)
@@ -131,11 +149,17 @@ with mss() as sct:
                 y = max_loc[1] + restrat_h
                 click_on_target(x, y)
 
-            # Zobrazení obrázku v OpenCV
-            if show_img_result:
-                image = cv.resize(image, (image.shape[1] // 2, image.shape[0] // 2))
-                cv.imshow('Snímek obrazovky', image)
-                cv.waitKey(0)
-                cv.destroyAllWindows()
+        # Zobrazení obrázku v OpenCV
+        if show_img_result:
+            path = "debug"
+            if(os.path.exists(path) == False):
+                os.mkdir(path)
+            result = cv.resize(image, (image.shape[1] // 2, image.shape[0] // 2))
+            filename = time.strftime("%Y%m%d_%H%M%S") + ".jpg"
+            cv.imwrite(os.path.join(path ,filename), image)
+            
+            # cv.imshow('Snímek obrazovky', image)
+            # cv.waitKey(0)
+            # cv.destroyAllWindows()
         
         time.sleep(0.5)
