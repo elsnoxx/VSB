@@ -4,115 +4,116 @@ import numpy as np
 import pyautogui
 import time
 import os
+from helper import click_on_target, load_files, load_picture, center_point, monitor_size, save_pic, find_template, get_roi
+
+#big screen
+scale_factor = 4.6
+# scale_factor = 6
+
+scale_factor_other = 1
+
+show_img_result = True
+fail_count = 0
+
+path = 'duckhunt/tragets'  
+path_debug = "debug"
+cnt = 0 
+cnt_rety = 5
 
 
-    
+restrat = load_picture('duckhunt/restart.png', scale_factor_other)
+restrat_h, restrat_w = center_point(restrat)
 
-def click_on_target(x, y, max_val):
-    pyautogui.click(x, y, _pause=False)
-    print(f"Klikám... {x} a {y}, Maximální hodnota shody: {max_val:.2f}")
-
-red_files = []
-blask_files = []
-path = 'duckhunt/tragets'
-for file in os.listdir(path):
-    if(file.split('_')[0] == 'red' ):
-        red_files.append(os.path.join(path, file))
-    elif(file.split('_')[0] == 'black' ):
-        blask_files.append(os.path.join(path, file))
-
-
-print(red_files)
-print(blask_files)
+ 
+red_files, blask_files = load_files(path)
 templates = []
 for file in blask_files:
     template = cv.imread(file, 0)
-    template = cv.resize(template, (int(template.shape[1] * 2.8), int(template.shape[0] * 2.8)))
+    template = cv.resize(template, (int(template.shape[1] // scale_factor), int(template.shape[0] // scale_factor)))
     templates.append(template)
 
-
-if template is None:
-    print("Chyba: Soubor target.png nebyl nalezen!")
-    exit()
-
-mon_width, mon_height = pyautogui.size()
-mon_width = mon_width // 2
+mon_width, mon_height = monitor_size()
 
 search_area = {"top": 0, "left": mon_width, "width": mon_width, "height": mon_height}
 
-prev_x, prev_y = None, None
-cnt = 0
-
-avr = []
+template = templates[1]
+h,w = center_point(template)
 
 with mss() as sct:
     while True:
         image = np.array(sct.grab(search_area))
         width, height = image.shape[1], image.shape[0]
-        image_gray = cv.cvtColor(np.array(image), cv.COLOR_BGRA2GRAY)
+        image_gray = cv.cvtColor(np.array(image), cv.COLOR_RGB2GRAY)
 
-        for template in templates:
-            # cnt += 1
-
-                
-            res = cv.matchTemplate(image_gray, template, cv.TM_CCOEFF_NORMED)
-            _, max_val, _, max_loc = cv.minMaxLoc(res)
-
-
-            # print(f"Maximální hodnota shody: {max_val:.2f} na pozici {max_loc}.")
-            # cv.rectangle(image_gray, max_loc, (max_loc[0] + template.shape[1], max_loc[1] + template.shape[0]), (0, 255, 0), 2)
-            # cv.putText(image_gray, f"{max_val:.2f} {file}", (max_loc[0], max_loc[1] - 10), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-
-            if max_val >= 0.7:
-                # aktuální pozice středu objektu
-                x = max_loc[0] + template.shape[1] // 2 + mon_width
-                y = max_loc[1] + template.shape[0] // 2
-
-                if prev_x is not None:
-                    dist = np.hypot(x - prev_x, y - prev_y)
-
-                    if dist > 100:   # nový target
-                        print("Nový target - reset predikce")
-                        prev_x, prev_y = None, None
-                        click_on_target(x, y, max_val)
-
-                    else:
-                        vx = x - prev_x
-                        vy = y - prev_y
-
-                        pred_x = int(x + vx)
-                        pred_y = int(y + vy)
-
-                        click_on_target(pred_x, pred_y)
-
-                else:
-                    # první detekce → ještě nemáme rychlost
-                    click_on_target(x, y, max_val)
-
-                # uložíme aktuální pozici
-                prev_x, prev_y = x, y
-
-                # Zobrazení obrázku v OpenCV
-                
-        avr.append(max_val)
-        # cv.imshow('Sablona', template)
-        # image_gray = cv.resize(image_gray, (image_gray.shape[1] // 2, image_gray.shape[0] // 2))
-        # cv.imshow('Snímek obrazovky', image_gray)
-        # cv.waitKey(0)
-        # cv.destroyAllWindows()
-        # cnt = 0
-
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
+        print("Template:", template.shape)
+        print("Screen:", image_gray.shape)
         
-        # time.sleep(0.5)
-        # print(f"avr is {sum(avr) / len(avr):.2f}")
+        max_val, max_loc = find_template(image_gray, template)
+        
+        # cv.imshow("screen", image_gray)
+        # cv.imshow("template", template)
+        # cv.waitKey(0)
+        time.sleep(0.1)
+        
+        image_second = np.array(sct.grab(search_area))
+        width, height = image_second.shape[1], image_second.shape[0]
+        image_second_gray = cv.cvtColor(np.array(image_second), cv.COLOR_RGB2GRAY)
+
+        max_val_second, max_loc_second = find_template(image_second_gray, template, threshold=0.8)
+
+
+        print(f"Maximální hodnota shody: {max_val:.2f} na pozici {max_loc}.")
+
+        if max_val >= 0.6 and max_val_second >= 0.6:            
+            roi, offset = get_roi(image_second_gray, max_loc, template.shape, margin=100)
+            
+            res_2 = cv.matchTemplate(roi, template, cv.TM_CCOEFF_NORMED)
+            max_val_second, max_loc_roi = find_template(roi, template, threshold=0.8)
+            
+            # Přepočti souřadnice z ROI zpět na celou obrazovku
+            
+            
+            if max_val_second >= 0.8:
+                max_loc_second = (max_loc_roi[0] + offset[0], max_loc_roi[1] + offset[1])
+                fail_count = 0 
+                if show_img_result:
+                    cv.rectangle(image, max_loc, (max_loc[0] + template.shape[1], max_loc[1] + template.shape[0]), (0,255,0), 2)
+                    cv.rectangle(image, max_loc_second, (max_loc_second[0] + template.shape[1], max_loc_second[1] + template.shape[0]), (0,0,255), 2)
+
+                # Teď už x1, y1 a x2, y2 patří stejnému terči!
+                x1, y1 = max_loc[0] + w, max_loc[1] + h
+                x2, y2 = max_loc_second[0] + w, max_loc_second[1] + h
+
+                vx, vy = x2 - x1, y2 - y1
+                
+                # Predikce (můžeš vektor i vynásobit pro větší předstih)
+                pred_x, pred_y = int(x2 + vx), int(y2 + vy)
+                
+                click_on_target(pred_x + mon_width, pred_y)
+                
+                if show_img_result:
+                    cv.circle(image, (x1, y1), 6, (0, 255, 0), -1)
+                    cv.circle(image, (x2, y2), 6, (0, 0, 255), -1)
+                    cv.circle(image, (pred_x, pred_y), 6, (255, 0, 0), -1)
+        else:
+            print("Nenalezen žádný target.")
+            fail_count += 1
+
+        if fail_count >= cnt_rety:
+
+            max_val, max_loc = find_template(image_gray, restrat, threshold=0.8)
+            print(f"Maximální hodnota shody: {max_val:.2f} na pozici {max_loc}.")
+            
+            if max_val >= 0.8:
+                fail_count = 0
+                if show_img_result:
+                    cv.rectangle(image, max_loc, (max_loc[0] + restrat.shape[1], max_loc[1] + restrat.shape[0]), (0, 255, 0), 2)
+                x = max_loc[0] + restrat_w + mon_width
+                y = max_loc[1] + restrat_h
+                click_on_target(x, y)
 
         # Zobrazení obrázku v OpenCV
-        # cv.rectangle(image, max_loc, (max_loc[0] + template.shape[1], max_loc[1] + template.shape[0]), (0, 255, 0), 2)
-        # cv.imshow('Sablona', template)
-        # image = cv.resize(image, (image.shape[1] // 2, image.shape[0] // 2))
-        # cv.imshow('Snímek obrazovky', image)
-        # cv.waitKey(0)
-        # cv.destroyAllWindows()
-        # time.sleep(0.5)
+        if show_img_result:
+            save_pic(path_debug, image)
+        
+        time.sleep(0.5)
