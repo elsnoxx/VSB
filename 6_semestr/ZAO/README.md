@@ -1,5 +1,16 @@
 # Základy analýzy obrazu (ZAO)
 
+
+Seznam ukolu
+1. OpenCV + YOLO
+2. Analýza semaforů 
+3. Vyhledávání vzorů (template matching) 
+4. Analýza obsazenosti parkoviště pomocí hranových detektorů
+
+
+
+
+
 Website: https://mrl.cs.vsb.cz//people/fusek/zao_course.html
 
 
