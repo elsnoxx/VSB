@@ -1,0 +1,12 @@
+systemctl status myservice
+● myservice.service - Moje testovaci jednotka pro automaticke spusteni
+     Loaded: loaded (/etc/systemd/system/myservice.service; enabled; preset: enabled)
+     Active: active (exited) since Thu 2026-03-19 18:08:19 CET; 4min 4s ago
+ Invocation: 701d8353b2d44a3ba9a2ca081892913b
+    Process: 741 ExecStart=/usr/local/bin/script.sh (code=exited, status=0/SUCCESS)
+   Main PID: 741 (code=exited, status=0/SUCCESS)
+   Mem peak: 1.8M
+        CPU: 41ms
+
+Mar 19 18:08:19 debian systemd[1]: Starting myservice.service - Moje testovaci jednotka pro automaticke spusteni...
+Mar 19 18:08:19 debian systemd[1]: Finished myservice.service - Moje testovaci jednotka pro automaticke spusteni.
