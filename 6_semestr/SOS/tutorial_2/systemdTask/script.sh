@@ -1,5 +1,4 @@
 #!/bin/bash
-# Cesta: /usr/local/bin/muj_skript.sh
 
 # Procházíme všechny podadresáře v /home
 for dir in /home/* ; do

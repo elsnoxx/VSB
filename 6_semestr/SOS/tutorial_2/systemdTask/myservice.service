@@ -1,5 +1,3 @@
-# Cesta: /etc/systemd/system/moje_jednotka.service
-
 [Unit]
 Description=Moje testovaci jednotka pro automaticke spusteni
 After=network.target
