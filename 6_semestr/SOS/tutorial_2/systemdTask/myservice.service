@@ -1,0 +1,13 @@
+# Cesta: /etc/systemd/system/moje_jednotka.service
+
+[Unit]
+Description=Moje testovaci jednotka pro automaticke spusteni
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/script.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

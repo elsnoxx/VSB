@@ -1,0 +1,37 @@
+/dev/md0:
+           Version : 1.2
+     Creation Time : Tue Mar 17 13:54:26 2026
+        Raid Level : raid6
+        Array Size : 41908224 (39.97 GiB 42.91 GB)
+     Used Dev Size : 20954112 (19.98 GiB 21.46 GB)
+      Raid Devices : 4
+     Total Devices : 5
+       Persistence : Superblock is persistent
+
+     Intent Bitmap : Internal
+
+       Update Time : Tue Mar 17 13:56:32 2026
+             State : clean, degraded, recovering 
+    Active Devices : 3
+   Working Devices : 5
+    Failed Devices : 0
+     Spare Devices : 2
+
+            Layout : left-symmetric
+        Chunk Size : 512K
+
+Consistency Policy : bitmap
+
+    Rebuild Status : 83% complete
+
+              Name : debian:0  (local to host debian)
+              UUID : 9dad72c9:2341510f:bdba8031:9c579c75
+            Events : 33
+
+    Number   Major   Minor   RaidDevice State
+       4       8       96        0      spare rebuilding   /dev/sdg
+       1       8       48        1      active sync   /dev/sdd
+       2       8       64        2      active sync   /dev/sde
+       3       8       80        3      active sync   /dev/sdf
+
+       0       8       32        -      spare   /dev/sdc
