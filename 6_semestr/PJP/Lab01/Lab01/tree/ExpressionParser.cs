@@ -18,8 +18,15 @@ namespace Lab01.tree
             text = Regex.Replace(text, @"\s+", "");
 
             if (text.Length == 0)
-                throw new Exception("Empty expression");
+            {
+                Console.WriteLine("Empty expression");
+                return null;
+            }
+                
+            
 
+            ValidateExpression(text);
+            
             if (text.StartsWith("(") &&
                 text.EndsWith(")") &&
                 IsValidBrackets(text.Substring(1, text.Length - 2)))
@@ -64,7 +71,24 @@ namespace Lab01.tree
                 return new Value(value);
             }
 
-            throw new Exception("Invalid expression");
+            Console.WriteLine("Invalid expression");
+            return null;
+        }
+        
+        static void ValidateExpression(string text)
+        {
+            for (int i = 0; i < text.Length - 1; i++)
+            {
+                if (IsOperator(text[i]) && IsOperator(text[i + 1]))
+                {
+                    Console.WriteLine($"Neplatná sekvence operátorů: {text[i]}{text[i + 1]}");
+                }
+            }
+        }
+
+        static bool IsOperator(char c)
+        {
+            return c == '+' || c == '-' || c == '*' || c == '/';
         }
         public static double Evaluate(Node node)
         {
@@ -88,7 +112,8 @@ namespace Lab01.tree
                 }
             }
 
-            throw new Exception("Invalid node");
+            Console.WriteLine("Invalid node");
+            return double.NaN;
         }
         static bool IsValidBrackets(string text)
         {
