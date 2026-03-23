@@ -1,0 +1,8 @@
+*** Report for user quotas on device /dev/sdb
+Block grace time: 7days; Inode grace time: 7days
+                        Block limits                File limits
+User            used    soft    hard  grace    used  soft  hard  grace
+----------------------------------------------------------------------
+root      --      20       0       0              2     0     0
+fic0024   --      20  500000  600000              6     0     0
+franta    --      16  500000  600000              5     0     0

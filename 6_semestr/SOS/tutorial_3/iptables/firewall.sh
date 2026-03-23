@@ -43,3 +43,6 @@ iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
 echo "Firewall byl úspěšně nastaven."
+
+iptables -L -v -n
+iptables -t nat -L -v -n
