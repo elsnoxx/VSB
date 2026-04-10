@@ -2,10 +2,14 @@
 
 
 Seznam ukolu
-1. OpenCV + YOLO
-2. Analýza semaforů 
-3. Vyhledávání vzorů (template matching) 
+1. OpenCV + YOLO - Done
+2. Analýza semaforů - Done 
+3. Vyhledávání vzorů (template matching) - Dart Done
 4. Analýza obsazenosti parkoviště pomocí hranových detektorů
+5.
+6.
+7.
+8. Počítání dřepů pomocí obrazů - Done
 
 
 
