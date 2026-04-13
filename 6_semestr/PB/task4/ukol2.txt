@@ -1,0 +1,4 @@
+john --format=md5crypt hash.txt --show
+hax0r:password:18353:0:99999:7:::
+
+1 password hash cracked, 0 left

