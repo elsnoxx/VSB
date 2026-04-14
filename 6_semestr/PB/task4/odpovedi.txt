@@ -1,0 +1,111 @@
+Co je uloženo v paměti, jaké je její rozložení a z jakých částí se skládá ?
+
+Struktura a obsah pamětiPaměť typu Flash o velikosti 8 MB je rozdělena na dvě hlavní části. 
+Útočník použil techniku maskování, kdy se celý soubor navenek tváří jako legitimní multimediální 
+soubor, aby zmátl základní kontrolu.1. 
+
+Rozložení (Layout) paměti:Adresní rozsah (Offset)Formát / TypPopis obsahu0x000000 – 0x03FFFFJPEG ImageObrázek ve formátu JFIF 1.01 (vytvořen pomocí gd-jpeg). Slouží jako "maska".0x040000 – 0x71E000Squashfs (v4.0)Komprimovaný souborový systém (Linux rootfs), little-endian, komprese gzip.0x71E001 – 0x7FFFFFPadding / Free spaceZbytek kapacity 8MB chipu (nevyužito nebo nulováno).
+
+
+2. Z čeho se paměť skládá:Zaváděcí/Klamná část (0–256 KB):Obsahuje data obrázku JPEG. Při běžném otevření v prohlížeči se zobrazí vizuální obsah, což má za cíl skrýt fakt, že jde o firmware útočného zařízení.Operační systém (cca 7 MB):Jádrem paměti je souborový systém Squashfs. Tento systém je určen pouze pro čtení (read-only), což je typické pro embedded zařízení. Obsahuje kompletní strom adresářů operačního systému založeného na Linuxu (pravděpodobně distribuce Buildroot).Softwarové komponenty uvnitř systému:Kernel a knihovny: Využívá uClibc a standardní Linuxové nástroje.BusyBox: Poskytuje základní utility (ls, cat, mount, atd.).Síťové nástroje: brctl (pro tvorbu bridge), tcpdump (pro odposlech).Vzdálený přístup: dropbear (SSH server), apache (webový server pro stahování úlovků), tor (pro anonymizaci přístupu).Jak jsi na to přišel (Metodika pro dokumentaci):Identifikace souboru: Pomocí nástroje file byl soubor identifikován jako JPEG.Hloubková analýza: Nástroj binwalk odhalil, že na offsetu 262144 (0x40000) se nachází skrytá hlavička souborového systému Squashfs.Analýza entropie: Příkaz binwalk -E potvrdil vysokou míru entropie od adresy 0x40000, což značí komprimovaná data (v tomto případě právě souborový systém).Extrakce: Obsah byl extrahován příkazem binwalk -e (nebo ručně přes dd), čímž byl získán přístup k jednotlivým souborům v /etc, /bin a /usr.Tip: Do odpovědi nezapomeň uvést i ten časový údaj (Created: 2020-04-01 11:45:28), který binwalk vypsal. Je to důležitý detail o tom, kdy byl systém sestaven.
+
+
+Jaké softwarové komponenty byly použity a pro jakou platformu ?
+
+1. Určení platformy (Architektura procesoru)
+Platformu zjistíš analýzou kterékoliv spustitelné binárky (např. busybox nebo ls). Binární soubory ve formátu ELF v sobě mají hlavičku, která procesor definuje.
+
+Příkaz: file ./bin/busybox
+
+Tvůj výsledek: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV)...
+
+Interpretace: Platforma je x86 (32-bit). To je netypické pro malé routery (ty mívají MIPS nebo ARM), což naznačuje, že útočník použil průmyslové PC nebo emulátor.
+
+Další užitečný příkaz pro detailnější info o platformě:
+
+Příkaz: readelf -h ./bin/busybox
+
+Hledej řádek Machine, kde uvidíš explicitně napsáno Intel 80386.
+
+2. Identifikace operačního systému
+Podle struktury adresářů a použitých knihoven určíš, o jakou distribuci jde.
+
+Příkaz: ls -l ./lib/ld-uClibc*
+
+Zjištění: Přítomnost uClibc (micro-C library) potvrzuje, že jde o minimalistický Embedded Linux.
+
+Příkaz: cat ./etc/os-release nebo cat ./etc/issue
+
+V těchto souborech bývá název distribuce (např. Buildroot, OpenWrt, Alpine). Pokud tam nejsou, jde pravděpodobně o čistý Buildroot, který tyto soubory standardně nevytváří.
+
+3. Seznam klíčových softwarových komponent
+Tady projdeš služby, které systém spouští, a nástroje, které jsou v něm dohrané.
+
+Základní systém (Userland):
+
+BusyBox: Téměř všechny standardní příkazy (ls, cp, mv, ps) jsou v tomto systému pouze symbolické odkazy na jednu binárku /bin/busybox.
+
+Síťová infrastruktura a odposlech:
+
+tcpdump (v /usr/sbin/tcpdump): Hlavní nástroj pro zachytávání paketů.
+
+brctl (v /usr/sbin/brctl): Nástroj z balíku bridge-utils pro spojení rozhraní eth0 a eth1.
+
+Vzdálený přístup a web:
+
+Dropbear: Lehký SSH server (nahrazuje OpenSSH). Najdeš ho v /usr/sbin/dropbear a konfigurační skript v /etc/init.d/S50dropbear.
+
+Apache/httpd: Webový server pro přístup k datům (v /usr/sbin/httpd).
+
+Anonymizace:
+
+Tor: Program pro přístup k onion síti (v /usr/bin/tor).
+
+Shrnutí pro dokumentaci (Jak to zformulovat):
+Platforma: > Zařízení využívá architekturu Intel 80386 (x86, 32-bit). Toto bylo ověřeno analýzou ELF hlavičky souboru /bin/busybox pomocí nástrojů file a readelf.
+
+Softwarové komponenty:
+Systém běží na minimalistické linuxové distribuci (pravděpodobně Buildroot) využívající knihovnu uClibc. Mezi klíčové komponenty patří:
+
+BusyBox (v1.x): zajišťující základní funkcionalitu shellu.
+
+Bridge-utils (brctl): pro vytvoření síťového mostu mezi porty.
+
+TCPDump: nakonfigurovaný pro automatický odposlech HTTP, FTP, SMTP a Telnet provozu.
+
+Dropbear: pro zabezpečenou vzdálenou správu přes SSH.
+
+Tor: pro anonymizaci odchozího spojení nebo skrytí řídícího serveru.
+
+Apache: sloužící jako rozhraní pro exfiltraci zachycených dat (.pcap souborů).
+
+Malý tip na závěr:
+Všimni si verze BusyBoxu (pokud ji vypíšeš příkazem ./bin/busybox). Pokud je velmi stará, je to další argument pro část o "vylepšení systému" (aktualizace softwaru kvůli zranitelnostem).
+
+Jakým způsobem realizoval útočník vzdálený přístup k zařízení, jaká hesla používal, odkud se získala ?
+
+
+
+Co bylo cílem útoku ?
+Co bylo cílem útoku?
+
+Tady už to víš: Odposlech (sniffing) citlivých dat v nešifrovaných protokolech.
+
+Můžeš specifikovat, že šlo o Man-in-the-Middle (MitM) útok, kdy zařízení sedělo na spoji jako bridge a filtrovalo hesla/data z protokolů HTTP, FTP, SMTP a Telnet. Cílem bylo pravděpodobně získat přihlašovací údaje administrátorů nebo citlivá data přenášená uvnitř sítě.
+
+
+Jakým způsobem byste použitý obraz systému vylepšili/opravili chyby ?
+Jakým způsobem byste použitý obraz systému vylepšili/opravili chyby?
+
+Zabezpečení účtů: Změna hesla na silné, zakázání přihlášení rootovi, ideálně použití SSH klíčů místo hesel.
+
+Minimalizace (Hardening): Odstranění zbytečného softwaru. Pokud je to sniffer, nepotřebuje Apache (může odesílat data šifrovaně jinak).
+
+Šifrování: Implementace šifrování celého souborového systému (v rámci možností flash).
+
+Detekce: Přidání mechanismu "Dead man's switch" – pokud někdo zařízení odpojí nebo otevře (tamper detection), data se smažou.
+
+Aktualizace: BusyBox i uClibc v tomto dumpu vypadají podle datumu (2020) na starší verze, které mohou obsahovat známé zranitelnosti.
+
+
+Doplňte jakékoliv další relevantní informace, na které narazíte během zkoumání obrazu.

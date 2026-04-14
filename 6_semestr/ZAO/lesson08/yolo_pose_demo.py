@@ -147,7 +147,7 @@ if __name__ == "__main__":
     results_log = []
 
     for i in range(len(labels)):
-        predicted = calculateAccurency(files[i], up_thresh, down_thresh, drop_up_limit, drop_down_limit, img_show="none")
+        predicted = calculateAccurency(files[i], up_thresh, down_thresh, drop_up_limit, drop_down_limit, img_show="show")
 
         if predicted == labels[i]:
             correct += 1

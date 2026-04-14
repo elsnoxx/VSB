@@ -1,86 +1,103 @@
 import cv2
-import helpers
-import detection
-import drawings
+import time
+
+def load_eye_states(file_path):
+    try:
+        with open(file_path, 'r') as f:
+            return [line.strip().lower() for line in f]
+    except Exception as e:
+        print(f"Could not load '{file_path}'!", e)
+        return []
 
 
-results = helpers.load_templates()
-face_frontal = helpers.load_frontal()
-face_profile = helpers.load_profile()
-face_gescure = helpers.load_gescure()
-cap = helpers.load_video()
+def initialize_cascades():
+    return {
+        "face_frontal": cv2.CascadeClassifier('haarcascades/haarcascades/haarcascade_frontalface_default.xml'),
+        "face_profile": cv2.CascadeClassifier('haarcascades/haarcascades/haarcascade_profileface.xml'),
+        "eye": cv2.CascadeClassifier('eye_cascade_fusek/eye_cascade_fusek.xml')
+    }
 
+def detect_faces(cascade, gray_frame, weight_threshold=2.0):
+    faces, _, weights = cascade.detectMultiScale3(
+            gray_frame, scaleFactor=1.1, minNeighbors=3, minSize=(200, 200), maxSize=(500, 500),
+            outputRejectLevels=True)
+    return [face for face, weight in zip(faces, weights) if weight > weight_threshold]
 
-predictions = []
-while True:
-    ret, frame = cap.read()
-    if not ret: break
+def is_eye_open(eye_region_gray, intensity_threshold=80):
+    # Avg pixel intensity
+    avg_intensity = eye_region_gray.mean()
 
+    # Presuming "open"
+    return avg_intensity > intensity_threshold
+
+def process_frame(frame, cascades, eye_states, frame_index, correct_predictions, total_predictions):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    
-    # Pomocná proměnná pro stav v tomto snímku (výchozí je 'close', pokud nic nenajdem)
-    current_frame_state = "close" 
 
-    start_time = cv2.getTickCount()
+    faces = detect_faces(cascades["face_frontal"], gray) + detect_faces(cascades["face_profile"], gray)
+    predicted_eye_state = "close"
 
-    # 1. Nejdříve zkusíme Frontal
-    rects_f, weights_f = detection.detec_frontal_face(frame, face_frontal)
-    
-    faces_to_process = []
+    for (x, y, w, h) in faces:
+        roi_gray = gray[y:y + h, x:x + w]
 
-    # Pokud jsme našli frontální obličej s dostatečnou vahou
-    found_frontal = False
-    for i, f in enumerate(rects_f):
-        if weights_f[i] > 2.0:
-            faces_to_process.append((f, "Frontal", (255, 0, 0)))
-            found_frontal = True
-            break # Pro řidiče v autě nám stačí jeden obličej
+        # Eye detection
+        eyes = cascades["eye"].detectMultiScale(roi_gray, scaleFactor=1.05, minNeighbors=3, minSize=(20, 20), maxSize=(60, 60))
+        for (ex, ey, ew, eh) in eyes:
+            eye_roi_gray = roi_gray[ey:ey + eh, ex:ex + ew]
 
-    # 2. POUZE POKUD jsme nenašli Frontal, zkusíme Profile
-    if not found_frontal:
-        rects_p, weights_p = detection.detec_profile_face(frame, face_profile)
-        for i, f in enumerate(rects_p):
-            if weights_p[i] > 2.0:
-                faces_to_process.append((f, "Profile", (0, 255, 0)))
+            cv2.rectangle(frame,
+                          (x + ex, y + ey), (x + ex + ew, y + ey + eh),
+                          (0, 255, 0), 2)
+
+            if is_eye_open(eye_roi_gray):
+                predicted_eye_state = "open"
                 break
 
-    end_time = cv2.getTickCount()
-    time_ms = (end_time - start_time) / cv2.getTickFrequency() * 1000
+    if frame_index < len(eye_states):
+        if predicted_eye_state == eye_states[frame_index]:
+            correct_predictions += 1
+        total_predictions += 1
 
-    # B. DETEKCE OČÍ UVNITŘ OBLIČEJE
-    for (box, name, color) in faces_to_process:
-        x, y, w, h = box
-        cv2.rectangle(frame, (x, y), (x+w, y+h), color, 2)
-        
-        # Vytvoříme ROI (Region of Interest) - výřez pouze obličeje
-        face_roi_gray = gray[y:y+h, x:x+w]
-        
-        # Hledáme oči jen v horní polovině obličeje (zrychlení a přesnost)
-        eyes_roi = face_roi_gray[0:int(h*0.6), :]
-        
-        rects_g, _, weights_g = face_gescure.detectMultiScale3(
-            eyes_roi, scaleFactor=1.1, minNeighbors=5, outputRejectLevels=True
+    return correct_predictions, total_predictions
+
+
+def main():
+    eye_states = load_eye_states('eye-state.txt')
+    cascades = initialize_cascades()
+    cap = cv2.VideoCapture('fusek_face_car_01.avi')
+
+    correct_predictions = 0
+    total_predictions = 0
+    frame_index = 0
+
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        start_time = time.time()
+        correct_predictions, total_predictions = process_frame(
+            frame, cascades, eye_states, frame_index, correct_predictions, total_predictions
         )
+        detection_time = time.time() - start_time
 
-        for i, (ex, ey, ew, eh) in enumerate(rects_g):
-            if weights_g[i] > 1.5:
-                # Výřez konkrétního oka pro analýzu stavu (open/close)
-                eye_final_roi = eyes_roi[ey:ey+eh, ex:ex+ew]
-                
-                state, ratio = detection.detect_eye_state(eye_final_roi)
-                current_frame_state = state # Uložíme výsledek
+        cv2.putText(frame, f"Detection Time: {detection_time:.3f}s", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7,
+                    (0, 0, 255), 2)
+        cv2.imshow("Face/Eye Detection", frame)
 
-                # Vykreslení oka
-                drawings.draw_eye(frame,x,y,ex,ey,ew,eh,state)
-                
-                break
+        if cv2.waitKey(1) & 0xFF == 27:
+            break
 
-    # Uložíme predikci pro výpočet accuracy na konci
-    predictions.append(current_frame_state)
-    # Info display
-    drawings.info_display(frame, time_ms)
-    
-    if cv2.waitKey(1) & 0xFF == ord('q'): break
+        frame_index += 1
 
-cap.release()
-helpers.calculate_accurency(predictions, results)
+    cap.release()
+    cv2.destroyAllWindows()
+
+    if total_predictions > 0:
+        accuracy = (correct_predictions / total_predictions) * 100
+        print(f"Overall eye state recognition accuracy: {accuracy:.2f}%")
+    else:
+        print("eye-state.txt missing!")
+
+
+if __name__ == "__main__":
+    main()
