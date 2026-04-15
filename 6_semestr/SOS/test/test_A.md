@@ -6,6 +6,11 @@ miising tas 3 and 4 a vyzkouset to na konfigurovat na virtualu
 
 1. Vytvorim novy VM, pojmenuji a bez pridani iso kliknu dokoncit
 2. Pridat sitovy adapter typu **Síť pouze s hostem**
+3. kontrola jestli u adapteru je zapnute dhcp
+4. Kliknu na Uloziste
+5. Najdu radic sata tam je ikona hardisku **add hardisk**
+6. Create
+7. dokoncit 3x
 3. Po startu VM vyplnim iso disk a kliknu na mount a retry boot
 4. Po menu vybrat moznost instal
 5. Vybrat jazyk jako english
@@ -43,7 +48,7 @@ Prvni zakomentovat a potom ulozit
 
 ### instalovani vseh potrebnych balicku
 ```bash
-apt install vim isc-dhcp-client iptables nfs-kernel-server nfs-common -y
+apt install vim isc-dhcp-client isc-dhcp-server mdadm quota iptables nfs-kernel-server nfs-common curl -y
 ```
 
 ## Ukol 2 Konfigurace site
@@ -61,7 +66,7 @@ dhclient enp0s8
 3. Automaticky nastaveni
 
 ```bash
-vim /etc/network/interfaces 
+nano /etc/network/interfaces 
 ```
 
 ```text
@@ -96,9 +101,106 @@ reboot
 ## Ukol 3
 Do virtualizovaného PC přidejte další tři pevné disky o kapacitě alespoň 200MB. Z těchto disků vytvořte v systému RAID který bude odolný proti výpadku dvou disků. Na RAID vytvořte jeden oddíl a naformátujte ho souborovým systémem ext4. Tento souborový systém připojte jako složku /home. Nakonfigurujte systém tak, aby připojení diskového pole proběhlo vždy po startu systému, pro identifikaci raidu použijte UUID.
 
+Nejsprve zacnu prikazem abych vedel nazyvani disku
+```shell
+lsblk
+```
+
+Potom vytvorit partitiony
+```shell
+fdisk /dev/sda
+fdisk /dev/sdb
+fdisk /dev/sdc
+```
+postup pro vsechny
+1. n (nový) -> p (primární) -> Enter -> Enter -> Enter (vše výchozí).
+2. t (změna typu) -> fd (Linux raid autodetect).
+3. w (uložit a skončit).
+
+
+
+```shell
+mdadm --create /dev/md0 --level=1 --raid-devices=3 /dev/sda1 /dev/sdb1 /dev/sdc1
+```
+potom dam y
+
+
+formatovani disku
+```shell
+mkfs.ext4 /dev/md0
+```
+
+### Mount a přesun dat:
+```shell
+Bash
+mount /dev/md0 /mnt
+cp -rp /home/* /mnt/
+umount /mnt
+```
+
+UUID a fstab:
+
+Zjisti UUID: blkid /dev/md0
+V /etc/fstab přidej: UUID=5b0f21c6-77e0-4c10-bf2a-018e7dafcc86 /home ext4 defaults,usrquota 0 2
+
+### tetovaci vypisy
+
+df -h /home
+
+cat /proc/mdstat
+ls -l /home
 
 ## Ukol 4
 Vytvořte spustitelný skript v jazyce bash, který do systému přidá definovaný počet uživatelských účtů ve tvaru uz001 až uz###, kde ### bude číslo zadané jako parametr skriptu. Zařiďte, aby číslo nemohlo přesáhnout 3 cifry. Interpret pro všechny uživatele bude /bin/bash a uživatelům se vytvoří domovský adresář ve složce /home. Uživatelé budou mít prázdné heslo a budou nuceni si ho po prvním přihlášení změnit. Každému uživateli se při vytvoření účtu vytvoří v domovské složce soubor READ_ME.txt . Všem uživatelů definujte diskové kvóty.
+
+### Script 
+
+```bash
+#!/bin/bash
+
+# 1. Kontrola, zda byl zadán parametr
+if [ -z "$1" ]; then
+    echo "Použití: $0 <počet_uživatelů>"
+    exit 1
+fi
+
+# 2. Kontrola, zda je parametr číslo a nepřesahuje 999
+pocet=$1
+if ! [[ "$pocet" =~ ^[0-9]+$ ]] || [ "$pocet" -gt 999 ]; then
+    echo "Chyba: Zadejte číslo v rozsahu 1 až 999."
+    exit 1
+fi
+
+echo "Vytvářím $pocet uživatelů..."
+
+# 3. Cyklus pro vytváření uživatelů
+for i in $(seq -f "%03g" 1 "$pocet"); do
+    username="uz$i"
+
+    # Vytvoření uživatele (-m vytvoří home, -s nastaví shell)
+    useradd -m -s /bin/bash "$username"
+
+    # Nastavení prázdného hesla
+    passwd -d "$username"
+
+    # Vynucení změny hesla při prvním přihlášení
+    chage -d 0 "$username"
+
+    # Vytvoření souboru READ_ME.txt v domovské složce
+    echo "Vítejte v systému, prosím změňte si heslo." > "/home/$username/READ_ME.txt"
+    
+    # Nastavení vlastnictví souboru uživateli
+    chown "$username:$username" "/home/$username/READ_ME.txt"
+
+    # Nastavení diskové kvóty (příklad: 100MB soft, 110MB hard)
+    # Předpokládá se, že kvóty jsou na systému již inicializovány
+    setquota -u "$username" 100M 110M 0 0 /home
+
+    echo "Uživatel $username vytvořen."
+done
+
+echo "Hotovo."
+```
 
 ## Ukol 5
 V kořenovém adresáři vytvořte složku /projekty. V systému vytvořte skupinu projekty a přidejte do ní deset uživatelů. Složka /projekty bude umožňovat přístup (rwx) jen uživatelům patřícím do skupiny projekty. Pokud některý z uživatelů vytvoří v této složce soubor, tento bude automaticky patřit skupině projekty a nikoli domovské skupině uživatele, který ho vytvořil.
@@ -130,8 +232,9 @@ usermod -a -G projekty user2
 pro 10 uzivatelu
 
 ```bash
-for i in $(seq 1 10); do
-    useradd -m -G projekty uzivatel$i
+for i in {3..10}; do
+    adduser --disabled-password --gecos "" user$i
+    usermod -a -G projekty user$i
 done
 ```
 
@@ -151,6 +254,12 @@ cat /etc/group
 ls -ld /projekty
 ```
 
+### kontrola uzivatelem
+```shell
+su - user1
+touch /projekty/test_soubor
+ls -l /projekty/test_soubor
+```
 
 ## Ukol 6
 Nainstalujte webový server Apache2 s podporou PHP, https a userdir.
@@ -169,6 +278,13 @@ Nastaveni SSL
 ```bash
 a2enmod ssl
 nano /etc/apache2/sites-available/000-default.conf
+```
+
+nebo 
+
+```shell
+a2enmod ssl
+a2ensite default-ssl
 ```
 
 ```text
@@ -220,25 +336,10 @@ a2enmod userdir
 systemctl restart apache2
 ```
 
-Prihlasit se jako uzivatel
-
-```shell
-fic0024@debian:~$ mkdir public_html
-fic0024@debian:~$ echo "<?php phpinfo(); ?>" > ~/public_html/index.php
-fic0024@debian:~$ chmod 755 /home/fic0024
-fic0024@debian:~$ chmod 755 /home/fic0024/public_html
-fic0024@debian:~$ chmod 644 /home/fic0024/public_html/index.php
-```
-
 Nastaveni PHP
 
 ```shell
 nano /etc/apache2/mods-enabled/dir.conf
-```
-
-zmint na 
-```
-DirectoryIndex index.php index.cgi index.pl index.html index.xhtml index.htm
 ```
 
 ```shell
@@ -252,6 +353,24 @@ nano /etc/apache2/mods-available/php8.4.conf
     </Directory>
 </IfModule>
 ```
+
+Prihlasit se jako uzivatel
+
+```shell
+fic0024@debian:~$ mkdir public_html
+fic0024@debian:~$ echo "<?php phpinfo(); ?>" > ~/public_html/index.php
+fic0024@debian:~$ chmod 755 /home/fic0024
+fic0024@debian:~$ chmod 755 /home/fic0024/public_html
+fic0024@debian:~$ chmod 644 /home/fic0024/public_html/index.php
+```
+
+
+
+zmint na 
+```
+DirectoryIndex index.php index.cgi index.pl index.html index.xhtml index.htm
+```
+
 
 potom restart servisy
 ```shell
@@ -270,6 +389,78 @@ Funkčnost firewallu demonstrujte.
 
 Vytvořte jednotku pro systemd, které zavede pravidla firewalu, vždy po startu systému.
 
+### start skript
+
+```shell
+nano firewall.sh
+```
+
+```text
+#!/bin/bash
+
+# 1. Čištění starých pravidel
+iptables -F
+iptables -t nat -F
+
+# 2. Nastavení defaultní politiky na DROP
+iptables -P INPUT DROP
+iptables -P OUTPUT DROP
+iptables -P FORWARD DROP
+
+# 3. Povolení loopbacku (důležité pro systémové služby)
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# 4. Povolení navázaných spojení (ESTABLISHED, RELATED) - KLÍČOVÉ PRO SSH
+# Toto dovolí serveru odpovídat na požadavky, které byly povoleny v INPUTu
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# 5. SSH (22) a NFS (2049) pouze na Host-only (enp0s8)
+iptables -A INPUT -i enp0s8 -p tcp --dport 22 -j ACCEPT
+iptables -A OUTPUT -o enp0s8 -p tcp --sport 22 -j ACCEPT
+
+iptables -A INPUT -i enp0s8 -p tcp --dport 2049 -j ACCEPT
+iptables -A OUTPUT -o enp0s8 -p tcp --sport 2049 -j ACCEPT
+iptables -A INPUT -i enp0s8 -p udp --dport 2049 -j ACCEPT
+iptables -A OUTPUT -o enp0s8 -p udp --sport 2049 -j ACCEPT
+
+# 6. HTTP (80) a HTTPS (443) ze všech rozhraní
+iptables -A INPUT -p tcp -m multiport --dports 80,443 -j ACCEPT
+iptables -A OUTPUT -p tcp -m multiport --sports 80,443 -j ACCEPT
+
+# 7. ICMP (ping) na všech rozhraních
+iptables -A INPUT -p icmp -j ACCEPT
+iptables -A OUTPUT -p icmp -j ACCEPT
+
+# 8. Source NAT na rozhraní NAT (pravděpodobně enp0s3)
+# Toto zajistí, že virtuál může "ven" do internetu přes rozhraní enp0s3
+iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
+```
+
+### End skript
+```shell
+nano firewall_stop.sh
+```
+
+```test
+#!/bin/bash
+
+# 1. Nastav politiku na přijímání (vše projde)
+iptables -P INPUT ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -P FORWARD ACCEPT
+
+# 2. Teď teprve smaž pravidla
+iptables -F
+iptables -t nat -F
+```
+
+### povoleni execute
+```shell
+chmod +x firewall*
+```
+
 ### Vytoreni sluzby
 ```shell
 nano /etc/systemd/system/fwtest.service
@@ -278,14 +469,14 @@ nano /etc/systemd/system/fwtest.service
 ```text
 [Unit]
 Description=Firewall sluzba
+After=network.target
 
 [Service]
 Type=oneshot
-WorkingDirectory=/root
 ExecStart=/root/firewall.sh
 ExecStop=/root/firewall_stop.sh
 RemainAfterExit=yes
-syste
+
 [Install]
 WantedBy=multi-user.target
 ```
@@ -303,32 +494,7 @@ iptables -L #zobrazi pravidla
 iptables -F #smaze pravidla
 ```
 
-### start skript
 
-```text
-#!/bin/bash
-
-iptables -P INPUT DROP;
-iptables -P OUTPUT DROP;
-
-iptables -A INPUT  -i enp0s8 -p tcp --dport 22 -j ACCEPT
-iptables -A INPUT  -i enp0s8 -p tcp --dport 2049 -j ACCEPT
-iptables -A INPUT  -i enp0s8 -p udp --dport 2049 -j ACCEPT
-
-iptables -A INPUT  -p tcp -m multiport --dports 80,443 -j ACCEPT
-
-iptables -A INPUT -p icmp -j ACCEPT
-
-iptables -A OUTPUT -p icmp -j ACCEPT
-```
-
-### End skript
-
-```test
-#!/bin/bash
-
-iptables -F
-```
 
 ### Test
 ```text
@@ -352,7 +518,7 @@ Otevrit konfiguraci dhcp serveru
 nano /etc/default/isc-dhcp-server
 ```
 
-Zmenit
+Pridat
 ```text
 INTERFACESv4="enp0s8"
 ```
@@ -364,10 +530,11 @@ nano /etc/dhcp/dhcpd.conf
 ```
 
 ```text
-> option domain-name "vsb.cz";
-  option domain-name-servers 158.196.0.53, 158.196.149.9;
-> subnet 192.168.56.0 netmask 255.255.255.0 {
-  range 192.168.56.20 192.168.97.120;
+option domain-name "vsb.cz";
+option domain-name-servers 158.196.0.53, 158.196.149.9;
+
+subnet 192.168.56.0 netmask 255.255.255.0 {
+  range 192.168.56.20 192.168.56.120;
   option broadcast-address 192.168.56.255;
   option routers 192.168.56.2;
 }
@@ -380,7 +547,19 @@ service isc-dhcp-server restart
 service isc-dhcp-server status
 
 dhcp-lease-list
+
+dhcpd -t -cf /etc/dhcp/dhcpd.conf
 ```
+
+### testovani
+
+zapnou novu cistou virtualku na dhcp serveru dam prikaz 
+```shell
+journalctl -u isc-dhcp-server -f
+```
+
+a pripojim k adapteru na novem virtualu ip astresu jourmnal by mel potom vypsat pripojeni
+
 
 # Task 9 - NFS
 Nainstalujte server NFS a vyexportujte složku /var/www/html pro všechny počítače v síti „Host-only network“. Správnou funkci demonstrujte.
@@ -390,11 +569,20 @@ nano /etc/exports
 ```
 
 ```text
-/var/www        192.168.97.0/24(rw,sync,no_subtree_check)
+/var/www    192.168.245.0/24(rw,sync,no_subtree_check,no_root_squash)
 ```
 
 Restarttovat servisu
 ```shell
+# Znovu načte konfiguraci exportů
+exportfs -ra
+
+# Restartuje službu pro jistotu
+service nfs-kernel-server restart
+
+# Ověří, že je složka viditelná pro správnou síť
+exportfs -v
+
 service nfs-kernel-server restart
 
 exportfs
@@ -403,5 +591,24 @@ nano /etc/dhcp/dhcpd.conf
 ```
 
 ## Testovani v konzoli druheho PC
-apt install nfs-common
-mount 192.168.97.102:/var/www /mnt/
+```shell
+apt install nfs-common -y
+dhclient enp0s8
+mkdir -p /mnt/web_nfs
+mount 192.168.245.104:/var/www /mnt/web_nfs
+```
+
+vytvoreni testovaciho souboru
+```shell
+# Na klientovi
+touch /mnt/web_nfs/html/funguje_to.txt
+
+# Na serveru
+ls -l /var/www/html/
+```
+
+
+### aplikovani zmen
+```shell
+exportfs -ra
+```
