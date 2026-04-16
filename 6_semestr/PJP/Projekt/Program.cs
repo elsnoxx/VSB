@@ -1,37 +1,35 @@
-﻿// Template generated code from Antlr4Templates v6.0
+﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
+using PLCProject;
+using System.Globalization;
+
 namespace Projekt
 {
-    using Antlr4.Runtime;
-    using System.Text;
-
-    public class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
-            Try("1 + 2 + 3");
-            Try("1 2 + 3");
-            Try("1 + +");
-        }
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            var fileName = "input.txt";
+            Console.WriteLine("Parsing: " + fileName);
+            var inputFile = new StreamReader(fileName);
+            AntlrInputStream input = new AntlrInputStream(inputFile);
+            var lexer = new PLCLexer(input);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            var parser = new PLCParser(tokens);
 
-        static void Try(string input)
-        {
-            var str = new AntlrInputStream(input);
-            System.Console.WriteLine(input);
-            var lexer = new ArithmeticLexer(str);
-            var tokens = new CommonTokenStream(lexer);
-            var parser = new ArithmeticParser(tokens);
-            var listener_lexer = new ErrorListener<int>();
-            var listener_parser = new ErrorListener<IToken>();
-            lexer.RemoveErrorListeners();
-            parser.RemoveErrorListeners();
-            lexer.AddErrorListener(listener_lexer);
-            parser.AddErrorListener(listener_parser);
-            var tree = parser.file();
-            if (listener_lexer.had_error || listener_parser.had_error)
-                System.Console.WriteLine("error in parse.");
-            else
-                System.Console.WriteLine("parse completed.");
-            System.Console.WriteLine(tree.ToStringTree(parser));
+            parser.AddErrorListener(new VerboseListener());
+
+            IParseTree tree = parser.prog();
+
+            if (parser.NumberOfSyntaxErrors == 0)
+            {
+                //Console.WriteLine(tree.ToStringTree(parser));
+                ParseTreeWalker walker = new ParseTreeWalker();
+                walker.Walk(new EvalListener(), tree);
+
+                new EvalVisitor().Visit(tree);
+            }
         }
     }
 }
