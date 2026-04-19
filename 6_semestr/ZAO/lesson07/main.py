@@ -15,9 +15,9 @@ class MLP(nn.Module):
         self.network = nn.Sequential(
             nn.Linear(3072, 512),
             nn.ReLU(),
-            nn.Linear(512, 128),
+            nn.Linear(512, 256),
             nn.ReLU(),
-            nn.Linear(128, 43)  # 43 tříd dopravních značek
+            nn.Linear(256, 43)  # 43 tříd dopravních značek
         )
 
     def forward(self, x):
@@ -131,7 +131,7 @@ print(f"Počet trénovacích obrázků: {len(train_data)}")
 print(f"Počet testovacích obrázků: {len(test_data)}")
 
 # Vytvoření DataLoaderů
-BATCH_SIZE = 32 
+BATCH_SIZE = 64 
 
 train_loader = DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True)
 test_loader  = DataLoader(test_data,  batch_size=BATCH_SIZE, shuffle=False)
