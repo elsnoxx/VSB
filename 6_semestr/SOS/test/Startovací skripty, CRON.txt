@@ -1,0 +1,35 @@
+	Startovací skripty, CRON
+Jak spustíte službu jednorázově bez její aktivace při startu?
+Co v příkazové řádce znamená > >> 2> ?
+Jak změním stav služby na „disabled“ pomocí systemctl?
+Co znamená milti-user.target v jednotce systému d?
+Co je to relativní a absolutní cesta k souboru?
+Jaký je rozdíl mezi uživatelským a systémovým crontabem.
+Jak se dí v BASH použít výstup jednoho programu jako parametr programu jiného.
+
+	Správa disků, RAID
+Vysvětlete princip RAID6. Způsob zabezpečení dat a vliv na rychlost čtení a zápisu.
+Vysvětlete princip RAID5. Způsob zabezpečení dat a vliv na rychlost čtení a zápisu.
+Vysvětlete princip RAID1. Způsob zabezpečení dat a vliv na rychlost čtení a zápisu.
+Jaké informace se nacházejí v MBR.
+Jaký souborový systém je v současnosti v OS Linux nejpoužívanější, jmenujte některé z možných voleb tohoto FS.
+Jaký je rozdíl mezi /dev/sdb1 a /dev/mb1.
+
+	Uživatelé, skupiny, práva a QUOTY
+Co je to domovská/primární skupina uživatele a jak poznám že se jedná a domovskou skupinu?
+Jaké jsou typy uživatelských kvót.
+K čemu se využívá soubor /etc/skel.
+
+
+	Firewall, NAT, konfigurace sítě
+Co je to defaultní politika?
+Na co je třeba si dát pozor po zadání příkazu "iptables -F".
+Jaký je standardní konfigurační soubor pro nastavení síťových interface v OS Debian.
+Jak je možné vypsat aktuální pravidla firewalu.
+Jak si vypíšu aktuální pravidla v tabulce filter?
+
+	Služby OS GNU Linux/Debian
+Proč se ISC DHCP server po instalaci nespustí?
+Co znamená u DHCP serveru autoritativní režim?
+Jaký efekt má instalace modulu userdir na webovém serveru Apache2.
+Jak je možné otestovat, že v konfiguraci ISC DHCP Serveru není žádná chyba.
