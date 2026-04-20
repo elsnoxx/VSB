@@ -19,7 +19,7 @@ def initialize_cascades():
 
 def detect_faces(cascade, gray_frame, weight_threshold=2.0):
     faces, _, weights = cascade.detectMultiScale3(
-            gray_frame, scaleFactor=1.1, minNeighbors=3, minSize=(200, 200), maxSize=(500, 500),
+            gray_frame, scaleFactor=1.1, minNeighbors=3, minSize=(100, 100), maxSize=(500, 500),
             outputRejectLevels=True)
     return [face for face, weight in zip(faces, weights) if weight > weight_threshold]
 
@@ -44,9 +44,7 @@ def process_frame(frame, cascades, eye_states, frame_index, correct_predictions,
         for (ex, ey, ew, eh) in eyes:
             eye_roi_gray = roi_gray[ey:ey + eh, ex:ex + ew]
 
-            cv2.rectangle(frame,
-                          (x + ex, y + ey), (x + ex + ew, y + ey + eh),
-                          (0, 255, 0), 2)
+            cv2.rectangle(frame, (x + ex, y + ey), (x + ex + ew, y + ey + eh), (0, 255, 0), 2)
 
             if is_eye_open(eye_roi_gray):
                 predicted_eye_state = "open"

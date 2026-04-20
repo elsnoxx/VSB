@@ -95,8 +95,8 @@ for item in data:
         cv.putText(img, f"Class: {cls}, Conf: {conf:.2f}", (int(x1), int(y1) - 10), cv.FONT_HERSHEY_SIMPLEX, 0.5, tuple(args.color), 2)
         cv.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), tuple(args.color), 3)
     cv.putText(img, f"Total Detected: {len(boxes)}", (10, img.shape[0] - 10), cv.FONT_HERSHEY_SIMPLEX, 0.7, tuple(args.color), 2)
-    # cv.imshow('Custom drawing', img)
+    cv.imshow('Custom drawing', img)
     cv.imwrite(os.path.join(args.output_dir, f"{os.path.basename(files[img_counter]).split('.')[0]}_detection.jpg"), img)
-    # cv.waitKey(0)
+    cv.waitKey(0)
     img_counter += 1
     

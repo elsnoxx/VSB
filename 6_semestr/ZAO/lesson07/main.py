@@ -56,6 +56,50 @@ class CNN(nn.Module):
         x = self.classifier(x)
         return x
 
+class MLP_Gray(nn.Module):
+    def __init__(self, in_channels=1, img_size=32):
+        super().__init__()
+        self.flatten = nn.Flatten()
+        input_dim = in_channels * img_size * img_size  # 1*32*32 = 1024 pro grayscale
+        self.network = nn.Sequential(
+            nn.Linear(input_dim, 512),
+            nn.ReLU(),
+            nn.Linear(512, 256),
+            nn.ReLU(),
+            nn.Linear(256, 43)
+        )
+
+    def forward(self, x):
+        x = self.flatten(x)
+        return self.network(x)
+
+class CNN_Gray(nn.Module):
+    def __init__(self, in_channels=1, img_size=32):
+        super().__init__()
+        self.features = nn.Sequential(
+            # První konvoluce nyní přijímá jen 1 kanál
+            nn.Conv2d(in_channels, 16, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+            
+            nn.Conv2d(16, 32, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2)
+        )
+        
+        self.classifier = nn.Sequential(
+            nn.Flatten(),
+            # 32 kanálů * 8 * 8 pixelů = 2048
+            nn.Linear(32 * 8 * 8, 128),
+            nn.ReLU(),
+            nn.Linear(128, 43)
+        )
+
+    def forward(self, x):
+        x = self.features(x)
+        x = self.classifier(x)
+        return x
+
 def train_and_evaluate(model, train_loader, test_loader, epochs=5):
     model.to(device)
     # Ztrátová funkce (pro klasifikaci do více tříd)
@@ -111,6 +155,14 @@ data_transforms = transforms.Compose([
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)) # Volitelná normalizace
 ])
 
+# Nová transformace pro černobílé obrázky
+gray_transforms = transforms.Compose([
+    transforms.Resize((32, 32)),
+    transforms.Grayscale(num_output_channels=1), # Odstraní barvu
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,), (0.5,)) 
+])
+
 # Načtení trénovacích dat
 train_data = datasets.GTSRB(
     root='./data', 
@@ -152,3 +204,28 @@ print(f"Trénování proběhne na: {device}")
 # (Pro začátek zkusíme jen 3 epochy, abys viděl, jestli to funguje)
 mlp_acc = train_and_evaluate(mlp_model, train_loader, test_loader, epochs=3)
 cnn_acc = train_and_evaluate(cnn_model, train_loader, test_loader, epochs=3)
+
+
+# Načtení černobílého datasetu
+train_data_gray = datasets.GTSRB(root='./data', split='train', download=True, transform=gray_transforms)
+test_data_gray = datasets.GTSRB(root='./data', split='test', download=True, transform=gray_transforms)
+
+# Nové DataLoadery
+train_loader_gray = DataLoader(train_data_gray, batch_size=BATCH_SIZE, shuffle=True)
+test_loader_gray  = DataLoader(test_data_gray,  batch_size=BATCH_SIZE, shuffle=False)
+
+print("Černobílé DataLoadery jsou připraveny.")
+
+# Vytvoření instancí pro šedý režim
+mlp_gray_model = MLP_Gray(in_channels=1)
+cnn_gray_model = CNN_Gray(in_channels=1)
+
+# Spuštění trénování na šedých datech
+print("\n=== TRÉNOVÁNÍ NA ČERNOBÍLÝCH DATECH ===")
+mlp_gray_acc = train_and_evaluate(mlp_gray_model, train_loader_gray, test_loader_gray, epochs=3)
+cnn_gray_acc = train_and_evaluate(cnn_gray_model, train_loader_gray, test_loader_gray, epochs=3)
+
+# Závěrečné porovnání
+print("\n--- FINÁLNÍ POROVNÁNÍ PŘESNOSTI ---")
+print(f"MLP (RGB): {mlp_acc:.2f}% vs. MLP (Šedá): {mlp_gray_acc:.2f}%")
+print(f"CNN (RGB): {cnn_acc:.2f}% vs. CNN (Šedá): {cnn_gray_acc:.2f}%")

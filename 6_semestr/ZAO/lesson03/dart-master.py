@@ -7,11 +7,11 @@ import os
 from helper import click_on_target, load_picture, center_point, monitor_size, save_pic, find_template, get_roi
 
 #big screen
-scale_factor = 4.6
-# scale_factor = 6
+# scale_factor = 4.6
+scale_factor = 6
 
-scale_factor_other = 1
-# scale_factor_other = 1.355
+# scale_factor_other = 1
+scale_factor_other = 1.355
 
 cnt_rety = 10
 

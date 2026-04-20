@@ -7,12 +7,13 @@ import os
 from helper import click_on_target, load_files, load_picture, center_point, monitor_size, save_pic, find_template, get_roi
 
 #big screen
-scale_factor = 4.6
+scale_factor = 1.5
 # scale_factor = 6
 
+# scale_factor_other = 1
 scale_factor_other = 1
 
-show_img_result = True
+show_img_result = False
 fail_count = 0
 
 path = 'duckhunt/tragets'  
@@ -29,7 +30,7 @@ red_files, blask_files = load_files(path)
 templates = []
 for file in blask_files:
     template = cv.imread(file, 0)
-    template = cv.resize(template, (int(template.shape[1] // scale_factor), int(template.shape[0] // scale_factor)))
+    template = cv.resize(template, (int(template.shape[1] * scale_factor), int(template.shape[0] * scale_factor)))
     templates.append(template)
 
 mon_width, mon_height = monitor_size()
@@ -64,15 +65,13 @@ with mss() as sct:
 
         print(f"Maximální hodnota shody: {max_val:.2f} na pozici {max_loc}.")
 
-        if max_val >= 0.6 and max_val_second >= 0.6:            
+        if max_val >= 0.5 and max_val_second >= 0.5:            
             roi, offset = get_roi(image_second_gray, max_loc, template.shape, margin=100)
             
             res_2 = cv.matchTemplate(roi, template, cv.TM_CCOEFF_NORMED)
             max_val_second, max_loc_roi = find_template(roi, template, threshold=0.8)
             
-            # Přepočti souřadnice z ROI zpět na celou obrazovku
-            
-            
+            # Přepočti souřadnice z ROI zpět na celou obrazovku            
             if max_val_second >= 0.8:
                 max_loc_second = (max_loc_roi[0] + offset[0], max_loc_roi[1] + offset[1])
                 fail_count = 0 
@@ -86,7 +85,7 @@ with mss() as sct:
 
                 vx, vy = x2 - x1, y2 - y1
                 
-                # Predikce (můžeš vektor i vynásobit pro větší předstih)
+                # Predikce
                 pred_x, pred_y = int(x2 + vx), int(y2 + vy)
                 
                 click_on_target(pred_x + mon_width, pred_y)
