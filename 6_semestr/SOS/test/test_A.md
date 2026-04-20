@@ -1,6 +1,5 @@
 # Zadani A
 
-miising tas 3 and 4 a vyzkouset to na konfigurovat na virtualu
 
 ## Task 1 - Instalace Debianu
 
@@ -98,6 +97,12 @@ Kontrola nastaveni a pri startu bude aktivni ip u interfaceu
 reboot
 ```
 
+or 
+
+```bash
+ip add
+```
+
 ## Ukol 3
 Do virtualizovaného PC přidejte další tři pevné disky o kapacitě alespoň 200MB. Z těchto disků vytvořte v systému RAID který bude odolný proti výpadku dvou disků. Na RAID vytvořte jeden oddíl a naformátujte ho souborovým systémem ext4. Tento souborový systém připojte jako složku /home. Nakonfigurujte systém tak, aby připojení diskového pole proběhlo vždy po startu systému, pro identifikaci raidu použijte UUID.
 
@@ -141,7 +146,7 @@ umount /mnt
 UUID a fstab:
 
 Zjisti UUID: blkid /dev/md0
-V /etc/fstab přidej: UUID=5b0f21c6-77e0-4c10-bf2a-018e7dafcc86 /home ext4 defaults,usrquota 0 2
+V /etc/fstab přidej: UUID=4b3b61e2-53e2-49fe-8f76-3e47382d3e2c /home ext4 defaults,usrquota 0 2
 
 ### tetovaci vypisy
 
@@ -551,7 +556,7 @@ service isc-dhcp-server status
 
 dhcp-lease-list
 
-dhcpd -t -cf /etc/dhcp/dhcpd.conf
+dhcpd -t 
 ```
 
 ### testovani
@@ -572,7 +577,7 @@ nano /etc/exports
 ```
 
 ```text
-/var/www    192.168.245.0/24(rw,sync,no_subtree_check,no_root_squash)
+/var/www    192.168.56.0/24(rw,sync,no_subtree_check,no_root_squash)
 ```
 
 Restarttovat servisu
@@ -598,7 +603,7 @@ nano /etc/dhcp/dhcpd.conf
 apt install nfs-common -y
 dhclient enp0s8
 mkdir -p /mnt/web_nfs
-mount 192.168.245.104:/var/www /mnt/web_nfs
+mount 192.168.56.104:/var/www /mnt/web_nfs
 ```
 
 vytvoreni testovaciho souboru

@@ -1,0 +1,169 @@
+1) Ve virtualizačním prostředí Virtualbox vytvořte PC s jedním pevným diskem a dvěma síťovými kartami. Jednu kartu připojte do sítě NAT a druhou do sítě "Host-only network". Na toto virtualizované PC nainstalujte aktuální OS Linux/Debian v minimalistické verzi, pouze s podporou protokolu SSH (bez XWindows, apod.).
+
+you can do it just follow the video on the sos web the 1st presentation
+
+2) Nakonfigurujte systém tak, aby síťová karta na rozhraní NAT dostávala IP adresu prostřednictvím protokolu DHCP (z Virtualboxu) a druhá karta bude mít IP adresu nastavenou pevně. Pro konfiguraci obou rozhraní využijte standardní metody používané v distribuci Debian.
+
+nano /etc/network/interfaces
+allow-hotplug enp0s8
+iface enp0s8 inet static
+    address 192.168.225.8
+    netmask 255.255.255.0
+
+ifdown enp0s8 && sudo ifup enp0s8
+
+ip a show enp0s8
+
+3) Do virtualizovaného PC přidejte další čtyři pevné disky o kapacitě alespoň 200MB. Z těchto disků vytvořte v systému RAID, který bude odolný proti výpadku jednoho disku. Na tomto RAID poli vytvořte jeden oddíl a ten naformátujte souborovým systémem ext4. Nakonfigurujte systém tak, aby se oddíl vytvořený na RAID poli připojoval jako složka /home po startu systému. Využijte standardní systémovou konfiguraci, pro identifikaci raidu použijte UUID.
+
+root@vbox:~# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   10G  0 disk
+├─sda1   8:1    0    9G  0 part /
+├─sda2   8:2    0    1K  0 part
+└─sda5   8:5    0  975M  0 part [SWAP]
+sdb      8:16   0  200M  0 disk
+sdc      8:32   0  200M  0 disk
+sdd      8:48   0  200M  0 disk
+sde      8:64   0  200M  0 disk
+sr0     11:0    1 1024M  0 rom
+
+apt update
+apt install mdadm -y
+
+mdadm --create --verbose /dev/md0 --level=5 --raid-devices=4 /dev/sdb /dev/sdc /dev/sdd /dev/sde
+
+cat /proc/mdstat
+md0 : active raid5 sde[4] sdd[2] sdc[1] sdb[0]
+      608256 blocks super 1.2 level 5, 512k chunk, algorithm 2 [4/4] [UUUU]
+
+fdisk /dev/md0 n p 1 enter enter w
+
+mkfs.ext4 /dev/md0p1
+
+mount /dev/md0p1 /home
+
+blkid /dev/md0p1
+/dev/md0p1: UUID="65699859-3b48-4a61-b1af-c06a535685ac" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="2b33a10b-01"
+
+nano /etc/fstab
+UUID="65699859-3b48-4a61-b1af-c06a535685ac" /home ext4 defaults 0 2
+
+root@vbox:~# lsblk
+NAME      MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
+sda         8:0    0    10G  0 disk
+├─sda1      8:1    0     9G  0 part  /
+├─sda2      8:2    0     1K  0 part
+└─sda5      8:5    0   975M  0 part  [SWAP]
+sdb         8:16   0   200M  0 disk
+└─md0       9:0    0   594M  0 raid5
+  └─md0p1 259:0    0 592.5M  0 part  /home
+sdc         8:32   0   200M  0 disk
+└─md0       9:0    0   594M  0 raid5
+  └─md0p1 259:0    0 592.5M  0 part  /home
+sdd         8:48   0   200M  0 disk
+└─md0       9:0    0   594M  0 raid5
+  └─md0p1 259:0    0 592.5M  0 part  /home
+sde         8:64   0   200M  0 disk
+└─md0       9:0    0   594M  0 raid5
+  └─md0p1 259:0    0 592.5M  0 part  /home
+sr0        11:0    1  1024M  0 rom
+
+4) Vytvořte spustitelný skript v jazyce bash, který do systému přidá 100 uživatelských účtů. Loginy budou user00 až user99, interpret pro všechny uživatele bude /bin/bash a uživatelům se vytvoří domovský adresář ve složce /home. Jako parametr skriptu bude možné zadat defaultní heslo pro vytvářené uživatele. Skript otestuje zdali je heslo delší než 5 znaků. V případě, že nebude zadaný parametr, bude heslo prázdné. Všem uživatelů definujte diskové kvóty.
+
+apt-get install quota
+
+nano /etc/fstab
+defaults,usrquota,grpquota
+mount -o remount /home
+systemctl daemon-reload
+
+quotacheck -cugm /home
+quotaon -v /home
+
+nano add_users.sh
+
+______________________________________________
+#!/bin/bash
+
+# Check if a password argument is provided
+if [ -z "$1" ]; then
+  echo "No password provided. Users will have empty passwords."
+  PASSWORD=""
+else
+  if [ ${#1} -le 5 ]; then
+    echo "Error: Password must be longer than 5 characters."
+    exit 1
+  fi
+  PASSWORD="$1"
+fi
+
+# Loop to create users user00 to user99
+for i in $(seq -w 0 99); do
+  USERNAME="user$i"
+  
+  # Create user with home directory and /bin/bash shell
+  useradd -m -s /bin/bash "$USERNAME"
+  
+  # Set user password if provided
+  if [ -n "$PASSWORD" ]; then
+    echo "$USERNAME:$PASSWORD" | chpasswd
+  fi
+  
+  # Set disk quota: soft limit 100MB, hard limit 200MB; inode soft limit 10, hard limit 15
+  setquota -u "$USERNAME" 102400 204800 10 15 /home
+done
+__________________________________________________
+
+chmod +x add_users.sh
+./add_users.sh sudo
+
+/sbin/repquota /home
+*** Report for user quotas on device /dev/md0p1
+Block grace time: 7days; Inode grace time: 7days
+                        Block limits                File limits
+User            used    soft    hard  grace    used  soft  hard  grace
+----------------------------------------------------------------------
+root      --      20       0       0              2     0     0
+user00    --      16  102400  204800              4    10    15
+user01    --      16  102400  204800              4    10    15
+user02    --      16  102400  204800              4    10    15
+user03    --      16  102400  204800              4    10    15
+user04    --      16  102400  204800              4    10    15
+user05    --      16  102400  204800              4    10    15
+user06    --      16  102400  204800              4    10    15
+user07    --      16  102400  204800              4    10    15
+user08    --      16  102400  204800              4    10    15
+user09    --      16  102400  204800              4    10    15
+user10    --      16  102400  204800              4    10    15
+user11    --      16  102400  204800              4    10    15
+user12    --      16  102400  204800              4    10    15
+user13    --      16  102400  204800              4    10    15
+user14    --      16  102400  204800              4    10    15
+etc...
+
+
+5) V adresáři /home vytvořte složku /studenti. V systému vytvořte skupinu studenti a přidejte do ní 10 uživatelů. Složka /home/studenti bude umožňovat přístup jen uživatelům patřícím do skupiny studenti (rwx). Pokud některý z uživatelů vytvoří v této složce soubor, tento bude automaticky patřit skupině studenti a nikoli skupině uživatele, který ho vytvořil.
+
+nano add_users1.sh
+
+_______________________________________
+#!/bin/bash
+
+/sbin/groupadd studenti
+mkdir /home/studenti
+chown :studenti /home/studenti
+chmod 770 /home/studenti
+chmod g+s /home/studenti
+
+for i in {10..20}; do
+    /sbin/usermod -aG studenti user$i
+done
+_______________________
+
+chmod +x add_users1.sh
+./add_users1.sh
+
+getent group studenti
+
+
