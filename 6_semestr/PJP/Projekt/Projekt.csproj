@@ -8,13 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="PLC.g4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Antlr4 Include="PLC.g4">
-      <Package>PLCProject</Package>
-    </Antlr4>
+    <Antlr4 Include="PLCProject.g4" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Projekt.Runtime
+namespace Projekt
 {
-    internal class Interpreter
+    internal class CodeGeneratorListener
     {
     }
 }

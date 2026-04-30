@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Projekt.Visitors
+namespace PLC_Lab9
 {
-    internal class TypeChecker
+    public enum Type
     {
+        Int, Float, Error
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Projekt.Visitors
+namespace Projekt
 {
-    internal class CodeGenerator
+    internal class CodeGeneratorVisitor
     {
     }
 }
