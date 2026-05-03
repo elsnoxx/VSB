@@ -7,12 +7,21 @@ namespace Projekt
 {
     internal class Program
     {
-        static readonly string[] fileNames = ["PLC_t1.in.txt", "PLC_t2.in.txt", "PLC_t3.in.txt"];
+        static readonly string[] fileNames = ["PLC_t1.in.txt", "PLC_t2.in.txt", "PLC_t3.in.txt", "PLC_errors.in.txt"];
         static void Main(string[] args)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
-            var fileName = "input.txt";
-            Console.WriteLine("Parsing: " + fileName);
+            //var fileName = "input.txt";
+            //Console.WriteLine("Parsing: " + fileName);
+
+            //if (args.Length > 0)
+            //{
+            //    fileName = args[0];
+            //    Console.WriteLine("Parsing: " + fileName);
+            //    CompilationProces(fileName);
+            //} else {
+            //    Console.WriteLine("No input file provided. Processing default test files...");
+            //}
 
             foreach (var file in fileNames)
             {
@@ -26,9 +35,9 @@ namespace Projekt
         {
             var input = File.ReadAllText(fileName);
             var inputStream = new AntlrInputStream(input);
-            var lexer = new PLCLexer(inputStream);
+            var lexer = new PLCProjectLexer(inputStream);
             var tokenStream = new CommonTokenStream(lexer);
-            var parser = new PLCParser(tokenStream);
+            var parser = new PLCProjectParser(tokenStream);
 
             // 1. Syntaktická analýza
             var errorListener = new VerboseListener();
@@ -54,8 +63,31 @@ namespace Projekt
                 return;
             }
 
-            // 3. Pokud jsme došli sem, můžeme generovat kód...
-            Console.WriteLine("Type checking passed!");
+            // 3. Generování kódu
+            Console.WriteLine("Type checking passed! Generating code...");
+
+            var codeGen = new CodeGeneratorVisitor(typeChecker);
+            string finalCode = codeGen.Visit(tree);
+
+            // Vyčištění prázdných řádků a výpis
+            finalCode = string.Join("\n", finalCode.Split('\n', StringSplitOptions.RemoveEmptyEntries));
+            Console.WriteLine("--- GENERATED CODE ---");
+            //Console.WriteLine(finalCode);
+
+            // Volitelně uložení do souboru
+            File.WriteAllText(fileName + ".out", finalCode);
+
+            try
+            {
+                Console.WriteLine("--- STARTING VIRTUAL MACHINE ---");
+                VirtualMachine vm = new VirtualMachine(finalCode);
+                vm.Run();
+                Console.WriteLine("--- VM FINISHED SUCCESSFULLY ---");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"VM Runtime Error: {ex.Message}");
+            }
         }
     }
 }
