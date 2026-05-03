@@ -62,6 +62,8 @@ LPAREN : '(' ;
 RPAREN : ')' ;
 LBRACE : '{' ;
 RBRACE : '}' ;
+LBRACKET : '[' ;
+RBRACKET : ']' ;
 MUL    : '*' ;
 DIV    : '/' ;
 MOD    : '%' ;
