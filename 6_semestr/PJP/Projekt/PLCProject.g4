@@ -18,21 +18,21 @@ command
     ; 
 
 expr 
-    : LPAREN expr RPAREN                              # PAREN
-    | SUB expr                                        # MINUS
-    | NOT expr                                        # NOT
-    | expr op=(MUL | DIV | MOD) expr                  # MUL_DIV_MOD
-    | expr op=(ADD | SUB | CONCAT) expr               # ADD_SUB_CONCAT
-    | expr op=(LT | GT) expr                          # REL
-    | expr op=(EQ | NEQ) expr                         # EQUAL
-    | expr AND expr                                   # AND
-    | expr OR expr                                    # OR
-    | <assoc=right> VARID ASSIGN expr                 # ASSIGN
-    | INT                                             # INT
-    | FLOAT                                           # FLOAT
-    | BOOL                                            # BOOL   
-    | STR                                             # STR
-    | VARID                                           # VARID
+    : LPAREN expr RPAREN                               # PAREN
+    | INT                                              # INT
+    | FLOAT                                            # FLOAT
+    | BOOL                                             # BOOL   
+    | STR                                              # STR
+    | VARID                                            # VARID
+    | SUB expr                                         # MINUS
+    | NOT expr                                         # NOT
+    | expr op=(MUL | DIV | MOD) expr                   # MUL_DIV_MOD
+    | expr op=(ADD | SUB | CONCAT) expr                # ADD_SUB_CONCAT
+    | expr op=(LT | GT) expr                           # REL
+    | expr op=(EQ | NEQ) expr                          # EQUAL
+    | expr AND expr                                    # AND
+    | expr OR expr                                     # OR
+    | <assoc=right> VARID ASSIGN expr                  # ASSIGN
     ;
 
 vartype 

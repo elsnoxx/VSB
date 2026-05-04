@@ -9,11 +9,13 @@ namespace Projekt
         public SymbolTable symbolTable = new SymbolTable();
         public List<string> Errors { get; } = new List<string>();
 
+        // --- Pomocná metoda pro přidávání chyb ---
         private void AddError(ParserRuleContext context, string msg)
         {
             Errors.Add($"Line {context.Start.Line}:{context.Start.Column} - {msg}");
         }
 
+        // --- Program (root) ---
         public override DataType VisitPAREN(PLCProjectParser.PARENContext context)
         {
             return Visit(context.expr());
@@ -35,13 +37,11 @@ namespace Projekt
         }
 
         // --- Aritmetika, Konkatenace (+, -, .) ---
-        // V nové gramatice se metoda jmenuje podle labelu # ADD_SUB_CONCAT
         public override DataType VisitADD_SUB_CONCAT([NotNull] PLCProjectParser.ADD_SUB_CONCATContext context)
         {
             DataType left = Visit(context.expr(0));
             DataType right = Visit(context.expr(1));
 
-            // V nové gramatice používáme typy tokenů z Lexeru
             int opType = context.op.Type;
 
             if (opType == PLCProjectLexer.CONCAT) // Operátor '.'
@@ -74,7 +74,7 @@ namespace Projekt
                 return DataType.Error;
             }
 
-            // Násobení a dělení (podobně jako sčítání)
+            // Násobení a dělení
             if (left == DataType.Int && right == DataType.Int) return DataType.Int;
             if ((left == DataType.Int || left == DataType.Float) && (right == DataType.Int || right == DataType.Float))
                 return DataType.Float;
@@ -86,7 +86,6 @@ namespace Projekt
         // --- Deklarace proměnných ---
         public override DataType VisitCMDVAR(PLCProjectParser.CMDVARContext context)
         {
-            // context.vartype() vrací pravidlo, které obsahuje INT_KW, FLOAT_KW atd.
             string typeStr = context.vartype().GetText().ToLower();
             DataType type = typeStr switch
             {
@@ -101,6 +100,28 @@ namespace Projekt
             {
                 if (!symbolTable.Declare(id.GetText(), type))
                     AddError(context, $"Variable '{id.GetText()}' is already declared.");
+            }
+            return DataType.Error;
+        }
+
+        // -- Příkazy pro čtení (read) ---
+        public override DataType VisitCMDREAD(PLCProjectParser.CMDREADContext context)
+        {
+            foreach (var id in context.VARID())
+            {
+                if (symbolTable.GetType(id.GetText()) == DataType.Error)
+                    AddError(context, $"Variable '{id.GetText()}' was not declared.");
+            }
+            return DataType.Error;
+        }
+
+        // --- Příkaz pro zápis (write) ---
+        public override DataType VisitCMDWRITE(PLCProjectParser.CMDWRITEContext context)
+        {
+            foreach (var expr in context.expr())
+            {
+                if (Visit(expr) == DataType.Error)
+                    AddError(context, "Invalid expression in 'write' command.");
             }
             return DataType.Error;
         }
@@ -140,6 +161,22 @@ namespace Projekt
             return DataType.Error;
         }
 
+
+        // --- Unární mínus ---
+        public override DataType VisitMINUS(PLCProjectParser.MINUSContext context)
+        {
+            DataType val = Visit(context.expr());
+
+            if (val == DataType.Int || val == DataType.Float)
+                return val;
+
+            AddError(context, "Unary '-' requires numeric operand.");
+            return DataType.Error;
+        }
+
+        #region Logické operátory (AND, OR, NOT, <, >, ==, !=)
+
+        // --- Relace (>, <) ---
         public override DataType VisitREL(PLCProjectParser.RELContext context)
         {
             DataType left = Visit(context.expr(0));
@@ -155,6 +192,7 @@ namespace Projekt
             return DataType.Error;
         }
 
+        // --- Rovnost (==, !=) ---
         public override DataType VisitEQUAL(PLCProjectParser.EQUALContext context)
         {
             DataType left = Visit(context.expr(0));
@@ -173,6 +211,7 @@ namespace Projekt
             return DataType.Error;
         }
 
+        // --- Logický NOT ---
         public override DataType VisitNOT(PLCProjectParser.NOTContext context)
         {
             var val = Visit(context.expr());
@@ -184,17 +223,36 @@ namespace Projekt
             return DataType.Error;
         }
 
-        public override DataType VisitMINUS(PLCProjectParser.MINUSContext context)
+        // --- Logické AND ---
+        public override DataType VisitAND(PLCProjectParser.ANDContext context)
         {
-            DataType val = Visit(context.expr());
+            DataType left = Visit(context.expr(0));
+            DataType right = Visit(context.expr(1));
 
-            if (val == DataType.Int || val == DataType.Float)
-                return val;
+            if (left == DataType.Bool && right == DataType.Bool)
+                return DataType.Bool;
 
-            AddError(context, "Unary '-' requires numeric operand.");
+            AddError(context, "Operator '&&' requires two boolean operands.");
             return DataType.Error;
         }
 
+        // --- Logické OR ---
+        public override DataType VisitOR(PLCProjectParser.ORContext context)
+        {
+            DataType left = Visit(context.expr(0));
+            DataType right = Visit(context.expr(1));
+
+            if (left == DataType.Bool && right == DataType.Bool)
+                return DataType.Bool;
+
+            AddError(context, "Operator '||' requires two boolean operands.");
+            return DataType.Error;
+        }
+
+        #endregion
+
+
+        // --- Cyklus while ---
         public override DataType VisitWHILE(PLCProjectParser.WHILEContext context)
         {
             if (Visit(context.expr()) != DataType.Bool)
