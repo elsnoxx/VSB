@@ -12,6 +12,7 @@ namespace Projekt
         Float, 
         Bool, 
         String, 
+        Procedure,
         Error
     }
 }

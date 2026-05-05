@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http.Headers;
 
 namespace Projekt
 {
@@ -11,6 +12,7 @@ namespace Projekt
         private List<string[]> instructions = new List<string[]>();
         private Dictionary<string, object> memory = new Dictionary<string, object>();
         private Dictionary<string, int> labels = new Dictionary<string, int>();
+        private Dictionary<string, int> valueLabels = new Dictionary<string, int>();
 
         public VirtualMachine(string generatedCode)
         {
@@ -20,14 +22,18 @@ namespace Projekt
             foreach (var line in lines)
             {
                 var trimmed = line.Trim();
+                if (string.IsNullOrEmpty(trimmed)) continue;
 
-                if (trimmed.StartsWith("label"))
+                var parts = trimmed.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                string command = parts[0].ToLower();
+
+                if (command == "label")
                 {
-                    labels[trimmed.Split(' ')[1]] = index;
+                    labels[parts[1]] = index;
                 }
                 else
-                {
-                    instructions.Add(trimmed.Split(' ', StringSplitOptions.RemoveEmptyEntries));
+                {                    
+                    instructions.Add(parts);
                     index++;
                 }
             }
@@ -145,6 +151,18 @@ namespace Projekt
                     case "jmp":
                         ip = labels[inst[1]];
                         continue;
+
+                    case "valuejump":
+                        string targetLabel = stack.Pop().ToString();
+                        if (labels.ContainsKey(targetLabel))
+                        {
+                            ip = labels[targetLabel];
+                            continue;
+                        }
+                        else
+                        {
+                            throw new Exception($"Label '{targetLabel}' nebyl nalezen!");
+                        }
 
                     case "fjmp":
                         var r = stack.Pop();

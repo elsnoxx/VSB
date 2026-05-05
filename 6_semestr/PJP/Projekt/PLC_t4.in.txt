@@ -1,0 +1,16 @@
+int a,b;
+string s;
+
+procedure add(){
+    a = a + 1;
+    a = a + 1;
+}
+
+procedure print(){
+    write a;
+}
+
+a = 1;
+add();
+add();
+print();

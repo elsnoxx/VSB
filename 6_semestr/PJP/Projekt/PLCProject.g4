@@ -1,21 +1,24 @@
 ﻿grammar PLCProject;
 
-prog : statement+ EOF ;
+prog : declaration* procedure* statement* EOF ;
+
+declaration : vartype VARID (COMMA VARID)* SEMI ;
+
+procedure : 'procedure' VARID LPAREN RPAREN LBRACE statement* RBRACE ;
 
 statement 
-    : command? SEMI                                   # CMD
+    : command SEMI                                    # CMD
+    | VARID LPAREN RPAREN SEMI                        # CALL
     | LBRACE statement* RBRACE                        # BLOCK
     | IF LPAREN expr RPAREN statement (ELSE statement)? # IF_ELSE
     | WHILE LPAREN expr RPAREN statement              # WHILE
-    | FOR LPAREN expr? SEMI expr? SEMI expr? RPAREN statement # FOR
     ;
 
 command 
-    : vartype VARID (COMMA VARID)*                    # CMDVAR
-    | expr                                            # CMDEXPR
+    : expr                                            # CMDEXPR
     | READ VARID (COMMA VARID)*                       # CMDREAD
     | WRITE expr (COMMA expr)*                        # CMDWRITE
-    ; 
+    ;
 
 expr 
     : LPAREN expr RPAREN                               # PAREN

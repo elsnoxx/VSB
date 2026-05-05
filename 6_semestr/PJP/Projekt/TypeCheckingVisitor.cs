@@ -84,7 +84,7 @@ namespace Projekt
         }
 
         // --- Deklarace proměnných ---
-        public override DataType VisitCMDVAR(PLCProjectParser.CMDVARContext context)
+        public override DataType VisitDeclaration(PLCProjectParser.DeclarationContext context)
         {
             string typeStr = context.vartype().GetText().ToLower();
             DataType type = typeStr switch
@@ -260,6 +260,26 @@ namespace Projekt
 
             Visit(context.statement());
             return DataType.Error;
+        }
+
+        // --- Procedure ---
+
+        public override DataType VisitProcedure(PLCProjectParser.ProcedureContext context)
+        {
+            string procName = context.VARID().GetText();
+            if (!symbolTable.Declare(procName, DataType.Procedure))
+                AddError(context, $"Procedure '{procName}' already declared.");
+
+            foreach (var stmt in context.statement()) Visit(stmt);
+            return DataType.Procedure;
+        }
+
+        public override DataType VisitCALL(PLCProjectParser.CALLContext context)
+        {
+            if (symbolTable.GetType(context.VARID().GetText()) != DataType.Procedure)
+                AddError(context, $"'{context.VARID().GetText()}' is not a procedure.");
+
+            return DataType.Procedure;
         }
     }
 }

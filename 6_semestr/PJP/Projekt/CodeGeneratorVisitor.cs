@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Security.Cryptography;
+using System.Text;
 using Antlr4.Runtime.Misc;
 
 namespace Projekt
@@ -20,17 +21,31 @@ namespace Projekt
         public override string VisitProg(PLCProjectParser.ProgContext context)
         {
             StringBuilder sb = new StringBuilder();
+            string mainStartLabel = "main_start";
 
+            
+            sb.AppendLine($"jmp {mainStartLabel}");
+
+            
+            foreach (var proc in context.procedure())
+            {
+                sb.AppendLine(Visit(proc));
+            }
+
+            
+            sb.AppendLine($"label {mainStartLabel}");
             foreach (var stmt in context.statement())
             {
-
                 sb.AppendLine(Visit(stmt));
             }
+
 
             return sb.ToString();
         }
 
+
         // ---------------- LITERALS ----------------
+
         public override string VisitINT(PLCProjectParser.INTContext context)
         => $"push I {context.GetText()}";
 
@@ -107,7 +122,7 @@ namespace Projekt
         public override string VisitASSIGN(PLCProjectParser.ASSIGNContext context)
         {
             string varName = context.VARID().GetText();
-            return $"{Visit(context.expr())}\nsave {varName}\nload {varName}";
+            return $"{Visit(context.expr())}\nsave {varName}";
         }
 
         // ---------------- IF / ELSE ----------------
@@ -134,23 +149,7 @@ namespace Projekt
             return sb.ToString();
         }
 
-        // ---------------- WHILE ----------------
-        public override string VisitWHILE(PLCProjectParser.WHILEContext context)
-        {
-            string startLabel = GetNextLabel();
-            string endLabel = GetNextLabel();
-
-            StringBuilder sb = new StringBuilder();
-
-            sb.AppendLine($"label {startLabel}");
-            sb.AppendLine(Visit(context.expr()));
-            sb.AppendLine($"fjmp {endLabel}");
-            sb.AppendLine(Visit(context.statement()));
-            sb.AppendLine($"jmp {startLabel}");
-            sb.AppendLine($"label {endLabel}");
-
-            return sb.ToString();
-        }
+        
 
         // ---------------- WRITE ----------------
         public override string VisitCMDWRITE(PLCProjectParser.CMDWRITEContext context)
@@ -272,6 +271,58 @@ namespace Projekt
             DataType type = typeChecker.Visit(context);
             string suffix = (type == DataType.Float) ? "F" : "I";
             return $"{Visit(context.expr())}\numinus {suffix}";
+        }
+
+        // ---------------- WHILE ----------------
+        public override string VisitWHILE(PLCProjectParser.WHILEContext context)
+        {
+            string startLabel = GetNextLabel();
+            string endLabel = GetNextLabel();
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine($"label {startLabel}");
+            sb.AppendLine(Visit(context.expr()));
+            sb.AppendLine($"fjmp {endLabel}");
+            sb.AppendLine(Visit(context.statement()));
+            sb.AppendLine($"jmp {startLabel}");
+            sb.AppendLine($"label {endLabel}");
+
+            return sb.ToString();
+        }
+
+        public override string VisitProcedure(PLCProjectParser.ProcedureContext context)
+        {
+            string procName = context.VARID().GetText();
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine($"label {procName}");
+
+            // Tělo procedury
+            foreach (var stmt in context.statement())
+            {
+                sb.AppendLine(Visit(stmt));
+            }
+
+            sb.AppendLine("valuejump");
+
+            return sb.ToString();
+        }
+
+        public override string VisitCALL(PLCProjectParser.CALLContext context)
+        {
+            string procName = context.VARID().GetText();
+            string returnLabel = GetNextLabel();
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine($"push S {returnLabel}");
+
+            sb.AppendLine($"push S {procName}");
+            sb.AppendLine("valuejump");
+
+            sb.AppendLine($"label {returnLabel}");
+
+            return sb.ToString().TrimEnd();
         }
     }
 }

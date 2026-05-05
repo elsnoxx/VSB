@@ -7,9 +7,10 @@ namespace Projekt
 {
     internal class Program
     {
-        static readonly string[] fileNames = ["PLC_t1.in.txt", "PLC_t2.in.txt", "PLC_t3.in.txt", "PLC_errors.in.txt"];
+        //static readonly string[] fileNames = ["PLC_t1.in.txt", "PLC_t2.in.txt", "PLC_t3.in.txt", "PLC_errors.in.txt"];
+        static readonly string[] fileNames = ["PLC_t4.in.txt"];
         static string fileName = "";
-        static bool isVerbose = false;
+        static bool isVerbose = true;
         static void Main(string[] args)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
