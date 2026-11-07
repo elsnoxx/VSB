@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Advanced VPN Configuration Using Wireguard</h1>
+
+    <h2>Úvod</h2>
+    <p>Cílem projektu je vytvorit tesbed prostredi kde se vyskouzsi jedny z nejznamejsich scenaru pro spojeni pomoci VPNa to presneji pro 1:1, N : 1 a komunikace za pomoci PKI, implementace scénářů 1:1 (klient–server) a N:1 (hub-and-spoke: více klientů přes centrální server), metodické otestování (konektivita, propustnost) a jednoduché napojení na „PKI-light“  kde se udela evidence a ukazku revokace pristupu. tento web je dokumentace prave toho vytvareni s screenshoty a popsanymi kroky.</p>
+
+    <h3>Wireguard</h3>
+    <p>Wireguard je moderní VPN protokol, který je známý svou jednoduchostí, vysokou bezpečností a efektivitou. V tomto projektu bude použit pro konfiguraci různých VPN scénářů. Konfigurace je staickaa jednoduse citelna sluzba bezi v systemd jako servise vzdy jako wg-quick@interface</p>
+
+
+
+    <h3>Typicke Konfigurace</h3>
+    <ul>
+        <li>1 : 1 - road-warrior</li>
+        <li>N : 1 - hub-and-spoke</li>
+        <li>Pripadne site to site</li>
+    </ul>
+    <p>Pro konfiguraci Wireguard VPN je potřeba vygenerovat klíče pro server i klienty a následně vytvořit konfigurační soubory s těmito klíči a příslušnými nastaveními.</p>
+
+    <h3>Implementace (testbed, 1:1 a N:1) </h3>
+
+    <p> Testbed jsme vytvoril za pomoci 3 linux debian VM serveru. Kde jsou pojmenovane podle funkce: WireguardServer, WireguardClient1 a WireguardClient2. kazda vm ma dva adaptery jeden jako NAt a jedne pro hostonly. VPN sit je natavena s prefixem 10.13.1.0/24 a to na rozhrani wg0. Naserveru je povolen ip forwarding a taky jednoduche pravidlo v ip tables pro povoleni komunikace mezi klienty a centralnim prvkem.</p>
+
+
+
+    <h2>Postuo</h2>
+
+    <h3>Vytvoření testbed prostředí</h3>
+    <p>Pro vytvoření testbed prostředí byly použity tři Debian VM: WireguardServer, WireguardClient1 a WireguardClient2. Každá VM má dva síťové adaptéry: jeden pro NAT a druhý pro host-only síť. VPN síť je nastavena s prefixem 10.13.1.0/24 na rozhraní wg0.</p>
+    <p>Na serveru je povolen IP forwarding a nastavena jednoduchá pravidla v iptables pro povolení komunikace mezi klienty a centrálním serverem.</p>
+
+    <ul>
+        <li><img src="images/testbed_setup.png" alt="Testbed Setup"></li>
+    </ul>
+
+    vypis z ip adress na kazdem ze serveru a klientu:
+    <ul>
+        <li><img src="images/ip_address_server.png" alt="IP Address Server"></li>
+        <li><img src="images/ip_address_client1.png" alt="IP Address Client1"></li>
+        <li><img src="images/ip_address_client2.png" alt="IP Address Client2"></li>
+    </ul>
+
+    <h3>Konfigurace Wireguard</h3>
+    <p>Po vytvoření testbed prostředí a ověření síťové konektivity je dalším krokem konfigurace Wireguard VPN. To zahrnuje vygenerování klíčů pro server a klienty a vytvoření konfiguračních souborů s těmito klíči a příslušnými nastaveními.</p>
+    <ul>
+        <li><img src="images/wireguard_server_config.png" alt="Wireguard Server Config"></li>
+        <li><img src="images/wireguard_client1_config.png" alt="Wireguard Client1 Config"></li>
+        <li><img src="images/wireguard_client2_config.png" alt="Wireguard Client2 Config"></li>
+    </ul>
+
+    <h3>Ping test</h3>
+    <p>Pro ověření konektivity mezi serverem a klienty se provádí ping testy. To zahrnuje odesílání ICMP echo requestů z klientů na server a naopak, aby se potvrdilo, že VPN tunel je funkční.</p>
+    <ul>
+        <li><img src="images/client2_to_client1.png" alt="Client2 to Client1 Ping Test"></li>
+        <li><img src="images/client1_to_client2.png" alt="Client1 to Client2 Ping Test"></li>
+        <li><img src="images/client1_to_server.png" alt="Client1 to Server Ping Test"></li>
+        <li><img src="images/client2_to_server.png" alt="Client2 to Server Ping Test"></li>
+        <li><img src="images/server_to_client1.png" alt="Server to Client1 Ping Test"></li>
+        <li><img src="images/server_to_client2.png" alt="Server to Client2 Ping Test"></li>
+    </ul>
+
+    <h3>Zobrazeni tunelu a handshaku</h3>
+    <p>pro overeni stavu tunelu a potvrzeni handshaku se pouziva prikaz <code>wg show</code> na serveru i klientech. Takze si ukazeme jak vypada revokace po odebrani peera neboli klienta 2 ze serveru, ktery se jiz nebude zobrazovat</p>
+    <ul>
+        <li><img src="images/wireguard_server_config_revoked.png" alt="Wireguard Server Config Revoked"></li>
+        <li><img src="images/wireguard_server_wg_show.png" alt="Wireguard Server WG Show"></li>
+        <li><img src="images/wireguard_client1_wg_show.png" alt="Wireguard Client1 WG Show"></li>
+        <li><img src="images/wireguard_client2_wg_show.png" alt="Wireguard Client2 WG Show"></li>
+    </ul>
+
+    <h3>Ověření konektivity VPN</h3>
+    <p>Po konfiguraci Wireguard VPN je důležité ověřit, že VPN tunel funguje správně. To zahrnuje kontrolu IP adres přiřazených rozhraním wg0 na serveru i klientech a testování konektivity mezi klienty a serverem.</p>
+    <ul>
+        <li><img src="images/wireguard_ping_test.png" alt="Wireguard Ping Test"></li>
+    </ul>
+
+
+  <section id="refs">
+    <h2>Reference</h2>
+    <ul>
+      <li><a href="https://www.wireguard.com/" target="_blank" rel="noreferrer noopener">WireGuard – Official Website</a></li>
+      <li><a href="https://www.wireguard.com/quickstart/" target="_blank" rel="noreferrer noopener">WireGuard Quickstart</a></li>
+      <li><a href="https://man7.org/linux/man-pages/man8/wg.8.html" target="_blank" rel="noreferrer noopener">wg(8) – Linux man page</a></li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>
