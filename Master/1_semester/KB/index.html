@@ -1,94 +1,229 @@
-<html lang="en">
+<!doctype html>
+<html lang="cs">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="description" content="Dokumentace konfigurace WireGuard VPN v testbed prostředí.">
+    <title>WireGuard VPN | Dokumentace</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <h1>Advanced VPN Configuration Using Wireguard</h1>
+    <header class="hero">
+        <div class="hero-content">
+            <p class="eyebrow">Síťová dokumentace · WireGuard</p>
+            <h1>Advanced VPN Configuration Using WireGuard</h1>
+            <p>Praktická dokumentace testbedu, konfigurace VPN scénářů 1:1 a N:1, ověření konektivity a revokace klienta.</p>
+        </div>
+    </header>
 
-    <h2>Úvod</h2>
-    <p>Cílem projektu je vytvorit tesbed prostredi kde se vyskouzsi jedny z nejznamejsich scenaru pro spojeni pomoci VPNa to presneji pro 1:1, N : 1 a komunikace za pomoci PKI, implementace scénářů 1:1 (klient–server) a N:1 (hub-and-spoke: více klientů přes centrální server), metodické otestování (konektivita, propustnost) a jednoduché napojení na „PKI-light“  kde se udela evidence a ukazku revokace pristupu. tento web je dokumentace prave toho vytvareni s screenshoty a popsanymi kroky.</p>
+    <div class="layout">
+        <nav class="toc" aria-label="Obsah dokumentace">
+            <strong>Obsah</strong>
+            <a href="#uvod">Úvod</a>
+            <a href="#testbed">Testbed</a>
+            <a href="#konfigurace">Konfigurace</a>
+            <a href="#overeni">Ověření</a>
+            <a href="#revokace">Revokace</a>
+            <a href="#reference">Reference</a>
+        </nav>
 
-    <h3>Wireguard</h3>
-    <p>Wireguard je moderní VPN protokol, který je známý svou jednoduchostí, vysokou bezpečností a efektivitou. V tomto projektu bude použit pro konfiguraci různých VPN scénářů. Konfigurace je staickaa jednoduse citelna sluzba bezi v systemd jako servise vzdy jako wg-quick@interface</p>
+        <main>
+            <section id="uvod" class="section">
+                <div class="section-heading">
+                    <p class="eyebrow">01 · Kontext projektu</p>
+                    <h2>Úvod</h2>
+                </div>
+                <p>Cílem projektu je vytvořit testbed prostředí, ve kterém lze vyzkoušet známé scénáře spojení pomocí VPN: komunikaci 1:1 (klient–server), N:1 (hub-and-spoke, tedy více klientů přes centrální server) a komunikaci s využitím PKI.</p>
+                <div class="cards">
+                    <article class="card">
+                        <h3>WireGuard</h3>
+                        <p>Moderní VPN protokol známý jednoduchostí, vysokou bezpečností a efektivitou. Konfigurace je statická a snadno čitelná.</p>
+                    </article>
+                    <article class="card">
+                        <h3>Typické konfigurace</h3>
+                        <p><strong>1:1</strong> road-warrior · <strong>N:1</strong> hub-and-spoke · případně site-to-site.</p>
+                    </article>
+                    <article class="card">
+                        <h3>Technické řešení</h3>
+                        <p>Služba běží v systemd jako <code>wg-quick@interface</code> a používá rozhraní <code>wg0</code>.</p>
+                    </article>
+                </div>
+            </section>
 
+            <section id="testbed" class="section">
+                <div class="section-heading">
+                    <p class="eyebrow">02 · Příprava prostředí</p>
+                    <h2>Vytvoření testbed prostředí</h2>
+                    <p>Testovací síť je postavena na třech Debian VM se společným VPN prefixem.</p>
+                </div>
+                <ol class="steps">
+                    <li><h3>Virtuální stroje</h3><p>WireguardServer, WireguardClient1 a WireguardClient2. Každý stroj má adaptér pro NAT a druhý pro host-only síť.</p></li>
+                    <li><h3>Síťová topologie</h3><p>VPN síť používá prefix <code>10.13.1.0/24</code> na rozhraní <code>wg0</code>.</p></li>
+                    <li><h3>Směrování</h3><p>Na serveru je povolen IP forwarding a nastavena pravidla iptables pro komunikaci mezi klienty a centrálním serverem.</p></li>
+                </ol>
+                <div class="gallery">
+                    <figure><img src="img/server_ip_a.png" alt="Výpis IP adres na serveru" loading="lazy"><figcaption>WireguardServer</figcaption></figure>
+                    <figure><img src="img/client1_ip_a.png" alt="Výpis IP adres na klientovi 1" loading="lazy"><figcaption>WireguardClient1</figcaption></figure>
+                    <figure><img src="img/client2_ip_a.png" alt="Výpis IP adres na klientovi 2" loading="lazy"><figcaption>WireguardClient2</figcaption></figure>
+                </div>
+            </section>
 
+            <section id="konfigurace" class="section">
+                <div class="section-heading">
+                    <p class="eyebrow">03 · Nastavení VPN</p>
+                    <h2>Konfigurace WireGuard</h2>
+                    <p>Po ověření síťové konektivity následuje vygenerování klíčů a vytvoření konfiguračních souborů pro server i klienty.</p>
+                </div>
+                <div class="configurations">
+                    <article class="configuration">
+                        <h3>Server</h3>
+                        <pre><code>[Interface]
+Address = 10.13.1.1/24
+ListenPort = 51820
+PrivateKey = mF30nvj0sntEFA8LzAarQ9TZIPm9WZIU+xW23ccwt0c=
 
-    <h3>Typicke Konfigurace</h3>
-    <ul>
-        <li>1 : 1 - road-warrior</li>
-        <li>N : 1 - hub-and-spoke</li>
-        <li>Pripadne site to site</li>
-    </ul>
-    <p>Pro konfiguraci Wireguard VPN je potřeba vygenerovat klíče pro server i klienty a následně vytvořit konfigurační soubory s těmito klíči a příslušnými nastaveními.</p>
+PostUp = sysctl -w net.ipv4.ip_forward=1
+PostUp = iptables -t nat -A POSTROUTING -s 10.13.1.0/24 -o enp0s3 -j MASQUERADE
+PostDown = iptables -t nat -D POSTROUTING -s 10.13.1.0/24 -o enp0s3 -j MASQUERADE
 
-    <h3>Implementace (testbed, 1:1 a N:1) </h3>
+[Peer]
+PublicKey = pbP6HsYmt4yQZpfDuBGBa4uT/xgQlHDqvXaON951kVI=
+AllowedIPs = 10.13.1.2/32</code></pre>
+                    </article>
+                    <article class="configuration">
+                        <h3>Klient 1</h3>
+                        <pre><code>[Interface]
+Address = 10.13.1.2/24
+PrivateKey = YK3kySMRXbXrCCKLd+c1j5XCpsN808sY5CNcp2Ssenk=
 
-    <p> Testbed jsme vytvoril za pomoci 3 linux debian VM serveru. Kde jsou pojmenovane podle funkce: WireguardServer, WireguardClient1 a WireguardClient2. kazda vm ma dva adaptery jeden jako NAt a jedne pro hostonly. VPN sit je natavena s prefixem 10.13.1.0/24 a to na rozhrani wg0. Naserveru je povolen ip forwarding a taky jednoduche pravidlo v ip tables pro povoleni komunikace mezi klienty a centralnim prvkem.</p>
+[Peer]
+PublicKey = Lh/Y064MDnT08cmN7XYZhe76Zci1AN5/kQVuBCnk/FA=
+Endpoint = 192.168.56.107:51820
+AllowedIPs = 10.13.1.0/24
+PersistentKeepalive = 25</code></pre>
+                    </article>
+                    <article class="configuration">
+                        <h3>Klient 2</h3>
+                        <pre><code>[Interface]
+Address = 10.13.1.3/24
+PrivateKey = +P2EWNlUHJOngUWtj+y3ItIfGI7vZGfzrTa7gVbqvV4=
 
+[Peer]
+PublicKey = Lh/Y064MDnT08cmN7XYZhe76Zci1AN5/kQVuBCnk/FA=
+Endpoint = 192.168.56.107:51820
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 25</code></pre>
+                    </article>
+                </div>
+            </section>
 
+            <section id="overeni" class="section">
+                <div class="section-heading">
+                    <p class="eyebrow">04 · Testování</p>
+                    <h2>Ověření konektivity VPN</h2>
+                    <p>Funkčnost tunelu ověřujeme ping testy mezi klienty a serverem a kontrolou stavu rozhraní <code>wg0</code>.</p>
+                </div>
+                <div class="gallery">
+                    <figure><img src="img/ping_test_client2_to_client1_and_server.png" alt="Ping z klienta 2 na klienta 1 a server" loading="lazy"><figcaption>Client2 → Client1 a Server</figcaption></figure>
+                    <figure><img src="img/ping_test_client1_to_client2_and_server.png" alt="Ping z klienta 1 na klienta 2 a server" loading="lazy"><figcaption>Client1 → Client2 a Server</figcaption></figure>
+                    <figure><img src="img/ping_test_server_to_clients.png" alt="Ping ze serveru na klienty" loading="lazy"><figcaption>Server → klienti</figcaption></figure>
+                </div>
+                <h3>Ověření webového serveru Nginx</h3>
+                <p>
+                    Na serveru běží webový server Nginx. Dostupnost webu z obou klientů ověříme pomocí příkazu
+                    <code>curl 10.13.1.1</code>. Odpověď obsahuje stránku <em>WireGuard Testbed – Server funguje přes VPN</em>,
+                    což potvrzuje funkční přístup ke službě přes VPN tunel.
+                </p>
+                <div class="gallery gallery-two">
+                    <figure><img src="img/client1_curl_to_server.png" alt="Client1 načítá web ze serveru pomocí curl" loading="lazy"><figcaption>Client1 → Nginx na serveru</figcaption></figure>
+                    <figure><img src="img/client2_curl_to_server.png" alt="Client2 načítá web ze serveru pomocí curl" loading="lazy"><figcaption>Client2 → Nginx na serveru</figcaption></figure>
+                </div>
+                <h3>Zobrazení tunelu a handshaku</h3>
+                <p>Stav tunelu a potvrzení handshaku zobrazíme příkazem <code>wg show</code> na serveru i klientech.</p>
+                <div class="gallery">
+                    <figure><img src="img/server_wg_show.png" alt="Stav WireGuard na serveru" loading="lazy"><figcaption>Server</figcaption></figure>
+                    <figure><img src="img/clinet1_wg_show.png" alt="Stav WireGuard na klientovi 1" loading="lazy"><figcaption>Client1</figcaption></figure>
+                    <figure><img src="img/clinet2_wg_show.png" alt="Stav WireGuard na klientovi 2" loading="lazy"><figcaption>Client2</figcaption></figure>
+                </div>
 
-    <h2>Postuo</h2>
+                <h3>Otestování pomocí iperf3</h3>
+                <p>Pro ověření propustnosti tunelu použijeme nástroj <code>iperf3</code>. Každý test tvoří jednu cestu mezi dvěma zařízeními, proto jsou výsledky zobrazené po dvou.</p>
+                <div class="gallery gallery-two">
+                    <figure><img src="img/iperf3_client1_to_client2.png" alt="Výsledek iperf3 na klientovi 1" loading="lazy"><figcaption>Client1 → Client2</figcaption></figure>
+                    <figure><img src="img/iperf3_client1_to_server.png" alt="Výsledek iperf3 na klientovi 1" loading="lazy"><figcaption>Client1 → Server</figcaption></figure>
+                    <figure><img src="img/iperf3_client2_to_client1.png" alt="Výsledek iperf3 na klientovi 2" loading="lazy"><figcaption>Client2 → Client1</figcaption></figure>
+                    <figure><img src="img/iperf3_client2_to_server.png" alt="Výsledek iperf3 na klientovi 2" loading="lazy"><figcaption>Client2 → Server</figcaption></figure>
+                    <figure><img src="img/iperf3_server_to_client1.png" alt="Výsledek iperf3 na serveru" loading="lazy"><figcaption>Server → Client1</figcaption></figure>
+                    <figure><img src="img/iperf3_server_to_client2.png" alt="Výsledek iperf3 na serveru" loading="lazy"><figcaption>Server → Client2</figcaption></figure>
+                </div>
+            </section>
 
-    <h3>Vytvoření testbed prostředí</h3>
-    <p>Pro vytvoření testbed prostředí byly použity tři Debian VM: WireguardServer, WireguardClient1 a WireguardClient2. Každá VM má dva síťové adaptéry: jeden pro NAT a druhý pro host-only síť. VPN síť je nastavena s prefixem 10.13.1.0/24 na rozhraní wg0.</p>
-    <p>Na serveru je povolen IP forwarding a nastavena jednoduchá pravidla v iptables pro povolení komunikace mezi klienty a centrálním serverem.</p>
+            <section id="revokace" class="section">
+                <div class="section-heading">
+                    <p class="eyebrow">05 · Správa přístupu</p>
+                    <h2>Revokace klienta</h2>
+                </div>
+                <p>Po odebrání klienta z konfigurace serveru je nutné ověřit, že již nemá přístup k VPN tunelu. Kontrolu provedeme znovu pomocí výstupu příkazu <code>wg show</code>.</p>
+                <div class="gallery">
+                    <figure><img src="img/server_wg_show_revoked.png" alt="WireGuard server po revokaci klienta" loading="lazy"><figcaption>Server po revokaci Client2</figcaption></figure>
+                </div>
+            </section>
 
-    <ul>
-        <li><img src="images/testbed_setup.png" alt="Testbed Setup"></li>
-    </ul>
+            <section id="reference" class="section references">
+                <div class="section-heading">
+                    <p class="eyebrow">06 · Další informace</p>
+                    <h2>Reference</h2>
+                </div>
+                <ul>
+                    <li><a href="https://www.wireguard.com/" target="_blank" rel="noreferrer noopener">WireGuard – Official Website</a></li>
+                    <li><a href="https://www.wireguard.com/quickstart/" target="_blank" rel="noreferrer noopener">WireGuard Quickstart</a></li>
+                    <li><a href="https://man7.org/linux/man-pages/man8/wg.8.html" target="_blank" rel="noreferrer noopener">wg(8) – Linux man page</a></li>
+                </ul>
+            </section>
+        </main>
+    </div>
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Náhled obrázku" hidden>
+        <figure>
+            <button class="lightbox-close" type="button" aria-label="Zavřít náhled">&times;</button>
+            <img id="lightbox-image" src="" alt="">
+            <figcaption id="lightbox-caption"></figcaption>
+        </figure>
+    </div>
+    <footer>Dokumentace konfigurace WireGuard VPN</footer>
 
-    vypis z ip adress na kazdem ze serveru a klientu:
-    <ul>
-        <li><img src="images/ip_address_server.png" alt="IP Address Server"></li>
-        <li><img src="images/ip_address_client1.png" alt="IP Address Client1"></li>
-        <li><img src="images/ip_address_client2.png" alt="IP Address Client2"></li>
-    </ul>
+    <script>
+        const lightbox = document.querySelector("#lightbox");
+        const lightboxImage = document.querySelector("#lightbox-image");
+        const lightboxCaption = document.querySelector("#lightbox-caption");
+        const closeButton = document.querySelector(".lightbox-close");
+        const galleryImages = document.querySelectorAll(".gallery img");
 
-    <h3>Konfigurace Wireguard</h3>
-    <p>Po vytvoření testbed prostředí a ověření síťové konektivity je dalším krokem konfigurace Wireguard VPN. To zahrnuje vygenerování klíčů pro server a klienty a vytvoření konfiguračních souborů s těmito klíči a příslušnými nastaveními.</p>
-    <ul>
-        <li><img src="images/wireguard_server_config.png" alt="Wireguard Server Config"></li>
-        <li><img src="images/wireguard_client1_config.png" alt="Wireguard Client1 Config"></li>
-        <li><img src="images/wireguard_client2_config.png" alt="Wireguard Client2 Config"></li>
-    </ul>
+        function closeLightbox() {
+            lightbox.hidden = true;
+            document.body.style.overflow = "";
+        }
 
-    <h3>Ping test</h3>
-    <p>Pro ověření konektivity mezi serverem a klienty se provádí ping testy. To zahrnuje odesílání ICMP echo requestů z klientů na server a naopak, aby se potvrdilo, že VPN tunel je funkční.</p>
-    <ul>
-        <li><img src="images/client2_to_client1.png" alt="Client2 to Client1 Ping Test"></li>
-        <li><img src="images/client1_to_client2.png" alt="Client1 to Client2 Ping Test"></li>
-        <li><img src="images/client1_to_server.png" alt="Client1 to Server Ping Test"></li>
-        <li><img src="images/client2_to_server.png" alt="Client2 to Server Ping Test"></li>
-        <li><img src="images/server_to_client1.png" alt="Server to Client1 Ping Test"></li>
-        <li><img src="images/server_to_client2.png" alt="Server to Client2 Ping Test"></li>
-    </ul>
+        galleryImages.forEach((image) => {
+            image.addEventListener("click", () => {
+                lightboxImage.src = image.src;
+                lightboxImage.alt = image.alt;
+                lightboxCaption.textContent = image.closest("figure").querySelector("figcaption").textContent;
+                lightbox.hidden = false;
+                document.body.style.overflow = "hidden";
+                closeButton.focus();
+            });
+        });
 
-    <h3>Zobrazeni tunelu a handshaku</h3>
-    <p>pro overeni stavu tunelu a potvrzeni handshaku se pouziva prikaz <code>wg show</code> na serveru i klientech. Takze si ukazeme jak vypada revokace po odebrani peera neboli klienta 2 ze serveru, ktery se jiz nebude zobrazovat</p>
-    <ul>
-        <li><img src="images/wireguard_server_config_revoked.png" alt="Wireguard Server Config Revoked"></li>
-        <li><img src="images/wireguard_server_wg_show.png" alt="Wireguard Server WG Show"></li>
-        <li><img src="images/wireguard_client1_wg_show.png" alt="Wireguard Client1 WG Show"></li>
-        <li><img src="images/wireguard_client2_wg_show.png" alt="Wireguard Client2 WG Show"></li>
-    </ul>
-
-    <h3>Ověření konektivity VPN</h3>
-    <p>Po konfiguraci Wireguard VPN je důležité ověřit, že VPN tunel funguje správně. To zahrnuje kontrolu IP adres přiřazených rozhraním wg0 na serveru i klientech a testování konektivity mezi klienty a serverem.</p>
-    <ul>
-        <li><img src="images/wireguard_ping_test.png" alt="Wireguard Ping Test"></li>
-    </ul>
-
-
-  <section id="refs">
-    <h2>Reference</h2>
-    <ul>
-      <li><a href="https://www.wireguard.com/" target="_blank" rel="noreferrer noopener">WireGuard – Official Website</a></li>
-      <li><a href="https://www.wireguard.com/quickstart/" target="_blank" rel="noreferrer noopener">WireGuard Quickstart</a></li>
-      <li><a href="https://man7.org/linux/man-pages/man8/wg.8.html" target="_blank" rel="noreferrer noopener">wg(8) – Linux man page</a></li>
-    </ul>
-  </section>
-</main>
+        closeButton.addEventListener("click", closeLightbox);
+        lightbox.addEventListener("click", (event) => {
+            if (event.target === lightbox) closeLightbox();
+        });
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && !lightbox.hidden) closeLightbox();
+        });
+    </script>
 </body>
+
 </html>
